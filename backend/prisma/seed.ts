@@ -12,57 +12,57 @@
  *   TARGET_PRODUCTS=1500 npm run seed → cambia el objetivo de productos
  */
 
-import { fetchTodosLosProductosDummy, fetchCategoriasDummy } from "./lib/dummyjson";
-import { construirDesdeDummy, completarCatalogo } from "./lib/generar-catalogo";
-import { SUCURSALES, generarDisponibilidad } from "./lib/generar-sucursales";
-import type { ProductoSemilla } from "./lib/tipos";
+import { fetchAllDummyProducts, fetchDummyCategories } from "./lib/dummyjson";
+import { buildFromDummy, completeCatalog } from "./lib/generate-catalog";
+import { BRANCHES, generateAvailability } from "./lib/generate-branches";
+import type { ProductSeed } from "./lib/types";
 
-const OBJETIVO_PRODUCTOS = Number(process.env.TARGET_PRODUCTS ?? 1200);
+const TARGET_PRODUCTS = Number(process.env.TARGET_PRODUCTS ?? 1200);
 const DRY_RUN = process.argv.includes("--dry-run") || process.env.DRY_RUN === "1";
 
-function validarInvariantes(catalogo: ProductoSemilla[]) {
-  const codigos = new Set<string>();
-  for (const p of catalogo) {
-    if (codigos.has(p.codigoHomologado)) {
-      throw new Error(`Código homologado duplicado: ${p.codigoHomologado}`);
+function validateInvariants(catalog: ProductSeed[]) {
+  const codes = new Set<string>();
+  for (const p of catalog) {
+    if (codes.has(p.homologatedCode)) {
+      throw new Error(`Código homologado duplicado: ${p.homologatedCode}`);
     }
-    codigos.add(p.codigoHomologado);
+    codes.add(p.homologatedCode);
 
-    if (p.costo >= p.precioDigital) {
+    if (p.cost >= p.digitalPrice) {
       throw new Error(
-        `RN-02 violada: costo (${p.costo}) >= precio digital (${p.precioDigital}) en ${p.codigoHomologado}`
+        `RN-02 violada: costo (${p.cost}) >= precio digital (${p.digitalPrice}) en ${p.homologatedCode}`
       );
     }
   }
-  if (catalogo.length < OBJETIVO_PRODUCTOS) {
+  if (catalog.length < TARGET_PRODUCTS) {
     throw new Error(
-      `Catálogo insuficiente: ${catalogo.length} < objetivo ${OBJETIVO_PRODUCTOS}`
+      `Catálogo insuficiente: ${catalog.length} < objetivo ${TARGET_PRODUCTS}`
     );
   }
 }
 
-async function construirCatalogo(): Promise<ProductoSemilla[]> {
+async function buildCatalog(): Promise<ProductSeed[]> {
   console.log("→ Descargando catálogo base real (DummyJSON)...");
-  const [productosDummy, categorias] = await Promise.all([
-    fetchTodosLosProductosDummy(),
-    fetchCategoriasDummy(),
+  const [dummyProducts, categories] = await Promise.all([
+    fetchAllDummyProducts(),
+    fetchDummyCategories(),
   ]);
-  console.log(`  ${productosDummy.length} productos reales, ${categorias.length} categorías`);
+  console.log(`  ${dummyProducts.length} productos reales, ${categories.length} categorías`);
 
-  const base = construirDesdeDummy(productosDummy);
-  const catalogo = completarCatalogo(base, categorias, OBJETIVO_PRODUCTOS);
+  const base = buildFromDummy(dummyProducts);
+  const catalog = completeCatalog(base, categories, TARGET_PRODUCTS);
   console.log(
-    `→ Catálogo final: ${catalogo.length} productos ` +
-      `(${base.length} reales + ${catalogo.length - base.length} sintéticos)`
+    `→ Catálogo final: ${catalog.length} productos ` +
+      `(${base.length} reales + ${catalog.length - base.length} sintéticos)`
   );
 
-  validarInvariantes(catalogo);
+  validateInvariants(catalog);
   console.log("→ Invariantes OK: sin códigos duplicados, RN-02 respetada en todos los productos");
 
-  return catalogo;
+  return catalog;
 }
 
-async function sembrarBaseDeDatos(catalogo: ProductoSemilla[]) {
+async function seedCatalog(catalog: ProductSeed[]) {
   // Import diferido: en modo --dry-run no hace falta que exista @prisma/client
   // generado ni una DATABASE_URL configurada.
   const { PrismaClient } = await import("@prisma/client");
@@ -70,92 +70,93 @@ async function sembrarBaseDeDatos(catalogo: ProductoSemilla[]) {
 
   try {
     console.log("→ Creando categorías...");
-    const nombresCategoria = [...new Set(catalogo.map((p) => p.categoria))];
-    for (const nombre of nombresCategoria) {
-      await prisma.categoria.upsert({
-        where: { nombre },
+    const categoryNames = [...new Set(catalog.map((p) => p.category))];
+    for (const name of categoryNames) {
+      await prisma.category.upsert({
+        where: { name },
         update: {},
-        create: { nombre },
+        create: { name },
       });
     }
-    const categoriasDb = await prisma.categoria.findMany();
-    const idPorCategoria = new Map(
-      categoriasDb.map((c: { nombre: string; id: number }) => [c.nombre, c.id])
+    const categoriesDb = await prisma.category.findMany();
+    const categoryIdByName = new Map(
+      categoriesDb.map((c: { name: string; id: number }) => [c.name, c.id])
     );
 
     console.log("→ Insertando productos en lotes de 500...");
-    const TAMANO_LOTE = 500;
-    for (let i = 0; i < catalogo.length; i += TAMANO_LOTE) {
-      const lote = catalogo.slice(i, i + TAMANO_LOTE);
-      await prisma.producto.createMany({
-        data: lote.map((p) => ({
-          codigoHomologado: p.codigoHomologado,
-          nombre: p.nombre,
-          categoriaId: idPorCategoria.get(p.categoria)!,
-          costo: p.costo,
-          precioDigital: p.precioDigital,
-          publicado: p.publicado,
-          fuente: p.fuente,
+    const BATCH_SIZE = 500;
+    for (let i = 0; i < catalog.length; i += BATCH_SIZE) {
+      const batch = catalog.slice(i, i + BATCH_SIZE);
+      await prisma.product.createMany({
+        data: batch.map((p) => ({
+          homologatedCode: p.homologatedCode,
+          name: p.name,
+          categoryId: categoryIdByName.get(p.category)!,
+          brand: p.brand,
+          cost: p.cost,
+          digitalPrice: p.digitalPrice,
+          published: p.published,
+          source: p.source,
         })),
         skipDuplicates: true,
       });
-      console.log(`  ${Math.min(i + TAMANO_LOTE, catalogo.length)}/${catalogo.length}`);
+      console.log(`  ${Math.min(i + BATCH_SIZE, catalog.length)}/${catalog.length}`);
     }
 
     console.log("→ Creando sucursales...");
-    for (const s of SUCURSALES) {
-      await prisma.sucursal.upsert({
-        where: { nombre: s.nombre },
+    for (const b of BRANCHES) {
+      await prisma.branch.upsert({
+        where: { name: b.name },
         update: {},
-        create: s,
+        create: b,
       });
     }
-    const sucursalesDb = await prisma.sucursal.findMany();
-    const productosDb = await prisma.producto.findMany({ select: { id: true } });
+    const branchesDb = await prisma.branch.findMany();
+    const productsDb = await prisma.product.findMany({ select: { id: true } });
 
     console.log(
-      `→ Generando disponibilidad (${productosDb.length} productos × ${sucursalesDb.length} sucursales)...`
+      `→ Generando disponibilidad (${productsDb.length} productos × ${branchesDb.length} sucursales)...`
     );
-    const TAMANO_LOTE_DISPONIBILIDAD = 1000;
-    let filas: {
-      productoId: number;
-      sucursalId: number;
-      existenciasErp: number;
-      umbralSeguridad: number;
-      unidadesReservadas: number;
-      sincronizadoEn: Date;
+    const AVAILABILITY_BATCH_SIZE = 1000;
+    let rows: {
+      productId: number;
+      branchId: number;
+      erpUnits: number;
+      safetyThreshold: number;
+      reservedUnits: number;
+      syncedAt: Date;
     }[] = [];
 
-    for (const producto of productosDb) {
-      for (const sucursal of sucursalesDb) {
-        filas.push({ productoId: producto.id, sucursalId: sucursal.id, ...generarDisponibilidad() });
+    for (const product of productsDb) {
+      for (const branch of branchesDb) {
+        rows.push({ productId: product.id, branchId: branch.id, ...generateAvailability() });
       }
-      if (filas.length >= TAMANO_LOTE_DISPONIBILIDAD) {
-        await prisma.disponibilidad.createMany({ data: filas, skipDuplicates: true });
-        filas = [];
+      if (rows.length >= AVAILABILITY_BATCH_SIZE) {
+        await prisma.availability.createMany({ data: rows, skipDuplicates: true });
+        rows = [];
       }
     }
-    if (filas.length > 0) {
-      await prisma.disponibilidad.createMany({ data: filas, skipDuplicates: true });
+    if (rows.length > 0) {
+      await prisma.availability.createMany({ data: rows, skipDuplicates: true });
     }
 
-    const totalDisponibilidad = await prisma.disponibilidad.count();
-    console.log(`✓ Siembra completa: ${productosDb.length} productos, ${totalDisponibilidad} filas de disponibilidad`);
+    const totalAvailability = await prisma.availability.count();
+    console.log(`✓ Siembra completa: ${productsDb.length} productos, ${totalAvailability} filas de disponibilidad`);
   } finally {
     await prisma.$disconnect();
   }
 }
 
 async function main() {
-  const catalogo = await construirCatalogo();
+  const catalog = await buildCatalog();
 
   if (DRY_RUN) {
     console.log("→ --dry-run: no se escribió nada en la base de datos.");
-    console.log("  Muestra de 3 productos:", catalogo.slice(0, 3));
+    console.log("  Muestra de 3 productos:", catalog.slice(0, 3));
     return;
   }
 
-  await sembrarBaseDeDatos(catalogo);
+  await seedCatalog(catalog);
 }
 
 main().catch((err) => {

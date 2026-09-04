@@ -8,7 +8,13 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init",
     "seed": "ts-node prisma/seed.ts",
-    "seed:test": "ts-node prisma/seed.ts --dry-run"
+    "seed:test": "ts-node prisma/seed.ts --dry-run",
+    "seed:account": "ts-node prisma/seed-account.ts",
+    "seed:cart": "ts-node prisma/seed-cart.ts",
+    "seed:order": "ts-node prisma/seed-order.ts",
+    "seed:payment": "ts-node prisma/seed-payment.ts",
+    "seed:all": "ts-node prisma/seed-all.ts",
+    "test:generation": "ts-node scripts/test-generation.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.20.0"

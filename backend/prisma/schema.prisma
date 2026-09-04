@@ -1,7 +1,9 @@
-// Esquema de referencia para el catálogo digital de ComproYa en Línea.
-// Cubre únicamente SP-01 (gobierno del catálogo) y SP-02 (disponibilidad),
-// que es lo que la siembra de datos de este script necesita poblar.
-// Campos y reglas trazables al CANON-ComproYa.md: C-01, C-03, RN-01 a RN-04.
+// Esquema de datos de ComproYa en Línea. Modelos y campos en inglés (buenas
+// prácticas de base de datos); los comentarios citan en español los
+// identificadores del canon (RN-XX, C-XX, CU-XX) para mantener trazabilidad —
+// ver CANON-ComproYa.md. Un solo schema.prisma para todo el proyecto: cada
+// sub-problema del canon agrega aquí sus modelos a medida que se implementa,
+// en el orden de sprints de docs/plan-de-trabajo.md.
 
 generator client {
   provider = "prisma-client-js"
@@ -12,63 +14,316 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Categoria {
-  id        Int        @id @default(autoincrement())
-  nombre    String     @unique
-  productos Producto[]
+// ---------------------------------------------------------------------------
+// Módulo catalogo (SP-01 gobierno del catálogo, SP-02 disponibilidad).
+// Sprint 1. Trazable a C-01, C-03, RN-01 a RN-04.
+// ---------------------------------------------------------------------------
 
-  @@map("categorias")
+enum ProductSource {
+  DUMMYJSON
+  SYNTHETIC
 }
 
-model Producto {
-  id                 Int             @id @default(autoincrement())
-  // Código homologado del maestro (RN-01): un producto solo es vendible
-  // en línea si este código existe y el producto fue publicado explícitamente.
-  codigoHomologado   String          @unique @map("codigo_homologado")
-  nombre             String
-  categoriaId        Int             @map("categoria_id")
-  categoria          Categoria       @relation(fields: [categoriaId], references: [id])
-  // Costo interno registrado en el ERP. RN-02: el precio digital nunca
-  // puede ser inferior a este costo sin aprobación de gerencia comercial.
-  costo              Decimal         @db.Decimal(12, 2)
-  precioDigital      Decimal         @map("precio_digital") @db.Decimal(12, 2)
+model Category {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  products Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id              Int           @id @default(autoincrement())
+  // Código homologado del maestro (RN-01): un producto solo es vendible en
+  // línea si este código existe y el producto fue publicado explícitamente.
+  homologatedCode String        @unique @map("homologated_code")
+  name            String
+  categoryId      Int           @map("category_id")
+  category        Category      @relation(fields: [categoryId], references: [id])
+  // Marca del producto (DummyJSON la trae; sin tabla propia porque ningún
+  // caso de uso del canon exige administrar marcas como entidad aparte).
+  brand           String?
+  // Costo interno registrado en el ERP. RN-02: el precio digital nunca puede
+  // ser inferior a este costo sin aprobación de gerencia comercial.
+  cost            Decimal       @db.Decimal(12, 2)
+  digitalPrice    Decimal       @map("digital_price") @db.Decimal(12, 2)
   // RN-01: publicación explícita en el canal, independiente de existir en el maestro.
-  publicado          Boolean         @default(true)
-  fuente             String          @default("dummyjson") // "dummyjson" | "sintetico"
-  creadoEn           DateTime        @default(now()) @map("creado_en")
-  disponibilidad     Disponibilidad[]
+  published       Boolean       @default(true)
+  source          ProductSource @default(DUMMYJSON)
+  createdAt       DateTime      @default(now()) @map("created_at")
 
-  @@index([categoriaId])
-  @@map("productos")
+  availability           Availability[]
+  cartItems              CartItem[]
+  orderItems             OrderItem[]
+  complementaryOf        ComplementaryProduct[] @relation("BaseProduct")
+  complementarySuggested ComplementaryProduct[] @relation("SuggestedProduct")
+
+  @@index([categoryId])
+  @@map("products")
 }
 
-model Sucursal {
-  id             Int              @id @default(autoincrement())
-  nombre         String           @unique
-  ciudad         String
-  disponibilidad Disponibilidad[]
+model Branch {
+  id           Int            @id @default(autoincrement())
+  name         String         @unique
+  city         String
+  availability Availability[]
+  orders       Order[]
 
-  @@map("sucursales")
+  @@map("branches")
 }
 
-model Disponibilidad {
-  id                  Int      @id @default(autoincrement())
-  productoId          Int      @map("producto_id")
-  producto            Producto @relation(fields: [productoId], references: [id])
-  sucursalId          Int      @map("sucursal_id")
-  sucursal            Sucursal @relation(fields: [sucursalId], references: [id])
-  // Existencias que reporta el ERP para esa sucursal (fuera del alcance del canal,
-  // el canal solo lo consume).
-  existenciasErp            Int      @map("existencias_erp")
-  // RN-03: unidades ofrecidas = existenciasErp - umbralSeguridad - unidadesReservadas.
-  // Se guarda cada componente por separado; el cálculo es responsabilidad
-  // de la capa de aplicación, tal como lo describe el canon ("disponibilidad calculada").
-  umbralSeguridad     Int      @default(5) @map("umbral_seguridad")
-  unidadesReservadas  Int      @default(0) @map("unidades_reservadas")
-  // RN-04: si esta marca de tiempo tiene más de 15 minutos, la sucursal
-  // no puede ofrecer retiro para este producto.
-  sincronizadoEn      DateTime @map("sincronizado_en")
+model Availability {
+  id              Int      @id @default(autoincrement())
+  productId       Int      @map("product_id")
+  product         Product  @relation(fields: [productId], references: [id])
+  branchId        Int      @map("branch_id")
+  branch          Branch   @relation(fields: [branchId], references: [id])
+  // Existencias que reporta el ERP para esta sucursal (fuera del alcance del
+  // canal, el canal solo lo consume).
+  erpUnits        Int      @map("erp_units")
+  // RN-03: unidades ofrecidas = erpUnits - safetyThreshold - reservedUnits.
+  // Se guarda cada componente por separado; el cálculo es responsabilidad de
+  // la capa de aplicación, tal como lo describe el canon ("disponibilidad calculada").
+  safetyThreshold Int      @default(5) @map("safety_threshold")
+  reservedUnits   Int      @default(0) @map("reserved_units")
+  // RN-04: si esta marca de tiempo tiene más de 15 minutos, la sucursal no
+  // puede ofrecer retiro para este producto.
+  syncedAt        DateTime @map("synced_at")
 
-  @@unique([productoId, sucursalId])
-  @@map("disponibilidad")
+  reservations UnitsReservation[]
+
+  @@unique([productId, branchId])
+  @@map("availability")
+}
+
+// ---------------------------------------------------------------------------
+// Módulo cuenta (SP-07 identidad del comprador digital, SP-08 consentimiento).
+// Sprint 2. Trazable a C-14, C-15, C-16, RN-10, RN-11.
+// ---------------------------------------------------------------------------
+
+model Customer {
+  id           Int      @id @default(autoincrement())
+  document     String   @unique
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  // C-14: cuenta vinculada al programa de lealtad. Nullable porque el canon
+  // documenta 8-12% de registros sin correspondencia (sección 10).
+  loyaltyId    String?  @unique @map("loyalty_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  consent          Consent?
+  deletionRequests DeletionRequest[]
+  behaviorEvents   BehaviorEvent[]
+  carts            Cart[]
+  orders           Order[]
+
+  @@map("customers")
+}
+
+model Consent {
+  id         Int      @id @default(autoincrement())
+  customerId Int      @unique @map("customer_id")
+  customer   Customer @relation(fields: [customerId], references: [id])
+  // C-15: revocable. RN-10: sin consentimiento activo, el comportamiento del
+  // cliente se registra de forma anónima, sin identificador de cliente.
+  active     Boolean  @default(true)
+  updatedAt  DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("consents")
+}
+
+model DeletionRequest {
+  id          Int       @id @default(autoincrement())
+  customerId  Int       @map("customer_id")
+  customer    Customer  @relation(fields: [customerId], references: [id])
+  requestedAt DateTime  @default(now()) @map("requested_at")
+  // RN-11: toda solicitud de supresión se ejecuta dentro de las 72 horas siguientes.
+  fulfilledAt DateTime? @map("fulfilled_at")
+
+  @@map("deletion_requests")
+}
+
+model BehaviorEvent {
+  id         Int       @id @default(autoincrement())
+  // RN-10: nullable a propósito — sin consentimiento activo, el evento se
+  // guarda sin identificador de cliente (registro anónimo).
+  customerId Int?      @map("customer_id")
+  customer   Customer? @relation(fields: [customerId], references: [id])
+  // C-16: formato de eventos estable.
+  type       String
+  payload    Json
+  occurredAt DateTime  @default(now()) @map("occurred_at")
+
+  @@index([customerId])
+  @@map("behavior_events")
+}
+
+// ---------------------------------------------------------------------------
+// Módulo carrito (SP-03 sostenimiento de la intención de compra). Sprint 3.
+// Trazable a C-04 (carrito persistente y fusionable) y C-05 (complementarios).
+// ---------------------------------------------------------------------------
+
+model Cart {
+  id         Int        @id @default(autoincrement())
+  // Nullable: carrito de invitado antes de iniciar sesión (C-04; la fusión al
+  // registrarse/iniciar sesión es responsabilidad de la capa de aplicación).
+  customerId Int?       @map("customer_id")
+  customer   Customer?  @relation(fields: [customerId], references: [id])
+  updatedAt  DateTime   @default(now()) @updatedAt @map("updated_at")
+  items      CartItem[]
+
+  @@map("carts")
+}
+
+model CartItem {
+  id        Int     @id @default(autoincrement())
+  cartId    Int     @map("cart_id")
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  productId Int     @map("product_id")
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+
+  @@unique([cartId, productId])
+  @@map("cart_items")
+}
+
+model ComplementaryProduct {
+  id                 Int     @id @default(autoincrement())
+  productId          Int     @map("product_id")
+  product            Product @relation("BaseProduct", fields: [productId], references: [id])
+  suggestedProductId Int     @map("suggested_product_id")
+  suggestedProduct   Product @relation("SuggestedProduct", fields: [suggestedProductId], references: [id])
+  // C-05: hasta 4 sugerencias por producto — el orden decide cuáles se
+  // muestran primero si hay más de 4 filas cargadas para el mismo producto.
+  position           Int     @default(0)
+
+  @@unique([productId, suggestedProductId])
+  @@map("complementary_products")
+}
+
+// ---------------------------------------------------------------------------
+// Módulo pedido (SP-04 cierre de la venta, SP-06 ejecución y seguimiento).
+// Sprints 4 y 6. Trazable a C-06, C-07, C-10 a C-13, RN-05, RN-07 a RN-09.
+// ---------------------------------------------------------------------------
+
+enum OrderStatus {
+  CREATED
+  PAID
+  PREPARING
+  READY_FOR_PICKUP
+  DELIVERED
+  CANCELLED
+  PAYMENT_FAILED
+}
+
+model Order {
+  id                  Int         @id @default(autoincrement())
+  customerId          Int         @map("customer_id")
+  customer            Customer    @relation(fields: [customerId], references: [id])
+  branchId            Int         @map("branch_id")
+  branch              Branch      @relation(fields: [branchId], references: [id])
+  // Máquina de estados descrita en arquitectura.md sección 5.
+  status              OrderStatus @default(CREATED)
+  committedAt         DateTime    @map("committed_at")
+  // RN-08: código de retiro de un solo uso, vence a los 5 días calendario.
+  pickupCode          String      @unique @map("pickup_code")
+  pickupCodeExpiresAt DateTime    @map("pickup_code_expires_at")
+  correlationId       String      @unique @map("correlation_id")
+  createdAt           DateTime    @default(now()) @map("created_at")
+
+  items            OrderItem[]
+  reservations     UnitsReservation[]
+  statusHistory    OrderStatusHistory[]
+  couponRedemption CouponRedemption?
+  payment          Payment?
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int     @map("order_id")
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId Int     @map("product_id")
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  unitPrice Decimal @map("unit_price") @db.Decimal(12, 2)
+
+  @@map("order_items")
+}
+
+model UnitsReservation {
+  id             Int          @id @default(autoincrement())
+  orderId        Int          @map("order_id")
+  order          Order        @relation(fields: [orderId], references: [id])
+  availabilityId Int          @map("availability_id")
+  availability   Availability @relation(fields: [availabilityId], references: [id])
+  quantity       Int
+  // RN-05: ningún pedido se cobra sin que las unidades queden reservadas
+  // primero. `releasedAt` nulo mientras la reserva sigue vigente.
+  releasedAt     DateTime?    @map("released_at")
+
+  @@map("units_reservations")
+}
+
+model OrderStatusHistory {
+  id         Int         @id @default(autoincrement())
+  orderId    Int         @map("order_id")
+  order      Order       @relation(fields: [orderId], references: [id])
+  status     OrderStatus
+  occurredAt DateTime    @default(now()) @map("occurred_at")
+
+  @@map("order_status_history")
+}
+
+model LoyaltyCoupon {
+  id         Int     @id @default(autoincrement())
+  code       String  @unique
+  percentage Decimal @db.Decimal(5, 2)
+  active     Boolean @default(true)
+
+  redemptions CouponRedemption[]
+
+  @@map("loyalty_coupons")
+}
+
+model CouponRedemption {
+  id       Int           @id @default(autoincrement())
+  couponId Int           @map("coupon_id")
+  coupon   LoyaltyCoupon @relation(fields: [couponId], references: [id])
+  // RN-07: un cupón se redime una sola vez por pedido, incluso con
+  // reintentos — se refuerza con `@unique` en `orderId`, no solo por convención.
+  orderId  Int           @unique @map("order_id")
+  order    Order         @relation(fields: [orderId], references: [id])
+
+  @@map("coupon_redemptions")
+}
+
+// ---------------------------------------------------------------------------
+// Módulo pago (SP-05 cobro y conciliación). Sprint 5. Trazable a C-08, C-09,
+// RN-06 (nunca se guarda número de tarjeta, solo el token de la pasarela).
+// ---------------------------------------------------------------------------
+
+enum PaymentMethod {
+  CARD
+  BANK_DEBIT
+}
+
+enum PaymentStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+}
+
+model Payment {
+  id           Int           @id @default(autoincrement())
+  orderId      Int           @unique @map("order_id")
+  order        Order         @relation(fields: [orderId], references: [id])
+  method       PaymentMethod
+  status       PaymentStatus @default(PENDING)
+  gatewayToken String        @map("gateway_token")
+  confirmedAt  DateTime?     @map("confirmed_at")
+
+  @@map("payments")
 }
