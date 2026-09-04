@@ -1,0 +1,83 @@
+name: Desplegar a Cloud Run
+
+on:
+  push:
+    branches: [main]
+
+env:
+  REGION: us-central1
+  REPO: comproya
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configurar Docker para Artifact Registry
+        run: gcloud auth configure-docker $REGION-docker.pkg.dev --quiet
+
+      - name: Build y push de la imagen
+        run: |
+          IMAGE=$REGION-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/$REPO/backend:${{ github.sha }}
+          docker build -t $IMAGE ./backend
+          docker push $IMAGE
+          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
+
+      - name: Migrar la base de datos (Prisma)
+        run: |
+          cd backend
+          npm install
+          npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Deploy a Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: comproya-backend
+          region: ${{ env.REGION }}
+          image: ${{ env.IMAGE }}
+
+  frontend:
+    runs-on: ubuntu-latest
+    needs: backend
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configurar Docker para Artifact Registry
+        run: gcloud auth configure-docker $REGION-docker.pkg.dev --quiet
+
+      - name: Build y push de la imagen
+        run: |
+          IMAGE=$REGION-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/$REPO/frontend:${{ github.sha }}
+          docker build -t $IMAGE ./frontend
+          docker push $IMAGE
+          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
+
+      - name: Deploy a Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: comproya-frontend
+          region: ${{ env.REGION }}
+          image: ${{ env.IMAGE }}

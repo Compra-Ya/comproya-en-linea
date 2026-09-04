@@ -1,0 +1,74 @@
+// Esquema de referencia para el catálogo digital de ComproYa en Línea.
+// Cubre únicamente SP-01 (gobierno del catálogo) y SP-02 (disponibilidad),
+// que es lo que la siembra de datos de este script necesita poblar.
+// Campos y reglas trazables al CANON-ComproYa.md: C-01, C-03, RN-01 a RN-04.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Categoria {
+  id        Int        @id @default(autoincrement())
+  nombre    String     @unique
+  productos Producto[]
+
+  @@map("categorias")
+}
+
+model Producto {
+  id                 Int             @id @default(autoincrement())
+  // Código homologado del maestro (RN-01): un producto solo es vendible
+  // en línea si este código existe y el producto fue publicado explícitamente.
+  codigoHomologado   String          @unique @map("codigo_homologado")
+  nombre             String
+  categoriaId        Int             @map("categoria_id")
+  categoria          Categoria       @relation(fields: [categoriaId], references: [id])
+  // Costo interno registrado en el ERP. RN-02: el precio digital nunca
+  // puede ser inferior a este costo sin aprobación de gerencia comercial.
+  costo              Decimal         @db.Decimal(12, 2)
+  precioDigital      Decimal         @map("precio_digital") @db.Decimal(12, 2)
+  // RN-01: publicación explícita en el canal, independiente de existir en el maestro.
+  publicado          Boolean         @default(true)
+  fuente             String          @default("dummyjson") // "dummyjson" | "sintetico"
+  creadoEn           DateTime        @default(now()) @map("creado_en")
+  disponibilidad     Disponibilidad[]
+
+  @@index([categoriaId])
+  @@map("productos")
+}
+
+model Sucursal {
+  id             Int              @id @default(autoincrement())
+  nombre         String           @unique
+  ciudad         String
+  disponibilidad Disponibilidad[]
+
+  @@map("sucursales")
+}
+
+model Disponibilidad {
+  id                  Int      @id @default(autoincrement())
+  productoId          Int      @map("producto_id")
+  producto            Producto @relation(fields: [productoId], references: [id])
+  sucursalId          Int      @map("sucursal_id")
+  sucursal            Sucursal @relation(fields: [sucursalId], references: [id])
+  // Existencias que reporta el ERP para esa sucursal (fuera del alcance del canal,
+  // el canal solo lo consume).
+  existenciasErp            Int      @map("existencias_erp")
+  // RN-03: unidades ofrecidas = existenciasErp - umbralSeguridad - unidadesReservadas.
+  // Se guarda cada componente por separado; el cálculo es responsabilidad
+  // de la capa de aplicación, tal como lo describe el canon ("disponibilidad calculada").
+  umbralSeguridad     Int      @default(5) @map("umbral_seguridad")
+  unidadesReservadas  Int      @default(0) @map("unidades_reservadas")
+  // RN-04: si esta marca de tiempo tiene más de 15 minutos, la sucursal
+  // no puede ofrecer retiro para este producto.
+  sincronizadoEn      DateTime @map("sincronizado_en")
+
+  @@unique([productoId, sucursalId])
+  @@map("disponibilidad")
+}
