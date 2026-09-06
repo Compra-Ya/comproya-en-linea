@@ -128,6 +128,13 @@ La sección 10 del canon fija veinte umbrales de requisitos. La tabla siguiente 
 | Pago con tarjeta confirmado ≤ 60 s | Latencia propia de la interfaz de Stripe, muy por debajo del umbral |
 | Conciliación pedido–pago–inventario, diferencia ≤ 0,1 % | Reserva de unidades y registro de pago viven en la misma base de datos transaccional (Postgres), dentro de la misma transacción SQL — no hay ventana de inconsistencia entre sistemas distintos |
 
+**Nota de rendimiento frontend.** El umbral de búsqueda (P95 ≤ 1,5 s desde 3 caracteres) y el de publicación visible en el catálogo (≤ 5 min) tienen mitad backend, mitad frontend — la mitad backend ya está en la tabla de arriba; la mitad frontend queda como requisito para cuando se construya el sitio real en Next.js:
+
+- Imágenes de producto servidas con `next/image` (formatos modernos, tamaños responsivos) — nunca la imagen original sin procesar.
+- Cero JavaScript de terceros innecesario en la ruta del catálogo y del buscador; cargar bajo demanda (`dynamic import`) todo lo que no sea parte del renderizado inicial (modales, paneles internos).
+- Los mockups de `docs/mockups-brief.md` ya siguen esta disciplina de forma consistente — cada ícono es SVG en línea, no hay una sola imagen rasterizada — como referencia de que la interfaz puede construirse sin peso muerto.
+- Medir con Lighthouse/Web Vitals en CI antes de dar por cumplido el umbral; el número del canon es el criterio de aceptación, no una impresión visual.
+
 ## 11. Decisiones que hay que revisar
 
 - Se asumió Stripe en modo sandbox y Postgres en Cloud SQL porque ya se habían acordado en esta conversación; si el equipo prefiere otro motor de base de datos, cambia la sección 5 y el `schema.prisma`, no el resto del documento.
