@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'Manrope',system-ui,-apple-system,sans-serif;color:#16202B;background:#F4F6F8}
+button{font-family:inherit}
+button:focus-visible{outline:2px solid #17457F;outline-offset:2px}
+@keyframes cy-modal-in{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes cy-scrim-in{from{opacity:0}to{opacity:1}}
+.cy-scrim{animation:cy-scrim-in .18s ease both}
+.cy-modal-card{animation:cy-modal-in .22s cubic-bezier(.22,.61,.36,1) both}
+</style>
+</helmet>
+
+<div style="background:#16202B;color:#fff;padding:9px 20px;font:700 11px/1.4 'Manrope',sans-serif;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+  <span style="background:#E8681C;padding:3px 8px;border-radius:5px;font-weight:800">P-13</span>
+  <span>CU-13 Cancelación del pedido — extensión de CU-11</span>
+  <span style="opacity:.5">·</span>
+  <span>Actor: Cliente digital</span>
+  <span style="opacity:.5">·</span>
+  <span>RN-09 · Sprint 6</span>
+</div>
+
+<div class="cy-scrim" style="min-height:640px;background:#EDF0F3;background-image:repeating-linear-gradient(135deg,rgba(23,69,127,.05) 0 10px,rgba(23,69,127,0) 10px 20px);display:flex;align-items:center;justify-content:center;padding:50px 20px">
+  <div class="cy-modal-card" style="width:440px;max-width:100%;background:#fff;border-radius:16px;box-shadow:0 28px 60px rgba(16,32,48,.22);padding:30px;display:flex;flex-direction:column;gap:18px">
+    <div style="display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center">
+      <span style="width:44px;height:44px;border-radius:12px;background:#FBEAE7;display:flex;align-items:center;justify-content:center;font:800 20px/1 'Manrope',sans-serif;color:#B23B23">!</span>
+      <span style="font:800 19px/1.3 'Manrope',sans-serif;margin-top:6px">¿Cancelar el pedido #48213?</span>
+      <span style="font:500 13px/1.5 'Manrope',sans-serif;color:#8B98A5">Aún no ha iniciado su alistamiento en sucursal Chapinero</span>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;background:#F4F6F8;border-radius:10px;padding:14px 16px">
+      <div style="display:flex;align-items:center;gap:9px"><span style="width:6px;height:6px;border-radius:999px;background:#5B6875"></span><span style="font:600 12px/1.4 'Manrope',sans-serif">La reserva de tus unidades se libera en menos de 5 minutos</span></div>
+      <div style="display:flex;align-items:center;gap:9px"><span style="width:6px;height:6px;border-radius:999px;background:#5B6875"></span><span style="font:600 12px/1.4 'Manrope',sans-serif">El cobro se revierte en menos de 24 horas</span></div>
+    </div>
+
+    <div style="display:flex;gap:10px">
+      <button type="button" style="flex:1;height:46px;border:1.5px solid #D6DBE1;border-radius:10px;background:#fff;font:700 13.5px/1 'Manrope',sans-serif;cursor:pointer">Mantener pedido</button>
+      <button type="button" style="flex:1;height:46px;border:0;border-radius:10px;background:#B23B23;color:#fff;font:700 13.5px/1 'Manrope',sans-serif;cursor:pointer" style-hover="background:#96301C">Sí, cancelar</button>
+    </div>
+  </div>
+</div>
+
+<main style="max-width:720px;margin:0 auto;padding:24px 24px 60px">
+  <div style="display:flex;align-items:center;gap:10px;background:#EDF0F3;border-radius:10px;padding:12px 14px">
+    <span style="width:26px;height:26px;border-radius:999px;background:#8B98A5;color:#fff;display:flex;align-items:center;justify-content:center;font:800 13px/1 'Manrope',sans-serif;flex:none">✕</span>
+    <span style="font:600 12.5px/1.4 'Manrope',sans-serif;color:#5B6875">RN-09: si el pedido ya inició alistamiento en sucursal (como el pedido #48219, ver P-12), este botón aparece deshabilitado con el mensaje "Ya no se puede cancelar — el pedido está en alistamiento"</span>
+  </div>
+</main>
+</x-dc>
+</body>
+</html>

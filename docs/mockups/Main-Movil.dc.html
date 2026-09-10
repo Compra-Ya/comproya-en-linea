@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#F4F6F8;font-family:'Manrope',system-ui,-apple-system,sans-serif;color:#16202B;-webkit-font-smoothing:antialiased}
+a{color:#17457F;text-decoration:none}
+button{font-family:inherit}
+.cy-scroll{overflow-x:auto;scrollbar-width:none}
+.cy-scroll::-webkit-scrollbar{display:none}
+</style>
+</helmet>
+
+<div style="background:#16202B;color:#fff;padding:9px 14px;font:700 10.5px/1.4 'Manrope',sans-serif;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+  <span style="background:#8B98A5;padding:3px 7px;border-radius:5px;font-weight:800">RESPONSIVE</span>
+  <span>Main · versión móvil (390px) · menú hamburguesa abierto</span>
+</div>
+
+<div style="width:390px;margin:0 auto;position:relative;min-height:844px;background:#F4F6F8;overflow:hidden">
+
+  <header style="background:#fff;border-bottom:1px solid #E6E9ED">
+    <div style="background:#17457F;color:#fff;padding:6px 14px;font:600 9.5px/1.3 'Manrope',sans-serif;text-align:center">Retiro sin costo en 8 sucursales o envío a todo el país</div>
+    <div style="display:flex;align-items:center;gap:10px;padding:12px 14px">
+      <button type="button" aria-label="Abrir menú" style="width:36px;height:36px;flex:none;border:0;background:transparent;display:flex;align-items:center;justify-content:center;border-radius:8px">
+        <span style="display:flex;flex-direction:column;gap:4px;width:18px">
+          <span style="height:2px;background:#16202B;border-radius:2px;display:block"></span>
+          <span style="height:2px;background:#16202B;border-radius:2px;display:block"></span>
+          <span style="height:2px;background:#16202B;border-radius:2px;display:block"></span>
+        </span>
+      </button>
+      <span style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px">
+        <svg width="26" height="26" viewBox="0 0 100 100" aria-label="ComproYa"><rect width="100" height="100" rx="22" fill="#17457F"/><path d="M69.92,66.72 A26,26 0 1,1 69.92,33.28" fill="none" stroke="#ffffff" stroke-width="16" stroke-linecap="round"/><polygon points="58,82 78,82 88,60 68,60" fill="#E8681C"/></svg>
+        <span style="font:800 16px/1 'Manrope',sans-serif;letter-spacing:-.03em">Compro<span style="color:#E8681C">Ya</span></span>
+      </span>
+      <button type="button" aria-label="Carrito" style="position:relative;width:36px;height:36px;flex:none;border:0;background:transparent;display:flex;align-items:center;justify-content:center">
+        <span style="width:17px;height:13px;border:2px solid #16202B;border-radius:0 0 4px 4px;display:block"></span>
+        <span style="position:absolute;top:2px;right:2px;width:15px;height:15px;border-radius:999px;background:#E8681C;color:#fff;font:800 9px/15px 'Manrope',sans-serif;text-align:center">0</span>
+      </button>
+    </div>
+    <div style="padding:0 14px 12px">
+      <div style="display:flex;align-items:center;height:40px;border:1.5px solid #E6E9ED;border-radius:10px;background:#fff">
+        <input type="text" aria-label="Buscar" placeholder="Buscar productos…" style="flex:1;min-width:0;height:100%;border:0;outline:0;background:transparent;padding:0 12px;font:500 13px/1 'Manrope',sans-serif">
+        <span style="width:34px;height:30px;margin-right:4px;border-radius:7px;background:#E8681C;display:flex;align-items:center;justify-content:center">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <main style="padding:16px 14px 90px;display:flex;flex-direction:column;gap:26px">
+    <div style="background:#fff;border:1px solid #E6E9ED;border-radius:14px;padding:22px 18px;display:flex;flex-direction:column;gap:10px">
+      <span style="display:inline-flex;align-self:flex-start;font:700 9px/1 'Manrope',sans-serif;text-transform:uppercase;letter-spacing:.08em;color:#17457F;background:#E9F0F9;padding:6px 9px;border-radius:999px">Temporada tecnología</span>
+      <span style="font:800 22px/1.2 'Manrope',sans-serif;letter-spacing:-.02em">Hasta 30% en audio y hogar inteligente</span>
+      <span style="font:500 12px/1.5 'Manrope',sans-serif;color:#5B6875">Precios validados contra el costo del ERP.</span>
+      <a href="#" style="margin-top:6px;display:flex;align-items:center;justify-content:center;height:42px;border-radius:9px;background:#E8681C;color:#fff;font:700 13px/1 'Manrope',sans-serif">Ver ofertas</a>
+    </div>
+
+    <div class="cy-scroll" style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(210px,1fr);gap:10px">
+      <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #E6E9ED;border-radius:11px;padding:12px">
+        <span style="width:28px;height:28px;flex:none;border-radius:7px;background:#E9F0F9;display:block"></span>
+        <span style="font:700 11.5px/1.3 'Manrope',sans-serif">Retiro en sucursal</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #E6E9ED;border-radius:11px;padding:12px">
+        <span style="width:28px;height:28px;flex:none;border-radius:7px;background:#E9F0F9;display:block"></span>
+        <span style="font:700 11.5px/1.3 'Manrope',sans-serif">Pago protegido</span>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <span style="font:800 16px/1.2 'Manrope',sans-serif;letter-spacing:-.01em">Explora categorías</span>
+      <div class="cy-scroll" style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(84px,1fr);gap:10px">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:7px;background:#fff;border:1px solid #E6E9ED;border-radius:11px;padding:12px 8px">
+          <span style="width:42px;height:42px;border-radius:999px;background:#F4F6F8;display:block"></span>
+          <span style="font:700 10.5px/1.2 'Manrope',sans-serif;text-align:center">Tecnología</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:7px;background:#fff;border:1px solid #E6E9ED;border-radius:11px;padding:12px 8px">
+          <span style="width:42px;height:42px;border-radius:999px;background:#F4F6F8;display:block"></span>
+          <span style="font:700 10.5px/1.2 'Manrope',sans-serif;text-align:center">Hogar</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:7px;background:#fff;border:1px solid #E6E9ED;border-radius:11px;padding:12px 8px">
+          <span style="width:42px;height:42px;border-radius:999px;background:#F4F6F8;display:block"></span>
+          <span style="font:700 10.5px/1.2 'Manrope',sans-serif;text-align:center">Moda</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <span style="font:800 16px/1.2 'Manrope',sans-serif;letter-spacing:-.01em">Ofertas publicadas hoy</span>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:#fff;border:1px solid #E6E9ED;border-radius:12px;overflow:hidden">
+          <span style="aspect-ratio:1/1;background:#F4F6F8;display:block"></span>
+          <div style="padding:9px;display:flex;flex-direction:column;gap:4px">
+            <span style="font:600 11px/1.3 'Manrope',sans-serif;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">Audífonos inalámbricos ANC</span>
+            <span style="font:800 13px/1 'Manrope',sans-serif">$189.900</span>
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid #E6E9ED;border-radius:12px;overflow:hidden">
+          <span style="aspect-ratio:1/1;background:#F4F6F8;display:block"></span>
+          <div style="padding:9px;display:flex;flex-direction:column;gap:4px">
+            <span style="font:600 11px/1.3 'Manrope',sans-serif;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">Aspiradora robot mapeo</span>
+            <span style="font:800 13px/1 'Manrope',sans-serif">$899.900</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <a href="#" aria-label="Volver arriba" style="position:absolute;right:16px;bottom:16px;width:42px;height:42px;border-radius:999px;background:#16202B;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px rgba(16,32,48,.25)">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+  </a>
+
+  <div style="position:absolute;inset:0;background:rgba(15,23,32,.55)"></div>
+
+  <div style="position:absolute;top:0;left:0;bottom:0;width:300px;background:#fff;box-shadow:12px 0 30px rgba(16,32,48,.25);display:flex;flex-direction:column">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 16px 12px;border-bottom:1px solid #E6E9ED">
+      <span style="display:flex;align-items:center;gap:8px">
+        <svg width="26" height="26" viewBox="0 0 100 100" aria-label="ComproYa"><rect width="100" height="100" rx="22" fill="#17457F"/><path d="M69.92,66.72 A26,26 0 1,1 69.92,33.28" fill="none" stroke="#ffffff" stroke-width="16" stroke-linecap="round"/><polygon points="58,82 78,82 88,60 68,60" fill="#E8681C"/></svg>
+        <span style="font:800 15px/1 'Manrope',sans-serif;letter-spacing:-.03em">Compro<span style="color:#E8681C">Ya</span></span>
+      </span>
+      <button type="button" aria-label="Cerrar menú" style="width:30px;height:30px;border:0;border-radius:999px;background:#F4F6F8;color:#5B6875;font:400 15px/1 'Manrope',sans-serif;cursor:pointer">✕</button>
+    </div>
+
+    <div style="flex:1;overflow-y:auto;padding:10px 8px;display:flex;flex-direction:column;gap:2px">
+      <span style="font:700 10px/1 'Manrope',sans-serif;text-transform:uppercase;letter-spacing:.08em;color:#8B98A5;padding:10px 12px 4px">Categorías</span>
+      <a href="#" style="display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:9px;font:700 13.5px/1 'Manrope',sans-serif;color:#16202B">Tecnología <span style="color:#8B98A5">›</span></a>
+      <a href="#" style="display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:9px;font:700 13.5px/1 'Manrope',sans-serif;color:#16202B">Hogar <span style="color:#8B98A5">›</span></a>
+      <a href="#" style="display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:9px;font:700 13.5px/1 'Manrope',sans-serif;color:#16202B">Moda <span style="color:#8B98A5">›</span></a>
+      <a href="#" style="display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:9px;font:700 13.5px/1 'Manrope',sans-serif;color:#16202B">Deportes <span style="color:#8B98A5">›</span></a>
+      <a href="#" style="display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:9px;font:700 13.5px/1 'Manrope',sans-serif;color:#16202B">Belleza y cuidado <span style="color:#8B98A5">›</span></a>
+      <a href="#" style="display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:9px;font:700 13.5px/1 'Manrope',sans-serif;color:#16202B">Mercado <span style="color:#8B98A5">›</span></a>
+
+      <span style="height:1px;background:#EDF0F3;margin:10px 4px"></span>
+
+      <a href="#" style="display:flex;align-items:center;gap:9px;padding:12px;border-radius:9px;font:600 13px/1 'Manrope',sans-serif;color:#16202B">Ofertas del día
+        <span style="font:800 8.5px/1 'Manrope',sans-serif;text-transform:uppercase;letter-spacing:.06em;color:#E8681C;background:#FDEEE4;padding:3px 5px;border-radius:4px">Hot</span>
+      </a>
+      <a href="#" style="padding:12px;border-radius:9px;font:600 13px/1 'Manrope',sans-serif;color:#16202B">Más vendidos</a>
+      <a href="#" style="padding:12px;border-radius:9px;font:600 13px/1 'Manrope',sans-serif;color:#16202B">Nuevos productos</a>
+      <a href="#" style="padding:12px;border-radius:9px;font:600 13px/1 'Manrope',sans-serif;color:#16202B">Promociones</a>
+      <a href="#" style="padding:12px;border-radius:9px;font:600 13px/1 'Manrope',sans-serif;color:#16202B">Supermercado</a>
+    </div>
+
+    <div style="border-top:1px solid #E6E9ED;padding:14px 16px;display:flex;flex-direction:column;gap:10px">
+      <a href="#" style="font:600 12.5px/1 'Manrope',sans-serif;color:#5B6875">Ayuda</a>
+      <a href="#" style="font:600 12.5px/1 'Manrope',sans-serif;color:#5B6875">Mis pedidos</a>
+      <a href="#" style="display:flex;align-items:center;justify-content:center;height:42px;border-radius:9px;border:1.5px solid #D6DBE1;font:700 13px/1 'Manrope',sans-serif;color:#16202B">Inicia sesión</a>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>
