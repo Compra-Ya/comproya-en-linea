@@ -1,0 +1,17 @@
+# Postgres local para desarrollo, coincide con backend/.env (puerto 5433 para
+# no chocar con una instalación local de Postgres en 5432).
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: comproya
+      POSTGRES_DB: comproya
+    ports:
+      - "5433:5432"
+    volumes:
+      - comproya_db_data:/var/lib/postgresql/data
+
+volumes:
+  comproya_db_data:

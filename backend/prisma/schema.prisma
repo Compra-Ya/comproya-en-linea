@@ -170,6 +170,9 @@ model Cart {
   // registrarse/iniciar sesión es responsabilidad de la capa de aplicación).
   customerId Int?       @map("customer_id")
   customer   Customer?  @relation(fields: [customerId], references: [id])
+  // Identifica el carrito de un invitado entre peticiones (y entre
+  // dispositivos, C-04) antes de que exista sesión. Se limpia al fusionar.
+  guestToken String?    @unique @map("guest_token")
   updatedAt  DateTime   @default(now()) @updatedAt @map("updated_at")
   items      CartItem[]
 
@@ -322,7 +325,14 @@ model Payment {
   order        Order         @relation(fields: [orderId], references: [id])
   method       PaymentMethod
   status       PaymentStatus @default(PENDING)
+  // Para CARD: id de la Checkout Session de Stripe, y luego el payment_intent
+  // una vez el webhook confirma. Para BANK_DEBIT: identificador simulado de
+  // la notificación de débito. RN-06: nunca un número de tarjeta.
   gatewayToken String        @map("gateway_token")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  // Se actualiza también cuando el estado pasa a FAILED — los jobs de
+  // liberación de reserva (arquitectura.md sección 8) miden el plazo desde aquí.
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at")
   confirmedAt  DateTime?     @map("confirmed_at")
 
   @@map("payments")

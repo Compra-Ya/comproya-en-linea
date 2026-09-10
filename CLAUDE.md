@@ -45,4 +45,4 @@ Todo lo que el canon declara fuera de alcance (sección 3): logística propia, c
 
 ## Estado actual
 
-`backend/prisma/` ya trae un script de siembra de catálogo funcional y probado (`seed.ts` + `lib/`), construido antes que el resto del repositorio — ver su propio `README.md`. El resto del backend y el frontend están por construir siguiendo `docs/plan-de-trabajo.md` desde la Fase 0.
+Sprints 1 a 5 construidos (backend NestJS + frontend Next.js): catálogo, cuenta, carrito, pedido y pago, con Stripe Checkout en modo de prueba para CU-15 y un endpoint propio simulando la notificación de débito bancario para CU-16. Ver `backend/README.md` y `frontend/README.md` para el detalle módulo por módulo y cómo correr todo en local. Sprint 6 (`operacion`: CU-11 a CU-14) y el bootstrap de GCP (`docs/despliegue-gcp.md`) siguen pendientes.

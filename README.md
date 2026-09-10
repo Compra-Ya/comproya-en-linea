@@ -16,12 +16,39 @@ Si es la primera vez que se abre este repositorio (persona o Claude Code), leer 
 ## Estado
 
 - Canon y documentos de arquitectura/plan: listos.
-- `backend/prisma/`: script de siembra del catálogo, construido y probado (ver `backend/README.md`).
-- Resto del backend (NestJS), frontend (Next.js) e infraestructura de GCP: por construir, siguiendo `docs/plan-de-trabajo.md` desde la Fase 0.
+- Backend (NestJS) y frontend (Next.js): construidos para los sprints 1 a 5 del canon — catálogo (CU-01, CU-02, CU-03), cuenta (CU-04, CU-05, CU-06), carrito (CU-07, CU-08), pedido (CU-09, CU-10) y pago (CU-15, CU-16, CU-17, con Stripe Checkout en modo de prueba). Detalle en `backend/README.md` y `frontend/README.md`.
+- Sprint 6 (`operacion`: CU-11 a CU-14) e infraestructura de GCP: por construir, siguiendo `docs/plan-de-trabajo.md`.
+- Mockups formales de Fase 0 (`docs/mockups-plan.md`, con `/design`): no se rehicieron en esta entrega — las pantallas se construyeron funcionales, siguiendo la asignación de actor/caso de uso de ese plan, pero sin el diseño visual detallado que produce `/design`.
+
+## Cómo correr el proyecto en local
+
+Requiere Node 22+ y Docker (para Postgres local; si ya tienes Cloud SQL u otro Postgres, usa esa cadena de conexión en su lugar).
+
+```bash
+# 1. Base de datos
+docker compose up -d
+
+# 2. Backend
+cd backend
+npm install
+cp .env.example .env        # completar JWT_SECRET y, para probar pagos, las llaves de Stripe (ver backend/README.md)
+npm run prisma:migrate
+npm run seed:all            # datos de ejemplo: catálogo, cuentas, carritos, pedidos, pagos
+npm run start:dev           # http://localhost:3001/api
+
+# 3. Frontend (en otra terminal)
+cd frontend
+npm install
+cp .env.example .env.local
+npm run dev                 # http://localhost:3000
+```
+
+Pruebas automatizadas (contra una base de datos de pruebas real, separada de la de desarrollo): `cd backend && npm test` — ver `backend/README.md` para el paso único de preparar `comproya_test`.
+
+Para probar el pago de punta a punta con las tarjetas de prueba de Stripe (flujo feliz y pago rechazado), ver la sección correspondiente en `backend/README.md`.
 
 ## Cómo seguir desde aquí
 
-1. Crear este repositorio en GitHub y subir este contenido.
-2. Abrir el repositorio con Claude Code — `CLAUDE.md` se carga automáticamente.
-3. Fase 0: correr `/design` contra la lista de `docs/mockups-plan.md`, y en paralelo seguir `docs/despliegue-gcp.md` para dejar GCP y el pipeline de despliegue listos.
-4. A partir de ahí, sprint por sprint según `docs/plan-de-trabajo.md`.
+1. Sprint 6 (`operacion`): CU-11 consulta de estado, CU-12 alistamiento y entrega en sucursal, CU-13 cancelación del pedido, CU-14 supervisión de pedidos en riesgo — siguiendo `docs/plan-de-trabajo.md`, Fase 6.
+2. Mockups formales de Fase 0 con `/design`, si el equipo los necesita para el entregable académico además de lo ya construido.
+3. Bootstrap de GCP y despliegue continuo, siguiendo `docs/despliegue-gcp.md`.
