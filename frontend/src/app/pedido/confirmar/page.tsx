@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { api, ApiError, getSelectedBranch } from "@/lib/api";
+import { api, ApiError, getSelectedBranch, setSelectedBranch } from "@/lib/api";
 import type { Carrito, Pedido, Sucursal } from "@/lib/types";
 
 // P-9 Confirmación del pedido (CU-09) + P-10 Aplicación de cupón de lealtad
@@ -12,7 +12,8 @@ import type { Carrito, Pedido, Sucursal } from "@/lib/types";
 export default function ConfirmarPedidoPage() {
   const router = useRouter();
   const [carrito, setCarrito] = useState<Carrito | null>(null);
-  const [sucursal, setSucursal] = useState<Sucursal | null>(null);
+  const [sucursales, setSucursales] = useState<Sucursal[]>([]);
+  const [branchId, setBranchId] = useState<number | null>(null);
   const [couponCode, setCouponCode] = useState("");
   const [cuponAplicado, setCuponAplicado] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -20,20 +21,22 @@ export default function ConfirmarPedidoPage() {
 
   useEffect(() => {
     api<Carrito>("/carrito").then(setCarrito).catch(() => undefined);
-    const branchId = getSelectedBranch();
-    if (branchId) {
-      api<Sucursal[]>("/catalogo/sucursales", { auth: false, cartToken: false }).then((lista) => {
-        setSucursal(lista.find((s) => s.id === branchId) ?? null);
-      });
-    }
+    api<Sucursal[]>("/catalogo/sucursales", { auth: false, cartToken: false }).then((lista) => {
+      setSucursales(lista);
+      // Si ya se eligió sucursal desde la ficha de producto (P-3), se
+      // respeta; si no (por ejemplo, se agregó al carrito desde el
+      // catálogo con el botón rápido), se ofrece elegirla aquí mismo.
+      const guardada = getSelectedBranch();
+      setBranchId(guardada && lista.some((s) => s.id === guardada) ? guardada : lista[0]?.id ?? null);
+    });
   }, []);
 
   async function confirmar() {
-    const branchId = getSelectedBranch();
     if (!branchId) {
-      setError("Elige una sucursal de retiro desde la ficha de un producto antes de confirmar.");
+      setError("Elige una sucursal de retiro.");
       return;
     }
+    setSelectedBranch(branchId);
     setError(null);
     setConfirmando(true);
     try {
@@ -75,11 +78,15 @@ export default function ConfirmarPedidoPage() {
 
           <div className="card card-pad">
             <h3 style={{ fontSize: 13, marginBottom: 10 }}>Retiro</h3>
-            {sucursal ? (
-              <p>{sucursal.name} · código de retiro se genera al confirmar</p>
-            ) : (
-              <p className="muted">Aún no elegiste sucursal — vuelve a la ficha del producto y usa "Retirar aquí".</p>
-            )}
+            <div className="field" style={{ marginBottom: 0 }}>
+              <label>Sucursal</label>
+              <select value={branchId ?? ""} onChange={(e) => setBranchId(Number(e.target.value))}>
+                {sucursales.map((s) => (
+                  <option key={s.id} value={s.id}>{s.name} — {s.city}</option>
+                ))}
+              </select>
+            </div>
+            <p className="faint" style={{ marginTop: 8 }}>El código de retiro se genera al confirmar.</p>
           </div>
         </div>
 

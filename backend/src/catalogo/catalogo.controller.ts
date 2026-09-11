@@ -16,17 +16,23 @@ export class CatalogoController {
   }
 
   @Get("productos")
-  buscarProductos(@Query("q") q?: string, @Query("page") page?: string) {
+  buscarProductos(@Query("q") q?: string, @Query("page") page?: string, @Query("categoryId") categoryId?: string) {
     const pageNumber = page ? Number(page) : 1;
+    const categoryIdNumber = categoryId ? Number(categoryId) : undefined;
     if (!q) {
-      return this.catalogo.listarPublicados(pageNumber);
+      return this.catalogo.listarPublicados(pageNumber, 20, categoryIdNumber);
     }
-    return this.catalogo.buscarProductos(q, pageNumber);
+    return this.catalogo.buscarProductos(q, pageNumber, 20, categoryIdNumber);
   }
 
   @Get("productos/:id")
   obtenerProducto(@Param("id", ParseIntPipe) id: number) {
     return this.catalogo.obtenerProducto(id);
+  }
+
+  @Get("categorias")
+  listarCategorias() {
+    return this.catalogo.listarCategorias();
   }
 
   @Get("sucursales")

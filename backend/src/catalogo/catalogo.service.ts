@@ -62,13 +62,14 @@ export class CatalogoService {
   // este módulo (docs/arquitectura.md sección 10); aquí solo se exige el
   // mínimo de caracteres para no lanzar búsquedas de 1-2 letras contra todo
   // el catálogo.
-  async buscarProductos(query: string, page = 1, pageSize = 20) {
+  async buscarProductos(query: string, page = 1, pageSize = 20, categoryId?: number) {
     if (query.trim().length < 3) {
       throw new BadRequestException("La búsqueda requiere al menos 3 caracteres");
     }
     const where = {
       published: true,
       name: { contains: query, mode: "insensitive" as const },
+      ...(categoryId ? { categoryId } : {}),
     };
     const [items, total] = await this.prisma.$transaction([
       this.prisma.product.findMany({
@@ -83,8 +84,8 @@ export class CatalogoService {
     return { items, total, page, pageSize };
   }
 
-  async listarPublicados(page = 1, pageSize = 20) {
-    const where = { published: true };
+  async listarPublicados(page = 1, pageSize = 20, categoryId?: number) {
+    const where = { published: true, ...(categoryId ? { categoryId } : {}) };
     const [items, total] = await this.prisma.$transaction([
       this.prisma.product.findMany({
         where,
@@ -113,6 +114,18 @@ export class CatalogoService {
 
   async disponibilidadPorProducto(productId: number) {
     return this.erp.listarDisponibilidadPorProducto(productId);
+  }
+
+  // Para la grilla de categorías del catálogo (P-2) — cuenta real de
+  // productos publicados por categoría, no una cifra decorativa.
+  async listarCategorias() {
+    const categorias = await this.prisma.category.findMany({
+      include: { _count: { select: { products: { where: { published: true } } } } },
+      orderBy: { name: "asc" },
+    });
+    return categorias
+      .map((c) => ({ id: c.id, name: c.name, productCount: c._count.products }))
+      .filter((c) => c.productCount > 0);
   }
 
   async listarSucursales() {

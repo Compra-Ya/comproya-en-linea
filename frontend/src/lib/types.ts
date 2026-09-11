@@ -3,6 +3,7 @@
 export interface Categoria {
   id: number;
   name: string;
+  productCount?: number;
 }
 
 export interface Producto {
