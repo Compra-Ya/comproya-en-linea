@@ -1,44 +1,38 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { api, ApiError, setCartToken } from "@/lib/api";
-import type { Carrito, Disponibilidad, Producto, Sucursal } from "@/lib/types";
+import { Suspense, useEffect, useState } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { api, ApiError } from "@/lib/api";
+import type { Producto } from "@/lib/types";
+import ShopHeader from "@/components/ShopHeader";
 
-// P-2 Búsqueda de productos (CU-02) + P-3 Consulta de disponibilidad por
-// sucursal (CU-03). Sprint 1 — sin autenticación (decisión D-01 del canon).
-export default function CatalogoPage() {
-  const [query, setQuery] = useState("");
+// P-2 Búsqueda de productos (CU-02). Sprint 1 — sin autenticación (decisión
+// D-01 del canon); ShopHeader ya maneja sesión/carrito para cuando sí exista.
+function Catalogo() {
+  const searchParams = useSearchParams();
+  const qParam = searchParams.get("q") ?? "";
   const [productos, setProductos] = useState<Producto[]>([]);
-  const [sucursales, setSucursales] = useState<Sucursal[]>([]);
-  const [sucursalSeleccionada, setSucursalSeleccionada] = useState<number | null>(null);
-  const [disponibilidad, setDisponibilidad] = useState<Record<number, Disponibilidad>>({});
+  const [categoriaActiva, setCategoriaActiva] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [mensaje, setMensaje] = useState<string | null>(null);
-  const [cargando, setCargando] = useState(false);
-
-  useEffect(() => {
-    api<Sucursal[]>("/catalogo/sucursales", { auth: false, cartToken: false }).then((lista) => {
-      setSucursales(lista);
-      if (lista[0]) setSucursalSeleccionada(lista[0].id);
-    });
-  }, []);
+  const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
     buscar();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [qParam]);
 
   async function buscar() {
     setError(null);
     setCargando(true);
     try {
-      if (query.trim().length > 0 && query.trim().length < 3) {
+      if (qParam && qParam.length < 3) {
         setError("La búsqueda requiere al menos 3 caracteres");
-        setCargando(false);
+        setProductos([]);
         return;
       }
-      const path = query.trim() ? `/catalogo/productos?q=${encodeURIComponent(query.trim())}` : "/catalogo/productos";
-      const respuesta = await api<{ items: Producto[] }>(path, { auth: false, cartToken: false });
+      const path = qParam ? `/catalogo/productos?q=${encodeURIComponent(qParam)}` : "/catalogo/productos";
+      const respuesta = await api<{ items: Producto[]; total: number }>(path, { auth: false, cartToken: false });
       setProductos(respuesta.items);
     } catch (e) {
       setError(e instanceof ApiError ? e.message : "No se pudo cargar el catálogo");
@@ -47,83 +41,74 @@ export default function CatalogoPage() {
     }
   }
 
-  async function verDisponibilidad(productId: number) {
-    if (!sucursalSeleccionada) return;
-    try {
-      const d = await api<Disponibilidad>(
-        `/catalogo/productos/${productId}/disponibilidad?sucursalId=${sucursalSeleccionada}`,
-        { auth: false, cartToken: false },
-      );
-      setDisponibilidad((prev) => ({ ...prev, [productId]: d }));
-    } catch (e) {
-      setError(e instanceof ApiError ? e.message : "No se pudo consultar la disponibilidad");
-    }
-  }
-
-  async function agregarAlCarrito(productId: number) {
-    setMensaje(null);
-    setError(null);
-    try {
-      const carrito = await api<Carrito>("/carrito/items", { method: "POST", body: { productId, quantity: 1 } });
-      if (carrito.guestToken) setCartToken(carrito.guestToken);
-      setMensaje("Producto agregado al carrito");
-    } catch (e) {
-      // E-1 (sin disponibilidad) no se valida aquí — RN-03 se aplica al
-      // confirmar el pedido, cuando ya hay una sucursal de retiro elegida.
-      setError(e instanceof ApiError ? e.message : "No se pudo agregar el producto");
-    }
-  }
+  const categorias = Array.from(new Set(productos.map((p) => p.category?.name).filter(Boolean))) as string[];
+  const visibles = categoriaActiva ? productos.filter((p) => p.category?.name === categoriaActiva) : productos;
 
   return (
     <div>
-      <h1>Catálogo</h1>
-      {error && <div className="alerta-error">{error}</div>}
-      {mensaje && <div className="alerta-exito">{mensaje}</div>}
+      <ShopHeader activeLink="catalogo" />
 
-      <div className="tarjeta">
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          <input
-            placeholder="Buscar (mínimo 3 caracteres)…"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && buscar()}
-          />
-          <select
-            value={sucursalSeleccionada ?? ""}
-            onChange={(e) => setSucursalSeleccionada(Number(e.target.value))}
-          >
-            {sucursales.map((s) => (
-              <option key={s.id} value={s.id}>{s.name} — {s.city}</option>
-            ))}
-          </select>
-          <button onClick={buscar} disabled={cargando}>Buscar</button>
+      <div style={{ margin: "24px 24px 0" }}>
+        <div className="card" style={{ background: "linear-gradient(120deg,var(--navy),#1d4f8f)", border: "none", borderRadius: 18, padding: "32px 40px", color: "#fff" }}>
+          <h2 style={{ color: "#fff", fontSize: 24, maxWidth: 520 }}>
+            {qParam ? `Resultados para "${qParam}"` : "Catálogo homologado, publicado y con precio digital verificado"}
+          </h2>
+          <p style={{ color: "#cfe0f2", fontSize: 13, marginTop: 6 }}>Los resultados aparecen desde que escribes 3 caracteres.</p>
         </div>
       </div>
 
-      <div className="grid-productos">
-        {productos.map((p) => (
-          <div key={p.id} className="tarjeta">
-            <span className="etiqueta">{p.category?.name}</span>
-            <h2>{p.name}</h2>
-            <p className="muted">{p.homologatedCode}</p>
-            <p><strong>${Number(p.digitalPrice).toLocaleString("es-CO")}</strong></p>
+      <div className="container" style={{ maxWidth: 1300 }}>
+        {error && <div className="notice notice-danger" style={{ marginBottom: 16 }}>{error}</div>}
 
-            {disponibilidad[p.id] ? (
-              <p className="muted">
-                {disponibilidad[p.id].unidadesDisponibles} unidades disponibles en esta sucursal
-                {!disponibilidad[p.id].puedeRetirar && (
-                  <> — <span style={{ color: "var(--danger)" }}>sin retiro (sucursal desincronizada, RN-04)</span></>
-                )}
-              </p>
-            ) : (
-              <button className="secundario" onClick={() => verDisponibilidad(p.id)}>Ver disponibilidad</button>
-            )}
-
-            <button onClick={() => agregarAlCarrito(p.id)}>Agregar al carrito</button>
+        {categorias.length > 0 && (
+          <div style={{ display: "flex", gap: 10, marginBottom: 18, flexWrap: "wrap" }}>
+            <button className={`tabs button${categoriaActiva === null ? " active" : ""}`} style={tabChip(categoriaActiva === null)} onClick={() => setCategoriaActiva(null)}>Todas</button>
+            {categorias.map((c) => (
+              <button key={c} style={tabChip(categoriaActiva === c)} onClick={() => setCategoriaActiva(c)}>{c}</button>
+            ))}
           </div>
-        ))}
-        {productos.length === 0 && !cargando && <p className="muted">No hay productos publicados que coincidan.</p>}
+        )}
+
+        {!cargando && <p className="muted" style={{ marginBottom: 16 }}>{visibles.length} productos publicados encontrados</p>}
+
+        <div className="grid-productos">
+          {visibles.map((p) => (
+            <Link key={p.id} href={`/producto/${p.id}`} className="product-card" style={{ color: "inherit" }}>
+              <div className="product-thumb">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="5" y="2" width="14" height="20" rx="1.5" /><path d="M5 11h14" /></svg>
+              </div>
+              <div className="product-info">
+                <span style={{ fontSize: 13, fontWeight: 600 }}>{p.name}</span>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontWeight: 700, fontSize: 16 }}>$ {Number(p.digitalPrice).toLocaleString("es-CO")}</span>
+                  <span className="badge badge-orange">Publicado</span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+        {visibles.length === 0 && !cargando && !error && <p className="muted">No hay productos publicados que coincidan.</p>}
       </div>
     </div>
+  );
+}
+
+function tabChip(active: boolean): React.CSSProperties {
+  return {
+    padding: "8px 16px",
+    borderRadius: 999,
+    border: `1px solid ${active ? "var(--navy)" : "var(--line)"}`,
+    background: active ? "var(--navy)" : "#fff",
+    color: active ? "#fff" : "var(--ink-soft)",
+    fontSize: 12.5,
+    fontWeight: 600,
+  };
+}
+
+export default function CatalogoPage() {
+  return (
+    <Suspense fallback={<p className="muted">Cargando…</p>}>
+      <Catalogo />
+    </Suspense>
   );
 }

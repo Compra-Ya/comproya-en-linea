@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { api, ApiError } from "@/lib/api";
 import type { Comprobante } from "@/lib/types";
@@ -42,28 +43,52 @@ export default function ComprobantePage() {
     };
   }, [orderId]);
 
-  if (reintentando) return <p className="muted">Confirmando el pago con la pasarela…</p>;
-  if (error) return <div className="alerta-error">{error}</div>;
-  if (!comprobante) return null;
-
   return (
-    <div className="tarjeta" style={{ maxWidth: 480 }}>
-      <h1>Comprobante</h1>
-      <div className="alerta-exito">Pago confirmado</div>
+    <div className="auth-shell">
+      <div style={{ width: "100%", background: "#ececec", borderBottom: "1px dashed var(--line)", padding: "8px 24px", fontSize: 11, color: "var(--ink-soft)", textAlign: "center" }}>
+        Continúa el flujo de pago, una vez el pago quedó confirmado
+      </div>
+      <div className="auth-wrap" style={{ padding: "26px 0" }}>
+        {reintentando && <p className="muted" style={{ textAlign: "center" }}>Confirmando el pago con la pasarela…</p>}
+        {error && <div className="notice notice-danger">{error}</div>}
+        {comprobante && (
+          <>
+            <div className="check-circle">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M20 6 9 17l-5-5" /></svg>
+            </div>
+            <h2 style={{ textAlign: "center", marginBottom: 4 }}>Pago confirmado</h2>
+            <p className="muted" style={{ textAlign: "center", marginBottom: 22 }}>
+              Pedido #{comprobante.idPedido} · identificador de correlación {comprobante.correlationId}
+            </p>
 
-      <p className="muted">Código de retiro (un solo uso, RN-08)</p>
-      <p className="pickup-code">{comprobante.pickupCode}</p>
-      <p className="muted">Vence: {new Date(comprobante.pickupCodeExpiresAt).toLocaleString("es-CO")}</p>
-      <p className="muted">Sucursal de retiro: {comprobante.branch.name} — {comprobante.branch.city}</p>
+            <div className="card card-pad">
+              <div className="retiro-code">
+                <span className="faint">Código de retiro</span>
+                <div className="code">{comprobante.pickupCode}</div>
+                <span className="faint">
+                  Válido hasta el {new Date(comprobante.pickupCodeExpiresAt).toLocaleDateString("es-CO")} · de un solo uso
+                </span>
+              </div>
 
-      <hr style={{ margin: "16px 0", border: "none", borderTop: "1px solid var(--border)" }} />
-      {comprobante.items.map((item) => (
-        <div className="fila" key={item.id}>
-          <span>{item.product.name} × {item.quantity}</span>
-          <span>${(Number(item.unitPrice) * item.quantity).toLocaleString("es-CO")}</span>
-        </div>
-      ))}
-      <p className="muted">Identificador de correlación: {comprobante.correlationId}</p>
+              {comprobante.items.map((item) => (
+                <div className="li" key={item.id}>
+                  <span>{item.product.name}{item.quantity > 1 ? ` × ${item.quantity}` : ""}</span>
+                  <span>$ {(Number(item.unitPrice) * item.quantity).toLocaleString("es-CO")}</span>
+                </div>
+              ))}
+              <div className="li" style={{ borderBottom: "none", fontWeight: 800, color: "var(--ink)" }}>
+                <span>Total pagado</span>
+                <span>
+                  $ {comprobante.items.reduce((acc, i) => acc + Number(i.unitPrice) * i.quantity, 0).toLocaleString("es-CO")}
+                </span>
+              </div>
+              <p className="faint" style={{ marginTop: 10 }}>Sucursal de retiro: {comprobante.branch.name} — {comprobante.branch.city}</p>
+
+              <Link href="/"><button className="btn btn-navy btn-full" style={{ marginTop: 16 }}>Volver al catálogo</button></Link>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 }

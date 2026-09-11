@@ -16,14 +16,17 @@ export class CatalogoController {
   }
 
   @Get("productos")
-  buscarProductos(
-    @Query("q") q?: string,
-    @Query("page", new ParseIntPipe({ optional: true })) page?: number,
-  ) {
+  buscarProductos(@Query("q") q?: string, @Query("page") page?: string) {
+    const pageNumber = page ? Number(page) : 1;
     if (!q) {
-      return this.catalogo.listarPublicados(page ?? 1);
+      return this.catalogo.listarPublicados(pageNumber);
     }
-    return this.catalogo.buscarProductos(q, page ?? 1);
+    return this.catalogo.buscarProductos(q, pageNumber);
+  }
+
+  @Get("productos/:id")
+  obtenerProducto(@Param("id", ParseIntPipe) id: number) {
+    return this.catalogo.obtenerProducto(id);
   }
 
   @Get("sucursales")
@@ -39,12 +42,9 @@ export class CatalogoController {
   }
 
   @Get("productos/:id/disponibilidad")
-  disponibilidad(
-    @Param("id", ParseIntPipe) id: number,
-    @Query("sucursalId", new ParseIntPipe({ optional: true })) sucursalId?: number,
-  ) {
+  disponibilidad(@Param("id", ParseIntPipe) id: number, @Query("sucursalId") sucursalId?: string) {
     if (sucursalId) {
-      return this.catalogo.disponibilidadPorSucursal(id, sucursalId);
+      return this.catalogo.disponibilidadPorSucursal(id, Number(sucursalId));
     }
     return this.catalogo.disponibilidadPorProducto(id);
   }

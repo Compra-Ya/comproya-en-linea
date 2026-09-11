@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { AdaptadorErpSimulado } from "./puertos/adaptador-erp-simulado";
 import { PublicarProductoDto } from "./dto/publicar-producto.dto";
@@ -96,6 +96,14 @@ export class CatalogoService {
       this.prisma.product.count({ where }),
     ]);
     return { items, total, page, pageSize };
+  }
+
+  async obtenerProducto(id: number) {
+    const producto = await this.prisma.product.findUnique({ where: { id }, include: { category: true } });
+    if (!producto || !producto.published) {
+      throw new NotFoundException("El producto no existe o no está publicado en el canal");
+    }
+    return producto;
   }
 
   // CU-03 Consulta de disponibilidad por sucursal.

@@ -30,6 +30,43 @@ export function setCartToken(token: string | null) {
   else localStorage.removeItem("comproya_cart_token");
 }
 
+// Solo para mostrar "Hola, <nombre>" en el encabezado sin una llamada extra
+// por pantalla — el backend sigue siendo la única fuente de verdad de la sesión.
+export interface CustomerResumen {
+  id: number;
+  name: string;
+}
+
+export function getStoredCustomer(): CustomerResumen | null {
+  if (typeof window === "undefined") return null;
+  const raw = localStorage.getItem("comproya_customer");
+  return raw ? (JSON.parse(raw) as CustomerResumen) : null;
+}
+
+export function setStoredCustomer(customer: CustomerResumen | null) {
+  if (typeof window === "undefined") return;
+  if (customer) localStorage.setItem("comproya_customer", JSON.stringify(customer));
+  else localStorage.removeItem("comproya_customer");
+}
+
+// Sucursal de retiro elegida en la ficha de producto (P-3) y llevada a la
+// confirmación del pedido (P-9) — el pedido solo admite una sucursal.
+export function getSelectedBranch(): number | null {
+  if (typeof window === "undefined") return null;
+  const raw = localStorage.getItem("comproya_branch_id");
+  return raw ? Number(raw) : null;
+}
+
+export function setSelectedBranch(branchId: number) {
+  if (typeof window === "undefined") return;
+  localStorage.setItem("comproya_branch_id", String(branchId));
+}
+
+export function cerrarSesion() {
+  setToken(null);
+  setStoredCustomer(null);
+}
+
 export async function api<T>(
   path: string,
   options: { method?: string; body?: unknown; auth?: boolean; cartToken?: boolean } = {},

@@ -1,19 +1,22 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { api, ApiError } from "@/lib/api";
 
 // P-15 Pago con tarjeta (CU-15, Stripe Checkout) y P-16 Pago con débito
-// bancario (CU-16, simulado) — especialización de "Pagar pedido" a nivel de
-// interfaz (docs/plan-de-trabajo.md, Fase 5), sin ser un caso de uso nuevo.
-// RN-06: nunca se pide ni se muestra un número de tarjeta en esta pantalla —
-// la tarjeta se captura en la página que aloja Stripe.
+// bancario (CU-16, simulado) — mismas pestañas "Tarjeta / Débito bancario"
+// del mockup. Diferencia deliberada frente al mockup: la pestaña de tarjeta
+// no pide número de tarjeta en este formulario — RN-06 exige que ComproYa
+// nunca la reciba, así que solo hay un botón que redirige a la página que
+// aloja Stripe (donde sí se captura la tarjeta).
 export default function PagoPage() {
   const params = useParams<{ orderId: string }>();
   const search = useSearchParams();
   const router = useRouter();
   const orderId = Number(params.orderId);
+  const [tab, setTab] = useState<"tarjeta" | "debito">("tarjeta");
   const [error, setError] = useState<string | null>(
     search.get("cancelado") ? "El pago con tarjeta fue cancelado o no se completó." : null,
   );
@@ -44,7 +47,7 @@ export default function PagoPage() {
   }
 
   // Simula la notificación de débito bancario que en el canon entrega la
-  // pasarela de pagos (no hay una pasarela de débito real conectada).
+  // pasarela de pagos (canon, sección 3) — no hay banco real conectado.
   async function simularNotificacion(exitoso: boolean) {
     setNotificando(true);
     setError(null);
@@ -60,32 +63,60 @@ export default function PagoPage() {
   }
 
   return (
-    <div className="tarjeta" style={{ maxWidth: 480 }}>
-      <h1>Pagar pedido #{orderId}</h1>
-      {error && <div className="alerta-error">{error}</div>}
-      <p className="muted">
-        ComproYa no captura ni almacena el número de tarjeta (RN-06): el pago con tarjeta ocurre en una
-        página propia de Stripe.
-      </p>
+    <div className="auth-shell">
+      <Link href="/" className="auth-brand"><span className="brand-mark">CY</span>ComproYa</Link>
+      <div className="auth-wrap">
+        <h2 style={{ textAlign: "center", marginBottom: 16 }}>Pagar pedido #{orderId}</h2>
 
-      <div style={{ marginBottom: 16 }}>
-        <h2>Pago con tarjeta (Stripe, modo de prueba)</h2>
-        <button onClick={pagarConTarjeta} disabled={cargandoTarjeta}>Pagar con tarjeta</button>
-      </div>
+        <div className="tabs">
+          <button className={tab === "tarjeta" ? "active" : undefined} onClick={() => setTab("tarjeta")}>Tarjeta</button>
+          <button className={tab === "debito" ? "active" : undefined} onClick={() => setTab("debito")}>Débito bancario</button>
+        </div>
 
-      <div>
-        <h2>Pago con débito bancario</h2>
-        {!debito ? (
-          <button className="secundario" onClick={iniciarDebito}>Iniciar débito bancario</button>
-        ) : (
-          <div>
-            <p className="muted">Referencia: {debito.referencia}. Esperando notificación del banco…</p>
-            <div style={{ display: "flex", gap: 8 }}>
-              <button onClick={() => simularNotificacion(true)} disabled={notificando}>Simular notificación exitosa</button>
-              <button className="secundario" onClick={() => simularNotificacion(false)} disabled={notificando}>Simular rechazo</button>
-            </div>
-          </div>
-        )}
+        {error && <div className="notice notice-danger" style={{ marginBottom: 14 }}>{error}</div>}
+
+        <div className="card card-pad">
+          {tab === "tarjeta" ? (
+            <>
+              <div className="notice notice-neutral" style={{ marginBottom: 16 }}>
+                Este pago lo administra Stripe, en modo de prueba. ComproYa no almacena ni procesa el número de
+                tarjeta: solo recibe un token emitido por la pasarela (RN-06).
+              </div>
+              <button className="btn btn-primary btn-full" onClick={pagarConTarjeta} disabled={cargandoTarjeta}>
+                Pagar con tarjeta
+              </button>
+            </>
+          ) : (
+            <>
+              {!debito ? (
+                <>
+                  <div className="field">
+                    <label>Selecciona tu banco</label>
+                    <select disabled><option>Banco Central</option></select>
+                  </div>
+                  <div className="notice notice-warn" style={{ margin: "8px 0 16px" }}>
+                    Se simula la confirmación del banco (no hay una pasarela de débito bancario real conectada). Si no
+                    hay confirmación en 30 minutos, el pedido se cancela.
+                  </div>
+                  <button className="btn btn-primary btn-full" onClick={iniciarDebito}>Continuar con mi banco</button>
+                </>
+              ) : (
+                <>
+                  <p className="faint" style={{ marginBottom: 12 }}>Referencia: {debito.referencia}</p>
+                  <div className="notice notice-warn" style={{ marginBottom: 16 }}>Esperando confirmación del débito bancario…</div>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <button className="btn btn-primary" style={{ flex: 1 }} onClick={() => simularNotificacion(true)} disabled={notificando}>
+                      Simular confirmación
+                    </button>
+                    <button className="btn btn-outline-red" style={{ flex: 1 }} onClick={() => simularNotificacion(false)} disabled={notificando}>
+                      Simular rechazo
+                    </button>
+                  </div>
+                </>
+              )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
