@@ -1,10 +1,15 @@
 import "reflect-metadata";
+import { join } from "path";
 import { NestFactory } from "@nestjs/core";
 import { ValidationPipe } from "@nestjs/common";
+import { NestExpressApplication } from "@nestjs/platform-express";
 import { AppModule } from "./app.module";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { rawBody: true });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { rawBody: true });
+  // Imágenes del catálogo curado (backend/public/**), servidas fuera del
+  // prefijo /api porque no son un recurso de la API sino un archivo estático.
+  app.useStaticAssets(join(__dirname, "..", "public"), { prefix: "/media" });
   // FRONTEND_ORIGIN admite una lista separada por comas — el dominio de
   // producción de Vercel más sus URLs de preview por rama, por ejemplo.
   const origenes = (process.env.FRONTEND_ORIGIN ?? "http://localhost:3000")

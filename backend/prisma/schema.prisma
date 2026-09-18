@@ -50,6 +50,9 @@ model Product {
   // RN-01: publicación explícita en el canal, independiente de existir en el maestro.
   published       Boolean       @default(true)
   source          ProductSource @default(DUMMYJSON)
+  // Imagen real de producto (catálogo curado); null para el resto del
+  // catálogo sintético, que sigue usando el ícono genérico del frontend.
+  imageUrl        String?       @map("image_url")
   createdAt       DateTime      @default(now()) @map("created_at")
 
   availability           Availability[]
@@ -121,14 +124,27 @@ model Customer {
   @@map("customers")
 }
 
+// Máquina de estados de Consentimiento (Plan_Pruebas_ComproYa.docx, sección
+// 9.2, PE-01 a PE-05): Pendiente -> Activo/Revocado -> Suprimido (terminal).
+// No es un identificador textual del canon: es una interpretación técnica
+// para poder ejecutar esos casos de prueba, documentada como tal en
+// Resultados_Pruebas_ComproYa.md.
+enum ConsentStatus {
+  PENDIENTE
+  ACTIVO
+  REVOCADO
+  SUPRIMIDO
+}
+
 model Consent {
-  id         Int      @id @default(autoincrement())
-  customerId Int      @unique @map("customer_id")
-  customer   Customer @relation(fields: [customerId], references: [id])
+  id         Int           @id @default(autoincrement())
+  customerId Int           @unique @map("customer_id")
+  customer   Customer      @relation(fields: [customerId], references: [id])
   // C-15: revocable. RN-10: sin consentimiento activo, el comportamiento del
   // cliente se registra de forma anónima, sin identificador de cliente.
-  active     Boolean  @default(true)
-  updatedAt  DateTime @default(now()) @updatedAt @map("updated_at")
+  active     Boolean       @default(true)
+  status     ConsentStatus @default(PENDIENTE)
+  updatedAt  DateTime      @default(now()) @updatedAt @map("updated_at")
 
   @@map("consents")
 }

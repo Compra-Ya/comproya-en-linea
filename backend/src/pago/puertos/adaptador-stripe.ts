@@ -29,7 +29,11 @@ export class AdaptadorStripe implements PuertoPasarelaDePagos {
     const frontendUrl = process.env.FRONTEND_ORIGIN ?? "http://localhost:3000";
     // `expires_at` acota la sesión a 30 minutos: si el cliente cierra la
     // pestaña sin pagar, Stripe emite `checkout.session.expired` dentro del
-    // plazo que exige el canon para liberar la reserva.
+    // plazo que exige el canon para liberar la reserva. No se puede acortar
+    // para pruebas: Stripe exige un mínimo real de 30 minutos entre creación
+    // y expiración de una Checkout Session (comprobado empíricamente contra
+    // la API real) — CU-09-02 expira la sesión desde el test con
+    // `stripe.checkout.sessions.expire()`, no bajando este plazo.
     const expiresAt = Math.floor(Date.now() / 1000) + 30 * 60;
     const session = await this.cliente.checkout.sessions.create({
       mode: "payment",

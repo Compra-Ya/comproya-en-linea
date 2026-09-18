@@ -6,6 +6,7 @@ import { CatalogoService } from "../catalogo/catalogo.service";
 import { AdaptadorErpSimulado } from "../catalogo/puertos/adaptador-erp-simulado";
 import { CarritoService } from "../carrito/carrito.service";
 import { PedidoService } from "./pedido.service";
+import { Pedido } from "./dominio/pedido";
 
 describe("PedidoService (RN-05, RN-07, RN-08, RN-09)", () => {
   let prisma: PrismaService;
@@ -96,14 +97,109 @@ describe("PedidoService (RN-05, RN-07, RN-08, RN-09)", () => {
     ).rejects.toThrow();
   });
 
-  it("RN-09: el modelo de pedido incluye el estado cancelado y no lo alcanza automáticamente tras confirmar", async () => {
-    // RN-09 solo se modela en esta entrega (CU-13 de cancelación es sprint 6,
-    // fuera de alcance) — se verifica que el estado existe y que un pedido
-    // recién confirmado queda en CREATED, nunca CANCELLED.
-    expect(Object.values(OrderStatus)).toContain(OrderStatus.CANCELLED);
+  it("PE-07: Creado + cancelar() antes de iniciar alistamiento (RN-09) -> Cancelado, reserva liberada", async () => {
+    const { product, branch, customer } = await crearProductoConDisponibilidad(20);
+    await carrito.agregarItem(customer.id, null, { productId: product.id, quantity: 2 });
+    const order = await pedido.confirmar(customer.id, { branchId: branch.id });
+    expect(Pedido.desde(order).puedeCancelarse()).toBe(true);
+
+    const cancelado = await pedido.cancelar(order.id);
+
+    expect(cancelado.status).toBe(OrderStatus.CANCELLED);
+    const disponibilidad = await prisma.availability.findFirst({ where: { productId: product.id } });
+    expect(disponibilidad?.reservedUnits).toBe(0);
+  });
+
+  it("RN-09: un pedido en alistamiento ya no puede cancelarse", async () => {
     const { product, branch, customer } = await crearProductoConDisponibilidad(20);
     await carrito.agregarItem(customer.id, null, { productId: product.id, quantity: 1 });
     const order = await pedido.confirmar(customer.id, { branchId: branch.id });
-    expect(order.status).toBe(OrderStatus.CREATED);
+    await pedido.marcarEstado(order.id, OrderStatus.PAID);
+    await pedido.iniciarAlistamiento(order.id);
+
+    const enAlistamiento = await pedido.obtener(order.id);
+    expect(Pedido.desde(enAlistamiento).puedeCancelarse()).toBe(false);
+    await expect(pedido.cancelar(order.id)).rejects.toThrow(/RN-09/);
+  });
+
+  it("PE-09: En alistamiento + retiro en tienda -> Listo para retiro", async () => {
+    const { product, branch, customer } = await crearProductoConDisponibilidad(20);
+    await carrito.agregarItem(customer.id, null, { productId: product.id, quantity: 1 });
+    const order = await pedido.confirmar(customer.id, { branchId: branch.id });
+    await pedido.marcarEstado(order.id, OrderStatus.PAID);
+    await pedido.iniciarAlistamiento(order.id);
+
+    const listo = await pedido.marcarListoParaRetiro(order.id);
+
+    expect(listo.status).toBe(OrderStatus.READY_FOR_PICKUP);
+  });
+
+  it("PE-10: Listo para retiro + retiro con código dentro de 5 días (RN-08) -> Entregado", async () => {
+    const { product, branch, customer } = await crearProductoConDisponibilidad(20);
+    await carrito.agregarItem(customer.id, null, { productId: product.id, quantity: 1 });
+    const order = await pedido.confirmar(customer.id, { branchId: branch.id });
+    await pedido.marcarEstado(order.id, OrderStatus.PAID);
+    await pedido.iniciarAlistamiento(order.id);
+    await pedido.marcarListoParaRetiro(order.id);
+
+    const entregado = await pedido.retirarConCodigo(order.id, order.pickupCode, new Date());
+
+    expect(entregado.status).toBe(OrderStatus.DELIVERED);
+  });
+
+  it("PE-10 (caso de frontera): código presentado después de 5 días -> se rechaza el retiro, no se completa la entrega", async () => {
+    const { product, branch, customer } = await crearProductoConDisponibilidad(20);
+    await carrito.agregarItem(customer.id, null, { productId: product.id, quantity: 1 });
+    const order = await pedido.confirmar(customer.id, { branchId: branch.id });
+    await pedido.marcarEstado(order.id, OrderStatus.PAID);
+    await pedido.iniciarAlistamiento(order.id);
+    await pedido.marcarListoParaRetiro(order.id);
+    const seisDiasDespues = new Date(order.pickupCodeExpiresAt.getTime() + 24 * 60 * 60 * 1000);
+
+    await expect(pedido.retirarConCodigo(order.id, order.pickupCode, seisDiasDespues)).rejects.toThrow(/venció/);
+
+    const final = await pedido.obtener(order.id);
+    expect(final.status).toBe(OrderStatus.READY_FOR_PICKUP); // no se completó la entrega
+  });
+
+  it("PI-04: confirmar() calcula el total y solicita las reservas correspondientes (Carrito y ReservaUnidades simulados)", async () => {
+    const moduleAislado = await Test.createTestingModule({
+      providers: [
+        PedidoService,
+        PrismaService,
+        { provide: CarritoService, useValue: {} },
+        { provide: CatalogoService, useValue: {} },
+      ],
+    }).compile();
+    const prismaAislado = moduleAislado.get(PrismaService);
+    const pedidoAislado = moduleAislado.get(PedidoService);
+    const carritoSimulado = moduleAislado.get(CarritoService) as { obtenerOCrear?: jest.Mock };
+    const catalogoSimulado = moduleAislado.get(CatalogoService) as { reservarUnidades?: jest.Mock };
+    await resetDb(prismaAislado);
+    const category = await prismaAislado.category.create({ data: { name: "CatPI04" } });
+    const product = await prismaAislado.product.create({
+      data: { homologatedCode: "PI04-000001", name: "P", categoryId: category.id, cost: 1000, digitalPrice: 15000 },
+    });
+    const branch = await prismaAislado.branch.create({ data: { name: "SucursalPI04", city: "Bogotá" } });
+    // Fila real de Availability solo para que la FK de UnitsReservation sea
+    // válida — la decisión de "hay unidades" la sigue tomando el simulado.
+    const availability = await prismaAislado.availability.create({
+      data: { productId: product.id, branchId: branch.id, erpUnits: 20, safetyThreshold: 5, reservedUnits: 0, syncedAt: new Date() },
+    });
+    const customer = await prismaAislado.customer.create({
+      data: { document: "PI04-1", name: "Cliente", email: "pi04@test.com", passwordHash: "x" },
+    });
+    carritoSimulado.obtenerOCrear = jest.fn(async () => ({
+      id: 1,
+      items: [{ productId: product.id, quantity: 2, product: { digitalPrice: 15000 } }],
+    }));
+    catalogoSimulado.reservarUnidades = jest.fn(async () => availability.id); // ReservaUnidades simulada: siempre reserva con éxito.
+
+    const order = await pedidoAislado.confirmar(customer.id, { branchId: branch.id });
+
+    expect(catalogoSimulado.reservarUnidades).toHaveBeenCalledWith(product.id, branch.id, 2);
+    const total = await pedidoAislado.calcularTotal(order.id);
+    expect(total).toBe(30000); // 15000 * 2
+    await prismaAislado.$disconnect();
   });
 });

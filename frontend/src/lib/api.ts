@@ -1,6 +1,14 @@
 // Cliente HTTP hacia el backend (NestJS). Un solo punto de entrada para que
 // cada pantalla no repita el manejo de token / X-Cart-Token / errores.
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001/api";
+// Origen del backend sin el prefijo /api, para recursos estáticos (imágenes
+// del catálogo curado) servidos fuera de la API — ver backend/src/main.ts.
+const API_ORIGIN = API_URL.replace(/\/api\/?$/, "");
+
+export function urlImagenProducto(imageUrl: string | null | undefined): string | null {
+  if (!imageUrl) return null;
+  return `${API_ORIGIN}${imageUrl}`;
+}
 
 export class ApiError extends Error {
   constructor(public status: number, message: string) {

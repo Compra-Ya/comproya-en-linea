@@ -1,4 +1,5 @@
 import { BadRequestException, ConflictException, Injectable, UnauthorizedException } from "@nestjs/common";
+import { ConsentStatus } from "@prisma/client";
 import { JwtService } from "@nestjs/jwt";
 import { Customer } from "@prisma/client";
 import * as bcrypt from "bcryptjs";
@@ -60,7 +61,15 @@ export class CuentaService {
 
   // CU-05 Administración del consentimiento — activar/revocar en ≤ 2
   // interacciones (canon, sección 10): una sola llamada a este endpoint.
+  // PE-01/PE-02/PE-05 (Plan_Pruebas_ComproYa.docx, sección 9.2): la máquina
+  // de estados de Consentimiento es Pendiente -> Activo/Revocado -> Suprimido
+  // (terminal); desde Suprimido ninguna decisión del cliente cambia el estado.
   async decidirConsentimiento(customerId: number, dto: DecidirConsentimientoDto) {
+    const actual = await this.prisma.consent.findUnique({ where: { customerId } });
+    if (actual?.status === ConsentStatus.SUPRIMIDO) {
+      throw new ConflictException("No se puede otorgar ni revocar un consentimiento ya suprimido");
+    }
+
     if (dto.activo && dto.loyaltyId) {
       const encontrado = this.lealtad.resolverIdentificador(dto.loyaltyId);
       if (!encontrado) {
@@ -72,11 +81,12 @@ export class CuentaService {
       }
     }
 
+    const status = dto.activo ? ConsentStatus.ACTIVO : ConsentStatus.REVOCADO;
     return this.prisma.$transaction(async (tx) => {
       const consent = await tx.consent.upsert({
         where: { customerId },
-        update: { active: dto.activo },
-        create: { customerId, active: dto.activo },
+        update: { active: dto.activo, status },
+        create: { customerId, active: dto.activo, status },
       });
       if (dto.activo && dto.loyaltyId) {
         await tx.customer.update({ where: { id: customerId }, data: { loyaltyId: dto.loyaltyId } });
@@ -112,7 +122,12 @@ export class CuentaService {
           where: { customerId: solicitud.customerId },
           data: { customerId: null },
         }),
-        this.prisma.consent.updateMany({ where: { customerId: solicitud.customerId }, data: { active: false } }),
+        // PE-03/PE-04: revocado o activo, la supresión dentro de 72h (RN-11)
+        // siempre termina en el estado terminal Suprimido.
+        this.prisma.consent.updateMany({
+          where: { customerId: solicitud.customerId },
+          data: { active: false, status: ConsentStatus.SUPRIMIDO },
+        }),
         this.prisma.deletionRequest.update({ where: { id: solicitud.id }, data: { fulfilledAt: ahora } }),
       ]);
     }

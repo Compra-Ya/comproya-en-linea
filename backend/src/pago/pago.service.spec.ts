@@ -77,7 +77,7 @@ describe("PagoService (RN-06, CU-15, CU-16, CU-17)", () => {
     expect(NUMERO_DE_TARJETA.test(payment?.gatewayToken ?? "")).toBe(false);
   });
 
-  it("CU-15/CU-17: el webhook checkout.session.completed confirma el pago y habilita el comprobante", async () => {
+  it("PE-06 / CU-15/CU-17: el webhook checkout.session.completed confirma el pago (Creado -> Pagado) y habilita el comprobante", async () => {
     const { order, customer } = await crearPedidoConfirmado();
     await pago.crearSesionTarjeta(customer.id, order.id);
 
@@ -107,6 +107,21 @@ describe("PagoService (RN-06, CU-15, CU-16, CU-17)", () => {
     expect(actualizado?.status).toBe(OrderStatus.PAYMENT_FAILED);
     const disponibilidad = await prisma.availability.findFirst({ where: { productId: product.id } });
     expect(disponibilidad?.reservedUnits).toBe(0); // Reserva liberada.
+  });
+
+  it("PE-08: autorización de pago rechazada (payment_intent.payment_failed) -> Pedido en Pago fallido", async () => {
+    const { order, customer, product } = await crearPedidoConfirmado();
+    await pago.crearSesionTarjeta(customer.id, order.id);
+
+    await pago.manejarEventoStripe({
+      type: "payment_intent.payment_failed",
+      data: { object: { metadata: { orderId: String(order.id) } } },
+    } as any);
+
+    const actualizado = await prisma.order.findUnique({ where: { id: order.id } });
+    expect(actualizado?.status).toBe(OrderStatus.PAYMENT_FAILED);
+    const disponibilidad = await prisma.availability.findFirst({ where: { productId: product.id } });
+    expect(disponibilidad?.reservedUnits).toBe(0);
   });
 
   it("CU-16: la notificación de débito bancario exitosa confirma el pago", async () => {

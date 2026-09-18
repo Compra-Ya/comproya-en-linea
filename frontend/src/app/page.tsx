@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { api, ApiError, setCartToken } from "@/lib/api";
+import { api, ApiError, setCartToken, urlImagenProducto } from "@/lib/api";
 import type { Categoria, Producto } from "@/lib/types";
 import ShopHeader from "@/components/ShopHeader";
 
@@ -194,7 +194,12 @@ function Catalogo() {
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 21s-7-4.35-9.5-8.8C.6 8.7 2 5 5.6 4.2 8 3.6 10 5 12 7.3 14 5 16 3.6 18.4 4.2 22 5 23.4 8.7 21.5 12.2 19 16.65 12 21 12 21Z" /></svg>
                 </div>
                 <div className="product-thumb">
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="5" y="2" width="14" height="20" rx="1.5" /><path d="M5 11h14" /></svg>
+                  {urlImagenProducto(p.imageUrl) ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={urlImagenProducto(p.imageUrl)!} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  ) : (
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2"><rect x="5" y="2" width="14" height="20" rx="1.5" /><path d="M5 11h14" /></svg>
+                  )}
                 </div>
                 <div className="product-info" style={{ paddingBottom: 0 }}>
                   <span style={{ fontSize: 12.5, fontWeight: 600 }}>{p.name}</span>

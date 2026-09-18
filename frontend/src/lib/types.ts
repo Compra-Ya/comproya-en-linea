@@ -16,6 +16,7 @@ export interface Producto {
   cost: string;
   digitalPrice: string;
   published: boolean;
+  imageUrl?: string | null;
 }
 
 export interface Sucursal {

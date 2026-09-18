@@ -56,6 +56,7 @@ async function seedAccount(customers: CustomerSeed[]) {
         create: {
           customerId: customer.id,
           active: consentByDocument.get(customer.document) ?? true,
+          status: (consentByDocument.get(customer.document) ?? true) ? "ACTIVO" : "PENDIENTE",
         },
       });
     }

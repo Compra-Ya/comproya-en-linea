@@ -148,6 +148,56 @@ export class PedidoService {
     return subtotal;
   }
 
+  // RN-09: un pedido solo puede cancelarse mientras no haya iniciado su
+  // alistamiento en sucursal. Alcance mínimo de "operación" (sprint 6, ver
+  // Resultados_Pruebas_ComproYa.md): estos cuatro métodos solo mueven la
+  // máquina de estados de Pedido — no hay pantallas ni rol de Gerente de
+  // Tienda completos, eso sigue siendo CU-11 a CU-14.
+  async cancelar(orderId: number) {
+    const order = await this.obtener(orderId);
+    if (order.status !== OrderStatus.CREATED && order.status !== OrderStatus.PAID) {
+      throw new BadRequestException("El pedido ya inició alistamiento y no admite cancelación (RN-09)");
+    }
+    await this.marcarEstado(orderId, OrderStatus.CANCELLED);
+    await this.liberarReservasDelPedido(orderId);
+    return this.obtener(orderId);
+  }
+
+  async iniciarAlistamiento(orderId: number) {
+    const order = await this.obtener(orderId);
+    if (order.status !== OrderStatus.PAID) {
+      throw new BadRequestException("Solo un pedido pagado puede iniciar alistamiento");
+    }
+    await this.marcarEstado(orderId, OrderStatus.PREPARING);
+    return this.obtener(orderId);
+  }
+
+  async marcarListoParaRetiro(orderId: number) {
+    const order = await this.obtener(orderId);
+    if (order.status !== OrderStatus.PREPARING) {
+      throw new BadRequestException("Solo un pedido en alistamiento puede quedar listo para retiro");
+    }
+    await this.marcarEstado(orderId, OrderStatus.READY_FOR_PICKUP);
+    return this.obtener(orderId);
+  }
+
+  // RN-08: el código de retiro es de un solo uso y vence a los 5 días
+  // calendario — ambas condiciones se verifican aquí, no solo la fecha.
+  async retirarConCodigo(orderId: number, pickupCode: string, ahora: Date = new Date()) {
+    const order = await this.obtener(orderId);
+    if (order.status !== OrderStatus.READY_FOR_PICKUP) {
+      throw new BadRequestException("El pedido no está listo para retiro");
+    }
+    if (order.pickupCode !== pickupCode) {
+      throw new BadRequestException("El código de retiro no coincide con el del pedido");
+    }
+    if (ahora.getTime() > order.pickupCodeExpiresAt.getTime()) {
+      throw new BadRequestException("El código de retiro venció (RN-08: vigente 5 días calendario)");
+    }
+    await this.marcarEstado(orderId, OrderStatus.DELIVERED);
+    return this.obtener(orderId);
+  }
+
   async marcarEstado(orderId: number, status: OrderStatus) {
     return this.prisma.$transaction([
       this.prisma.order.update({ where: { id: orderId }, data: { status } }),

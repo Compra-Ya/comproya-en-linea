@@ -15,6 +15,7 @@
 import { fetchAllDummyProducts, fetchDummyCategories } from "./lib/dummyjson";
 import { buildFromDummy, completeCatalog } from "./lib/generate-catalog";
 import { BRANCHES, generateAvailability } from "./lib/generate-branches";
+import { CURATED_PRODUCTS } from "./lib/generate-curated";
 import type { ProductSeed } from "./lib/types";
 
 const TARGET_PRODUCTS = Number(process.env.TARGET_PRODUCTS ?? 1200);
@@ -50,10 +51,13 @@ async function buildCatalog(): Promise<ProductSeed[]> {
   console.log(`  ${dummyProducts.length} productos reales, ${categories.length} categorías`);
 
   const base = buildFromDummy(dummyProducts);
-  const catalog = completeCatalog(base, categories, TARGET_PRODUCTS);
+  const generado = completeCatalog(base, categories, TARGET_PRODUCTS);
+  // Catálogo curado (4 productos con imagen real, ver generate-curated.ts):
+  // se suma sin reemplazar nada del catálogo sintético/DummyJSON existente.
+  const catalog = [...generado, ...CURATED_PRODUCTS];
   console.log(
     `→ Catálogo final: ${catalog.length} productos ` +
-      `(${base.length} reales + ${catalog.length - base.length} sintéticos)`
+      `(${base.length} reales + ${generado.length - base.length} sintéticos + ${CURATED_PRODUCTS.length} curados con imagen)`
   );
 
   validateInvariants(catalog);
@@ -97,6 +101,7 @@ async function seedCatalog(catalog: ProductSeed[]) {
           digitalPrice: p.digitalPrice,
           published: p.published,
           source: p.source,
+          imageUrl: p.imageUrl ?? null,
         })),
         skipDuplicates: true,
       });

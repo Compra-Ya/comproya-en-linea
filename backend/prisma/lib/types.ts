@@ -13,6 +13,9 @@ export interface ProductSeed {
   digitalPrice: number;
   published: boolean;
   source: "DUMMYJSON" | "SYNTHETIC";
+  // Imagen real de producto (catálogo curado, ver generate-curated.ts).
+  // Undefined/null para el resto del catálogo, que usa el ícono genérico.
+  imageUrl?: string | null;
 }
 
 export interface BranchSeed {
