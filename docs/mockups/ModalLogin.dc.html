@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'Manrope',system-ui,-apple-system,sans-serif;color:#16202B}
+a{color:#17457F;text-decoration:none}
+a:hover{color:#E8681C}
+button{font-family:inherit}
+input:focus-visible,button:focus-visible{outline:2px solid #17457F;outline-offset:2px}
+@keyframes cy-modal-in{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes cy-scrim-in{from{opacity:0}to{opacity:1}}
+.cy-scrim{animation:cy-scrim-in .18s ease both}
+.cy-modal-card{animation:cy-modal-in .22s cubic-bezier(.22,.61,.36,1) both}
+</style>
+</helmet>
+
+<div style="background:#16202B;color:#fff;padding:9px 20px;font:700 11px/1.4 'Manrope',sans-serif;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+  <span style="background:#8B98A5;padding:3px 8px;border-radius:5px;font-weight:800">SIN P-n</span>
+  <span>Mecanismo de sesión (JWT propio) — no es un caso de uso del canon</span>
+  <span style="opacity:.5">·</span>
+  <span>Requisito técnico que habilita CU-04 en adelante</span>
+</div>
+
+<div class="cy-scrim" style="min-height:640px;background:#EDF0F3;background-image:repeating-linear-gradient(135deg,rgba(23,69,127,.05) 0 10px,rgba(23,69,127,0) 10px 20px);display:flex;align-items:center;justify-content:center;padding:60px 20px;position:relative">
+  <span style="position:absolute;top:24px;left:24px;font:600 11px/1 'Manrope',sans-serif;color:#8B98A5">Fondo: contenido de la página anterior (atenuado)</span>
+
+  <div class="cy-modal-card" style="width:420px;max-width:100%;background:#fff;border-radius:16px;box-shadow:0 28px 60px rgba(16,32,48,.22);padding:32px;display:flex;flex-direction:column;gap:20px;position:relative">
+    <button type="button" aria-label="Cerrar" style="position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:999px;border:0;background:#F4F6F8;color:#5B6875;font:400 16px/1 'Manrope',sans-serif;cursor:pointer" style-hover="background:#EDF0F3;color:#16202B">✕</button>
+
+    <div style="display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center">
+      <svg width="44" height="44" viewBox="0 0 100 100" style="flex:none;display:block" aria-label="ComproYa"><rect width="100" height="100" rx="22" fill="#17457F"/><path d="M69.92,66.72 A26,26 0 1,1 69.92,33.28" fill="none" stroke="#ffffff" stroke-width="16" stroke-linecap="round"/><polygon points="58,82 78,82 88,60 68,60" fill="#E8681C"/></svg>
+      <span style="font:800 20px/1.3 'Manrope',sans-serif;margin-top:6px">Inicia sesión en ComproYa</span>
+      <span style="font:500 13px/1.5 'Manrope',sans-serif;color:#8B98A5">Consulta tus pedidos, tu carrito guardado y tu identificador de lealtad</span>
+    </div>
+
+    <div style="display:flex;align-items:flex-start;gap:10px;background:#FBEAE7;border-radius:10px;padding:12px 13px">
+      <span style="width:20px;height:20px;border-radius:999px;background:#B23B23;color:#fff;display:flex;align-items:center;justify-content:center;font:800 11px/1 'Manrope',sans-serif;flex:none">!</span>
+      <span style="font:600 12.5px/1.4 'Manrope',sans-serif;color:#B23B23">Correo o contraseña incorrectos. Verifica tus datos e intenta de nuevo.</span>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <label style="display:flex;flex-direction:column;gap:6px">
+        <span style="font:700 12px/1 'Manrope',sans-serif;color:#16202B">Correo electrónico</span>
+        <input type="email" placeholder="tucorreo@ejemplo.com" style="height:46px;border:1.5px solid #E6E9ED;border-radius:10px;padding:0 14px;font:500 13.5px/1 'Manrope',sans-serif;outline:0">
+      </label>
+      <label style="display:flex;flex-direction:column;gap:6px">
+        <span style="font:700 12px/1 'Manrope',sans-serif;color:#16202B">Contraseña</span>
+        <input type="password" placeholder="••••••••" style="height:46px;border:1.5px solid #E6E9ED;border-radius:10px;padding:0 14px;font:500 13.5px/1 'Manrope',sans-serif;outline:0">
+      </label>
+      <div style="display:flex;justify-content:flex-end">
+        <a href="#" style="font:600 12.5px/1 'Manrope',sans-serif">¿Olvidaste tu contraseña?</a>
+      </div>
+      <button type="button" style="height:48px;border:0;border-radius:10px;background:#E8681C;color:#fff;font:700 14px/1 'Manrope',sans-serif;cursor:pointer" style-hover="background:#CF5A13">Iniciar sesión</button>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="flex:1;height:1px;background:#E6E9ED"></span>
+      <span style="font:600 11px/1 'Manrope',sans-serif;color:#8B98A5">O</span>
+      <span style="flex:1;height:1px;background:#E6E9ED"></span>
+    </div>
+
+    <span style="text-align:center;font:500 13px/1.5 'Manrope',sans-serif;color:#5B6875">¿Aún no tienes cuenta? <a href="#" style="font-weight:700">Regístrate — P-4</a></span>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

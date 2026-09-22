@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'Manrope',system-ui,-apple-system,sans-serif;color:#16202B;background:#F4F6F8}
+a{color:#17457F;text-decoration:none}
+button{font-family:inherit}
+button:focus-visible,a:focus-visible{outline:2px solid #17457F;outline-offset:2px}
+</style>
+</helmet>
+
+<div style="background:#16202B;color:#fff;padding:9px 20px;font:700 11px/1.4 'Manrope',sans-serif;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+  <span style="background:#E8681C;padding:3px 8px;border-radius:5px;font-weight:800">P-17</span>
+  <span>CU-17 Emisión del comprobante</span>
+  <span style="opacity:.5">·</span>
+  <span>Actor: Cliente digital · Gerente de Tienda</span>
+  <span style="opacity:.5">·</span>
+  <span>RN-08, C-09 · Sprint 5</span>
+</div>
+
+<header style="background:#fff;border-bottom:1px solid #E6E9ED;padding:14px 24px;display:flex;align-items:center;gap:16px">
+  <svg width="36" height="36" viewBox="0 0 100 100" style="flex:none;display:block" aria-label="ComproYa"><rect width="100" height="100" rx="22" fill="#17457F"/><path d="M69.92,66.72 A26,26 0 1,1 69.92,33.28" fill="none" stroke="#ffffff" stroke-width="16" stroke-linecap="round"/><polygon points="58,82 78,82 88,60 68,60" fill="#E8681C"/></svg>
+  <span style="font:800 18px/1 'Manrope',sans-serif">Compro<span style="color:#E8681C">Ya</span></span>
+  <span style="flex:1"></span>
+  <a href="#" style="font:700 12.5px/1 'Manrope',sans-serif">Ver estado del pedido (P-11) →</a>
+</header>
+
+<main style="max-width:620px;margin:0 auto;padding:36px 24px 60px;display:flex;flex-direction:column;gap:20px">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">
+    <span style="width:52px;height:52px;border-radius:999px;background:#EDF3EF;color:#1E8E5A;display:flex;align-items:center;justify-content:center;font:800 24px/1 'Manrope',sans-serif">✓</span>
+    <span style="font:800 21px/1.3 'Manrope',sans-serif">Pago aprobado — pedido confirmado</span>
+    <span style="font:500 13px/1.4 'Manrope',sans-serif;color:#8B98A5">Identificador de correlación: COR-2026-0904-48213</span>
+  </div>
+
+  <div style="background:#fff;border:1px solid #E6E9ED;border-radius:16px;padding:26px;display:flex;flex-direction:column;gap:18px">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <span style="font:800 13.5px/1 'Manrope',sans-serif">Comprobante — pedido #48213</span>
+      <span style="font:500 11.5px/1 'Manrope',sans-serif;color:#8B98A5">4 sep 2026, 6:43 p. m.</span>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:16px;background:#F4F6F8;border-radius:12px;padding:16px">
+      <span style="width:64px;height:64px;flex:none;border-radius:8px;background:repeating-linear-gradient(90deg,#16202B 0 2px,transparent 2px 5px)"></span>
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <span style="font:500 10.5px/1 'Manrope',sans-serif;color:#8B98A5;text-transform:uppercase;letter-spacing:.06em">Código de retiro</span>
+        <span style="font:800 20px/1 ui-monospace,Menlo,monospace;letter-spacing:.05em">RTR-48213-K9M</span>
+        <span style="font:600 11.5px/1.4 'Manrope',sans-serif;color:#B23B23">Un solo uso · válido hasta el 9 de septiembre de 2026</span>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;justify-content:space-between;font:600 12.5px/1.4 'Manrope',sans-serif"><span>Aspiradora robot con mapeo de ambientes × 1</span><span>$899.900</span></div>
+      <div style="display:flex;justify-content:space-between;font:600 12.5px/1.4 'Manrope',sans-serif"><span>Bombillo inteligente × 2</span><span>$119.800</span></div>
+      <div style="display:flex;justify-content:space-between;font:600 12.5px/1.4 'Manrope',sans-serif;color:#5B6875"><span>Envío estimado</span><span>$12.900</span></div>
+      <div style="display:flex;justify-content:space-between;font:600 12.5px/1.4 'Manrope',sans-serif;color:#1E8E5A"><span>Cupón de lealtad LEALTAD-4821</span><span>− $50.000</span></div>
+    </div>
+    <div style="height:1px;background:#E6E9ED"></div>
+    <div style="display:flex;justify-content:space-between;font:800 17px/1 'Manrope',sans-serif"><span>Total pagado</span><span>$982.600</span></div>
+
+    <div style="display:flex;align-items:center;gap:10px;background:#E9F0F9;border-radius:10px;padding:12px 14px">
+      <span style="width:26px;height:26px;border-radius:999px;background:#17457F;color:#fff;display:flex;align-items:center;justify-content:center;font:800 13px/1 'Manrope',sans-serif;flex:none">i</span>
+      <span style="font:600 12.5px/1.4 'Manrope',sans-serif;color:#17457F">Este comprobante queda consultable durante 5 años. El Gerente de Tienda valida el código de retiro al momento de la entrega (P-12).</span>
+    </div>
+
+    <button type="button" style="height:46px;border:1.5px solid #D6DBE1;border-radius:10px;background:#fff;font:700 13.5px/1 'Manrope',sans-serif;cursor:pointer">Descargar comprobante</button>
+  </div>
+</main>
+</x-dc>
+</body>
+</html>

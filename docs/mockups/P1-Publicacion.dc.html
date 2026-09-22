@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'Manrope',system-ui,-apple-system,sans-serif;color:#16202B;background:#F4F6F8}
+a{color:#17457F;text-decoration:none}
+button{font-family:inherit}
+input:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid #17457F;outline-offset:2px}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:12px 14px;font-size:12.5px}
+th{font:700 10.5px/1 'Manrope',sans-serif;text-transform:uppercase;letter-spacing:.06em;color:#8B98A5;border-bottom:1px solid #E6E9ED}
+td{font:500 12.5px/1.4 'Manrope',sans-serif;color:#16202B;border-bottom:1px solid #EDF0F3}
+</style>
+</helmet>
+
+<div style="background:#16202B;color:#fff;padding:9px 20px;font:700 11px/1.4 'Manrope',sans-serif;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+  <span style="background:#E8681C;padding:3px 8px;border-radius:5px;font-weight:800">P-1</span>
+  <span>CU-01 Publicación de producto en el catálogo</span>
+  <span style="opacity:.5">·</span>
+  <span>Actor: Coordinador de Canal Digital</span>
+  <span style="opacity:.5">·</span>
+  <span>RN-01, RN-02 · Sprint 1</span>
+</div>
+
+<div style="display:flex;min-height:760px">
+  <aside style="width:232px;flex:none;background:#17457F;color:#fff;display:flex;flex-direction:column;padding:20px 14px;gap:22px">
+    <div style="display:flex;align-items:center;gap:10px;padding:0 8px">
+      <svg width="34" height="34" viewBox="0 0 100 100" style="flex:none;display:block" aria-label="ComproYa"><path d="M69.92,66.72 A26,26 0 1,1 69.92,33.28" fill="none" stroke="#ffffff" stroke-width="16" stroke-linecap="round"/><polygon points="58,82 78,82 88,60 68,60" fill="#E8681C"/></svg>
+      <span style="font:800 16px/1 'Manrope',sans-serif">ComproYa · Canal</span>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:4px">
+      <a href="#" style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:9px;background:rgba(255,255,255,.14);font:700 13px/1 'Manrope',sans-serif;color:#fff">
+        <span style="width:8px;height:8px;border-radius:999px;background:#E8681C;flex:none"></span> Publicación de catálogo
+      </a>
+      <a href="#" style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:9px;font:600 13px/1 'Manrope',sans-serif;color:rgba(255,255,255,.72)">
+        <span style="width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.3);flex:none"></span> Alistamiento y entrega
+      </a>
+      <a href="#" style="display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:9px;font:600 13px/1 'Manrope',sans-serif;color:rgba(255,255,255,.72)">
+        <span style="width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.3);flex:none"></span> Pedidos en riesgo
+      </a>
+    </nav>
+    <div style="margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px 8px;border-top:1px solid rgba(255,255,255,.14)">
+      <span style="width:30px;height:30px;border-radius:999px;background:rgba(255,255,255,.16);display:block"></span>
+      <span style="display:flex;flex-direction:column;line-height:1.3">
+        <span style="font:700 12px/1 'Manrope',sans-serif">Laura Ibáñez</span>
+        <span style="font:500 10.5px/1 'Manrope',sans-serif;color:rgba(255,255,255,.6)">Coordinador de Canal Digital</span>
+      </span>
+    </div>
+  </aside>
+
+  <main style="flex:1;padding:28px 32px;display:flex;flex-direction:column;gap:24px;min-width:0">
+    <div>
+      <h1 style="margin:0;font:800 22px/1.2 'Manrope',sans-serif;letter-spacing:-.02em">Publicación de catálogo</h1>
+      <span style="font:500 13px/1.4 'Manrope',sans-serif;color:#8B98A5">Solo se vende en línea lo que tiene código homologado y publicación explícita</span>
+    </div>
+
+    <div style="background:#fff;border:1px solid #E6E9ED;border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:16px">
+      <span style="font:800 14px/1 'Manrope',sans-serif">Nuevo producto</span>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+        <label style="display:flex;flex-direction:column;gap:6px">
+          <span style="font:700 11.5px/1 'Manrope',sans-serif;color:#5B6875">Código homologado</span>
+          <input type="text" placeholder="Ej. 7707012345678" style="height:42px;border:1.5px solid #E6E9ED;border-radius:9px;padding:0 12px;font:500 13px/1 'Manrope',sans-serif">
+        </label>
+        <label style="display:flex;flex-direction:column;gap:6px">
+          <span style="font:700 11.5px/1 'Manrope',sans-serif;color:#5B6875">Categoría (maestro homologado)</span>
+          <input type="text" value="Hogar · Electrodomésticos pequeños" readonly style="height:42px;border:1.5px solid #E6E9ED;border-radius:9px;padding:0 12px;font:500 13px/1 'Manrope',sans-serif;background:#F4F6F8;color:#5B6875">
+        </label>
+        <label style="display:flex;flex-direction:column;gap:6px">
+          <span style="font:700 11.5px/1 'Manrope',sans-serif;color:#5B6875">Costo registrado en el ERP</span>
+          <input type="text" value="$142.000" readonly style="height:42px;border:1.5px solid #E6E9ED;border-radius:9px;padding:0 12px;font:600 13px/1 'Manrope',sans-serif;background:#F4F6F8;color:#5B6875">
+        </label>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <label style="display:flex;flex-direction:column;gap:6px">
+          <span style="font:700 11.5px/1 'Manrope',sans-serif;color:#5B6875">Precio digital</span>
+          <input type="text" value="$128.000" style="height:42px;border:1.5px solid #E15252;border-radius:9px;padding:0 12px;font:600 13px/1 'Manrope',sans-serif">
+        </label>
+        <div style="display:flex;align-items:flex-end">
+          <span style="display:flex;align-items:center;gap:8px;background:#FBEAE7;border-radius:9px;padding:10px 12px;font:600 12px/1.4 'Manrope',sans-serif;color:#B23B23">Por debajo del costo del ERP — RN-02: requiere aprobación de gerencia comercial antes de publicar</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;background:#F4F6F8;border-radius:10px;padding:14px 16px">
+        <span style="display:flex;flex-direction:column;gap:2px">
+          <span style="font:700 13px/1 'Manrope',sans-serif">Publicar explícitamente en el canal digital</span>
+          <span style="font:500 11.5px/1.4 'Manrope',sans-serif;color:#8B98A5">RN-01 — tener código homologado no es suficiente, la publicación es un acto deliberado</span>
+        </span>
+        <span style="width:44px;height:26px;border-radius:999px;background:#D6DBE1;position:relative;flex:none">
+          <span style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:999px;background:#fff;box-shadow:0 1px 3px rgba(16,32,48,.25)"></span>
+        </span>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:10px">
+        <button type="button" style="height:42px;padding:0 18px;border:1.5px solid #D6DBE1;border-radius:9px;background:#fff;font:700 13px/1 'Manrope',sans-serif;cursor:pointer">Guardar borrador</button>
+        <button type="button" style="height:42px;padding:0 18px;border:0;border-radius:9px;background:#E8681C;color:#fff;font:700 13px/1 'Manrope',sans-serif;cursor:pointer">Solicitar aprobación y publicar</button>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #E6E9ED;border-radius:14px;overflow:hidden">
+      <div style="padding:18px 20px 4px;font:800 14px/1 'Manrope',sans-serif">Productos publicados recientemente</div>
+      <table>
+        <tr><th>Código homologado</th><th>Producto</th><th>Costo ERP</th><th>Precio digital</th><th>Estado</th><th>Publicado</th></tr>
+        <tr>
+          <td>7707011122334</td><td>Audífonos inalámbricos ANC</td><td>$139.900</td><td>$189.900</td>
+          <td><span style="display:inline-flex;align-items:center;gap:6px;background:#EDF3EF;color:#1E8E5A;font:700 11px/1 'Manrope',sans-serif;padding:5px 9px;border-radius:999px"><span style="width:6px;height:6px;border-radius:999px;background:#1E8E5A"></span>Publicado</span></td>
+          <td>Hace 5 min</td>
+        </tr>
+        <tr>
+          <td>7707019988771</td><td>Aspiradora robot mapeo</td><td>$649.900</td><td>$899.900</td>
+          <td><span style="display:inline-flex;align-items:center;gap:6px;background:#EDF3EF;color:#1E8E5A;font:700 11px/1 'Manrope',sans-serif;padding:5px 9px;border-radius:999px"><span style="width:6px;height:6px;border-radius:999px;background:#1E8E5A"></span>Publicado</span></td>
+          <td>Ayer</td>
+        </tr>
+        <tr>
+          <td>7707015566778</td><td>Silla ergonómica lumbar</td><td>$310.000</td><td>$389.900</td>
+          <td><span style="display:inline-flex;align-items:center;gap:6px;background:#FDEEE4;color:#CF5A13;font:700 11px/1 'Manrope',sans-serif;padding:5px 9px;border-radius:999px"><span style="width:6px;height:6px;border-radius:999px;background:#CF5A13"></span>Pendiente aprobación</span></td>
+          <td>Hace 2 días</td>
+        </tr>
+      </table>
+    </div>
+  </main>
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'Manrope',system-ui,-apple-system,sans-serif;color:#16202B}
+a{color:#17457F;text-decoration:none}
+a:hover{color:#E8681C}
+button{font-family:inherit}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid #17457F;outline-offset:2px}
+@keyframes cy-modal-in{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes cy-scrim-in{from{opacity:0}to{opacity:1}}
+.cy-scrim{animation:cy-scrim-in .18s ease both}
+.cy-modal-card{animation:cy-modal-in .22s cubic-bezier(.22,.61,.36,1) both}
+</style>
+</helmet>
+
+<div style="background:#16202B;color:#fff;padding:9px 20px;font:700 11px/1.4 'Manrope',sans-serif;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+  <span style="background:#E8681C;padding:3px 8px;border-radius:5px;font-weight:800">P-4</span>
+  <span>CU-04 Registro de cuenta (modal, en vez de página completa)</span>
+  <span style="opacity:.5">·</span>
+  <span>Actor: Cliente digital</span>
+  <span style="opacity:.5">·</span>
+  <span>C-14 · Sprint 2</span>
+</div>
+
+<div class="cy-scrim" style="min-height:700px;background:#EDF0F3;background-image:repeating-linear-gradient(135deg,rgba(23,69,127,.05) 0 10px,rgba(23,69,127,0) 10px 20px);display:flex;align-items:center;justify-content:center;padding:50px 20px">
+
+  <div class="cy-modal-card" style="width:460px;max-width:100%;background:#fff;border-radius:16px;box-shadow:0 28px 60px rgba(16,32,48,.22);padding:32px;display:flex;flex-direction:column;gap:18px;position:relative">
+    <button type="button" aria-label="Cerrar" style="position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:999px;border:0;background:#F4F6F8;color:#5B6875;font:400 16px/1 'Manrope',sans-serif;cursor:pointer" style-hover="background:#EDF0F3;color:#16202B">✕</button>
+
+    <div style="display:flex;flex-direction:column;gap:6px;align-items:center;text-align:center">
+      <svg width="44" height="44" viewBox="0 0 100 100" style="flex:none;display:block" aria-label="ComproYa"><rect width="100" height="100" rx="22" fill="#17457F"/><path d="M69.92,66.72 A26,26 0 1,1 69.92,33.28" fill="none" stroke="#ffffff" stroke-width="16" stroke-linecap="round"/><polygon points="58,82 78,82 88,60 68,60" fill="#E8681C"/></svg>
+      <span style="font:800 20px/1.3 'Manrope',sans-serif;margin-top:6px">Crea tu cuenta ComproYa</span>
+      <span style="font:500 13px/1.5 'Manrope',sans-serif;color:#8B98A5;max-width:34ch">Con tu documento vinculamos automáticamente tu identificador del programa de lealtad</span>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <label style="display:flex;flex-direction:column;gap:6px">
+        <span style="font:700 12px/1 'Manrope',sans-serif">Nombre completo</span>
+        <div style="position:relative">
+          <input type="text" value="María Fernanda Ruiz" style="width:100%;height:44px;border:1.5px solid #1E8E5A;border-radius:10px;padding:0 40px 0 14px;font:500 13.5px/1 'Manrope',sans-serif;outline:0">
+          <span style="position:absolute;right:13px;top:50%;transform:translateY(-50%);width:18px;height:18px;border-radius:999px;background:#1E8E5A;color:#fff;display:flex;align-items:center;justify-content:center;font:800 11px/1 'Manrope',sans-serif">✓</span>
+        </div>
+      </label>
+
+      <div style="display:grid;grid-template-columns:130px 1fr;gap:10px">
+        <label style="display:flex;flex-direction:column;gap:6px">
+          <span style="font:700 12px/1 'Manrope',sans-serif">Documento</span>
+          <select style="height:44px;border:1.5px solid #E6E9ED;border-radius:10px;padding:0 10px;font:500 13.5px/1 'Manrope',sans-serif;background:#fff">
+            <option>C.C.</option>
+            <option>C.E.</option>
+          </select>
+        </label>
+        <label style="display:flex;flex-direction:column;gap:6px">
+          <span style="font:700 12px/1 'Manrope',sans-serif">Número de documento</span>
+          <input type="text" placeholder="Sin puntos ni espacios" style="height:44px;border:1.5px solid #E6E9ED;border-radius:10px;padding:0 14px;font:500 13.5px/1 'Manrope',sans-serif;outline:0">
+        </label>
+      </div>
+
+      <label style="display:flex;flex-direction:column;gap:5px">
+        <span style="font:700 12px/1 'Manrope',sans-serif">Correo electrónico</span>
+        <input type="email" value="maria.ruiz@correo" aria-invalid="true" style="height:44px;border:1.5px solid #B23B23;border-radius:10px;padding:0 14px;font:500 13.5px/1 'Manrope',sans-serif;outline:0;background:#FBEAE7">
+        <span style="display:flex;align-items:center;gap:6px">
+          <span style="width:14px;height:14px;border-radius:999px;background:#B23B23;color:#fff;display:flex;align-items:center;justify-content:center;font:800 9px/1 'Manrope',sans-serif;flex:none">!</span>
+          <span style="font:600 11.5px/1.3 'Manrope',sans-serif;color:#B23B23">Ingresa un correo válido, ej. tucorreo@ejemplo.com</span>
+        </span>
+      </label>
+
+      <label style="display:flex;flex-direction:column;gap:6px">
+        <span style="font:700 12px/1 'Manrope',sans-serif">Contraseña</span>
+        <input type="password" placeholder="Mínimo 8 caracteres" style="height:44px;border:1.5px solid #E6E9ED;border-radius:10px;padding:0 14px;font:500 13.5px/1 'Manrope',sans-serif;outline:0">
+      </label>
+
+      <div style="display:flex;align-items:center;gap:10px;background:#E9F0F9;border-radius:10px;padding:11px 13px">
+        <span style="width:28px;height:28px;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;flex:none;font:800 13px/1 'Manrope',sans-serif;color:#17457F">★</span>
+        <span style="font:600 12px/1.4 'Manrope',sans-serif;color:#17457F">Resolveremos tu documento contra el programa de lealtad para vincular tu identificador y tus puntos</span>
+      </div>
+
+      <label style="display:flex;align-items:flex-start;gap:9px">
+        <input type="checkbox" style="margin-top:3px">
+        <span style="font:500 12px/1.5 'Manrope',sans-serif;color:#5B6875">Acepto el tratamiento de mis datos personales. Podrás administrar tu consentimiento en cualquier momento desde tu cuenta (P-5).</span>
+      </label>
+
+      <button type="button" style="height:48px;border:0;border-radius:10px;background:#E8681C;color:#fff;font:700 14px/1 'Manrope',sans-serif;cursor:pointer" style-hover="background:#CF5A13">Crear mi cuenta</button>
+    </div>
+
+    <span style="text-align:center;font:500 13px/1.5 'Manrope',sans-serif;color:#5B6875">¿Ya tienes cuenta? <a href="#" style="font-weight:700">Inicia sesión</a></span>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

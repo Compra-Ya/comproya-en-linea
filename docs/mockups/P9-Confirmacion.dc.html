@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'Manrope',system-ui,-apple-system,sans-serif;color:#16202B;background:#F4F6F8}
+a{color:#17457F;text-decoration:none}
+button{font-family:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #17457F;outline-offset:2px}
+.cy-two-col{display:grid;grid-template-columns:1fr 340px;gap:24px}
+@media(max-width:820px){.cy-two-col{grid-template-columns:1fr}}
+</style>
+</helmet>
+
+<div style="background:#16202B;color:#fff;padding:9px 20px;font:700 11px/1.4 'Manrope',sans-serif;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+  <span style="background:#E8681C;padding:3px 8px;border-radius:5px;font-weight:800">P-9</span>
+  <span>CU-09 Confirmación del pedido</span>
+  <span style="opacity:.5">·</span>
+  <span>Actor: Cliente digital</span>
+  <span style="opacity:.5">·</span>
+  <span>RN-05 · Sprint 4</span>
+</div>
+
+<header style="background:#fff;border-bottom:1px solid #E6E9ED;padding:14px 24px;display:flex;align-items:center;gap:16px">
+  <svg width="36" height="36" viewBox="0 0 100 100" style="flex:none;display:block" aria-label="ComproYa"><rect width="100" height="100" rx="22" fill="#17457F"/><path d="M69.92,66.72 A26,26 0 1,1 69.92,33.28" fill="none" stroke="#ffffff" stroke-width="16" stroke-linecap="round"/><polygon points="58,82 78,82 88,60 68,60" fill="#E8681C"/></svg>
+  <span style="font:800 18px/1 'Manrope',sans-serif">Compro<span style="color:#E8681C">Ya</span></span>
+  <span style="flex:1"></span>
+  <span style="font:700 12.5px/1 'Manrope',sans-serif;color:#8B98A5">Paso 1 de 2 · Confirmación</span>
+</header>
+
+<main style="max-width:1040px;margin:0 auto;padding:28px 24px 60px;display:flex;flex-direction:column;gap:20px">
+  <h1 style="margin:0;font:800 22px/1.2 'Manrope',sans-serif;letter-spacing:-.02em">Confirma tu pedido</h1>
+
+  <div class="cy-two-col">
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div style="background:#fff;border:1px solid #E6E9ED;border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px">
+        <span style="font:800 13.5px/1 'Manrope',sans-serif">Entrega</span>
+        <div style="display:flex;gap:12px;align-items:center">
+          <span style="width:9px;height:9px;border-radius:999px;background:#1E8E5A;flex:none"></span>
+          <span style="font:600 12.5px/1.4 'Manrope',sans-serif">Retiro en sucursal Chapinero — hoy, entre 3:00 p. m. y 6:00 p. m.</span>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <span style="width:9px;height:9px;border-radius:999px;background:#8B98A5;flex:none"></span>
+          <span style="font:600 12.5px/1.4 'Manrope',sans-serif;color:#5B6875">Envío a Cra. 15 # 88-30, Bogotá — con operador logístico aliado</span>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #E6E9ED;border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px">
+        <span style="font:800 13.5px/1 'Manrope',sans-serif">Artículos (3)</span>
+        <div style="display:flex;gap:14px;align-items:center">
+          <span style="width:52px;height:52px;flex:none;border-radius:8px;background:#F4F6F8"></span>
+          <span style="flex:1;font:600 12.5px/1.4 'Manrope',sans-serif">Aspiradora robot con mapeo de ambientes × 1</span>
+          <span style="font:700 12.5px/1 'Manrope',sans-serif">$899.900</span>
+        </div>
+        <div style="display:flex;gap:14px;align-items:center">
+          <span style="width:52px;height:52px;flex:none;border-radius:8px;background:#F4F6F8"></span>
+          <span style="flex:1;font:600 12.5px/1.4 'Manrope',sans-serif">Bombillo inteligente × 2</span>
+          <span style="font:700 12.5px/1 'Manrope',sans-serif">$119.800</span>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:10px;background:#E9F0F9;border-radius:10px;padding:12px 14px">
+        <span style="width:26px;height:26px;border-radius:999px;background:#17457F;color:#fff;display:flex;align-items:center;justify-content:center;font:800 13px/1 'Manrope',sans-serif;flex:none">✓</span>
+        <span style="font:600 12.5px/1.4 'Manrope',sans-serif;color:#17457F">RN-05: al confirmar, tus unidades quedan reservadas en el ERP antes de que se procese cualquier cobro</span>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #E6E9ED;border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px;align-self:flex-start;position:sticky;top:20px">
+      <span style="font:800 15px/1 'Manrope',sans-serif">Resumen</span>
+      <div style="display:flex;justify-content:space-between;font:500 13px/1 'Manrope',sans-serif;color:#5B6875"><span>Subtotal</span><span style="color:#16202B;font-weight:700">$1.019.700</span></div>
+      <div style="display:flex;justify-content:space-between;font:500 13px/1 'Manrope',sans-serif;color:#5B6875"><span>Envío estimado</span><span style="color:#16202B;font-weight:700">$12.900</span></div>
+
+      <div style="display:flex;gap:8px">
+        <input type="text" placeholder="Cupón de lealtad (P-10)" style="flex:1;height:40px;border:1.5px solid #E6E9ED;border-radius:8px;padding:0 12px;font:500 12.5px/1 'Manrope',sans-serif">
+        <button type="button" style="height:40px;padding:0 14px;border:1.5px solid #D6DBE1;border-radius:8px;background:#fff;font:700 12px/1 'Manrope',sans-serif;cursor:pointer">Aplicar</button>
+      </div>
+
+      <div style="height:1px;background:#E6E9ED"></div>
+      <div style="display:flex;justify-content:space-between;font:800 16px/1 'Manrope',sans-serif"><span>Total a reservar</span><span>$1.032.600</span></div>
+      <button type="button" style="height:48px;border:0;border-radius:10px;background:#E8681C;color:#fff;font:700 14px/1 'Manrope',sans-serif;cursor:pointer" style-hover="background:#CF5A13">Confirmar pedido</button>
+      <span style="font:500 11px/1.4 'Manrope',sans-serif;color:#8B98A5;text-align:center">Todavía no se procesa ningún cobro — eso ocurre en el siguiente paso (P-15 / P-16)</span>
+    </div>
+  </div>
+</main>
+</x-dc>
+</body>
+</html>

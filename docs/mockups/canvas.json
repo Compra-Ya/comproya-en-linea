@@ -1,0 +1,37 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 1400, "h": 1900, "is_interactive": true },
+    { "file": "ModalLogin.dc.html", "x": 1500, "y": 0, "w": 900, "h": 760 },
+    { "file": "P4-Registro.dc.html", "x": 2500, "y": 0, "w": 900, "h": 900 },
+    { "file": "Main-Movil.dc.html", "x": 3490, "y": 0, "w": 430, "h": 920 },
+
+    { "file": "P1-Publicacion.dc.html", "x": 0, "y": 2050, "w": 1300, "h": 900 },
+    { "file": "P3-Disponibilidad.dc.html", "x": 1390, "y": 2050, "w": 1050, "h": 850 },
+    { "file": "P5-Consentimiento.dc.html", "x": 2530, "y": 2050, "w": 1050, "h": 800 },
+
+    { "file": "P7-Carrito.dc.html", "x": 0, "y": 3100, "w": 1150, "h": 850 },
+    { "file": "P8-Complementarios.dc.html", "x": 1240, "y": 3100, "w": 900, "h": 650 },
+    { "file": "P9-Confirmacion.dc.html", "x": 2230, "y": 3100, "w": 1150, "h": 800 },
+    { "file": "P10-Cupon.dc.html", "x": 3470, "y": 3100, "w": 560, "h": 750 },
+
+    { "file": "P15-PagoTarjeta.dc.html", "x": 0, "y": 4100, "w": 1050, "h": 800 },
+    { "file": "P16-PagoDebito.dc.html", "x": 1140, "y": 4100, "w": 1050, "h": 750 },
+    { "file": "P17-Comprobante.dc.html", "x": 2280, "y": 4100, "w": 720, "h": 900 },
+
+    { "file": "P11-EstadoPedido.dc.html", "x": 0, "y": 5150, "w": 820, "h": 800 },
+    { "file": "P12-Alistamiento.dc.html", "x": 910, "y": 5150, "w": 1300, "h": 850 },
+    { "file": "P13-Cancelacion.dc.html", "x": 2300, "y": 5150, "w": 820, "h": 780 },
+    { "file": "P14-PedidosRiesgo.dc.html", "x": 3210, "y": 5150, "w": 1300, "h": 850 },
+
+    { "file": "ProductCard.dc.html", "x": 0, "y": 6150, "w": 340, "h": 460 }
+  ],
+  "annotations": [
+    { "id": "note-sprint1", "x": 0, "y": 1940, "w": 300, "text": "Sprint 1 · sin sesión (D-01)\nCU-01, CU-03" },
+    { "id": "note-sprint2", "x": 2530, "y": 1990, "w": 260, "text": "Sprint 2\nCU-05 (CU-04 en P-4 arriba)" },
+    { "id": "note-sprint34", "x": 0, "y": 2990, "w": 320, "text": "Sprint 3-4\nCU-07, CU-08, CU-09, CU-10" },
+    { "id": "note-sprint5", "x": 0, "y": 3990, "w": 320, "text": "Sprint 5\nCU-15, CU-16, CU-17" },
+    { "id": "note-sprint6", "x": 0, "y": 5040, "w": 320, "text": "Sprint 6\nCU-11, CU-12, CU-13, CU-14" },
+    { "id": "note-component", "x": 0, "y": 6040, "w": 320, "text": "Componente reutilizable, no es un P-n propio" }
+  ],
+  "launch": { "view": "canvas" }
+}
