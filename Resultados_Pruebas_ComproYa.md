@@ -2,9 +2,16 @@
 
 > **Nota:** la versión que sigue al pie de la letra el formato de caso de prueba funcional del docente (Anexo 1 de "6. PRUEBAS DE SOFTWARE.pdf" — INFORMACIÓN GLOBAL, tabla de datos de entrada con columnas CAMPO/VALOR/TIPO ESCENARIO/RESPUESTA ESPERADA/COINCIDE/RESPUESTA DEL SISTEMA, Probador con firma) es **`Resultados_Pruebas_ComproYa.docx`**, en la raíz del repo. Este `.md` queda como referencia rápida en texto plano y para el historial de git; el `.docx` es el documento para entregar.
 
-Documento de resultados de la ejecución real de los 26 casos definidos en `Plan_Pruebas_ComproYa.docx` (9 de ruta, 10 basados en estado, 5 de integración, 2 de sistema). Todas las pruebas de unidad e integración corrieron con Jest contra una base de datos Postgres de pruebas real (`comproya_test`), nunca contra mocks en memoria. Las dos pruebas de sistema corrieron con Playwright contra el frontend y el backend reales, y contra Stripe en modo de prueba (sandbox) real — sin simular la pasarela.
+Documento de resultados de la ejecución real de los 28 casos definidos en `Plan_Pruebas_ComproYa.docx` (10 de ruta, 10 basados en estado, 5 de integración, 3 de sistema). Todas las pruebas de unidad e integración corrieron con Jest contra una base de datos Postgres de pruebas real (`comproya_test`), nunca contra mocks en memoria. Las tres pruebas de sistema corrieron con Playwright contra el frontend y el backend reales: CU-04-01 (Caso de Uso 1) contra la aplicación real sin pasarela de pago de por medio, y CU-09-01/CU-09-02 (Caso de Uso 2) además contra Stripe en modo de prueba (sandbox) real — sin simular la pasarela.
 
-**Fecha de ejecución de todos los casos:** 2026-09-17. **Versión de ejecución:** 1 para todos los casos (todos pasaron en su primera corrida real; ver sección de desviaciones documentadas en cada caso donde aplica).
+**Fecha de ejecución:** 2026-09-17 para los 26 casos originales (PR-01 a PR-09, PE-01 a PE-10, PI-01 a PI-05, CU-09-01, CU-09-02); 2026-09-22 para PR-10 y CU-04-01, agregados en una segunda ronda para completar la distribución que precisó el docente en clase (10 Ruta / 10 Estado / 3 Integración mínimo / 3 Sistema). **Versión de ejecución:** 1 para los 28 casos (todos pasaron en su primera corrida real; ver sección de desviaciones documentadas en cada caso donde aplica).
+
+## Segunda ronda (2026-09-22) — dos casos agregados para completar la distribución pedida por el docente
+
+El docente aclaró en clase que la entrega debía distribuirse en 10 pruebas de Ruta (diagrama de actividad), 10 de Estado (diagrama de estados, por entidad), 3 de Integración (diagrama de clases) y 3 de Sistema (caso de uso). La primera ronda (2026-09-17) tenía 9/10/5/2. Se agregan dos casos para cerrar la brecha real (Integración se deja en 5, por encima del mínimo pedido, en vez de recortar cobertura ya aprobada):
+
+1. **PR-10** — la ruta de éxito del pago con débito bancario (CU-16) es la única ruta independiente del diagrama de actividad del Caso de Uso 2 que quedaba sin ficha propia: `PR-09` ya cubría el camino de fallo (sin confirmación a los 30 minutos), pero el camino de confirmación exitosa (`PagoService.notificarDebito(orderId, true)`) ya estaba implementado y probado desde la entrega anterior (`pago.service.spec.ts`, visible en la Figura 1 de este documento) sin una ficha formal que lo contara entre los casos de ruta. Se promueve aquí a ficha PR-10 — no requirió código nuevo.
+2. **CU-04-01** — el Caso de Uso 1 (registro + consentimiento) no tenía ninguna prueba de sistema: las dos existentes (CU-09-01, CU-09-02) son ambas del Caso de Uso 2. Se escribió y corrió un caso de sistema nuevo, de caja negra con Playwright contra la aplicación real, para el camino de éxito de registro (CU-04) seguido de activación del consentimiento (CU-05).
 
 ## Desviaciones deliberadas, documentadas de antemano en el plan de implementación (no son defectos)
 
@@ -143,6 +150,20 @@ Defectos y desviaciones: ninguno.
 Veredicto: [x] Paso   [ ] Falló
 Evidencia: ![evidencia PR-09](evidencia/unitarias-integracion-01.png)
 Observaciones: `backend/src/pago/dominio/pago-con-debito-bancario.spec.ts`.
+
+### CASO DE PRUEBA No. PR-10
+**VERSIÓN DE EJECUCIÓN:** 1
+**FECHA EJECUCIÓN:** 2026-09-22
+**MÓDULO DEL SISTEMA:** 1.5 Pago
+**1. CASO DE PRUEBA**
+a. Precondiciones: pedido confirmado con reserva de unidades exitosa; intento de pago con débito bancario ya iniciado (`PagoConDebitoBancario.procesar()` / `PagoService.crearIntentoDebito()`), dentro del plazo de 30 minutos.
+b. Pasos de la prueba: `PagoService.notificarDebito(orderId, true)` — equivalente a la notificación real de confirmación que entrega la pasarela de débito bancario simulada (CU-16, paso 2).
+c. Poscondiciones: `Pago.status = CONFIRMED`; `Pedido.status = PAID`; el comprobante queda disponible para emitirse (CU-17), igual que en el camino de éxito con tarjeta (PR-08) pero por la ruta de débito bancario.
+**2. RESULTADOS DE LA PRUEBA**
+Defectos y desviaciones: ninguno. Esta ruta (débito bancario confirmado con éxito) es la única ruta independiente del diagrama de actividad del Caso de Uso 2 que no tenía ficha propia — el código y la prueba ya existían y ya pasaban desde la entrega del 2026-09-17 (`pago.service.spec.ts`, visible en la Figura 1 de este documento), como cobertura fuera del conteo formal de las 26. Se promueve aquí a ficha PR-10, sin escribir código nuevo, para completar las 10 pruebas de ruta.
+Veredicto: [x] Paso   [ ] Falló
+Evidencia: ![evidencia PR-10](evidencia/unitarias-integracion-01.png) — línea `✓ CU-16: la notificación de débito bancario exitosa confirma el pago`.
+Observaciones: `backend/src/pago/pago.service.spec.ts`, `it("CU-16: la notificación de débito bancario exitosa confirma el pago")`.
 
 ---
 
@@ -366,6 +387,26 @@ Observaciones: `backend/src/pago/dominio/orquestador-de-pago.spec.ts`.
 
 ## 9.4 Pruebas del sistema (caja negra, end-to-end)
 
+### CASO DE PRUEBA No. CU-04-01
+**VERSIÓN DE EJECUCIÓN:** 1
+**FECHA EJECUCIÓN:** 2026-09-22
+**MÓDULO DEL SISTEMA:** 1.2 Cuenta Digital
+**1. CASO DE PRUEBA**
+a. Precondiciones: ninguna — documento, correo y contraseña nuevos, generados con un sufijo único por corrida; sin cuenta previa.
+b. Pasos de la prueba, caja negra contra la aplicación real (frontend + backend + Postgres reales, sin Stripe de por medio):
+   1. El cliente completa el formulario de registro en `/registro` (P-4: nombre, documento, correo, contraseña) y confirma "Crear cuenta" → el sistema crea `Cliente`/`Cuenta` y un `Consentimiento` en estado Pendiente (CU-04).
+   2. El sistema redirige a `/privacidad` (P-5); el interruptor de consentimiento aparece apagado (`aria-pressed="false"`), sin la insignia "Consentimiento activo".
+   3. El cliente activa el interruptor, sin identificador de lealtad → el sistema otorga el consentimiento (CU-05, un solo clic, canon sección 10: activar en ≤ 2 interacciones).
+c. Poscondiciones: la insignia "Consentimiento activo" queda visible y `aria-pressed="true"`; `GET /cuenta/consentimiento` (caja negra, API pública con el token de sesión real) responde `active: true`.
+**2. RESULTADOS DE LA PRUEBA**
+Defectos y desviaciones: ninguno.
+Veredicto: [x] Paso   [ ] Falló
+Evidencia:
+![paso 1 — formulario de registro](evidencia/CU-04-01/paso-1-registro.png)
+![paso 2 — privacidad, consentimiento pendiente](evidencia/CU-04-01/paso-2-privacidad-pendiente.png)
+![paso 3 — consentimiento activado](evidencia/CU-04-01/paso-3-consentimiento-activo.png)
+Observaciones: `e2e/tests/cu-04-01-registro-consentimiento.spec.ts`, ejecutado contra el frontend/backend reales. Cierra la brecha de que el Caso de Uso 1 no tenía ninguna prueba de sistema propia (CU-09-01/CU-09-02 son ambas del Caso de Uso 2).
+
 ### CASO DE PRUEBA No. CU-09-01
 **VERSIÓN DE EJECUCIÓN:** 1
 **FECHA EJECUCIÓN:** 2026-09-17
@@ -423,6 +464,7 @@ Observaciones: `e2e/tests/cu-09-02-camino-fallo.spec.ts`. La reserva liberada y 
 | PR-07 | Pasó | `pago/dominio/orquestador-de-pago.spec.ts` | `feature/cu1-cu2-registro-consentimiento-compra` |
 | PR-08 | Pasó | `pago/dominio/orquestador-de-pago.spec.ts` | `feature/cu1-cu2-registro-consentimiento-compra` |
 | PR-09 | Pasó | `pago/dominio/pago-con-debito-bancario.spec.ts` | `feature/cu1-cu2-registro-consentimiento-compra` |
+| PR-10 | Pasó | `pago/pago.service.spec.ts` | `claude/admiring-pascal-hgg7i9` |
 | PE-01 | Pasó | `cuenta/dominio/gestor-de-consentimiento.spec.ts` | `feature/cu1-cu2-registro-consentimiento-compra` |
 | PE-02 | Pasó | `cuenta/dominio/gestor-de-consentimiento.spec.ts` | `feature/cu1-cu2-registro-consentimiento-compra` |
 | PE-03 | Pasó | `cuenta/dominio/gestor-de-consentimiento.spec.ts` | `feature/cu1-cu2-registro-consentimiento-compra` |
@@ -438,10 +480,11 @@ Observaciones: `e2e/tests/cu-09-02-camino-fallo.spec.ts`. La reserva liberada y 
 | PI-03 | Pasó | `cuenta/dominio/gestor-de-consentimiento.spec.ts` | `feature/cu1-cu2-registro-consentimiento-compra` |
 | PI-04 | Pasó | `pedido/pedido.service.spec.ts` | `feature/cu1-cu2-registro-consentimiento-compra` |
 | PI-05 | Pasó | `pago/dominio/orquestador-de-pago.spec.ts` | `feature/cu1-cu2-registro-consentimiento-compra` |
+| CU-04-01 | Pasó | `e2e/tests/cu-04-01-registro-consentimiento.spec.ts` | `claude/admiring-pascal-hgg7i9` |
 | CU-09-01 | Pasó | `e2e/tests/cu-09-01-camino-exito.spec.ts` | `feature/cu1-cu2-registro-consentimiento-compra` |
 | CU-09-02 | Pasó | `e2e/tests/cu-09-02-camino-fallo.spec.ts` | `feature/cu1-cu2-registro-consentimiento-compra` |
 
-**26 de 26 casos pasaron**, todos en su primera ejecución real (sin necesidad de una segunda versión de ejecución). El backend completo (50 pruebas Jest en 12 archivos, que incluyen los 24 casos de unidad/integración más las pruebas ya existentes de sprints anteriores) también pasa sin regresiones.
+**28 de 28 casos pasaron**, todos en su primera ejecución real (sin necesidad de una segunda versión de ejecución). El backend completo (50 pruebas Jest en 12 archivos, que incluyen los 24 casos de unidad/integración más las pruebas ya existentes de sprints anteriores) también pasa sin regresiones — reconfirmado el 2026-09-22 (ver evidencia/unitarias-integracion-01.png).
 
 ## Cobertura extra, fuera de las 26 (no reportada como caso de prueba formal)
 
