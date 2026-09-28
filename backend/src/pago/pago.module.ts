@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { PedidoModule } from "../pedido/pedido.module";
+import { AuditoriaModule } from "../auditoria/auditoria.module";
 import { PagoController } from "./pago.controller";
 import { PagoService } from "./pago.service";
 import { AdaptadorStripe } from "./puertos/adaptador-stripe";
@@ -9,7 +10,7 @@ import { GeneradorDeComprobante } from "./dominio/generador-de-comprobante";
 
 // SP-05 (cobro y conciliación) — canon sección 6, sprint 5.
 @Module({
-  imports: [PedidoModule],
+  imports: [PedidoModule, AuditoriaModule],
   controllers: [PagoController],
   providers: [PagoService, AdaptadorStripe, LiberacionReservasJob, OrquestadorDePago, GeneradorDeComprobante],
   exports: [PagoService, OrquestadorDePago, GeneradorDeComprobante],

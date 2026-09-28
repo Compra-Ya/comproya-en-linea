@@ -5,6 +5,7 @@ import { PrismaClient } from "@prisma/client";
 // datos real y limpia (CLAUDE.md: nada de mocks en memoria).
 export async function resetDb(prisma: PrismaClient) {
   await prisma.$transaction([
+    prisma.auditLog.deleteMany(),
     prisma.couponRedemption.deleteMany(),
     prisma.orderStatusHistory.deleteMany(),
     prisma.unitsReservation.deleteMany(),

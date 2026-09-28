@@ -120,6 +120,7 @@ model Customer {
   behaviorEvents   BehaviorEvent[]
   carts            Cart[]
   orders           Order[]
+  auditLogs        AuditLog[]
 
   @@map("customers")
 }
@@ -256,6 +257,7 @@ model Order {
   statusHistory    OrderStatusHistory[]
   couponRedemption CouponRedemption?
   payment          Payment?
+  auditLogs        AuditLog[]
 
   @@map("orders")
 }
@@ -352,4 +354,25 @@ model Payment {
   confirmedAt  DateTime?     @map("confirmed_at")
 
   @@map("payments")
+}
+
+// ---------------------------------------------------------------------------
+// Auditoría de acceso — cierra el hallazgo de la métrica de seguridad
+// "Auditabilidad de acceso" (ISO/IEC 9126-3, 8.1.4): quién ejecutó cada
+// operación sensible de pedido/pago, y cuándo. `customerId` es nulo cuando la
+// acción la dispara un sistema externo simulado (la notificación de débito
+// bancario) y no hay identidad de cliente que registrar.
+// ---------------------------------------------------------------------------
+
+model AuditLog {
+  id         Int       @id @default(autoincrement())
+  action     String
+  customerId Int?      @map("customer_id")
+  customer   Customer? @relation(fields: [customerId], references: [id])
+  orderId    Int?      @map("order_id")
+  order      Order?    @relation(fields: [orderId], references: [id])
+  occurredAt DateTime  @default(now()) @map("occurred_at")
+
+  @@index([orderId])
+  @@map("audit_log")
 }

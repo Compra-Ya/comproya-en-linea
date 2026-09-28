@@ -1,3 +1,4 @@
+import { timingSafeEqual } from "crypto";
 import {
   BadRequestException,
   Body,
@@ -8,39 +9,73 @@ import {
   ParseIntPipe,
   Post,
   Req,
+  UnauthorizedException,
   UseGuards,
 } from "@nestjs/common";
 import type { Request } from "express";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { CurrentCustomer } from "../auth/current-customer.decorator";
+import { AuditoriaService } from "../auditoria/auditoria.service";
 import { PagoService } from "./pago.service";
 import { AdaptadorStripe } from "./puertos/adaptador-stripe";
 import { NotificarDebitoDto } from "./dto/notificar-debito.dto";
+
+// Compara el secreto recibido contra el configurado en tiempo constante
+// (crypto.timingSafeEqual), igualando longitudes de antemano para no filtrar
+// por qué tan larga es la coincidencia — mismo cuidado que la verificación de
+// firma de Stripe, adaptado a un secreto compartido simple porque este
+// endpoint simulado no pasa por ningún SDK de pasarela real.
+function secretoValido(recibido: string | undefined, esperado: string): boolean {
+  if (!recibido) return false;
+  const bufferRecibido = Buffer.from(recibido);
+  const bufferEsperado = Buffer.from(esperado);
+  if (bufferRecibido.length !== bufferEsperado.length) return false;
+  return timingSafeEqual(bufferRecibido, bufferEsperado);
+}
 
 @Controller("pagos")
 export class PagoController {
   constructor(
     private readonly pago: PagoService,
     private readonly stripe: AdaptadorStripe,
+    private readonly auditoria: AuditoriaService,
   ) {}
 
   @UseGuards(JwtAuthGuard)
   @Post("tarjeta/:orderId")
-  crearSesionTarjeta(@CurrentCustomer() customer: { customerId: number }, @Param("orderId", ParseIntPipe) orderId: number) {
-    return this.pago.crearSesionTarjeta(customer.customerId, orderId);
+  async crearSesionTarjeta(@CurrentCustomer() customer: { customerId: number }, @Param("orderId", ParseIntPipe) orderId: number) {
+    const resultado = await this.pago.crearSesionTarjeta(customer.customerId, orderId);
+    await this.auditoria.registrar({ action: "pago.crearSesionTarjeta", customerId: customer.customerId, orderId });
+    return resultado;
   }
 
   @UseGuards(JwtAuthGuard)
   @Post("debito/:orderId")
-  crearIntentoDebito(@CurrentCustomer() customer: { customerId: number }, @Param("orderId", ParseIntPipe) orderId: number) {
-    return this.pago.crearIntentoDebito(customer.customerId, orderId);
+  async crearIntentoDebito(@CurrentCustomer() customer: { customerId: number }, @Param("orderId", ParseIntPipe) orderId: number) {
+    const resultado = await this.pago.crearIntentoDebito(customer.customerId, orderId);
+    await this.auditoria.registrar({ action: "pago.crearIntentoDebito", customerId: customer.customerId, orderId });
+    return resultado;
   }
 
   // Simula la notificación de débito bancario que en el canon entrega la
-  // pasarela de pagos (sección 3) — no hay pasarela de débito real conectada.
+  // pasarela de pagos (sección 3) — no hay pasarela de débito real conectada,
+  // así que se verifica un secreto compartido (X-Debito-Secreto) en vez de la
+  // firma real de una pasarela que no existe. Sin identidad de cliente: quien
+  // llama es un sistema externo, no un cliente autenticado.
   @Post("debito/:orderId/notificacion")
-  notificarDebito(@Param("orderId", ParseIntPipe) orderId: number, @Body() dto: NotificarDebitoDto) {
-    return this.pago.notificarDebito(orderId, dto.exitoso);
+  async notificarDebito(
+    @Headers("x-debito-secreto") secreto: string | undefined,
+    @Param("orderId", ParseIntPipe) orderId: number,
+    @Body() dto: NotificarDebitoDto,
+  ) {
+    const esperado = process.env.DEBITO_NOTIFICATION_SECRET;
+    if (!esperado) throw new BadRequestException("Falta DEBITO_NOTIFICATION_SECRET");
+    if (!secretoValido(secreto, esperado)) {
+      throw new UnauthorizedException("Encabezado X-Debito-Secreto ausente o inválido");
+    }
+    const resultado = await this.pago.notificarDebito(orderId, dto.exitoso);
+    await this.auditoria.registrar({ action: "pago.notificarDebito", orderId });
+    return resultado;
   }
 
   @UseGuards(JwtAuthGuard)

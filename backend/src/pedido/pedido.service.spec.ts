@@ -110,6 +110,22 @@ describe("PedidoService (RN-05, RN-07, RN-08, RN-09)", () => {
     expect(disponibilidad?.reservedUnits).toBe(0);
   });
 
+  it("PE-11: Pagado + iniciarAlistamiento() -> En alistamiento; no admite iniciarse dos veces", async () => {
+    const { product, branch, customer } = await crearProductoConDisponibilidad(20);
+    await carrito.agregarItem(customer.id, null, { productId: product.id, quantity: 1 });
+    const order = await pedido.confirmar(customer.id, { branchId: branch.id });
+    await pedido.marcarEstado(order.id, OrderStatus.PAID);
+
+    const enAlistamiento = await pedido.iniciarAlistamiento(order.id);
+    expect(enAlistamiento.status).toBe(OrderStatus.PREPARING);
+
+    await expect(pedido.iniciarAlistamiento(order.id)).rejects.toThrow(
+      "Solo un pedido pagado puede iniciar alistamiento",
+    );
+    const sinCambio = await pedido.obtener(order.id);
+    expect(sinCambio.status).toBe(OrderStatus.PREPARING);
+  });
+
   it("RN-09: un pedido en alistamiento ya no puede cancelarse", async () => {
     const { product, branch, customer } = await crearProductoConDisponibilidad(20);
     await carrito.agregarItem(customer.id, null, { productId: product.id, quantity: 1 });
