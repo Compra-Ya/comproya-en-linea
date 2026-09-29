@@ -62,8 +62,12 @@ export function generateSynthetic(
   const result: ProductSeed[] = [];
   for (let i = 0; i < count; i++) {
     const category = faker.helpers.arrayElement(categories);
+    // Corrección CU-2 #5: antes `dec: 0` forzaba precios sintéticos sin
+    // decimales, inconsistente con `Decimal(12,2)` del esquema y con los
+    // precios de origen DummyJSON (que sí conservan 2 decimales, ver
+    // buildFromDummy más arriba).
     const digitalPrice = Number(
-      faker.commerce.price({ min: 8000, max: 3500000, dec: 0 })
+      faker.commerce.price({ min: 8000, max: 3500000, dec: 2 })
     );
     result.push({
       homologatedCode: buildHomologatedCode(category, startingIndex + i),

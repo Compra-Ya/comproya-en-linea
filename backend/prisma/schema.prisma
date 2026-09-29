@@ -371,6 +371,10 @@ model AuditLog {
   customer   Customer? @relation(fields: [customerId], references: [id])
   orderId    Int?      @map("order_id")
   order      Order?    @relation(fields: [orderId], references: [id])
+  // Identidad de sistema para transiciones automáticas sin cliente
+  // identificable (webhook de la pasarela, cron de liberación) — no
+  // reemplaza `customerId`, lo complementa cuando quien actúa no es una persona.
+  actor      String?
   occurredAt DateTime  @default(now()) @map("occurred_at")
 
   @@index([orderId])

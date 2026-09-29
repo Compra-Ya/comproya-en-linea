@@ -6,8 +6,10 @@ import { CatalogoService } from "../catalogo/catalogo.service";
 import { AdaptadorErpSimulado } from "../catalogo/puertos/adaptador-erp-simulado";
 import { CarritoService } from "../carrito/carrito.service";
 import { PedidoService } from "../pedido/pedido.service";
+import { AuditoriaService } from "../auditoria/auditoria.service";
 import { PagoService } from "./pago.service";
 import { AdaptadorStripe } from "./puertos/adaptador-stripe";
+import { descifrarToken } from "./dominio/cifrado-token";
 
 // RN-06: en ninguna de estas pruebas entra ni sale un número de tarjeta —
 // solo se ejercitan tokens. `AdaptadorStripe` se sustituye por un doble que
@@ -30,6 +32,7 @@ describe("PagoService (RN-06, CU-15, CU-16, CU-17)", () => {
         CatalogoService,
         AdaptadorErpSimulado,
         PrismaService,
+        AuditoriaService,
         {
           provide: AdaptadorStripe,
           useValue: {
@@ -50,7 +53,7 @@ describe("PagoService (RN-06, CU-15, CU-16, CU-17)", () => {
   beforeEach(async () => resetDb(prisma));
   afterAll(async () => prisma.$disconnect());
 
-  async function crearPedidoConfirmado() {
+  async function crearPedidoConfirmado(couponCode?: string) {
     const category = await prisma.category.create({ data: { name: "Cat" } });
     const product = await prisma.product.create({
       data: { homologatedCode: "ABC-000001", name: "P", categoryId: category.id, cost: 10, digitalPrice: 20 },
@@ -62,8 +65,11 @@ describe("PagoService (RN-06, CU-15, CU-16, CU-17)", () => {
     const customer = await prisma.customer.create({
       data: { document: "CC1", name: "Cliente", email: "c@test.com", passwordHash: "x" },
     });
+    if (couponCode) {
+      await prisma.loyaltyCoupon.create({ data: { code: couponCode, percentage: 10, active: true } });
+    }
     await carrito.agregarItem(customer.id, null, { productId: product.id, quantity: 2 });
-    const order = await pedido.confirmar(customer.id, { branchId: branch.id });
+    const order = await pedido.confirmar(customer.id, { branchId: branch.id, couponCode });
     return { order, customer, product, branch };
   }
 
@@ -73,8 +79,12 @@ describe("PagoService (RN-06, CU-15, CU-16, CU-17)", () => {
     expect(redirectUrl).toContain("checkout.stripe.com");
 
     const payment = await prisma.payment.findUnique({ where: { orderId: order.id } });
-    expect(payment?.gatewayToken).toBe(`cs_test_falso_${order.id}`);
-    expect(NUMERO_DE_TARJETA.test(payment?.gatewayToken ?? "")).toBe(false);
+    // Corrección CU-2 #6: el valor crudo en base de datos ya no es el token en
+    // texto plano — queda cifrado en reposo (AES-256-GCM), hay que
+    // descifrarlo para comparar contra lo que devolvió la pasarela.
+    expect(payment?.gatewayToken).not.toBe(`cs_test_falso_${order.id}`);
+    expect(descifrarToken(payment?.gatewayToken ?? "")).toBe(`cs_test_falso_${order.id}`);
+    expect(NUMERO_DE_TARJETA.test(descifrarToken(payment?.gatewayToken ?? ""))).toBe(false);
   });
 
   it("PE-06 / CU-15/CU-17: el webhook checkout.session.completed confirma el pago (Creado -> Pagado) y habilita el comprobante", async () => {
@@ -92,6 +102,70 @@ describe("PagoService (RN-06, CU-15, CU-16, CU-17)", () => {
     expect(actualizado?.status).toBe(OrderStatus.PAID);
     const comprobante = await pago.obtenerComprobante(customer.id, order.id);
     expect(comprobante.pickupCode).toBe(order.pickupCode);
+  });
+
+  it("Corrección CU-2 #1: el comprobante muestra el total con el descuento del cupón ya aplicado, no el subtotal sin descontar", async () => {
+    const { order, customer } = await crearPedidoConfirmado("DESC10");
+    await pago.crearSesionTarjeta(customer.id, order.id);
+
+    await pago.manejarEventoStripe({
+      type: "checkout.session.completed",
+      data: { object: { metadata: { orderId: String(order.id) }, payment_intent: "pi_test_falso", id: "cs_test_falso" } },
+    } as any);
+
+    const totalConDescuento = await pedido.calcularTotal(order.id);
+    const subtotalSinDescuento = order.items.reduce(
+      (acc, item) => acc + Number(item.unitPrice) * item.quantity,
+      0,
+    );
+    expect(totalConDescuento).toBeLessThan(subtotalSinDescuento); // el cupón sí descontó algo real
+
+    const comprobante = await pago.obtenerComprobante(customer.id, order.id);
+    expect(comprobante.total).toBe(totalConDescuento);
+    expect(comprobante.total).not.toBe(subtotalSinDescuento);
+  });
+
+  it("Corrección CU-2 #3a: la transición que dispara el webhook de Stripe queda auditada con un actor de sistema", async () => {
+    const { order, customer } = await crearPedidoConfirmado();
+    await pago.crearSesionTarjeta(customer.id, order.id);
+
+    await pago.manejarEventoStripe({
+      type: "checkout.session.completed",
+      data: { object: { metadata: { orderId: String(order.id) }, payment_intent: "pi_test_falso", id: "cs_test_falso" } },
+    } as any);
+
+    const auditoria = await prisma.auditLog.findFirst({
+      where: { orderId: order.id, action: "pago.confirmarPago" },
+    });
+    expect(auditoria?.actor).toBe("sistema:webhook-stripe");
+    expect(auditoria?.customerId).toBeNull(); // quien actúa aquí es la pasarela, no el cliente
+
+    // Un segundo evento sobre el mismo pedido ya confirmado es un no-op
+    // (idempotencia) y no debe generar una segunda fila de auditoría fantasma.
+    await pago.manejarEventoStripe({
+      type: "checkout.session.completed",
+      data: { object: { metadata: { orderId: String(order.id) }, payment_intent: "pi_test_falso", id: "cs_test_falso" } },
+    } as any);
+    const auditorias = await prisma.auditLog.findMany({ where: { orderId: order.id, action: "pago.confirmarPago" } });
+    expect(auditorias).toHaveLength(1);
+  });
+
+  it("Corrección CU-2 #3b: la liberación automática por vencimiento (cron) queda auditada con un actor de sistema", async () => {
+    const { order, customer } = await crearPedidoConfirmado();
+    await pago.crearSesionTarjeta(customer.id, order.id);
+    await prisma.payment.update({
+      where: { orderId: order.id },
+      data: { createdAt: new Date(Date.now() - 16 * 60 * 1000) },
+    });
+
+    const liberados = await pago.liberarPagosVencidos();
+
+    expect(liberados).toBe(1);
+    const auditoria = await prisma.auditLog.findFirst({
+      where: { orderId: order.id, action: "pago.liberarPagosVencidos" },
+    });
+    expect(auditoria?.actor).toBe("sistema:cron-liberacion-reservas");
+    expect(auditoria?.customerId).toBeNull();
   });
 
   it("CU-15 (E-2): checkout.session.expired marca el pago fallido y libera la reserva dentro de 15 minutos", async () => {

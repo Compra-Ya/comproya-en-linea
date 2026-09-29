@@ -79,7 +79,7 @@ export default function ComprobantePage() {
               <div className="li" style={{ borderBottom: "none", fontWeight: 800, color: "var(--ink)" }}>
                 <span>Total pagado</span>
                 <span>
-                  $ {comprobante.items.reduce((acc, i) => acc + Number(i.unitPrice) * i.quantity, 0).toLocaleString("es-CO")}
+                  $ {Number(comprobante.total).toLocaleString("es-CO")}
                 </span>
               </div>
               <p className="faint" style={{ marginTop: 10 }}>Sucursal de retiro: {comprobante.branch.name} — {comprobante.branch.city}</p>

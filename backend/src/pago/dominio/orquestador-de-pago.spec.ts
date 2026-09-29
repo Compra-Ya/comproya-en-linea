@@ -6,11 +6,13 @@ import { CatalogoService } from "../../catalogo/catalogo.service";
 import { AdaptadorErpSimulado } from "../../catalogo/puertos/adaptador-erp-simulado";
 import { CarritoService } from "../../carrito/carrito.service";
 import { PedidoService } from "../../pedido/pedido.service";
+import { AuditoriaService } from "../../auditoria/auditoria.service";
 import { PagoService } from "../pago.service";
 import { AdaptadorStripe } from "../puertos/adaptador-stripe";
 import { OrquestadorDePago } from "./orquestador-de-pago";
 import { GeneradorDeComprobante } from "./generador-de-comprobante";
 import { Token } from "./token";
+import { descifrarToken } from "./cifrado-token";
 
 describe("OrquestadorDePago (PR-07, PR-08, PI-05)", () => {
   let prisma: PrismaService;
@@ -28,6 +30,7 @@ describe("OrquestadorDePago (PR-07, PR-08, PI-05)", () => {
         CatalogoService,
         AdaptadorErpSimulado,
         PrismaService,
+        AuditoriaService,
         OrquestadorDePago,
         GeneradorDeComprobante,
         {
@@ -99,7 +102,10 @@ describe("OrquestadorDePago (PR-07, PR-08, PI-05)", () => {
 
     const paymentEnBd = await prisma.payment.findUnique({ where: { orderId: order.id } });
     const token = new Token(paymentEnBd!.gatewayToken);
-    expect(token.gatewayToken).toBe("pi_test_falso"); // Payment 1:1 con Token (orderId único)
+    // Corrección CU-2 #6: el valor crudo ya no es el token en texto plano —
+    // queda cifrado en reposo, hay que descifrarlo para comparar.
+    expect(token.gatewayToken).not.toBe("pi_test_falso");
+    expect(descifrarToken(token.gatewayToken)).toBe("pi_test_falso"); // Payment 1:1 con Token (orderId único)
 
     const comprobante = await generadorComprobante.generar(customer.id, order.id);
     expect(comprobante.pickupCode).toBe(order.pickupCode);

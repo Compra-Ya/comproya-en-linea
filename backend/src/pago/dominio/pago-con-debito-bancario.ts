@@ -1,13 +1,8 @@
 import { NotFoundException } from "@nestjs/common";
 import { PaymentStatus } from "@prisma/client";
 import { PrismaService } from "../../prisma/prisma.service";
-import { PagoService } from "../pago.service";
+import { PagoService, TREINTA_MINUTOS_MS } from "../pago.service";
 import { Pago } from "./pago";
-
-// Mismo plazo que usa PagoService.liberarPagosVencidos() para débito
-// bancario (canon, sección 10) — se repite aquí porque esa constante es
-// privada en pago.service.ts y ambos representan la misma regla fija.
-const TREINTA_MINUTOS_MS = 30 * 60 * 1000;
 
 // Clase de diseño PagoConDebitoBancario (Plan_Pruebas_ComproYa.docx, PR-09).
 // Envuelve PagoService.crearIntentoDebito()/notificarDebito() — CU-16.

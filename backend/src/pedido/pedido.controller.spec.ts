@@ -61,6 +61,24 @@ describe("PedidoController (autenticación, pertenencia y auditoría)", () => {
     return { customer, order, token };
   }
 
+  it("Corrección CU-2 #4: GET /pedidos/:id con token de otro cliente -> 403", async () => {
+    const { order } = await crearPedidoPagado("CC-AUTH-13");
+    const { token: tokenOtroCliente } = await crearPedidoPagado("CC-AUTH-14");
+    await request(app.getHttpServer())
+      .get(`/pedidos/${order.id}`)
+      .set("Authorization", `Bearer ${tokenOtroCliente}`)
+      .expect(403);
+  });
+
+  it("Corrección CU-2 #4: GET /pedidos/:id con el token del dueño -> 200 y devuelve el pedido", async () => {
+    const { order, token } = await crearPedidoPagado("CC-AUTH-15");
+    const respuesta = await request(app.getHttpServer())
+      .get(`/pedidos/${order.id}`)
+      .set("Authorization", `Bearer ${token}`)
+      .expect(200);
+    expect(respuesta.body.id).toBe(order.id);
+  });
+
   it("POST /pedidos/:id/cancelar sin token -> 401", async () => {
     const { order } = await crearPedidoPagado("CC-AUTH-01");
     await request(app.getHttpServer()).post(`/pedidos/${order.id}/cancelar`).expect(401);

@@ -3,13 +3,18 @@ import { BadRequestException, ForbiddenException, Injectable, Logger, NotFoundEx
 import { OrderStatus, PaymentMethod, PaymentStatus } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 import { PedidoService } from "../pedido/pedido.service";
+import { AuditoriaService } from "../auditoria/auditoria.service";
 import { AdaptadorStripe } from "./puertos/adaptador-stripe";
+import { cifrarToken } from "./dominio/cifrado-token";
 
 // Módulo pago: SP-05 (cobro y conciliación) — sprint 5. RN-06: nunca se
 // guarda un número de tarjeta, solo el token/identificador que entrega la
 // pasarela.
 const QUINCE_MINUTOS_MS = 15 * 60 * 1000;
-const TREINTA_MINUTOS_MS = 30 * 60 * 1000;
+// Exportada porque PagoConDebitoBancario.esperarConfirmacion() (clase de
+// diseño, dominio/pago-con-debito-bancario.ts) usa el mismo plazo — antes
+// estaba duplicada ahí como una constante local independiente.
+export const TREINTA_MINUTOS_MS = 30 * 60 * 1000;
 
 @Injectable()
 export class PagoService {
@@ -19,6 +24,7 @@ export class PagoService {
     private readonly prisma: PrismaService,
     private readonly pedido: PedidoService,
     private readonly stripe: AdaptadorStripe,
+    private readonly auditoria: AuditoriaService,
   ) {}
 
   private async pedidoDelCliente(customerId: number, orderId: number) {
@@ -38,10 +44,11 @@ export class PagoService {
     const total = await this.pedido.calcularTotal(orderId);
     const sesion = await this.stripe.crearCobroConTarjeta(orderId, total, order.correlationId);
 
+    const gatewayTokenCifrado = cifrarToken(sesion.gatewayToken);
     await this.prisma.payment.upsert({
       where: { orderId },
-      update: { method: PaymentMethod.CARD, status: PaymentStatus.PENDING, gatewayToken: sesion.gatewayToken },
-      create: { orderId, method: PaymentMethod.CARD, status: PaymentStatus.PENDING, gatewayToken: sesion.gatewayToken },
+      update: { method: PaymentMethod.CARD, status: PaymentStatus.PENDING, gatewayToken: gatewayTokenCifrado },
+      create: { orderId, method: PaymentMethod.CARD, status: PaymentStatus.PENDING, gatewayToken: gatewayTokenCifrado },
     });
     return { redirectUrl: sesion.redirectUrl };
   }
@@ -50,26 +57,41 @@ export class PagoService {
   // pago (nunca se confía en `success_url`, porque el cliente puede cerrar
   // la pestaña antes de volver).
   async manejarEventoStripe(event: import("stripe").Stripe.Event) {
+    // Auditabilidad de acceso (ISO/IEC 9126-3, 8.1.4): estas tres transiciones
+    // las dispara la pasarela, no un cliente autenticado — se registran con un
+    // actor de sistema explícito en vez de dejar el campo vacío. Solo se
+    // audita si en efecto hubo transición (confirmarPago/marcarPagoFallido
+    // devuelven false cuando su guarda de idempotencia ya las hizo no-op).
+    const ACTOR_WEBHOOK_STRIPE = "sistema:webhook-stripe";
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as import("stripe").Stripe.Checkout.Session;
         const orderId = Number(session.metadata?.orderId);
         if (!orderId) return;
-        await this.confirmarPago(orderId, String(session.payment_intent ?? session.id));
+        const transicionó = await this.confirmarPago(orderId, String(session.payment_intent ?? session.id));
+        if (transicionó) {
+          await this.auditoria.registrar({ action: "pago.confirmarPago", orderId, actor: ACTOR_WEBHOOK_STRIPE });
+        }
         return;
       }
       case "checkout.session.expired": {
         const session = event.data.object as import("stripe").Stripe.Checkout.Session;
         const orderId = Number(session.metadata?.orderId);
         if (!orderId) return;
-        await this.marcarPagoFallido(orderId);
+        const transicionó = await this.marcarPagoFallido(orderId);
+        if (transicionó) {
+          await this.auditoria.registrar({ action: "pago.marcarPagoFallido", orderId, actor: ACTOR_WEBHOOK_STRIPE });
+        }
         return;
       }
       case "payment_intent.payment_failed": {
         const intent = event.data.object as import("stripe").Stripe.PaymentIntent;
         const orderId = Number(intent.metadata?.orderId);
         if (!orderId) return;
-        await this.marcarPagoFallido(orderId);
+        const transicionó = await this.marcarPagoFallido(orderId);
+        if (transicionó) {
+          await this.auditoria.registrar({ action: "pago.marcarPagoFallido", orderId, actor: ACTOR_WEBHOOK_STRIPE });
+        }
         return;
       }
       default:
@@ -86,8 +108,8 @@ export class PagoService {
     const referencia = `DEBITO-${randomUUID().slice(0, 10).toUpperCase()}`;
     await this.prisma.payment.upsert({
       where: { orderId },
-      update: { method: PaymentMethod.BANK_DEBIT, status: PaymentStatus.PENDING, gatewayToken: referencia },
-      create: { orderId, method: PaymentMethod.BANK_DEBIT, status: PaymentStatus.PENDING, gatewayToken: referencia },
+      update: { method: PaymentMethod.BANK_DEBIT, status: PaymentStatus.PENDING, gatewayToken: cifrarToken(referencia) },
+      create: { orderId, method: PaymentMethod.BANK_DEBIT, status: PaymentStatus.PENDING, gatewayToken: cifrarToken(referencia) },
     });
     return { referencia };
   }
@@ -105,24 +127,29 @@ export class PagoService {
     }
   }
 
-  private async confirmarPago(orderId: number, gatewayToken: string) {
+  // Devuelve si de verdad transicionó (false = no-op por la guarda de
+  // idempotencia) para que los llamadores automáticos (webhook, cron) sepan
+  // si hay algo real que auditar.
+  private async confirmarPago(orderId: number, gatewayToken: string): Promise<boolean> {
     const payment = await this.prisma.payment.findUnique({ where: { orderId } });
-    if (!payment || payment.status === PaymentStatus.CONFIRMED) return; // idempotente ante reintentos del webhook.
+    if (!payment || payment.status === PaymentStatus.CONFIRMED) return false; // idempotente ante reintentos del webhook.
     await this.prisma.payment.update({
       where: { orderId },
-      data: { status: PaymentStatus.CONFIRMED, gatewayToken, confirmedAt: new Date() },
+      data: { status: PaymentStatus.CONFIRMED, gatewayToken: cifrarToken(gatewayToken), confirmedAt: new Date() },
     });
     // CU-17: el comprobante nunca se genera antes de que el pago quede
     // confirmado — se apoya en que el pedido solo pasa a PAID aquí.
     await this.pedido.marcarEstado(orderId, OrderStatus.PAID);
+    return true;
   }
 
-  private async marcarPagoFallido(orderId: number, estadoPedido: OrderStatus = OrderStatus.PAYMENT_FAILED) {
+  private async marcarPagoFallido(orderId: number, estadoPedido: OrderStatus = OrderStatus.PAYMENT_FAILED): Promise<boolean> {
     const payment = await this.prisma.payment.findUnique({ where: { orderId } });
-    if (!payment || payment.status === PaymentStatus.CONFIRMED) return;
+    if (!payment || payment.status === PaymentStatus.CONFIRMED) return false;
     await this.prisma.payment.update({ where: { orderId }, data: { status: PaymentStatus.FAILED } });
     await this.pedido.marcarEstado(orderId, estadoPedido);
     await this.pedido.liberarReservasDelPedido(orderId);
+    return true;
   }
 
   // CU-17 Emisión del comprobante — solo visible cuando el pago ya está
@@ -140,6 +167,10 @@ export class PagoService {
       branch: order.branch,
       items: order.items,
       pagadoEl: order.payment?.confirmedAt,
+      // Corrección: antes el frontend recalculaba sumando `items` sin
+      // descuento; este es el mismo total que ya calculó y cobró Stripe
+      // (incluye el descuento de cupón, RN-07), no una nueva fórmula.
+      total: await this.pedido.calcularTotal(orderId),
     };
   }
 
@@ -156,7 +187,14 @@ export class PagoService {
       const limite = pago.method === PaymentMethod.CARD ? QUINCE_MINUTOS_MS : TREINTA_MINUTOS_MS;
       if (ahora.getTime() - pago.createdAt.getTime() >= limite) {
         const estado = pago.method === PaymentMethod.CARD ? OrderStatus.PAYMENT_FAILED : OrderStatus.CANCELLED;
-        await this.marcarPagoFallido(pago.orderId, estado);
+        const transicionó = await this.marcarPagoFallido(pago.orderId, estado);
+        if (transicionó) {
+          await this.auditoria.registrar({
+            action: "pago.liberarPagosVencidos",
+            orderId: pago.orderId,
+            actor: "sistema:cron-liberacion-reservas",
+          });
+        }
         liberados++;
       }
     }

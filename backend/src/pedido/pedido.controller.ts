@@ -27,10 +27,17 @@ export class PedidoController {
     return this.pedido.listarPorCliente(customer.customerId);
   }
 
+  // Corrección CU-2 #4: antes solo exigía autenticación, sin verificar
+  // pertenencia — cualquier cliente autenticado podía leer el pedido de otro.
+  // Mismo patrón que `cancelar`.
   @UseGuards(JwtAuthGuard)
   @Get(":id")
-  obtener(@Param("id", ParseIntPipe) id: number) {
-    return this.pedido.obtener(id);
+  async obtener(@CurrentCustomer() customer: { customerId: number }, @Param("id", ParseIntPipe) id: number) {
+    const order = await this.pedido.obtener(id);
+    if (order.customerId !== customer.customerId) {
+      throw new ForbiddenException("Este pedido no pertenece al cliente autenticado");
+    }
+    return order;
   }
 
   // Alcance mínimo de "operación" (RN-09, sprint 6) — el Cliente digital

@@ -5,6 +5,9 @@ interface RegistrarAuditoria {
   action: string;
   customerId?: number;
   orderId?: number;
+  // Para transiciones automáticas sin cliente identificable (webhook de la
+  // pasarela, cron de liberación) — p. ej. "sistema:webhook-stripe".
+  actor?: string;
 }
 
 // Auditabilidad de acceso (ISO/IEC 9126-3, 8.1.4): quién ejecutó cada
@@ -15,9 +18,9 @@ interface RegistrarAuditoria {
 export class AuditoriaService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async registrar({ action, customerId, orderId }: RegistrarAuditoria) {
+  async registrar({ action, customerId, orderId, actor }: RegistrarAuditoria) {
     await this.prisma.auditLog.create({
-      data: { action, customerId, orderId },
+      data: { action, customerId, orderId, actor },
     });
   }
 }

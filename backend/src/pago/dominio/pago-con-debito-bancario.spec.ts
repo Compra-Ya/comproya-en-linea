@@ -6,6 +6,7 @@ import { CatalogoService } from "../../catalogo/catalogo.service";
 import { AdaptadorErpSimulado } from "../../catalogo/puertos/adaptador-erp-simulado";
 import { CarritoService } from "../../carrito/carrito.service";
 import { PedidoService } from "../../pedido/pedido.service";
+import { AuditoriaService } from "../../auditoria/auditoria.service";
 import { PagoService } from "../pago.service";
 import { AdaptadorStripe } from "../puertos/adaptador-stripe";
 import { OrquestadorDePago } from "./orquestador-de-pago";
@@ -25,6 +26,7 @@ describe("PagoConDebitoBancario (PR-09)", () => {
         CatalogoService,
         AdaptadorErpSimulado,
         PrismaService,
+        AuditoriaService,
         OrquestadorDePago,
         { provide: AdaptadorStripe, useValue: {} },
       ],

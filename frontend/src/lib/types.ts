@@ -113,4 +113,5 @@ export interface Comprobante {
   branch: Sucursal;
   items: ItemPedido[];
   pagadoEl: string;
+  total: number;
 }

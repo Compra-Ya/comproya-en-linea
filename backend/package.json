@@ -64,6 +64,7 @@
   "jest": {
     "moduleFileExtensions": ["js", "json", "ts"],
     "rootDir": "src",
+    "roots": ["<rootDir>", "<rootDir>/../prisma/lib"],
     "setupFiles": ["<rootDir>/../jest.setup.js"],
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
