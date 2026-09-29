@@ -104,6 +104,39 @@ describe("PagoService (RN-06, CU-15, CU-16, CU-17)", () => {
     expect(comprobante.pickupCode).toBe(order.pickupCode);
   });
 
+  it("Corrección CU-2 #7 (segunda ronda): el comprobante sigue disponible en todo el ciclo de vida posterior al pago, y deja de estarlo si el pedido se cancela", async () => {
+    const { order, customer } = await crearPedidoConfirmado();
+    await pago.crearSesionTarjeta(customer.id, order.id);
+    await pago.manejarEventoStripe({
+      type: "checkout.session.completed",
+      data: { object: { metadata: { orderId: String(order.id) }, payment_intent: "pi_test_falso", id: "cs_test_falso" } },
+    } as any);
+
+    await expect(pago.obtenerComprobante(customer.id, order.id)).resolves.toMatchObject({ pickupCode: order.pickupCode });
+
+    await pedido.iniciarAlistamiento(order.id);
+    await expect(pago.obtenerComprobante(customer.id, order.id)).resolves.toMatchObject({ pickupCode: order.pickupCode });
+
+    await pedido.marcarListoParaRetiro(order.id);
+    await expect(pago.obtenerComprobante(customer.id, order.id)).resolves.toMatchObject({ pickupCode: order.pickupCode });
+
+    await pedido.retirarConCodigo(order.id, order.pickupCode);
+    await expect(pago.obtenerComprobante(customer.id, order.id)).resolves.toMatchObject({ pickupCode: order.pickupCode });
+  });
+
+  it("Corrección CU-2 #7 (segunda ronda): el comprobante NO está disponible en Creado (sin pagar) ni en Cancelado", async () => {
+    const { order, customer } = await crearPedidoConfirmado();
+    await expect(pago.obtenerComprobante(customer.id, order.id)).rejects.toThrow(/no está disponible/);
+
+    await pago.crearSesionTarjeta(customer.id, order.id);
+    await pago.manejarEventoStripe({
+      type: "checkout.session.completed",
+      data: { object: { metadata: { orderId: String(order.id) }, payment_intent: "pi_test_falso", id: "cs_test_falso" } },
+    } as any);
+    await pedido.cancelar(order.id);
+    await expect(pago.obtenerComprobante(customer.id, order.id)).rejects.toThrow(/no está disponible/);
+  });
+
   it("Corrección CU-2 #1: el comprobante muestra el total con el descuento del cupón ya aplicado, no el subtotal sin descontar", async () => {
     const { order, customer } = await crearPedidoConfirmado("DESC10");
     await pago.crearSesionTarjeta(customer.id, order.id);
