@@ -58,6 +58,20 @@ export class CarritoService {
     return this.obtenerPorId(cart.id);
   }
 
+  // Verificación de pertenencia (sin crear nada, a diferencia de
+  // obtenerOCrear): mismo criterio invitado/autenticado que el resto del
+  // módulo — el carrito autenticado se identifica por customerId, el de
+  // invitado por guestToken. `actualizarItem`/`quitarItem` reciben el cartId
+  // de la URL y por sí solos no verifican que sea el que le corresponde a
+  // quien llama.
+  async perteneceA(cartId: number, customerId: number | null, guestToken: string | null): Promise<boolean> {
+    const cart = await this.prisma.cart.findUnique({ where: { id: cartId } });
+    if (!cart) return false;
+    if (customerId) return cart.customerId === customerId;
+    if (guestToken) return cart.guestToken === guestToken;
+    return false;
+  }
+
   async actualizarItem(cartId: number, productId: number, dto: ActualizarItemDto) {
     if (dto.quantity === 0) {
       await this.prisma.cartItem.deleteMany({ where: { cartId, productId } });

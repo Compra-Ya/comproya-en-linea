@@ -15,6 +15,17 @@ const QUINCE_MINUTOS_MS = 15 * 60 * 1000;
 // diseño, dominio/pago-con-debito-bancario.ts) usa el mismo plazo — antes
 // estaba duplicada ahí como una constante local independiente.
 export const TREINTA_MINUTOS_MS = 30 * 60 * 1000;
+// El canon exige el comprobante consultable 5 años desde su emisión — no solo
+// mientras el pedido está en Pagado, que en el camino normal dura poco antes
+// de avanzar a alistamiento. Disponible en todo el ciclo de vida posterior a
+// un pago confirmado; no disponible en los estados donde nunca hubo (o dejó
+// de haber) un pago confirmado.
+const ESTADOS_CON_COMPROBANTE_DISPONIBLE: OrderStatus[] = [
+  OrderStatus.PAID,
+  OrderStatus.PREPARING,
+  OrderStatus.READY_FOR_PICKUP,
+  OrderStatus.DELIVERED,
+];
 
 @Injectable()
 export class PagoService {
@@ -156,7 +167,7 @@ export class PagoService {
   // confirmado (P-6 / P-17).
   async obtenerComprobante(customerId: number, orderId: number) {
     const order = await this.pedidoDelCliente(customerId, orderId);
-    if (order.status !== OrderStatus.PAID) {
+    if (!ESTADOS_CON_COMPROBANTE_DISPONIBLE.includes(order.status)) {
       throw new BadRequestException("El comprobante no está disponible hasta que el pago quede confirmado");
     }
     return {

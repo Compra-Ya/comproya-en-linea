@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Headers, Param, ParseIntPipe, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, ForbiddenException, Get, Headers, Param, ParseIntPipe, Patch, Post, UseGuards } from "@nestjs/common";
 import { OptionalJwtAuthGuard } from "../auth/optional-jwt-auth.guard";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { CurrentCustomer } from "../auth/current-customer.decorator";
@@ -31,17 +31,36 @@ export class CarritoController {
     return this.carrito.agregarItem(customer?.customerId ?? null, cartToken ?? null, dto);
   }
 
+  // Corrección: el carrito de invitado sin sesión sigue siendo válido (C-04)
+  // — lo que faltaba era comparar el cartId de la URL contra la identidad de
+  // quien llama, para que no cualquiera que tenga o adivine un cartId ajeno
+  // pueda modificarlo o vaciarlo.
   @Patch(":cartId/items/:productId")
-  actualizar(
+  async actualizar(
+    @CurrentCustomer() customer: { customerId: number } | null,
     @Param("cartId", ParseIntPipe) cartId: number,
     @Param("productId", ParseIntPipe) productId: number,
     @Body() dto: ActualizarItemDto,
+    @Headers("x-cart-token") cartToken?: string,
   ) {
+    const esPropio = await this.carrito.perteneceA(cartId, customer?.customerId ?? null, cartToken ?? null);
+    if (!esPropio) {
+      throw new ForbiddenException("Este carrito no corresponde a quien hace la solicitud");
+    }
     return this.carrito.actualizarItem(cartId, productId, dto);
   }
 
   @Delete(":cartId/items/:productId")
-  quitar(@Param("cartId", ParseIntPipe) cartId: number, @Param("productId", ParseIntPipe) productId: number) {
+  async quitar(
+    @CurrentCustomer() customer: { customerId: number } | null,
+    @Param("cartId", ParseIntPipe) cartId: number,
+    @Param("productId", ParseIntPipe) productId: number,
+    @Headers("x-cart-token") cartToken?: string,
+  ) {
+    const esPropio = await this.carrito.perteneceA(cartId, customer?.customerId ?? null, cartToken ?? null);
+    if (!esPropio) {
+      throw new ForbiddenException("Este carrito no corresponde a quien hace la solicitud");
+    }
     return this.carrito.quitarItem(cartId, productId);
   }
 
