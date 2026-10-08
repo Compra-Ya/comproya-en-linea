@@ -1,25 +1,65 @@
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap');
 
-/* Tokens tomados literalmente de los mockups de docs/mockups-plan.md
-   (canvas "Mockups ComproYa en Línea", P-1 a P-17) — misma paleta e
-   identidad visual, no una reinterpretación. */
-:root {
-  --orange: #f2661d;
-  --orange-soft: #fef1e7;
-  --navy: #163d6d;
-  --navy-soft: #eaf0f7;
+/* ---------- Tokens del sistema de diseño ----------
+   Copiados de design/design-system/tokens.css (fuente de verdad del rediseño).
+   No editar aquí: cambiar el archivo del sistema de diseño y volver a copiar. */
+:root, [data-theme="light"] {
+  --orange-500: #f2661d;
+  --orange-600: #b9480d;
+  --orange-700: #9a3c0b;
+  --orange-100: #fef1e7;
+  --navy-700: #163d6d;
+  --navy-100: #eaf0f7;
   --ink: #171717;
   --ink-soft: #6b6b6b;
-  --ink-faint: #9a9a9a;
   --line: #e5e5e5;
+  --line-strong: #8a8a8a;
   --surface: #ffffff;
   --surface-muted: #f7f7f7;
+  --surface-disabled: #f0f0f0;
   --ok: #059669;
+  --ok-ink: #047857;
   --ok-soft: #d1fae5;
   --danger: #dc2626;
+  --danger-ink: #b91c1c;
   --danger-soft: #fee2e2;
   --warn: #d97706;
+  --warn-ink: #92400e;
   --warn-soft: #fef3c7;
+  --focus: var(--navy-700);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+  --control-md: 42px;
+  --control-lg: 46px;
+  --thumb: 64px;
+  --container: 1180px;
+  --bp-sm: 720px;
+  --bp-md: 900px;
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+/* ---------- Alias de los nombres anteriores (mientras migramos) ----------
+   Se retiran cuando ninguna regla de este archivo los use. --orange apunta a
+   orange-600 (texto blanco 5,26:1); --ink-faint queda retirado (A-14) y apunta a ink-soft. */
+:root {
+  --orange: var(--orange-600);
+  --orange-soft: var(--orange-100);
+  --navy: var(--navy-700);
+  --navy-soft: var(--navy-100);
+  --ink-faint: var(--ink-soft);
 }
 
 * {
@@ -904,3 +944,37 @@ tr:last-child td { border-bottom: none; }
   font-size: 12px;
   text-align: center;
 }
+
+/* ---------- Pantallas migradas al sistema de diseño ---------- */
+.pantalla {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.pantalla-titulo { margin: 0; font-size: 24px; line-height: 30px; font-weight: 700; letter-spacing: -0.01em; }
+.pantalla-seccion { margin: 0 0 var(--space-3); font-size: 18px; line-height: 24px; font-weight: 700; letter-spacing: -0.01em; }
+.confirmar-grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: var(--space-8); align-items: start; }
+.confirmar-principal, .confirmar-lateral { display: flex; flex-direction: column; gap: var(--space-4); min-width: 0; }
+.confirmar-grid .li > span:first-child { min-width: 0; overflow-wrap: anywhere; padding-right: var(--space-3); }
+.confirmar-grid .li > span:last-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.cupon { margin-top: var(--space-4); display: flex; flex-direction: column; gap: var(--space-2); }
+.cupon-etiqueta { font-size: 12px; line-height: 16px; font-weight: 600; }
+.cupon-fila { display: flex; gap: var(--space-2); }
+.cupon-fila input { flex: 1; min-width: 0; }
+@media (max-width: 900px) { .confirmar-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 720px) { .pantalla { padding: var(--space-4); } }
+.cupon-fila input {
+  height: var(--control-md);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  padding: 0 var(--space-3);
+  font: inherit;
+  font-size: 14px;
+  background: var(--surface);
+  color: var(--ink);
+}
+.cupon-fila input::placeholder { color: var(--ink-soft); }
+.cupon-fila input:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }

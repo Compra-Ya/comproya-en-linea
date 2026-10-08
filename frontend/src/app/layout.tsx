@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "@/components/ui/ui.css";
 
 export const metadata: Metadata = {
   title: "ComproYa en Línea",

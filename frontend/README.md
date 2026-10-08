@@ -35,3 +35,12 @@ npm run dev                    # http://localhost:3000 (necesita el backend corr
 ## Sesión, carrito de invitado y sucursal elegida
 
 El token JWT, el `X-Cart-Token` de invitado (C-04) y la sucursal elegida en la ficha de producto se guardan en `localStorage` (`src/lib/api.ts`) — es una conveniencia del navegador, no la fuente de verdad (que es el backend). Tanto `/ingresar` como `/registro` llaman a `POST /carrito/fusionar` si había un carrito de invitado activo, para no perder lo que ya se había agregado.
+
+## Sistema de diseño (migración en curso)
+
+La fuente de verdad del rediseño es `design/design-system/` (tokens, componentes, reglas).
+
+- `src/app/globals.css`: el bloque `:root` es una copia de `design/design-system/tokens.css`; los nombres anteriores (`--orange`, `--navy`, `--ink-faint`…) siguen como alias hasta migrar todas las pantallas. No editar los tokens aquí: cambiarlos en el sistema de diseño y volver a copiar.
+- `src/components/ui/`: componentes en TSX con las props de `design/design-system/components/index.d.ts`. Hechos: `Button`, `Notice`, `ShopHeader`, `CheckoutSteps` e `Icon`. Estilos en `ui/ui.css` (corte literal de `bundle.css`). `bundle.js` es solo referencia de comportamiento y no se importa.
+- `src/components/ShopHeaderConectado.tsx`: `ShopHeader` del sistema con sesión y carrito. El `ShopHeader.tsx` anterior sigue en las pantallas sin migrar; migrar una pantalla es cambiar ese import.
+- Pantallas migradas: `/pedido/confirmar`. Verificación a 390 y 1440 px sin desplazamiento horizontal: `e2e/capturas/verificar-confirmar-pedido.mjs` (capturas en `design/verificacion-rediseno/`).
