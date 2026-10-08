@@ -6,6 +6,7 @@ import { api, ApiError, setCartToken, setSelectedBranch } from "@/lib/api";
 import type { Carrito, Disponibilidad, Producto } from "@/lib/types";
 import ShopHeader from "@/components/ShopHeader";
 import { ProductImage } from "@/components/ProductImage";
+import { infoCategoria } from "@/lib/categorias";
 
 // P-3 Consulta de disponibilidad por sucursal (CU-03). "Retirar aquí" fija
 // la sucursal de retiro del pedido (RN-03/RN-04 ya evaluadas por fila) y
@@ -57,7 +58,7 @@ export default function ProductoPage() {
         <div>
           {producto && (
             <>
-              <span className="faint">{producto.category?.name} · Código homologado {producto.homologatedCode}</span>
+              <span className="faint">{infoCategoria(producto.category?.name).nombre}</span>
               <h2 style={{ fontSize: 26, margin: "8px 0 12px" }}>{producto.name}</h2>
               <span style={{ fontWeight: 800, fontSize: 24 }}>$ {Number(producto.digitalPrice).toLocaleString("es-CO")}</span>
             </>

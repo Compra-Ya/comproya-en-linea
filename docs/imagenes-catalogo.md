@@ -29,4 +29,8 @@ Fotos libres: para los tipos que el retail no cubre (comida, jabón, calzado) se
 
 Sitios probados y descartados (sin evasión, según las reglas del scraper): **Éxito** (429 a la primera solicitud; su `robots.txt` prohíbe `/api/`), **Jumbo** (el CDN de imágenes respondió 429), **Pexels** (403), **Olímpica**, **Carulla**, **Open Food Facts** y **Wikimedia Commons** (sus `robots.txt` prohíben el acceso automático a la API). Alkosto y Ktronix no venden comida.
 
+Fotos de categoría: `backend/scripts/scrape-category-images.ts` baja una foto de Unsplash por categoría (`frontend/public/categorias/`, origen en `design/imagenes-categorias-origen.csv`). Unsplash respondió 429 a mitad de la corrida; las 11 categorías restantes usan la foto de un producto representativo (`completar-categorias-con-productos.ts`) y se reemplazan por la de Unsplash al volver a correr el primer script cuando el límite se levante.
+
+Nombres en español y categorías coherentes (catálogo de pruebas): `backend/scripts/traducir-nombres-de-productos.ts` y `backend/scripts/categorizar-sinteticos.ts` (idempotentes, `--dry-run`). Orden en una base recién sembrada: 1) `apply-product-images.ts`, 2) `traducir-nombres-de-productos.ts`, 3) `categorizar-sinteticos.ts`, 4) `publicar-solo-con-imagen.ts`. Los dos primeros entienden nombres en inglés y en español, así que correrlos en otro orden no rompe la asignación de fotos.
+
 Catálogo de pruebas: `backend/scripts/publicar-solo-con-imagen.ts` (idempotente, `--dry-run`) deja publicados solo los productos con foto. Las categorías se ajustan solas porque `listarCategorias` solo lista las que tienen productos publicados.

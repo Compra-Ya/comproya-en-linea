@@ -58,9 +58,41 @@ const SUSTANTIVO_A_GRUPO: Record<string, string> = {
   Car: "carro",
 };
 
+// Primera palabra de los nombres ya traducidos al español (traducir-nombres.ts).
+const PRIMERA_PALABRA_A_GRUPO: Record<string, string> = {
+  Silla: "silla",
+  Computador: "computador",
+  Mesa: "mesa",
+  Guantes: "guantes",
+  Pantalón: "pantalon",
+  Gorra: "gorra",
+  Zapatos: "tenis",
+  Camisa: "camiseta",
+  Toallas: "toallas",
+  Mouse: "mouse",
+  Bicicleta: "bicicleta",
+  Balón: "balon",
+  Teclado: "teclado",
+  Jabón: "jabon",
+  Carro: "carro",
+  Salchichas: "salchichas",
+  Ensalada: "ensalada",
+  Atún: "atun",
+  Pescado: "pescado",
+  Pizza: "pizza",
+  Tocino: "tocino",
+  Pollo: "pollo",
+  Papas: "papas",
+  Queso: "queso",
+};
+
+/** Grupo de foto de un nombre sintético, en inglés ("... Chair") o ya traducido ("Silla de ..."). */
 export function grupoPorNombre(nombre: string): string | null {
-  const ultimo = nombre.trim().split(/\s+/).pop() ?? "";
-  return SUSTANTIVO_A_GRUPO[ultimo] ?? null;
+  const palabras = nombre.trim().split(/\s+/);
+  const ultimo = palabras[palabras.length - 1] ?? "";
+  if (SUSTANTIVO_A_GRUPO[ultimo]) return SUSTANTIVO_A_GRUPO[ultimo];
+  // Los nombres traducidos llevan el sustantivo primero y "de" en segundo lugar.
+  return palabras[1] === "de" || palabras[1] === "fritas" ? (PRIMERA_PALABRA_A_GRUPO[palabras[0]] ?? null) : null;
 }
 
 export interface ProductoParaImagen {

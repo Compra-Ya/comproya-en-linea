@@ -62,6 +62,18 @@ DATABASE_URL="<url desplegada>" npx ts-node scripts/publicar-solo-con-imagen.ts
 
 Reversión: `UPDATE products SET published = true;` (o restaurar el respaldo del paso 2; incluir `published` en el respaldo).
 
+## 4c. Nombres en español y categorías (confirmación aparte, con respaldo)
+
+Cambian `products.name` (~1900 productos) y `products.category_id` (~1800). No hay reversión automática del nombre (el original en inglés no se guarda): hacer antes el respaldo del paso 2 con las columnas `name` y `category_id`.
+
+```bash
+DATABASE_URL="<url desplegada>" npx ts-node scripts/traducir-nombres-de-productos.ts --dry-run
+DATABASE_URL="<url desplegada>" npx ts-node scripts/categorizar-sinteticos.ts --dry-run
+# con confirmación: repetir sin --dry-run, en ese orden
+```
+
+Orden recomendado de todo el plan: paso 4 (imágenes), 4c (nombres y categorías), 4b (publicación).
+
 ## 5. Verificación
 
 1. Repetir el paso 4 con `--dry-run`: debe informar `actualizados: 0`.

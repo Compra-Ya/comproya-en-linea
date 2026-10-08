@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { urlImagenProducto } from "../lib/api";
+import { infoCategoria } from "../lib/categorias";
 
 // Íconos del placeholder por familia de categoría (categorías de DummyJSON).
 const FAMILIAS: Array<[RegExp, string]> = [
@@ -46,13 +47,13 @@ export function ProductImage({
   return (
     <div
       role="img"
-      aria-label={`Sin foto: ${nombre ?? categoria ?? "producto"}`}
+      aria-label={`Sin foto: ${nombre ?? (categoria ? infoCategoria(categoria).nombre : "producto")}`}
       style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6, color: "var(--ink-faint)" }}
     >
       <svg width={tamano} height={tamano} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round">
         <path d={iconoDe(categoria)} />
       </svg>
-      {categoria && <span style={{ fontSize: 11 }}>{categoria}</span>}
+      {categoria && <span style={{ fontSize: 12 }}>{infoCategoria(categoria).nombre}</span>}
     </div>
   );
 }

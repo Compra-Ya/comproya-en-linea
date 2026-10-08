@@ -15,6 +15,7 @@ Material para rediseñar el frontend del **Caso de Uso 2 "Compra completa en el 
 | 5 | [05-auditoria-ui.md](05-auditoria-ui.md) | Problemas actuales ordenados por gravedad, con evidencia, tokens y componentes. | 15 min |
 | 6 | [06-copy.md](06-copy.md) | Todos los textos actuales y la propuesta corregida. | consulta |
 | 7 | [07-contenido.md](07-contenido.md) | Datos e imágenes disponibles por producto; proporciones y tamaños. | 5 min |
+| 8 | [08-prompt-diseno.md](08-prompt-diseno.md) | Prompt listo para pegar en la herramienta que genera las pantallas. | 5 min |
 
 Archivos de apoyo: [imagenes-origen.csv](imagenes-origen.csv) (origen de cada foto de producto), [02-estado-actual/respuestas-api.json](02-estado-actual/respuestas-api.json) (respuestas literales del servidor para las excepciones sin pantalla propia) y [02-estado-actual/capturas.json](02-estado-actual/capturas.json) (cada captura con su ruta y los avisos que mostraba).
 

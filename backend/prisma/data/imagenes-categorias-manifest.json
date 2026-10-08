@@ -1,0 +1,177 @@
+{
+  "beauty": {
+    "imageUrl": "/categorias/beauty.webp",
+    "tienda": "Unsplash",
+    "paginaUrl": "https://unsplash.com/photos/1596462502278-27bfdc403348",
+    "imagenUrl": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&q=80",
+    "descargadoEn": "2026-10-08T22:24:14.652Z"
+  },
+  "fragrances": {
+    "imageUrl": "/categorias/fragrances.webp",
+    "tienda": "Unsplash",
+    "paginaUrl": "https://unsplash.com/photos/1622618991746-fe6004db3a47",
+    "imagenUrl": "https://images.unsplash.com/photo-1622618991746-fe6004db3a47?w=800&q=80",
+    "descargadoEn": "2026-10-08T22:24:14.652Z"
+  },
+  "furniture": {
+    "imageUrl": "/categorias/furniture.webp",
+    "tienda": "Unsplash",
+    "paginaUrl": "https://unsplash.com/photos/1631679706909-1844bbd07221",
+    "imagenUrl": "https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=800&q=80",
+    "descargadoEn": "2026-10-08T22:24:14.652Z"
+  },
+  "groceries": {
+    "imageUrl": "/categorias/groceries.webp",
+    "tienda": "Unsplash",
+    "paginaUrl": "https://unsplash.com/photos/1542838132-92c53300491e",
+    "imagenUrl": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&q=80",
+    "descargadoEn": "2026-10-08T22:24:14.652Z"
+  },
+  "home-decoration": {
+    "imageUrl": "/categorias/home-decoration.webp",
+    "tienda": "Unsplash",
+    "paginaUrl": "https://unsplash.com/photos/1616046229478-9901c5536a45",
+    "imagenUrl": "https://images.unsplash.com/photo-1616046229478-9901c5536a45?w=800&q=80",
+    "descargadoEn": "2026-10-08T22:24:14.652Z"
+  },
+  "kitchen-accessories": {
+    "imageUrl": "/categorias/kitchen-accessories.webp",
+    "tienda": "Unsplash",
+    "paginaUrl": "https://unsplash.com/photos/1514986888952-8cd320577b68",
+    "imagenUrl": "https://images.unsplash.com/photo-1514986888952-8cd320577b68?w=800&q=80",
+    "descargadoEn": "2026-10-08T22:24:14.652Z"
+  },
+  "laptops": {
+    "imageUrl": "/categorias/laptops.webp",
+    "tienda": "Unsplash",
+    "paginaUrl": "https://unsplash.com/photos/1649972904349-6e44c42644a7",
+    "imagenUrl": "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=800&q=80",
+    "descargadoEn": "2026-10-08T22:24:14.652Z"
+  },
+  "mens-shirts": {
+    "imageUrl": "/categorias/mens-shirts.webp",
+    "tienda": "Unsplash",
+    "paginaUrl": "https://unsplash.com/photos/1740711152088-88a009e877bb",
+    "imagenUrl": "https://images.unsplash.com/photo-1740711152088-88a009e877bb?w=800&q=80",
+    "descargadoEn": "2026-10-08T22:24:14.652Z"
+  },
+  "mens-shoes": {
+    "imageUrl": "/categorias/mens-shoes.webp",
+    "tienda": "Unsplash",
+    "paginaUrl": "https://unsplash.com/photos/1542291026-7eec264c27ff",
+    "imagenUrl": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80",
+    "descargadoEn": "2026-10-08T22:24:14.652Z"
+  },
+  "mens-watches": {
+    "imageUrl": "/categorias/mens-watches.webp",
+    "tienda": "Unsplash",
+    "paginaUrl": "https://unsplash.com/photos/1542496658-e33a6d0d50f6",
+    "imagenUrl": "https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?w=800&q=80",
+    "descargadoEn": "2026-10-08T22:24:14.652Z"
+  },
+  "mobile-accessories": {
+    "imageUrl": "/categorias/mobile-accessories.webp",
+    "tienda": "Unsplash",
+    "paginaUrl": "https://unsplash.com/photos/1566793474285-2decf0fc182a",
+    "imagenUrl": "https://images.unsplash.com/photo-1566793474285-2decf0fc182a?w=800&q=80",
+    "descargadoEn": "2026-10-08T22:24:14.652Z"
+  },
+  "motorcycle": {
+    "imageUrl": "/categorias/motorcycle.webp",
+    "tienda": "Unsplash",
+    "paginaUrl": "https://unsplash.com/photos/1609630875171-b1321377ee65",
+    "imagenUrl": "https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=800&q=80",
+    "descargadoEn": "2026-10-08T22:24:14.652Z"
+  },
+  "skin-care": {
+    "imageUrl": "/categorias/skin-care.webp",
+    "tienda": "Unsplash",
+    "paginaUrl": "https://unsplash.com/photos/1581182800629-7d90925ad072",
+    "imagenUrl": "https://images.unsplash.com/photo-1581182800629-7d90925ad072?w=800&q=80",
+    "descargadoEn": "2026-10-08T22:24:14.652Z"
+  },
+  "smartphones": {
+    "imageUrl": "/categorias/smartphones.webp",
+    "tienda": "Unsplash",
+    "paginaUrl": "https://unsplash.com/photos/1592890288564-76628a30a657",
+    "imagenUrl": "https://images.unsplash.com/photo-1592890288564-76628a30a657?w=800&q=80",
+    "descargadoEn": "2026-10-08T22:24:14.652Z"
+  },
+  "sports-accessories": {
+    "imageUrl": "/categorias/sports-accessories.webp",
+    "tienda": "DummyJSON",
+    "paginaUrl": "https://dummyjson.com/products/140",
+    "imagenUrl": "https://cdn.dummyjson.com/product-images/sports-accessories/basketball/thumbnail.webp",
+    "descargadoEn": "2026-10-08T20:55:08.815Z"
+  },
+  "sunglasses": {
+    "imageUrl": "/categorias/sunglasses.webp",
+    "tienda": "DummyJSON",
+    "paginaUrl": "https://dummyjson.com/products/155",
+    "imagenUrl": "https://cdn.dummyjson.com/product-images/sunglasses/classic-sun-glasses/thumbnail.webp",
+    "descargadoEn": "2026-10-08T20:55:08.815Z"
+  },
+  "tablets": {
+    "imageUrl": "/categorias/tablets.webp",
+    "tienda": "DummyJSON",
+    "paginaUrl": "https://dummyjson.com/products/159",
+    "imagenUrl": "https://cdn.dummyjson.com/product-images/tablets/ipad-mini-2021-starlight/thumbnail.webp",
+    "descargadoEn": "2026-10-08T20:55:08.815Z"
+  },
+  "tops": {
+    "imageUrl": "/categorias/tops.webp",
+    "tienda": "DummyJSON",
+    "paginaUrl": "https://dummyjson.com/products/164",
+    "imagenUrl": "https://cdn.dummyjson.com/product-images/tops/gray-dress/thumbnail.webp",
+    "descargadoEn": "2026-10-08T20:55:08.815Z"
+  },
+  "vehicle": {
+    "imageUrl": "/categorias/vehicle.webp",
+    "tienda": "DummyJSON",
+    "paginaUrl": "https://dummyjson.com/products/169",
+    "imagenUrl": "https://cdn.dummyjson.com/product-images/vehicle/dodge-hornet-gt-plus/thumbnail.webp",
+    "descargadoEn": "2026-10-08T20:55:08.815Z"
+  },
+  "womens-bags": {
+    "imageUrl": "/categorias/womens-bags.webp",
+    "tienda": "DummyJSON",
+    "paginaUrl": "https://dummyjson.com/products/174",
+    "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-bags/prada-women-bag/thumbnail.webp",
+    "descargadoEn": "2026-10-08T20:55:08.815Z"
+  },
+  "womens-dresses": {
+    "imageUrl": "/categorias/womens-dresses.webp",
+    "tienda": "DummyJSON",
+    "paginaUrl": "https://dummyjson.com/products/177",
+    "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-dresses/black-women's-gown/thumbnail.webp",
+    "descargadoEn": "2026-10-08T20:55:08.815Z"
+  },
+  "womens-jewellery": {
+    "imageUrl": "/categorias/womens-jewellery.webp",
+    "tienda": "DummyJSON",
+    "paginaUrl": "https://dummyjson.com/products/182",
+    "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-jewellery/green-crystal-earring/thumbnail.webp",
+    "descargadoEn": "2026-10-08T20:55:08.815Z"
+  },
+  "womens-shoes": {
+    "imageUrl": "/categorias/womens-shoes.webp",
+    "tienda": "DummyJSON",
+    "paginaUrl": "https://dummyjson.com/products/189",
+    "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-shoes/red-shoes/thumbnail.webp",
+    "descargadoEn": "2026-10-08T20:55:08.815Z"
+  },
+  "womens-watches": {
+    "imageUrl": "/categorias/womens-watches.webp",
+    "tienda": "DummyJSON",
+    "paginaUrl": "https://dummyjson.com/products/192",
+    "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-watches/rolex-datejust-women/thumbnail.webp",
+    "descargadoEn": "2026-10-08T20:55:08.815Z"
+  },
+  "Electrodomésticos": {
+    "imageUrl": "/categorias/electrodomesticos.webp",
+    "tienda": "Unsplash",
+    "paginaUrl": "https://unsplash.com/photos/1588854337115-1c67d9247e4d",
+    "imagenUrl": "https://unsplash.com/photos/1588854337115-1c67d9247e4d",
+    "descargadoEn": "2026-09-17T19:05:39-05:00"
+  }
+}
