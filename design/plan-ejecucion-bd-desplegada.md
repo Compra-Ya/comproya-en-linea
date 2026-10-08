@@ -51,6 +51,17 @@ DATABASE_URL="<url desplegada>" npx ts-node scripts/apply-product-images.ts --cs
 
 Usar `--csv=` con otro nombre para no sobrescribir `design/imagenes-origen.csv` (el de la base local). El CSV de la base desplegada debe revisarse y versionarse igual: **ninguna imagen sin fila de origen**.
 
+## 4b. Publicación del catálogo de pruebas (confirmación aparte)
+
+Cambia `products.published`: deja publicados solo los productos con foto. Es un cambio de datos de negocio, así que se confirma por separado del paso 4.
+
+```bash
+DATABASE_URL="<url desplegada>" npx ts-node scripts/publicar-solo-con-imagen.ts --dry-run
+DATABASE_URL="<url desplegada>" npx ts-node scripts/publicar-solo-con-imagen.ts
+```
+
+Reversión: `UPDATE products SET published = true;` (o restaurar el respaldo del paso 2; incluir `published` en el respaldo).
+
 ## 5. Verificación
 
 1. Repetir el paso 4 con `--dry-run`: debe informar `actualizados: 0`.
@@ -77,4 +88,4 @@ También sirve restaurar desde el respaldo del paso 2.
 - **Derechos de las imágenes.** Las fotos de Alkosto y Ktronix pertenecen a sus titulares. Mitigaciones: sitio con `noindex`, `robots.txt` que bloquea todo, aviso en el pie, trazabilidad por producto, uso académico sin fines comerciales. No retirar estas protecciones.
 - **Repetición de fotos.** Un tipo de producto reutiliza entre 4 y 6 fotos.
 - **Desfase foto–categoría** en productos sintéticos (el nombre es aleatorio).
-- **Peso del repositorio:** 3,84 MB de imágenes; aceptable. Si el catálogo crece, pasar a un bucket de Cloud Storage (`docs/despliegue-gcp.md`, sección 4).
+- **Peso del repositorio:** 8,71 MB de imágenes; aceptable. Si el catálogo crece, pasar a un bucket de Cloud Storage (`docs/despliegue-gcp.md`, sección 4).

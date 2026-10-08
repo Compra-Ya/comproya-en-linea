@@ -31,7 +31,7 @@ Contra el criterio "ruta clara de vuelta al inicio desde cualquier módulo": el 
 ## 2. Excepciones del caso de uso: qué ve hoy el usuario
 
 ### 2.1 Producto no publicado
-- **Ruta:** `/producto/3` (producto con `published = false`). Capturas `10-producto-no-publicado`.
+- **Ruta:** `/producto/1` (producto con `published = false`). Captura `10-producto-no-publicado`.
 - **Qué pasa:** el servidor responde `404` con "El producto no existe o no está publicado en el canal", pero la pantalla **no lo muestra**: queda sin nombre ni precio, con el placeholder de imagen y la tabla de sucursales completa (la consulta de disponibilidad no valida la publicación).
 - **Mensaje en pantalla:** ninguno propio. Solo el aviso permanente: "Una sucursal con más de 15 minutos sin sincronizar con el ERP no puede ofrecer retiro (RN-04). Las unidades disponibles publicadas ya descuentan el umbral de seguridad y las reservas de otros pedidos (RN-03)."
 - **Si se pulsa "Retirar aquí":** el servidor responde `404` con "El producto no existe o no está publicado en el canal" (verificado con una llamada directa) y la pantalla lo mostraría en el aviso rojo.
@@ -44,7 +44,7 @@ Contra el criterio "ruta clara de vuelta al inicio desde cualquier módulo": el 
 
 ### 2.3 Unidades insuficientes
 - **Ruta:** `/pedido/confirmar`, captura `26-confirmar-error-unidades-insuficientes` (cantidad 9999 en el carrito).
-- **Mensaje (aviso rojo bajo el cupón):** "Solo hay 136 unidades disponibles para el producto 209 en la sucursal 6". Muestra identificadores internos (número de producto y de sucursal), no nombres.
+- **Mensaje (aviso rojo bajo el cupón):** "Solo hay 128 unidades disponibles para el producto 209 en la sucursal 6". Muestra identificadores internos (número de producto y de sucursal), no nombres.
 - Variante de carrera: "Las unidades disponibles cambiaron antes de completar la reserva; vuelve a intentarlo" (texto del servidor, mismo aviso).
 
 ### 2.4 Sucursal desincronizada

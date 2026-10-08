@@ -25,4 +25,8 @@ Cómo se obtuvieron: `backend/scripts/scrape-images.ts` lee los sitemaps de prod
 
 Cómo se aplican a la base: `backend/scripts/apply-product-images.ts` (idempotente; `--dry-run` para ensayar), con su prueba en `backend/prisma/lib/product-images.spec.ts`. Plan para la base desplegada: `design/plan-ejecucion-bd-desplegada.md`.
 
-Sitios probados y descartados (sin evasión, según las reglas del scraper): **Éxito** (429 a la primera solicitud; su `robots.txt` prohíbe `/api/`), **Jumbo** (el CDN de imágenes respondió 429), **Olímpica**, **Carulla**, **Open Food Facts** y **Wikimedia Commons** (sus `robots.txt` prohíben el acceso automático a la API). Por eso los productos de comida y jabón siguen con el placeholder por categoría. Alkosto y Ktronix no venden comida.
+Fotos libres: para los tipos que el retail no cubre (comida, jabón, calzado) se descargan fotos de **Unsplash** (Unsplash License) desde su búsqueda pública, permitida por su `robots.txt`: 6 por tipo, guardadas en `frontend/public/productos/retail/` y registradas en el manifiesto como tienda "Unsplash".
+
+Sitios probados y descartados (sin evasión, según las reglas del scraper): **Éxito** (429 a la primera solicitud; su `robots.txt` prohíbe `/api/`), **Jumbo** (el CDN de imágenes respondió 429), **Pexels** (403), **Olímpica**, **Carulla**, **Open Food Facts** y **Wikimedia Commons** (sus `robots.txt` prohíben el acceso automático a la API). Alkosto y Ktronix no venden comida.
+
+Catálogo de pruebas: `backend/scripts/publicar-solo-con-imagen.ts` (idempotente, `--dry-run`) deja publicados solo los productos con foto. Las categorías se ajustan solas porque `listarCategorias` solo lista las que tienen productos publicados.

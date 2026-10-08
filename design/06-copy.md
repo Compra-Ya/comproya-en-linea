@@ -65,7 +65,7 @@ No se encontró en la interfaz actual ninguno de estos términos prohibidos: "ch
 | "No se pudo cargar el catálogo" | "No pudimos cargar los productos. Revisa tu conexión e inténtalo de nuevo." + botón "Reintentar" |
 | "Cargar más ({n} de {total})" · "Cargando…" | "Ver más productos ({n} de {total})" |
 | Corazón con `title="Decorativo — sin lista de deseos implementada"` | Quitar (lista de deseos está fuera del alcance) |
-| "Pruebas" (categoría) | No debe mostrarse al cliente (son productos de prueba) |
+| "Pruebas" (categoría) | Ya no se muestra: sus 2 productos de prueba quedaron despublicados en el catálogo de pruebas |
 
 ### 3.2 Detalle de producto (`/producto/[id]`)
 

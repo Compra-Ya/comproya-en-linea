@@ -47,6 +47,24 @@ const REGLAS: Record<string, Regla> = {
 };
 
 
+
+// Fotos de licencia libre (Unsplash License / Pexels License) para los tipos que el retail
+// no cubre. Se usan las páginas de búsqueda públicas, permitidas por sus robots.txt.
+const FOTOS_LIBRES: Record<string, string> = {
+  tenis: "sneakers",
+  salchichas: "sausages",
+  ensalada: "salad bowl",
+  atun: "tuna",
+  pescado: "fish fillet",
+  pizza: "pizza",
+  tocino: "bacon",
+  pollo: "roast chicken",
+  papas: "potato chips",
+  queso: "cheese",
+  jabon: "soap bar",
+};
+const POR_FUENTE_LIBRE = 6;
+
 const TIENDAS = [
   { nombre: "Alkosto", origen: "https://www.alkosto.com", cacheSitemap: "alkosto-sitemap.xml" },
   { nombre: "Ktronix", origen: "https://www.ktronix.com", cacheSitemap: "ktronix-sitemap.xml" },
@@ -136,6 +154,65 @@ async function main() {
     console.log(`${grupo}: ${manifiesto.grupos[grupo].length} fotos (${candidatos.length} candidatos)`);
   }
 
+
+
+  // 1b) Fotos libres (Unsplash y Pexels) para comida, jabón y tenis.
+  const norm = (x: string) => encodeURIComponent(x);
+  for (const [grupo, consulta] of Object.entries(FOTOS_LIBRES)) {
+    manifiesto.grupos[grupo] ??= [];
+    let n = manifiesto.grupos[grupo].length;
+    const fuentes = [
+      {
+        tienda: "Unsplash",
+        busqueda: `https://unsplash.com/s/photos/${norm(consulta.replace(/ /g, "-"))}`,
+        ids: (html: string) => [...new Set([...html.matchAll(/https:\/\/images\.unsplash\.com\/photo-([a-zA-Z0-9_-]+)/g)].map((m) => m[1]))],
+        imagen: (id: string) => `https://images.unsplash.com/photo-${id}?w=800&q=80`,
+        pagina: (id: string) => `https://unsplash.com/photos/${id}`,
+      },
+      {
+        tienda: "Pexels",
+        busqueda: `https://www.pexels.com/search/${norm(consulta)}/`,
+        ids: (html: string) => [...new Set([...html.matchAll(/https:\/\/images\.pexels\.com\/photos\/(\d+)\//g)].map((m) => m[1]))],
+        imagen: (id: string) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=800`,
+        pagina: (id: string) => `https://www.pexels.com/photo/${id}/`,
+      },
+    ];
+    for (const f of fuentes) {
+      let ids: string[] = [];
+      try {
+        ids = f.ids((await cliente.obtener(f.busqueda)).toString("utf8"));
+      } catch (e) {
+        if (e instanceof SitioNoDisponible) nota.push(`${f.tienda}: ${e.motivo}`);
+        console.warn(`${f.tienda} ${grupo}: ${(e as Error).message}`);
+        continue;
+      }
+      let tomadas = 0;
+      for (const id of ids.slice(0, 12)) {
+        if (tomadas >= POR_FUENTE_LIBRE) break;
+        try {
+          const bytes = await cliente.obtener(f.imagen(id));
+          const huella = createHash("sha1").update(bytes).digest("hex");
+          if (vistos.has(huella)) continue;
+          vistos.add(huella);
+          n++;
+          tomadas++;
+          const nombre = `${grupo}-${String(n).padStart(2, "0")}.webp`;
+          await aWebp(bytes, join(SALIDA, "retail", nombre));
+          manifiesto.grupos[grupo].push({
+            imageUrl: `/productos/retail/${nombre}`,
+            tienda: f.tienda,
+            paginaUrl: f.pagina(id),
+            imagenUrl: f.imagen(id),
+            descargadoEn: ahora,
+          });
+        } catch (e) {
+          if (e instanceof SitioNoDisponible) nota.push(`${f.tienda}: ${e.motivo}`);
+          console.warn(`omitida ${f.tienda} ${id}: ${(e as Error).message}`);
+        }
+      }
+    }
+    console.log(`${grupo}: ${manifiesto.grupos[grupo].length} fotos (libres)`);
+  }
 
   // 2) DummyJSON: la foto oficial de cada producto, guardada en local.
   const lista = JSON.parse(

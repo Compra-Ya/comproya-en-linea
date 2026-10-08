@@ -7,6 +7,7 @@ import {
   elegirImagen,
   filasACsv,
   grupoPorNombre,
+  publicarSoloConImagen,
   ManifiestoImagenes,
   FuenteImagen,
 } from "./product-images";
@@ -34,8 +35,12 @@ describe("grupoPorNombre", () => {
     expect(grupoPorNombre("Rustic Steel Car")).toBe("carro");
     expect(grupoPorNombre("Sleek Cotton Pants")).toBe("pantalon");
   });
-  it("devuelve null para comida y para sustantivos desconocidos", () => {
-    expect(grupoPorNombre("Fresh Ceramic Chips")).toBeNull();
+  it("asigna grupo a la comida y a Soap", () => {
+    expect(grupoPorNombre("Fresh Ceramic Chips")).toBe("papas");
+    expect(grupoPorNombre("Tasty Metal Tuna")).toBe("atun");
+    expect(grupoPorNombre("Handmade Soap")).toBe("jabon");
+  });
+  it("devuelve null para sustantivos desconocidos", () => {
     expect(grupoPorNombre("Producto de prueba")).toBeNull();
   });
 });
@@ -92,6 +97,39 @@ describe("aplicarImagenes (base de pruebas)", () => {
     const lineas = filasACsv(r.filasOrigen).trim().split("\n");
     expect(lineas).toHaveLength(1 + r.filasOrigen.length);
     expect(lineas[0]).toContain("tiendaOrigen");
+  });
+});
+
+describe("publicarSoloConImagen (base de pruebas)", () => {
+  const prisma = new PrismaClient();
+  beforeEach(async () => {
+    await resetDb(prisma);
+    const cat = await prisma.category.create({ data: { name: "furniture" } });
+    const base = { categoryId: cat.id, cost: 10, digitalPrice: 20 };
+    await prisma.product.createMany({
+      data: [
+        { ...base, homologatedCode: "P-1", name: "Con foto despublicado", imageUrl: "/productos/a.webp", published: false },
+        { ...base, homologatedCode: "P-2", name: "Con foto publicado", imageUrl: "/productos/b.webp", published: true },
+        { ...base, homologatedCode: "P-3", name: "Sin foto publicado", published: true },
+      ],
+    });
+  });
+  afterAll(async () => {
+    await resetDb(prisma);
+    await prisma.$disconnect();
+  });
+
+  it("publica los que tienen foto, despublica los que no y es idempotente", async () => {
+    const r = await publicarSoloConImagen(prisma);
+    expect(r).toEqual({ total: 3, publicadosAhora: 1, despublicadosAhora: 1, publicadosFinal: 2 });
+    expect((await prisma.product.findMany({ where: { published: true } })).every((p) => p.imageUrl)).toBe(true);
+    expect(await publicarSoloConImagen(prisma)).toMatchObject({ publicadosAhora: 0, despublicadosAhora: 0, publicadosFinal: 2 });
+  });
+
+  it("dryRun informa el resultado sin escribir", async () => {
+    const r = await publicarSoloConImagen(prisma, true);
+    expect(r.publicadosFinal).toBe(2);
+    expect(await prisma.product.count({ where: { published: true } })).toBe(2); // sin cambios
   });
 });
 

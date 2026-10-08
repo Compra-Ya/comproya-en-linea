@@ -24,45 +24,48 @@ Productos complementarios: hasta 4 por producto, con los mismos datos que cualqu
 
 ## 2. Imágenes: cuántos productos tienen foto
 
+Catálogo de pruebas (base local, después de `publicar-solo-con-imagen`): **todo producto publicado tiene foto**.
+
 | Medida | Valor |
 |---|---|
 | Productos en la base local | 2117 |
-| Con imagen | 1236 |
-| Sin imagen (placeholder) | 881 |
-| Publicados | 1896 |
-| Publicados con imagen | 1105 |
+| Con imagen | 2115 |
+| Sin imagen | 2 (los productos de prueba, despublicados) |
+| Publicados | 2115 |
+| Publicados con imagen | 2115 |
+| Categorías visibles | 25 (la categoría "Pruebas" desaparece al no tener productos publicados) |
 
-Con imagen, por origen de la foto (de `imagenes-origen.csv`): DummyJSON 194, Alkosto 741, Ktronix 297, Unsplash 4. Detalle de la procedencia en [imagenes-origen.csv](imagenes-origen.csv).
+Con imagen, por origen de la foto (de `imagenes-origen.csv`, 2115 filas): Unsplash 883, Alkosto 741, Ktronix 297, DummyJSON 194. Las de Unsplash incluyen los 4 productos curados. Detalle de la procedencia en [imagenes-origen.csv](imagenes-origen.csv).
 
-Los productos **sin foto** son: los sintéticos de comida y jabón (tocino, pescado, queso, pizza, ensalada, atún, salchichas, pollo, papas fritas y "Soap"), para los que no se encontró una fuente que permita la descarga automática (ver `docs/imagenes-catalogo.md`), y los 2 productos de prueba. "Car" muestra carros de juguete a control remoto y "Pants" pantalones de motociclista, porque son los únicos que venden Alkosto y Ktronix. Para ellos el frontend muestra un placeholder por categoría (ícono y nombre de la categoría sobre fondo gris claro), nunca una imagen rota.
+**Advertencia de calidad para el diseño:** en los 1921 productos sintéticos el nombre es aleatorio y no coincide con la categoría (por ejemplo "Awesome Bamboo Hat" en la categoría `motorcycle`). La foto se eligió por el **tipo de producto del nombre** (una "Chair" muestra una silla), no por la categoría. Cada tipo reutiliza entre 4 y 6 fotos, por lo que en una grilla se repiten. Las fotos de retail (Alkosto, Ktronix) son de estudio sobre fondo blanco; las de comida, jabón y calzado (Unsplash) son fotografías de ambiente, con fondos de color y composiciones verticales u horizontales. El diseño no debe depender de que foto y categoría coincidan ni de que el fondo sea blanco.
 
-**Advertencia de calidad para el diseño:** en los 1921 productos sintéticos el nombre es aleatorio y no coincide con la categoría (por ejemplo "Awesome Bamboo Hat" en la categoría `motorcycle`). La foto se eligió por el **tipo de producto del nombre** (una "Chair" muestra una silla), no por la categoría. Un mismo tipo reutiliza entre 4 y 6 fotos, por lo que en una grilla se repiten. El diseño no debe depender de que foto y categoría coincidan.
+Productos publicados por categoría: beauty 89, fragrances 97, furniture 86, groceries 107, home-decoration 85, kitchen-accessories 113, laptops 95, mens-shirts 89, mens-shoes 73, mens-watches 95, mobile-accessories 99, motorcycle 93, skin-care 78, smartphones 85, sports-accessories 75, sunglasses 82, tablets 85, tops 92, vehicle 100, womens-bags 83, womens-dresses 77, womens-jewellery 69, womens-shoes 83, womens-watches 81, Electrodomésticos 4.
 
-Cobertura de fotos por categoría (productos con foto / productos de la categoría): beauty 44/89, fragrances 54/97, furniture 57/86, groceries 70/107, home-decoration 43/85, kitchen-accessories 71/113, laptops 53/95, mens-shirts 46/89, mens-shoes 41/73, mens-watches 53/95, mobile-accessories 62/99, motorcycle 50/93, skin-care 52/78, smartphones 56/85, sports-accessories 49/75, sunglasses 46/82, tablets 49/85, tops 59/92, vehicle 56/100, womens-bags 43/83, womens-dresses 45/77, womens-jewellery 44/69, womens-shoes 42/83, womens-watches 47/81, Electrodomésticos 4/4, Pruebas 0/2.
+El placeholder por categoría (ícono y nombre de la categoría sobre fondo gris claro) sigue siendo parte del diseño para cuando un producto nuevo no tenga foto o la foto no cargue; en el catálogo de pruebas ya no aparece (la captura `42` lo simula).
 
 ## 3. Proporciones y tamaños de imagen que el diseño debe asumir
 
-Medido sobre los 269 archivos en `frontend/public/productos/`:
+Medido sobre los 335 archivos en `frontend/public/productos/`:
 
 | Medida | Valor |
 |---|---|
 | Formato | WebP |
 | Ancho | entre 300 y 800 px (máximo 800 px por regla de la Tarea B) |
-| Peso total | 3,84 MB (curados 0,16 MB · DummyJSON 1,63 MB · retail 2,05 MB) |
-| Relación ancho/alto | 265 de 269 son cuadradas (1:1); 3 son 3:2 horizontales; 1 es casi cuadrada |
-| Fondo | Blanco en la gran mayoría (fotos de producto); las 4 fotos de los productos curados son fotografías de ambiente, no de estudio |
+| Peso total | 8,71 MB (curados 0,16 MB · DummyJSON 1,63 MB · retail y fotos libres 6,92 MB) |
+| Relación ancho/alto | 269 cuadradas (1:1); 34 horizontales (de 1,1:1 a 1,8:1); 32 verticales (de 0,6:1 a 0,8:1) |
+| Fondo | Blanco en las fotos de estudio (DummyJSON, Alkosto, Ktronix); de color en las de Unsplash |
 
 Recomendaciones de diseño derivadas:
 
-1. **Contenedor cuadrado (1:1)** para tarjeta y detalle, con la imagen **contenida** (sin recortar) sobre fondo blanco. Es lo que hace hoy `ProductImage` (`object-fit: contain`).
+1. **Contenedor cuadrado (1:1)** para tarjeta y detalle, con la imagen **contenida** (sin recortar) sobre fondo blanco. Es lo que hace hoy `ProductImage` (`object-fit: contain`); las fotos verticales y horizontales dejan franjas laterales o superiores.
 2. **Tamaños de uso:** tarjeta de catálogo ≈ 180–260 px de lado; detalle ≈ 360–480 px; miniatura de carrito 64 px y de complementario 46 px. Para el detalle de 480 px o más en pantallas de alta densidad, las fotos de DummyJSON (300 px de ancho) se verán suaves: no prometer zoom.
-3. **Imagen de reemplazo obligatoria:** 881 de 2117 productos no tienen foto. El placeholder es parte del diseño, no una excepción.
+3. **Imagen de reemplazo:** mantener el placeholder por si un producto nuevo no tiene foto.
 4. Las fotos son estáticas, locales y sin variantes de tamaño (una sola resolución por producto).
 5. Texto alternativo: el nombre del producto. Para el placeholder: "Sin foto: {producto}".
 
 ## 4. Categorías: nombres de pantalla pendientes
 
-Hoy 24 de 26 categorías se muestran con su nombre en inglés. El diseño necesita un nombre en español y, opcionalmente, un ícono con etiqueta por categoría. La lista completa y el número de productos de cada una están en la captura `01-catalogo-exito` y en `GET /catalogo/categorias`. La categoría "Pruebas" (2 productos de prueba) no debe mostrarse a clientes.
+Hoy 24 de las 25 categorías visibles se muestran con su nombre en inglés. El diseño necesita un nombre en español y, opcionalmente, un ícono con etiqueta por categoría. La lista completa y el número de productos de cada una están en la captura `01-catalogo-exito` y en `GET /catalogo/categorias`.
 
 ## 5. Cómo se calcularon estas cifras
 
@@ -70,6 +73,7 @@ Hoy 24 de 26 categorías se muestran con su nombre en inglés. El diseño necesi
 |---|---|
 | Productos, con imagen, por categoría, publicados | Consulta con Prisma a la base local (`backend`, `product.count` y `category.findMany`) |
 | Origen de las fotos | Salida de `npx ts-node scripts/apply-product-images.ts` y `imagenes-origen.csv` |
+| Publicación | Salida de `npx ts-node scripts/publicar-solo-con-imagen.ts` |
 | Ancho, relación, peso | Lectura de metadatos con `sharp` sobre `frontend/public/productos/**` |
 | Datos por producto | Esquema `backend/prisma/schema.prisma` y respuestas del servidor |
 

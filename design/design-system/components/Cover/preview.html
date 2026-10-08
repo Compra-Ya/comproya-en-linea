@@ -1,0 +1,34 @@
+<!-- @dsCard height=300 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>Portada</title>
+<style>
+  html, body { margin: 0; }
+  body { background: var(--surface-muted); width: 960px; height: 300px; position: relative; overflow: hidden; font-family: var(--font-sans); padding: 0; }
+  svg { position: absolute; inset: 0; }
+  .b-orange { fill: var(--orange-500); }
+  .b-navy { fill: var(--navy-700); }
+  .b-tint { fill: var(--orange-100); }
+  .b-action { fill: var(--orange-600); }
+  .b-navy-soft { fill: var(--navy-100); }
+  .tile { rx: var(--radius-lg); }
+  .disc { rx: 28px; }
+  .text { position: absolute; left: 40px; bottom: 36px; max-width: 440px; }
+  .name { margin: 0; font-size: 88px; line-height: .95; font-weight: 800; letter-spacing: -0.02em; color: var(--ink); }
+  .tag { margin: 14px 0 0; font-size: 14px; line-height: 20px; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+<svg width="960" height="300" viewBox="0 0 960 300" aria-hidden="true">
+  <!-- bloques: orange-500 (3x2 y 2x2), navy-700 (losa 1x4), orange-100, navy-100, orange-600 (un cuadro y un disco) -->
+  <!-- disposición: rejilla modular de cuadros 1:1 que sangra por el borde derecho, como la rejilla de ProductCard -->
+  <!-- patrón: "geométrico, modular, UI densa": cuadros cortados con radius-lg, algunos fusionados de dos o tres, porque el catálogo es una rejilla de tarjetas -->
+  <!-- escalas: lado 56 px, paso 72 px (56 + space-4), radio radius-lg 14 px, disco = mitad del lado -->
+  <rect class="b-orange tile" x="576" y="16" width="200" height="128"/><rect class="b-navy tile" x="792" y="16" width="56" height="272"/><rect class="b-tint tile" x="864" y="16" width="128" height="56"/><rect class="b-tint tile" x="504" y="88" width="56" height="56"/><rect class="b-action tile" x="864" y="88" width="56" height="56"/><rect class="b-navy-soft tile" x="936" y="88" width="56" height="56"/><rect class="b-navy-soft tile" x="504" y="160" width="56" height="56"/><rect class="b-tint tile" x="576" y="160" width="56" height="56"/><rect class="b-navy-soft tile" x="648" y="160" width="128" height="56"/><rect class="b-orange tile" x="864" y="160" width="128" height="128"/><rect class="b-action disc" x="576" y="232" width="56" height="56"/><rect class="b-tint tile" x="648" y="232" width="56" height="56"/><rect class="b-navy-soft tile" x="720" y="232" width="56" height="56"/>
+</svg>
+<div class="text">
+  <p class="name">ComproYa<br>en Línea</p>
+  <p class="tag">Compra en línea y retira en tu sucursal con tu código de retiro.</p>
+</div>
+</body>
+</html>

@@ -29,8 +29,7 @@ export interface ManifiestoImagenes {
 /**
  * Los nombres sintéticos (Faker) terminan en un sustantivo inglés de lista
  * cerrada. Solo los que tienen equivalente en el retail colombiano llevan
- * foto; el resto (comida, jabón) y todo tipo sin fotos en el manifiesto
- * conserva el placeholder por categoría.
+ * foto; un tipo sin fotos en el manifiesto conserva el placeholder por categoría.
  */
 const SUSTANTIVO_A_GRUPO: Record<string, string> = {
   Chair: "silla",
@@ -46,6 +45,16 @@ const SUSTANTIVO_A_GRUPO: Record<string, string> = {
   Ball: "balon",
   Keyboard: "teclado",
   Pants: "pantalon",
+  Sausages: "salchichas",
+  Salad: "ensalada",
+  Tuna: "atun",
+  Fish: "pescado",
+  Pizza: "pizza",
+  Bacon: "tocino",
+  Chicken: "pollo",
+  Chips: "papas",
+  Cheese: "queso",
+  Soap: "jabon",
   Car: "carro",
 };
 
@@ -130,4 +139,35 @@ export function filasACsv(filas: ResultadoAplicacion["filasOrigen"]): string {
     [p.id, p.name, f.tienda, f.paginaUrl, f.imagenUrl, f.descargadoEn, f.imageUrl].map(csv).join(",")
   );
   return [cab, ...lineas].join("\n") + "\n";
+}
+
+export interface ResultadoPublicacion {
+  total: number;
+  publicadosAhora: number;
+  despublicadosAhora: number;
+  publicadosFinal: number;
+}
+
+/**
+ * Catálogo de pruebas: publica los productos con foto y despublica los que no
+ * la tienen (RN-01: la publicación es explícita). Las categorías siguen solas:
+ * el servicio solo lista las que tienen productos publicados. Idempotente.
+ */
+export async function publicarSoloConImagen(
+  prisma: Pick<PrismaClient, "product">,
+  dryRun = false
+): Promise<ResultadoPublicacion> {
+  const conImagen = { imageUrl: { not: null } };
+  const sinImagen = { imageUrl: null };
+  const total = await prisma.product.count();
+  const porPublicar = await prisma.product.count({ where: { ...conImagen, published: false } });
+  const porDespublicar = await prisma.product.count({ where: { ...sinImagen, published: true } });
+  if (!dryRun) {
+    await prisma.product.updateMany({ where: { ...conImagen, published: false }, data: { published: true } });
+    await prisma.product.updateMany({ where: { ...sinImagen, published: true }, data: { published: false } });
+  }
+  const publicadosFinal = dryRun
+    ? (await prisma.product.count({ where: { published: true } })) + porPublicar - porDespublicar
+    : await prisma.product.count({ where: { published: true } });
+  return { total, publicadosAhora: porPublicar, despublicadosAhora: porDespublicar, publicadosFinal };
 }

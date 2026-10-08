@@ -1,0 +1,33 @@
+<!-- @dsCard group="Avisos y estado" height=420 -->
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Notice</title>
+<style>
+  body { padding: 16px; }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .stack { display: flex; flex-direction: column; gap: 16px; }
+  .narrow { max-width: 420px; }
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0 24px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 16px; }
+  .muted { color: var(--ink-soft); font-size: 13px; margin: 4px 0 0; }
+  .icons { display: flex; flex-wrap: wrap; gap: 8px; }
+  .ic { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; width: 78px; font-size: 12px; color: var(--ink-soft); }
+  .ic svg { color: var(--ink); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var C = window.ComproYa, h = React.createElement;
+  var SAMPLE_IMG = "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23ffffff'/%3E%3Crect x='30' y='52' width='140' height='84' rx='4' fill='%23171717'/%3E%3Crect x='36' y='58' width='128' height='72' fill='%23163d6d'/%3E%3Crect x='92' y='136' width='16' height='14' fill='%236b6b6b'/%3E%3Crect x='70' y='150' width='60' height='6' rx='3' fill='%236b6b6b'/%3E%3C/svg%3E";
+  var D = h('div', { className: 'stack' },
+    h(C.Notice, { tone: 'danger', title: 'Solo quedan 132 unidades disponibles de Silla ejecutiva en ComproYa Barranquilla.',
+      action: h(C.Button, { variant: 'secondary', href: '#' }, 'Volver al carrito') }, 'Ajusta la cantidad en tu carrito y vuelve a confirmar el pedido.'),
+    h(C.Notice, { tone: 'progress', title: 'Esperando la confirmación de tu banco' }, 'Tienes hasta las 15:42 (30 minutos). Esta pantalla se actualiza sola.'),
+    h(C.Notice, { tone: 'warn', title: 'Tus unidades están reservadas hasta las 15:27.' }, 'Si no pagas antes, liberamos la reserva.'),
+    h(C.Notice, { tone: 'ok', title: 'Pago confirmado' }, 'Tu código de retiro ya está listo.'),
+    h(C.Notice, { tone: 'info' }, 'Pagarás con tarjeta en la página segura de la pasarela de pagos. ComproYa nunca ve ni guarda los datos de tu tarjeta.'));
+  ReactDOM.createRoot(document.getElementById('root')).render(typeof D === 'function' ? h(D) : D);
+</script>
+</body>
+</html>

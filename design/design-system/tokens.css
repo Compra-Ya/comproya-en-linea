@@ -1,0 +1,48 @@
+/* ComproYa en Línea — generated from tokens.json */
+:root, [data-theme="light"] {
+  --orange-500: #f2661d;
+  --orange-600: #b9480d;
+  --orange-700: #9a3c0b;
+  --orange-100: #fef1e7;
+  --navy-700: #163d6d;
+  --navy-100: #eaf0f7;
+  --ink: #171717;
+  --ink-soft: #6b6b6b;
+  --line: #e5e5e5;
+  --line-strong: #8a8a8a;
+  --surface: #ffffff;
+  --surface-muted: #f7f7f7;
+  --surface-disabled: #f0f0f0;
+  --ok: #059669;
+  --ok-ink: #047857;
+  --ok-soft: #d1fae5;
+  --danger: #dc2626;
+  --danger-ink: #b91c1c;
+  --danger-soft: #fee2e2;
+  --warn: #d97706;
+  --warn-ink: #92400e;
+  --warn-soft: #fef3c7;
+  --focus: var(--navy-700);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+  --control-md: 42px;
+  --control-lg: 46px;
+  --thumb: 64px;
+  --container: 1180px;
+  --bp-sm: 720px;
+  --bp-md: 900px;
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+}

@@ -21,8 +21,7 @@ const VIEWPORTS = [
 ];
 const ID_TV = 2405; // curado, con foto
 const ID_SILLA = 209; // foto retail
-const ID_SIN_FOTO = 1; // 'Producto de prueba', sin foto
-const ID_NO_PUBLICADO = 3; // published=false
+const ID_NO_PUBLICADO = 1; // 'Producto de prueba': sin foto y despublicado en el catálogo de pruebas
 const SUC_SYNC = 6;
 const SUC_STALE = 3;
 const registro = [];
@@ -125,8 +124,15 @@ async function escenario(navegador, api, vp) {
     await foto(page, "producto-detalle-televisor", `/producto/${ID_TV}`, "Detalle con disponibilidad por sucursal (2 sincronizadas, el resto sin sincronizar)");
     await ir(page, `/producto/${ID_SILLA}`);
     await foto(page, "producto-detalle-silla", `/producto/${ID_SILLA}`, "Detalle con foto retail");
-    await ir(page, `/producto/${ID_SIN_FOTO}`);
-    await foto(page, "producto-sin-foto", `/producto/${ID_SIN_FOTO}`, "Producto sin foto (placeholder)");
+    // Placeholder: hoy todo producto publicado tiene foto, así que se simula la respuesta sin imageUrl.
+    await page.route(`**/catalogo/productos/${ID_SILLA}`, async (route) => {
+      const r = await route.fetch();
+      const j = await r.json();
+      await route.fulfill({ response: r, json: { ...j, imageUrl: null } });
+    });
+    await ir(page, `/producto/${ID_SILLA}`);
+    await foto(page, "producto-sin-foto", `/producto/${ID_SILLA}`, "Placeholder por categoría (respuesta simulada sin imageUrl: hoy todo producto publicado tiene foto)");
+    await page.unroute(`**/catalogo/productos/${ID_SILLA}`);
     await ir(page, `/producto/${ID_NO_PUBLICADO}`);
     await foto(page, "producto-no-publicado", `/producto/${ID_NO_PUBLICADO}`, "Excepción: producto no publicado");
     await ir(page, "/producto/9999999");
@@ -280,6 +286,18 @@ async function escenario(navegador, api, vp) {
   await foto(paginaOtro, "comprobante-pedido-de-otro-cliente-403", `/comprobante/${pedidoA}`, "Excepción: pedido de otro cliente (la API responde 403)");
   await ctxOtro.close();
   await ctx.close();
+  // Placeholders: hoy todo producto publicado tiene foto, así que se simula la respuesta sin imageUrl.
+  {
+    const { ctx: c2, page: p2 } = await nuevoContexto(null);
+    await p2.route("**/catalogo/productos?*", async (route) => {
+      const r = await route.fetch();
+      const j = await r.json();
+      await route.fulfill({ response: r, json: { ...j, items: j.items.map((p, i) => (i % 2 ? { ...p, imageUrl: null } : p)) } });
+    });
+    await ir(p2, "/");
+    await foto(p2, "catalogo-placeholders", "/", "Catálogo con placeholders (respuesta simulada sin imageUrl en una de cada dos tarjetas)");
+    await c2.close();
+  }
 }
 
 main().catch((e) => {
