@@ -91,8 +91,19 @@ export type EstadoPedido =
   | "CANCELLED"
   | "PAYMENT_FAILED";
 
-export interface Pedido {
+export type ModalidadEntrega = "PICKUP" | "SHIPPING";
+
+export interface DatosEnvio {
+  shippingName?: string | null;
+  shippingPhone?: string | null;
+  shippingAddress?: string | null;
+  shippingCity?: string | null;
+  shippingNotes?: string | null;
+}
+
+export interface Pedido extends DatosEnvio {
   id: number;
+  deliveryMode?: ModalidadEntrega;
   customerId: number;
   branchId: number;
   status: EstadoPedido;
@@ -105,8 +116,9 @@ export interface Pedido {
   branch?: Sucursal;
 }
 
-export interface Comprobante {
+export interface Comprobante extends DatosEnvio {
   idPedido: number;
+  deliveryMode?: ModalidadEntrega;
   correlationId: string;
   pickupCode: string;
   pickupCodeExpiresAt: string;

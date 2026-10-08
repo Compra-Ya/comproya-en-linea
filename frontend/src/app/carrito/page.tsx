@@ -3,22 +3,26 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { api, ApiError, setCartToken } from "@/lib/api";
+import { MODO_ENVIO, PASOS_COMPRA } from "@/lib/modo";
 import type { Carrito, Producto } from "@/lib/types";
-import ShopHeader from "@/components/ShopHeader";
+import ShopHeaderConectado from "@/components/ShopHeaderConectado";
 import { ProductImage } from "@/components/ProductImage";
+import { Button, CheckoutSteps, Notice, QuantityStepper, formatoCOP } from "@/components/ui";
 
-// P-7 Administración del carrito (CU-07) + P-8 Productos complementarios
-// (CU-08, hasta 4 — tope del canon, C-05; extensión de P-7, no una pantalla
-// aparte, tal como lo marca el mockup).
+// P-7 Administración del carrito (CU-07) + P-8 Productos complementarios (CU-08, hasta 4 — tope del
+// canon, C-05; extensión de P-7, no una pantalla aparte). Paso 1 de 4 de la compra: el cliente elige
+// la cantidad de cada producto y pasa a sus datos de envío (o a confirmar el pedido en el modo retiro).
 export default function CarritoPage() {
   const router = useRouter();
   const [carrito, setCarrito] = useState<Carrito | null>(null);
   const [complementarios, setComplementarios] = useState<Producto[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [errorLinea, setErrorLinea] = useState<{ productId: number; texto: string } | null>(null);
   const [cargando, setCargando] = useState(true);
 
   async function cargar() {
     setCargando(true);
+    setError(null);
     try {
       const actual = await api<Carrito>("/carrito");
       if (actual.guestToken) setCartToken(actual.guestToken);
@@ -33,7 +37,8 @@ export default function CarritoPage() {
         setComplementarios([]);
       }
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "No se pudo cargar el carrito");
+      void (e instanceof ApiError);
+      setError("No pudimos cargar tu carrito. Revisa tu conexión e inténtalo de nuevo.");
     } finally {
       setCargando(false);
     }
@@ -45,15 +50,15 @@ export default function CarritoPage() {
 
   async function actualizarCantidad(productId: number, quantity: number) {
     if (!carrito) return;
-    setError(null);
+    setErrorLinea(null);
     try {
       const actualizado = await api<Carrito>(`/carrito/${carrito.id}/items/${productId}`, {
         method: "PATCH",
         body: { quantity },
       });
       setCarrito(actualizado);
-    } catch (e) {
-      setError(e instanceof ApiError ? e.message : "No se pudo actualizar el carrito");
+    } catch {
+      setErrorLinea({ productId, texto: "No pudimos cambiar la cantidad. Inténtalo de nuevo." });
     }
   }
 
@@ -62,92 +67,103 @@ export default function CarritoPage() {
       const actualizado = await api<Carrito>("/carrito/items", { method: "POST", body: { productId, quantity: 1 } });
       if (actualizado.guestToken) setCartToken(actualizado.guestToken);
       setCarrito(actualizado);
-    } catch (e) {
-      setError(e instanceof ApiError ? e.message : "No se pudo agregar el producto");
+    } catch {
+      setError("No pudimos agregar el producto. Inténtalo de nuevo.");
     }
   }
 
-  if (cargando) return <p className="muted" style={{ padding: 24 }}>Cargando…</p>;
-
   const total = carrito?.items.reduce((acc, i) => acc + Number(i.product.digitalPrice) * i.quantity, 0) ?? 0;
-  const cantidadProductos = carrito?.items.length ?? 0;
+  const unidades = carrito?.items.reduce((acc, i) => acc + i.quantity, 0) ?? 0;
+  const vacio = !cargando && !error && !carrito?.items.length;
 
   return (
     <div>
-      <ShopHeader activeLink="carrito" />
-      <div className="container" style={{ maxWidth: 1100, display: "grid", gridTemplateColumns: "1fr 320px", gap: 32, alignItems: "start" }}>
-        <div>
-          <h2 style={{ fontSize: 22, marginBottom: 4 }}>Tu carrito</h2>
-          <p className="faint" style={{ marginBottom: 8 }}>Se mantiene guardado aunque cambies de dispositivo.</p>
+      <ShopHeaderConectado active="carrito" />
+      <main className="pantalla">
+        <CheckoutSteps current={1} steps={PASOS_COMPRA} back={{ label: "Seguir comprando", href: "/" }} />
+        <h1 className="pantalla-titulo">Tu carrito</h1>
 
-          {error && <div className="notice notice-danger" style={{ margin: "12px 0" }}>{error}</div>}
+        {cargando && <Notice tone="progress">Cargando tu carrito…</Notice>}
+        {error && (
+          <Notice tone="danger" title="No pudimos cargar tu carrito" action={<Button variant="secondary" onClick={cargar}>Reintentar</Button>}>
+            Revisa tu conexión e inténtalo de nuevo.
+          </Notice>
+        )}
+        {vacio && (
+          <Notice tone="info" title="Tu carrito está vacío" action={<Button variant="secondary" href="/">Ver productos</Button>}>
+            Agrega productos para continuar con tu compra.
+          </Notice>
+        )}
 
-          {(!carrito || carrito.items.length === 0) && <p className="muted">El carrito está vacío.</p>}
-
-          {carrito?.items.map((item) => (
-            <div className="line-item" key={item.id}>
-              <div className="thumb">
-                <ProductImage imageUrl={item.product.imageUrl} nombre={item.product.name} tamano={28} />
-              </div>
-              <div style={{ flex: 1, minWidth: 160 }}>
-                <span style={{ fontSize: 13, fontWeight: 600 }}>{item.product.name}</span>
-                <p className="faint" style={{ marginTop: 2 }}>$ {Number(item.product.digitalPrice).toLocaleString("es-CO")} c/u</p>
-              </div>
-              <div className="stepper">
-                <button onClick={() => actualizarCantidad(item.productId, Math.max(0, item.quantity - 1))}>–</button>
-                <span>{item.quantity}</span>
-                <button onClick={() => actualizarCantidad(item.productId, item.quantity + 1)}>+</button>
-              </div>
-              <span style={{ fontWeight: 700, fontSize: 14, width: 110, textAlign: "right" }}>
-                $ {(Number(item.product.digitalPrice) * item.quantity).toLocaleString("es-CO")}
-              </span>
-              <a href="#" onClick={(e) => { e.preventDefault(); actualizarCantidad(item.productId, 0); }} className="faint">Quitar</a>
-            </div>
-          ))}
-
-          {complementarios.length > 0 && (
-            <div style={{ marginTop: 28 }}>
-              <h3 style={{ fontSize: 14, marginBottom: 4 }}>También podría interesarte</h3>
-              <p className="faint" style={{ marginBottom: 14 }}>Hasta 4 productos complementarios, curados por el Analista de Marketing.</p>
-              <div className="card" style={{ overflow: "hidden" }}>
-                {complementarios.map((p) => (
-                  <div className="line-item" key={p.id} style={{ padding: "14px 16px" }}>
-                    <div className="thumb" style={{ width: 46, height: 46 }}>
-                      <ProductImage imageUrl={p.imageUrl} nombre={p.name} tamano={22} />
+        {!cargando && !error && !!carrito?.items.length && (
+          <div className="confirmar-grid">
+            <div className="confirmar-principal">
+              <section className="card card-pad">
+                {carrito.items.map((item) => (
+                  <div className="linea-carrito" key={item.id}>
+                    <div className="linea-foto">
+                      <ProductImage imageUrl={item.product.imageUrl} nombre={item.product.name} categoria={item.product.category?.name} tamano={28} />
                     </div>
-                    <div style={{ flex: 1 }}>
-                      <span style={{ fontSize: 12.5, fontWeight: 600 }}>{p.name}</span>
-                      <p className="faint">$ {Number(p.digitalPrice).toLocaleString("es-CO")}</p>
+                    <div className="linea-info">
+                      <p className="linea-nombre">{item.product.name}</p>
+                      <p className="faint">{formatoCOP(item.product.digitalPrice)} cada uno</p>
+                      {errorLinea?.productId === item.productId && (
+                        <p className="error-campo" role="alert">{errorLinea.texto}</p>
+                      )}
                     </div>
-                    <button
-                      className="btn"
-                      style={{ height: 30, padding: "0 14px", borderRadius: 999, borderColor: "var(--orange)", color: "var(--orange)", background: "var(--orange-soft)", fontSize: 11 }}
-                      onClick={() => agregarComplementario(p.id)}
+                    <QuantityStepper
+                      value={item.quantity}
+                      label={`Cantidad de ${item.product.name}`}
+                      onChange={(v) => actualizarCantidad(item.productId, v)}
+                    />
+                    <p className="linea-total">{formatoCOP(Number(item.product.digitalPrice) * item.quantity)}</p>
+                    <Button
+                      variant="ghost"
+                      icon="x"
+                      title={`Quitar ${item.product.name} del carrito`}
+                      onClick={() => actualizarCantidad(item.productId, 0)}
                     >
-                      Agregar
-                    </button>
+                      Quitar
+                    </Button>
                   </div>
                 ))}
-              </div>
-            </div>
-          )}
-        </div>
+              </section>
 
-        <div className="card card-pad">
-          <h3 style={{ fontSize: 14, marginBottom: 12 }}>Resumen</h3>
-          <div className="totalsrow"><span>Subtotal</span><span>$ {total.toLocaleString("es-CO")}</span></div>
-          <div className="totalsrow"><span>Productos</span><span>{cantidadProductos}</span></div>
-          <div className="totalsrow grand"><span>Total</span><span>$ {total.toLocaleString("es-CO")}</span></div>
-          <button
-            className="btn btn-primary btn-full"
-            style={{ marginTop: 14 }}
-            disabled={!carrito?.items.length}
-            onClick={() => router.push("/pedido/confirmar")}
-          >
-            Continuar a la confirmación
-          </button>
-        </div>
-      </div>
+              {complementarios.length > 0 && (
+                <section className="card card-pad">
+                  <h2 className="pantalla-seccion">Productos complementarios</h2>
+                  {complementarios.map((p) => (
+                    <div className="linea-carrito" key={p.id}>
+                      <div className="linea-foto" style={{ width: 46, height: 46 }}>
+                        <ProductImage imageUrl={p.imageUrl} nombre={p.name} categoria={p.category?.name} tamano={22} />
+                      </div>
+                      <div className="linea-info">
+                        <p className="linea-nombre">{p.name}</p>
+                        <p className="faint">{formatoCOP(p.digitalPrice)}</p>
+                      </div>
+                      <Button variant="secondary" icon="cart" title={`Agregar ${p.name} al carrito`} onClick={() => agregarComplementario(p.id)}>
+                        Agregar
+                      </Button>
+                    </div>
+                  ))}
+                </section>
+              )}
+            </div>
+
+            <aside className="confirmar-lateral">
+              <section className="card card-pad">
+                <h2 className="pantalla-seccion">Resumen</h2>
+                <div className="totalsrow"><span>Productos</span><span>{unidades}</span></div>
+                <div className="totalsrow"><span>Subtotal</span><span>{formatoCOP(total)}</span></div>
+                <div className="totalsrow grand"><span>Total</span><span>{formatoCOP(total)}</span></div>
+              </section>
+              <Button size="lg" full icon="chevron-right" onClick={() => router.push("/pedido/confirmar")}>
+                {MODO_ENVIO ? "Continuar con tus datos de envío" : "Confirmar pedido"}
+              </Button>
+            </aside>
+          </div>
+        )}
+      </main>
     </div>
   );
 }

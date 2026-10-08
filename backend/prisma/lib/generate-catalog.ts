@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import type { DummyProduct } from "./dummyjson";
 import type { ProductSeed } from "./types";
+import { precioCopDeUsd } from "./precios-cop";
 
 /**
  * RN-02: el precio digital nunca puede ser inferior al costo registrado en
@@ -36,7 +37,8 @@ export function buildHomologatedCode(category: string, index: number): string {
  */
 export function buildFromDummy(dummyProducts: DummyProduct[]): ProductSeed[] {
   return dummyProducts.map((p, i) => {
-    const digitalPrice = Math.round(p.price * 100) / 100;
+    // DummyJSON trae precios en USD: el catálogo vive en COP (tasa fija, ver precios-cop.ts).
+    const digitalPrice = precioCopDeUsd(p.price);
     return {
       homologatedCode: buildHomologatedCode(p.category, i + 1),
       name: p.title,

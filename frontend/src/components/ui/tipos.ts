@@ -50,6 +50,8 @@ export interface ShopHeaderProps {
   onLogout?: () => void;
   /** Número real de sucursales con retiro; omitir si no se conoce */
   branchesWithPickup?: number;
+  /** Texto de la barra superior; por defecto el del modo de entrega vigente. */
+  topMessage?: string;
   query?: string;
   onSearch?: (q: string) => void;
   className?: string;
@@ -57,6 +59,8 @@ export interface ShopHeaderProps {
 
 export interface CheckoutStepsProps {
   current: 1 | 2 | 3 | 4;
+  /** Nombres de los cuatro pasos; por defecto los del canon (Carrito, Confirmar pedido, Pago, Comprobante). */
+  steps?: string[];
   back?: { label: string; href: string };
   className?: string;
 }

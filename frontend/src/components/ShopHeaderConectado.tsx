@@ -6,6 +6,7 @@ import { api, cerrarSesion, getStoredCustomer, type CustomerResumen } from "@/li
 import type { Carrito } from "@/lib/types";
 import { ShopHeader } from "@/components/ui";
 import type { ShopHeaderProps } from "@/components/ui";
+import { TEXTOS } from "@/lib/modo";
 
 // ShopHeader del sistema de diseño con los datos de la sesión y del carrito. Las pantallas
 // que ya migraron lo usan; el ShopHeader anterior sigue en las demás hasta migrarlas.
@@ -26,6 +27,7 @@ export default function ShopHeaderConectado({ variant, active }: Pick<ShopHeader
     <ShopHeader
       variant={variant}
       active={active}
+      topMessage={TEXTOS.mensajeSuperior}
       customerName={customer?.name.split(" ")[0]}
       cartCount={cantidad}
       cartTotal={subtotal}

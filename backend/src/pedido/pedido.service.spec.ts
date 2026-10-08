@@ -213,7 +213,7 @@ describe("PedidoService (RN-05, RN-07, RN-08, RN-09)", () => {
 
     const order = await pedidoAislado.confirmar(customer.id, { branchId: branch.id });
 
-    expect(catalogoSimulado.reservarUnidades).toHaveBeenCalledWith(product.id, branch.id, 2);
+    expect(catalogoSimulado.reservarUnidades).toHaveBeenCalledWith(product.id, branch.id, 2, { exigirSincronizacion: true }); // retiro: RN-04 sigue exigida
     const total = await pedidoAislado.calcularTotal(order.id);
     expect(total).toBe(30000); // 15000 * 2
     await prismaAislado.$disconnect();

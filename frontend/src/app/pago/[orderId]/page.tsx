@@ -1,28 +1,36 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { api, ApiError } from "@/lib/api";
+import { MODO_ENVIO, PASOS_COMPRA } from "@/lib/modo";
+import type { Pedido } from "@/lib/types";
+import ShopHeaderConectado from "@/components/ShopHeaderConectado";
+import { Button, CheckoutSteps, Icon, Notice, formatoCOP } from "@/components/ui";
 
-// P-15 Pago con tarjeta (CU-15, Stripe Checkout) y P-16 Pago con débito
-// bancario (CU-16, simulado) — mismas pestañas "Tarjeta / Débito bancario"
-// del mockup. Diferencia deliberada frente al mockup: la pestaña de tarjeta
-// no pide número de tarjeta en este formulario — RN-06 exige que ComproYa
-// nunca la reciba, así que solo hay un botón que redirige a la página que
-// aloja Stripe (donde sí se captura la tarjeta).
+// P-15 Pago con tarjeta (CU-15, Stripe Checkout) y P-16 Pago con débito bancario (CU-16, simulado).
+// Paso 3 de 4. Diferencia deliberada frente al mockup: la tarjeta no se pide en este formulario —
+// RN-06 exige que ComproYa nunca la reciba, así que un botón lleva a la página que aloja la pasarela
+// (donde sí se captura). En la venta digital (modo por defecto) solo existe el pago con tarjeta.
 export default function PagoPage() {
   const params = useParams<{ orderId: string }>();
   const search = useSearchParams();
   const router = useRouter();
   const orderId = Number(params.orderId);
   const [tab, setTab] = useState<"tarjeta" | "debito">("tarjeta");
-  const [error, setError] = useState<string | null>(
-    search.get("cancelado") ? "El pago con tarjeta fue cancelado o no se completó." : null,
-  );
+  const [pedido, setPedido] = useState<Pedido | null>(null);
+  const [errorPedido, setErrorPedido] = useState<"sesion" | "ajeno" | "otro" | null>(null);
+  const [cancelado] = useState(!!search.get("cancelado"));
+  const [error, setError] = useState<string | null>(null);
   const [cargandoTarjeta, setCargandoTarjeta] = useState(false);
   const [debito, setDebito] = useState<{ referencia: string } | null>(null);
   const [notificando, setNotificando] = useState(false);
+
+  useEffect(() => {
+    api<Pedido>(`/pedidos/${orderId}`)
+      .then(setPedido)
+      .catch((e) => setErrorPedido(e instanceof ApiError ? (e.status === 401 ? "sesion" : e.status === 403 ? "ajeno" : "otro") : "otro"));
+  }, [orderId]);
 
   async function pagarConTarjeta() {
     setError(null);
@@ -31,7 +39,9 @@ export default function PagoPage() {
       const { redirectUrl } = await api<{ redirectUrl: string }>(`/pagos/tarjeta/${orderId}`, { method: "POST" });
       window.location.href = redirectUrl;
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "No se pudo iniciar el pago con tarjeta");
+      setError(e instanceof ApiError && /ya no admite/.test(e.message)
+        ? "Este pedido ya no admite pagos. Revisa su estado en Mis pedidos."
+        : "No pudimos abrir la pasarela de pago. Inténtalo de nuevo.");
       setCargandoTarjeta(false);
     }
   }
@@ -41,83 +51,125 @@ export default function PagoPage() {
     try {
       const resultado = await api<{ referencia: string }>(`/pagos/debito/${orderId}`, { method: "POST" });
       setDebito(resultado);
-    } catch (e) {
-      setError(e instanceof ApiError ? e.message : "No se pudo iniciar el pago con débito bancario");
+    } catch {
+      setError("No pudimos iniciar el pago con débito bancario. Inténtalo de nuevo.");
     }
   }
 
-  // Simula la notificación de débito bancario que en el canon entrega la
-  // pasarela de pagos (canon, sección 3) — no hay banco real conectado.
+  // Simula la notificación de débito bancario que en el canon entrega la pasarela de pagos (sección 3).
   async function simularNotificacion(exitoso: boolean) {
     setNotificando(true);
     setError(null);
     try {
       await api(`/pagos/debito/${orderId}/notificacion`, { method: "POST", auth: false, body: { exitoso } });
       if (exitoso) router.push(`/comprobante/${orderId}`);
-      else setError("El banco rechazó el débito (E-2). El pedido se canceló y la reserva se liberó.");
-    } catch (e) {
-      setError(e instanceof ApiError ? e.message : "No se pudo procesar la notificación");
+      else setError("Tu banco rechazó el pago. Cancelamos el pedido y liberamos tus unidades.");
+    } catch {
+      setError("No pudimos procesar la respuesta del banco. Inténtalo de nuevo.");
     } finally {
       setNotificando(false);
     }
   }
 
+  const envio = pedido?.deliveryMode === "SHIPPING";
+  const subtotal = pedido?.items.reduce((acc, i) => acc + Number(i.unitPrice) * i.quantity, 0) ?? 0;
+
   return (
-    <div className="auth-shell">
-      <Link href="/" className="auth-brand"><span className="brand-mark">CY</span>ComproYa</Link>
-      <div className="auth-wrap">
-        <h2 style={{ textAlign: "center", marginBottom: 16 }}>Pagar pedido #{orderId}</h2>
+    <div>
+      <ShopHeaderConectado variant="compact" active="carrito" />
+      <main className="pantalla">
+        <CheckoutSteps current={3} steps={PASOS_COMPRA} back={{ label: MODO_ENVIO ? "Volver a datos y envío" : "Volver a confirmar pedido", href: "/pedido/confirmar" }} />
+        <h1 className="pantalla-titulo">Pagar pedido #{orderId}</h1>
 
-        <div className="tabs">
-          <button className={tab === "tarjeta" ? "active" : undefined} onClick={() => setTab("tarjeta")}>Tarjeta</button>
-          <button className={tab === "debito" ? "active" : undefined} onClick={() => setTab("debito")}>Débito bancario</button>
-        </div>
+        {errorPedido === "sesion" && (
+          <Notice tone="danger" title="Inicia sesión para pagar tu pedido" action={<Button href={`/ingresar?volver=/pago/${orderId}`} icon="user">Iniciar sesión</Button>}>
+            Necesitamos saber quién hace el pedido.
+          </Notice>
+        )}
+        {errorPedido === "ajeno" && (
+          <Notice tone="danger" title="No encontramos este pedido en tu cuenta" action={<Button variant="secondary" href="/pedidos">Ver mis pedidos</Button>}>
+            Revisa que hayas iniciado sesión con la cuenta que hizo el pedido.
+          </Notice>
+        )}
+        {cancelado && (
+          <Notice tone="warn" title="No se completó tu pago">
+            Tu pedido sigue creado. Puedes intentar de nuevo con la misma tarjeta o con otra.
+          </Notice>
+        )}
+        {error && <Notice tone="danger" title="No pudimos completar la acción" action={<Button variant="secondary" href="/pedidos">Ver mis pedidos</Button>}>{error}</Notice>}
 
-        {error && <div className="notice notice-danger" style={{ marginBottom: 14 }}>{error}</div>}
-
-        <div className="card card-pad">
-          {tab === "tarjeta" ? (
-            <>
-              <div className="notice notice-neutral" style={{ marginBottom: 16 }}>
-                Este pago lo administra Stripe, en modo de prueba. ComproYa no almacena ni procesa el número de
-                tarjeta: solo recibe un token emitido por la pasarela (RN-06).
+        <div className="confirmar-grid">
+          <div className="confirmar-principal">
+            {!MODO_ENVIO && (
+              <div className="tabs">
+                <button className={tab === "tarjeta" ? "active" : undefined} onClick={() => setTab("tarjeta")}>Pago con tarjeta</button>
+                <button className={tab === "debito" ? "active" : undefined} onClick={() => setTab("debito")}>Pago con débito bancario</button>
               </div>
-              <button className="btn btn-primary btn-full" onClick={pagarConTarjeta} disabled={cargandoTarjeta}>
-                Pagar con tarjeta
-              </button>
-            </>
-          ) : (
-            <>
-              {!debito ? (
-                <>
-                  <div className="field">
-                    <label>Selecciona tu banco</label>
-                    <select disabled><option>Banco Central</option></select>
-                  </div>
-                  <div className="notice notice-warn" style={{ margin: "8px 0 16px" }}>
-                    Se simula la confirmación del banco (no hay una pasarela de débito bancario real conectada). Si no
-                    hay confirmación en 30 minutos, el pedido se cancela.
-                  </div>
-                  <button className="btn btn-primary btn-full" onClick={iniciarDebito}>Continuar con mi banco</button>
-                </>
+            )}
+
+            <section className="card card-pad">
+              {tab === "tarjeta" ? (
+                <div className="formulario">
+                  <h2 className="pantalla-seccion"><Icon name="card" size={20} /> Pago con tarjeta</h2>
+                  <p className="ayuda">
+                    Al continuar te llevamos a la página segura de la pasarela de pagos. ComproYa nunca ve ni guarda los datos de tu tarjeta.
+                  </p>
+                  <Notice tone="info" title="Modo de prueba">
+                    Usa la tarjeta 4242 4242 4242 4242, cualquier fecha futura y cualquier código de seguridad. No se cobra dinero real.
+                  </Notice>
+                  <Button size="lg" full icon="card" loading={cargandoTarjeta} onClick={pagarConTarjeta} disabled={errorPedido !== null}>
+                    Pagar con tarjeta
+                  </Button>
+                </div>
+              ) : !debito ? (
+                <div className="formulario">
+                  <h2 className="pantalla-seccion"><Icon name="bank" size={20} /> Pago con débito bancario</h2>
+                  <Notice tone="warn">Si tu banco no confirma el pago en 30 minutos, cancelamos el pedido y liberamos tus unidades.</Notice>
+                  <Button size="lg" full onClick={iniciarDebito}>Continuar con el pago con débito bancario</Button>
+                </div>
               ) : (
-                <>
-                  <p className="faint" style={{ marginBottom: 12 }}>Referencia: {debito.referencia}</p>
-                  <div className="notice notice-warn" style={{ marginBottom: 16 }}>Esperando confirmación del débito bancario…</div>
+                <div className="formulario">
+                  <p className="ayuda">Referencia de pago: {debito.referencia}</p>
+                  <Notice tone="progress" title="Esperando la confirmación de tu banco">Tienes 30 minutos. Esta pantalla se actualiza sola.</Notice>
                   <div style={{ display: "flex", gap: 8 }}>
-                    <button className="btn btn-primary" style={{ flex: 1 }} onClick={() => simularNotificacion(true)} disabled={notificando}>
-                      Simular confirmación
-                    </button>
-                    <button className="btn btn-outline-red" style={{ flex: 1 }} onClick={() => simularNotificacion(false)} disabled={notificando}>
-                      Simular rechazo
-                    </button>
+                    <Button loading={notificando} onClick={() => simularNotificacion(true)}>Simular confirmación</Button>
+                    <Button variant="danger" disabled={notificando} onClick={() => simularNotificacion(false)}>Simular rechazo</Button>
                   </div>
-                </>
+                </div>
               )}
-            </>
-          )}
+            </section>
+          </div>
+
+          <aside className="confirmar-lateral">
+            <section className="card card-pad">
+              <h2 className="pantalla-seccion">Tu pedido</h2>
+              {pedido ? (
+                <>
+                  {pedido.items.map((item) => (
+                    <div className="li" key={item.id}>
+                      <span>{item.product.name}{item.quantity > 1 ? ` × ${item.quantity}` : ""}</span>
+                      <span>{formatoCOP(Number(item.unitPrice) * item.quantity)}</span>
+                    </div>
+                  ))}
+                  <div className="totalsrow"><span>Subtotal</span><span>{formatoCOP(subtotal)}</span></div>
+                  <p className="faint" style={{ marginTop: 8 }}>El total final, con tu cupón si aplicaste uno, aparece en la pasarela y en tu pedido confirmado.</p>
+                </>
+              ) : errorPedido ? null : (
+                <Notice tone="progress">Cargando tu pedido…</Notice>
+              )}
+            </section>
+
+            {envio && pedido && (
+              <section className="card card-pad">
+                <h2 className="pantalla-seccion"><Icon name="package" size={20} /> Envío a</h2>
+                <p className="linea-nombre">{pedido.shippingName}</p>
+                <p className="faint">{pedido.shippingAddress}, {pedido.shippingCity}</p>
+                <p className="faint">Tel. {pedido.shippingPhone}</p>
+              </section>
+            )}
+          </aside>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

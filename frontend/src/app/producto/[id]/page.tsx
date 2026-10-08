@@ -7,11 +7,13 @@ import type { Carrito, Disponibilidad, Producto } from "@/lib/types";
 import ShopHeader from "@/components/ShopHeader";
 import { ProductImage } from "@/components/ProductImage";
 import { infoCategoria } from "@/lib/categorias";
+import { MODO_ENVIO } from "@/lib/modo";
+import DetalleProductoEnvio from "@/components/DetalleProductoEnvio";
 
 // P-3 Consulta de disponibilidad por sucursal (CU-03). "Retirar aquí" fija
 // la sucursal de retiro del pedido (RN-03/RN-04 ya evaluadas por fila) y
 // agrega el producto al carrito — el pedido solo admite una sucursal (schema).
-export default function ProductoPage() {
+function ProductoRetiro() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const productId = Number(params.id);
@@ -113,4 +115,10 @@ export default function ProductoPage() {
       </div>
     </div>
   );
+}
+
+// Venta digital con envío (por defecto): detalle con cantidad. Retiro en sucursal (canon): detalle con sucursales.
+export default function ProductoPage() {
+  const params = useParams<{ id: string }>();
+  return MODO_ENVIO ? <DetalleProductoEnvio productId={Number(params.id)} /> : <ProductoRetiro />;
 }

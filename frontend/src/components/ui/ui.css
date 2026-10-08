@@ -102,3 +102,10 @@
   .cy-step-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 }
 
+
+/* ---------- QuantityStepper ---------- */
+.cy-stepper { display: inline-flex; align-items: center; border: 1px solid var(--line-strong); border-radius: var(--radius-md); overflow: hidden; background: var(--surface); }
+.cy-stepper button { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border: 0; background: var(--surface); color: var(--ink); cursor: pointer; }
+.cy-stepper button:hover:not(:disabled) { background: var(--surface-muted); }
+.cy-stepper button:disabled { color: var(--ink-soft); background: var(--surface-disabled); cursor: not-allowed; }
+.cy-stepper span { min-width: 32px; text-align: center; font-weight: 700; }

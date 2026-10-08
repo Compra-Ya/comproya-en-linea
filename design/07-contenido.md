@@ -9,7 +9,7 @@ Los entrega el servicio de catálogo (`GET /catalogo/productos`, `GET /catalogo/
 | Dato | Campo | Disponible | Observaciones para el diseño |
 |---|---|---|---|
 | Nombre | `name` | Siempre | Largo variable (de "Apple" a "Knoll Saarinen Executive Conference Chair"); prever dos líneas. En 1921 productos es un nombre generado en inglés ("Awesome Aluminum Keyboard") |
-| Precio digital | `digitalPrice` | Siempre | Número con decimales; en pesos colombianos. Rango desde menos de 10 hasta millones; formatear con separador de miles |
+| Precio digital | `digitalPrice` | Siempre | En pesos colombianos (COP), enteros: todo el catálogo está normalizado a COP (DummyJSON convertido a 4000 COP por dólar; sintéticos con un precio plausible por tipo, por ejemplo una silla entre $ 89.000 y $ 650.000 y un atún entre $ 4.500 y $ 16.000). Mostrar como "$ 179.000", sin decimales |
 | Categoría | `category.name` | Siempre | Nombres en inglés tal cual la fuente ("mens-shirts", "home-decoration", "Electrodomésticos"): hace falta un nombre de pantalla en español por categoría (ver sección 4) |
 | Marca | `brand` | Casi siempre (puede ser nula) | No se muestra hoy |
 | Imagen | `imageUrl` | Parcial (sección 2) | Nunca hay más de una imagen por producto |

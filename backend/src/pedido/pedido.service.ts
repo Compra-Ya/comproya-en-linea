@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
-import { OrderStatus } from "@prisma/client";
+import { DeliveryMode, OrderStatus } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 import { CatalogoService } from "../catalogo/catalogo.service";
 import { CarritoService } from "../carrito/carrito.service";
@@ -31,13 +31,20 @@ export class PedidoService {
     // compartida con la creación del pedido (el puerto vive en otro módulo,
     // sección 3 de arquitectura.md), se reserva línea por línea y, si una
     // falla, se liberan las que sí se alcanzaron a reservar (compensación).
+    const envio = dto.tipoEntrega === "ENVIO";
+    // Retiro: la sucursal la elige el cliente. Envío: despacha la que tenga unidades para todo el pedido.
+    const branchId = envio
+      ? await this.catalogo.elegirSucursalDeDespacho(cart.items.map((i) => ({ productId: i.productId, quantity: i.quantity })))
+      : dto.branchId;
+    if (branchId == null) throw new BadRequestException("Elige una sucursal de retiro");
     const reservas: { availabilityId: number; quantity: number }[] = [];
     try {
       for (const item of cart.items) {
         const availabilityId = await this.catalogo.reservarUnidades(
           item.productId,
-          dto.branchId,
+          branchId,
           item.quantity,
+          { exigirSincronizacion: !envio },
         );
         reservas.push({ availabilityId, quantity: item.quantity });
       }
@@ -64,7 +71,17 @@ export class PedidoService {
       const created = await tx.order.create({
         data: {
           customerId,
-          branchId: dto.branchId,
+          branchId,
+          deliveryMode: envio ? DeliveryMode.SHIPPING : DeliveryMode.PICKUP,
+          ...(envio && dto.envio
+            ? {
+                shippingName: dto.envio.nombre.trim(),
+                shippingPhone: dto.envio.telefono.trim(),
+                shippingAddress: dto.envio.direccion.trim(),
+                shippingCity: dto.envio.ciudad.trim(),
+                shippingNotes: dto.envio.notas?.trim() || null,
+              }
+            : {}),
           status: OrderStatus.CREATED,
           committedAt: new Date(now.getTime() + HORA_COMPROMISO_MS),
           pickupCode: this.generarCodigoRetiro(),

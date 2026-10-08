@@ -135,8 +135,45 @@ export class CatalogoService {
   // Puente hacia AdaptadorErpSimulado para otros módulos (pedido). Nunca se
   // expone el adaptador ni `Availability` directamente fuera de catalogo —
   // solo este servicio de aplicación (docs/arquitectura.md sección 3).
-  async reservarUnidades(productId: number, branchId: number, quantity: number) {
-    return this.erp.reservarUnidades(productId, branchId, quantity);
+  async reservarUnidades(
+    productId: number,
+    branchId: number,
+    quantity: number,
+    opciones?: { exigirSincronizacion?: boolean },
+  ) {
+    return this.erp.reservarUnidades(productId, branchId, quantity, opciones);
+  }
+
+  // Venta con envío: elige la sucursal que despacha. Es la que tiene unidades disponibles (RN-03)
+  // para TODAS las líneas del carrito y, entre ellas, la de más unidades. No exige sincronización
+  // de retiro (RN-04 aplica al retiro, no al despacho). Si ninguna alcanza, falla con el mismo
+  // mensaje de RN-03 que ya conoce el cliente.
+  async elegirSucursalDeDespacho(lineas: Array<{ productId: number; quantity: number }>): Promise<number> {
+    const porSucursal = new Map<number, { alcanza: boolean; unidades: number }>();
+    for (const [indice, linea] of lineas.entries()) {
+      const filas = await this.erp.listarDisponibilidadPorProducto(linea.productId);
+      if (filas.length === 0) {
+        throw new NotFoundException("No hay disponibilidad registrada para ese producto");
+      }
+      const maximo = Math.max(...filas.map((f) => f.unidadesDisponibles));
+      if (maximo < linea.quantity) {
+        throw new BadRequestException(
+          `Solo hay ${maximo} unidades disponibles para el producto ${linea.productId} en la sucursal que despacha`,
+        );
+      }
+      for (const fila of filas) {
+        const previo = porSucursal.get(fila.branchId) ?? { alcanza: true, unidades: 0 };
+        porSucursal.set(fila.branchId, {
+          alcanza: (indice === 0 || previo.alcanza) && fila.unidadesDisponibles >= linea.quantity,
+          unidades: previo.unidades + fila.unidadesDisponibles,
+        });
+      }
+    }
+    const candidatas = [...porSucursal.entries()].filter(([, v]) => v.alcanza).sort((a, b) => b[1].unidades - a[1].unidades);
+    if (candidatas.length === 0) {
+      throw new BadRequestException("Ninguna sucursal tiene unidades disponibles para todo el pedido; ajusta las cantidades");
+    }
+    return candidatas[0][0];
   }
 
   async liberarReserva(availabilityId: number, quantity: number) {

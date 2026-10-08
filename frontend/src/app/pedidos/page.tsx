@@ -1,54 +1,91 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { api, ApiError } from "@/lib/api";
+import { MODO_ENVIO } from "@/lib/modo";
 import type { Pedido } from "@/lib/types";
-import ShopHeader from "@/components/ShopHeader";
+import ShopHeaderConectado from "@/components/ShopHeaderConectado";
+import { Button, Icon, Notice, formatoCOP } from "@/components/ui";
 
+// Mis pedidos: punto de entrada para volver a pagar o ver un pedido ya confirmado. Cada pedido dice
+// su estado en palabras y cuál es la siguiente acción. Estados del canon; en la venta digital
+// "Listo para retiro" se lee como "Listo para despacho".
 const ETIQUETA_ESTADO: Record<string, string> = {
   CREATED: "Creado, pendiente de pago",
   PAID: "Pagado",
   PREPARING: "En alistamiento",
-  READY_FOR_PICKUP: "Listo para retiro",
+  READY_FOR_PICKUP: MODO_ENVIO ? "Listo para despacho" : "Listo para retiro",
   DELIVERED: "Entregado",
   CANCELLED: "Cancelado",
   PAYMENT_FAILED: "Pago fallido",
 };
 
-// Sin mockup propio (no es un CU nuevo): es el punto de entrada para volver
-// a la pantalla de pago o de comprobante de un pedido ya confirmado.
+const NOTA_ESTADO: Record<string, string> = {
+  CREATED: "Falta el pago. Tus unidades están reservadas por tiempo limitado.",
+  PAYMENT_FAILED: "No se completó el pago. Puedes intentarlo de nuevo.",
+  CANCELLED: "Cancelamos el pedido y liberamos las unidades reservadas.",
+};
+
 export default function PedidosPage() {
   const [pedidos, setPedidos] = useState<Pedido[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState<"sesion" | "otro" | null>(null);
 
   useEffect(() => {
-    api<Pedido[]>("/pedidos").then(setPedidos).catch((e) => {
-      setError(e instanceof ApiError ? e.message : "Inicia sesión para ver tus pedidos");
-    });
+    api<Pedido[]>("/pedidos")
+      .then(setPedidos)
+      .catch((e) => setError(e instanceof ApiError && e.status === 401 ? "sesion" : "otro"))
+      .finally(() => setCargando(false));
   }, []);
 
   return (
     <div>
-      <ShopHeader activeLink="cuenta" />
-      <div className="container">
-        <h2 style={{ fontSize: 22, marginBottom: 16 }}>Mis pedidos</h2>
-        {error && <div className="notice notice-danger" style={{ marginBottom: 16 }}>{error}</div>}
-        {pedidos.map((p) => (
-          <div className="card card-pad" style={{ marginBottom: 12, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 16, flexWrap: "wrap" }} key={p.id}>
-            <div>
-              <strong>Pedido #{p.id}</strong>
-              <p className="faint" style={{ marginTop: 2 }}>{ETIQUETA_ESTADO[p.status] ?? p.status}</p>
-            </div>
-            {p.status === "CREATED" || p.status === "PAYMENT_FAILED" ? (
-              <Link href={`/pago/${p.id}`}><button className="btn btn-primary">Pagar</button></Link>
-            ) : p.status === "PAID" ? (
-              <Link href={`/comprobante/${p.id}`}><button className="btn">Ver comprobante</button></Link>
-            ) : null}
-          </div>
-        ))}
-        {pedidos.length === 0 && !error && <p className="muted">Todavía no tienes pedidos.</p>}
-      </div>
+      <ShopHeaderConectado active="pedidos" />
+      <main className="pantalla">
+        <h1 className="pantalla-titulo">Mis pedidos</h1>
+
+        {cargando && <Notice tone="progress">Cargando tus pedidos…</Notice>}
+        {error === "sesion" && (
+          <Notice tone="info" title="Inicia sesión para ver tus pedidos" action={<Button href="/ingresar?volver=/pedidos" icon="user">Iniciar sesión</Button>}>
+            Tus pedidos están guardados en tu cuenta.
+          </Notice>
+        )}
+        {error === "otro" && (
+          <Notice tone="danger" title="No pudimos cargar tus pedidos" action={<Button variant="secondary" onClick={() => location.reload()}>Reintentar</Button>}>
+            Revisa tu conexión e inténtalo de nuevo.
+          </Notice>
+        )}
+        {!cargando && !error && pedidos.length === 0 && (
+          <Notice tone="info" title="Todavía no tienes pedidos" action={<Button variant="secondary" href="/">Ver productos</Button>}>
+            Cuando hagas una compra la verás aquí.
+          </Notice>
+        )}
+
+        {pedidos.map((p) => {
+          const total = p.items.reduce((acc, i) => acc + Number(i.unitPrice) * i.quantity, 0);
+          const unidades = p.items.reduce((acc, i) => acc + i.quantity, 0);
+          return (
+            <article className="card card-pad pedido-fila" key={p.id}>
+              <div className="pedido-datos">
+                <p className="linea-nombre"><Icon name="receipt" size={18} /> Pedido #{p.id}</p>
+                <p className="estado-pedido">{ETIQUETA_ESTADO[p.status] ?? p.status}</p>
+                <p className="faint">
+                  {unidades} {unidades === 1 ? "producto" : "productos"} · {formatoCOP(total)}
+                  {p.deliveryMode === "SHIPPING" && p.shippingCity ? ` · Envío a ${p.shippingCity}` : ""}
+                </p>
+                {NOTA_ESTADO[p.status] && <p className="faint">{NOTA_ESTADO[p.status]}</p>}
+              </div>
+              {p.status === "CREATED" || p.status === "PAYMENT_FAILED" ? (
+                <Button icon="card" href={`/pago/${p.id}`}>Pagar</Button>
+              ) : p.status !== "CANCELLED" ? (
+                <Button variant="secondary" icon="receipt" href={`/comprobante/${p.id}`}>
+                  {MODO_ENVIO ? "Ver pedido confirmado" : "Ver comprobante y código de retiro"}
+                </Button>
+              ) : null}
+            </article>
+          );
+        })}
+      </main>
     </div>
   );
 }

@@ -27,7 +27,9 @@ export default function IngresarPage() {
       if (getCartToken()) {
         await api("/carrito/fusionar", { method: "POST" }).catch(() => undefined);
       }
-      router.push("/");
+      // Si venía de un paso de la compra, vuelve ahí (solo rutas propias).
+      const volver = new URLSearchParams(window.location.search).get("volver");
+      router.push(volver && volver.startsWith("/") && !volver.startsWith("//") ? volver : "/");
     } catch (e) {
       setError(e instanceof ApiError ? e.message : "No se pudo iniciar sesión");
     } finally {

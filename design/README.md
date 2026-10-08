@@ -4,6 +4,8 @@ Material para rediseñar el frontend del **Caso de Uso 2 "Compra completa en el 
 
 **Esta carpeta no contiene el rediseño.** Contiene el brief, el estado actual con capturas, los requisitos que el diseño debe cumplir y los textos y contenidos disponibles.
 
+> **El flujo de la prueba de usabilidad cambió:** ahora es venta digital con envío (carrito, cantidad, datos y dirección, pago con tarjeta en la pasarela, pedido confirmado), sin retiro en sucursal. El prompt para el diseñador de ese flujo es `08-prompt-diseno.md`; la decisión y el código están en `docs/modo-venta-digital.md`. Los documentos `01` a `07` se escribieron sobre el flujo con retiro del canon: sus reglas de retiro, sucursal y código de retiro no aplican a este modo.
+
 ## Orden de lectura
 
 | # | Archivo | Para qué sirve | Tiempo |

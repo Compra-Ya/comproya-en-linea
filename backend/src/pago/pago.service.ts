@@ -176,6 +176,13 @@ export class PagoService {
       pickupCode: order.pickupCode,
       pickupCodeExpiresAt: order.pickupCodeExpiresAt,
       branch: order.branch,
+      // Venta digital con envío: a dónde se envía. En los pedidos con retiro, `deliveryMode` es PICKUP.
+      deliveryMode: order.deliveryMode,
+      shippingName: order.shippingName,
+      shippingPhone: order.shippingPhone,
+      shippingAddress: order.shippingAddress,
+      shippingCity: order.shippingCity,
+      shippingNotes: order.shippingNotes,
       items: order.items,
       pagadoEl: order.payment?.confirmedAt,
       // Corrección: antes el frontend recalculaba sumando `items` sin

@@ -25,6 +25,7 @@ export function ShopHeader({
   logoutHref,
   onLogout,
   branchesWithPickup,
+  topMessage,
   query,
   onSearch,
   className,
@@ -34,7 +35,7 @@ export function ShopHeader({
     <header className={["cy-header", compacta && "cy-header-compact", className].filter(Boolean).join(" ")}>
       {compacta ? null : (
         <div className="cy-utility">
-          <span>Compra en línea y retira en sucursal</span>
+          <span>{topMessage ?? "Compra en línea y retira en sucursal"}</span>
           {branchesWithPickup != null ? (
             <span className="cy-utility-ok">
               <span className="cy-badge-dot" aria-hidden="true" />

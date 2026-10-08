@@ -30,6 +30,8 @@ export interface PuertoErp {
   // disponibilidad afectada para que el módulo pedido cree su propia
   // `UnitsReservation` (con el pedido al que pertenece) sin importar
   // `Availability` directamente — solo a través de este puerto.
-  reservarUnidades(productId: number, branchId: number, quantity: number): Promise<number>;
+  // `exigirSincronizacion: false` omite RN-04 (la sucursal sin sincronizar no ofrece RETIRO): se usa
+  // cuando el pedido se envía y la sucursal solo despacha. RN-03 y RN-05 siguen aplicando.
+  reservarUnidades(productId: number, branchId: number, quantity: number, opciones?: { exigirSincronizacion?: boolean }): Promise<number>;
   liberarReserva(availabilityId: number, quantity: number): Promise<void>;
 }

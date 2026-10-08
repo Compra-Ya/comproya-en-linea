@@ -9,6 +9,17 @@
 - El script (`backend/scripts/apply-product-images.ts`) es idempotente: una segunda corrida no escribe nada. Nunca borra una imagen existente.
 - **Las asignaciones se calculan de nuevo en cada base**: la siembra usa datos aleatorios, así que los ids y los nombres de los productos sintéticos de la base desplegada pueden diferir de los locales. Las cifras de cobertura (cuántos productos quedan con foto) deben recalcularse con el modo de prueba (paso 3); no asumir las locales.
 
+## 0. Migración de esquema (obligatoria para el modo de venta digital)
+
+El modo de venta digital con envío agrega columnas a `orders` (`delivery_mode` y `shipping_*`). Es una migración aditiva: no borra ni cambia datos y los pedidos existentes quedan como `PICKUP`. Se aplica con el procedimiento de despliegue de Prisma, antes de desplegar el backend nuevo:
+
+```bash
+cd backend
+DATABASE_URL="<url desplegada>" npx prisma migrate deploy
+```
+
+Sin esta migración el backend nuevo falla al crear pedidos. Ver `docs/modo-venta-digital.md`.
+
 ## 1. Requisitos previos
 
 1. Hacer pull de la rama con los cambios y **desplegar primero el frontend** (Vercel): las fotos viven en `frontend/public/productos/` y deben existir en el sitio antes de que la base apunte a ellas. Si la base se actualizara antes, el frontend mostraría el placeholder por categoría (no una imagen rota), pero sin foto.
@@ -73,6 +84,17 @@ DATABASE_URL="<url desplegada>" npx ts-node scripts/categorizar-sinteticos.ts --
 ```
 
 Orden recomendado de todo el plan: paso 4 (imágenes), 4c (nombres y categorías), 4b (publicación).
+
+## 4d. Precios en COP (confirmación aparte, con respaldo)
+
+Cambia `products.digital_price` y `products.cost` (~2100 productos): los de DummyJSON se convierten de USD a COP con una tasa fija de 4000 y los sintéticos reciben un precio plausible por tipo. Los pedidos y carritos ya creados conservan el precio con el que se hicieron. Incluir `digital_price` y `cost` en el respaldo del paso 2.
+
+```bash
+DATABASE_URL="<url desplegada>" npx ts-node scripts/normalizar-precios-cop.ts --dry-run
+# con confirmación: repetir sin --dry-run
+```
+
+Orden completo en una base recién sembrada: 4 (imágenes), 4c (nombres y categorías), 4d (precios), 4b (publicación).
 
 ## 5. Verificación
 

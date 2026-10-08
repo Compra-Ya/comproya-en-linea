@@ -237,6 +237,13 @@ enum OrderStatus {
   PAYMENT_FAILED
 }
 
+// Modalidad de entrega del pedido. PICKUP: retiro en sucursal con código (canon). SHIPPING: venta
+// digital con envío a la dirección del cliente (modo de la prueba de usabilidad, docs/modo-venta-digital.md).
+enum DeliveryMode {
+  PICKUP
+  SHIPPING
+}
+
 model Order {
   id                  Int         @id @default(autoincrement())
   customerId          Int         @map("customer_id")
@@ -251,6 +258,14 @@ model Order {
   pickupCodeExpiresAt DateTime    @map("pickup_code_expires_at")
   correlationId       String      @unique @map("correlation_id")
   createdAt           DateTime    @default(now()) @map("created_at")
+
+  // Venta digital con envío: datos de contacto y dirección. Nulos en los pedidos con retiro.
+  deliveryMode        DeliveryMode @default(PICKUP) @map("delivery_mode")
+  shippingName        String?      @map("shipping_name")
+  shippingPhone       String?      @map("shipping_phone")
+  shippingAddress     String?      @map("shipping_address")
+  shippingCity        String?      @map("shipping_city")
+  shippingNotes       String?      @map("shipping_notes")
 
   items            OrderItem[]
   reservations     UnitsReservation[]

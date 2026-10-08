@@ -4,9 +4,10 @@ import type { CheckoutStepsProps } from "./tipos";
 
 // Progreso de los cuatro pasos de la compra, con "Volver" explícito (A-05, UT-03).
 // Los nombres de los pasos son los títulos de las pantallas.
-const PASOS = ["Carrito", "Confirmar pedido", "Pago", "Comprobante"];
+const PASOS_CANON = ["Carrito", "Confirmar pedido", "Pago", "Comprobante"];
 
-export function CheckoutSteps({ current, back, className }: CheckoutStepsProps) {
+export function CheckoutSteps({ current, steps, back, className }: CheckoutStepsProps) {
+  const PASOS = steps && steps.length === 4 ? steps : PASOS_CANON;
   return (
     <div className={["cy-steps-wrap", className].filter(Boolean).join(" ")}>
       {back ? (

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { api, ApiError, setCartToken } from "@/lib/api";
 import { infoCategoria } from "@/lib/categorias";
+import { MODO_ENVIO, TEXTOS } from "@/lib/modo";
 import type { Categoria, Producto } from "@/lib/types";
 import ShopHeaderConectado from "@/components/ShopHeaderConectado";
 import TarjetaProducto from "@/components/TarjetaProducto";
@@ -92,13 +93,13 @@ function Catalogo() {
       <div className="container" style={{ maxWidth: 1300, paddingBottom: 0 }}>
         <div className="hero hero-compacto">
           <div className="hero-copy">
-            <h1>{qParam ? `Resultados para "${qParam}"` : "Encuentra tu producto y retíralo en tu sucursal"}</h1>
-            <p>Mira las unidades disponibles en cada sucursal, paga en línea y retira con tu código de retiro.</p>
+            <h1>{qParam ? `Resultados para "${qParam}"` : TEXTOS.heroTitulo}</h1>
+            <p>{TEXTOS.heroSubtitulo}</p>
           </div>
           <div className="hero-pasos" aria-label="Cómo funciona">
-            <span><Icon name="search" size={18} /> Elige</span>
-            <span><Icon name="card" size={18} /> Paga en línea</span>
-            <span><Icon name="store" size={18} /> Retira en sucursal</span>
+            <span><Icon name="search" size={18} /> {TEXTOS.pasosHero[0]}</span>
+            <span><Icon name="card" size={18} /> {TEXTOS.pasosHero[1]}</span>
+            <span><Icon name={MODO_ENVIO ? "package" : "store"} size={18} /> {TEXTOS.pasosHero[2]}</span>
           </div>
         </div>
       </div>
@@ -144,16 +145,16 @@ function Catalogo() {
       <div className="container" style={{ maxWidth: 1300, paddingTop: 0 }}>
         <div className="badges-grid">
           <div className="badge-card">
-            <div className="badge-ic"><Icon name="store" size={20} /></div>
-            <div><p>Retiro en sucursal</p><span>Elige dónde retirar al confirmar el pedido</span></div>
+            <div className="badge-ic"><Icon name={MODO_ENVIO ? "package" : "store"} size={20} /></div>
+            <div>{MODO_ENVIO ? <><p>Envío a tu dirección</p><span>Escribe dónde quieres recibir tu pedido</span></> : <><p>Retiro en sucursal</p><span>Elige dónde retirar al confirmar el pedido</span></>}</div>
           </div>
           <div className="badge-card">
             <div className="badge-ic"><Icon name="package" size={20} /></div>
-            <div><p>Unidades reservadas</p><span>Al confirmar el pedido reservamos tus unidades</span></div>
+            <div>{MODO_ENVIO ? <><p>Pago seguro</p><span>Pagas en la pasarela: ComproYa nunca ve tu tarjeta</span></> : <><p>Unidades reservadas</p><span>Al confirmar el pedido reservamos tus unidades</span></>}</div>
           </div>
           <div className="badge-card">
             <div className="badge-ic"><Icon name="card" size={20} /></div>
-            <div><p>Dos formas de pago</p><span>Tarjeta o pago con débito bancario</span></div>
+            <div>{MODO_ENVIO ? <><p>Paga con tarjeta</p><span>Débito o crédito, en la pasarela segura</span></> : <><p>Dos formas de pago</p><span>Tarjeta o pago con débito bancario</span></>}</div>
           </div>
           <div className="badge-card">
             <div className="badge-ic"><Icon name="receipt" size={20} /></div>

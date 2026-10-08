@@ -62,7 +62,12 @@ export class AdaptadorErpSimulado implements PuertoErp {
     return rows.map((row) => this.calcular(row));
   }
 
-  async reservarUnidades(productId: number, branchId: number, quantity: number): Promise<number> {
+  async reservarUnidades(
+    productId: number,
+    branchId: number,
+    quantity: number,
+    opciones: { exigirSincronizacion?: boolean } = {},
+  ): Promise<number> {
     const row = await this.prisma.availability.findUnique({
       where: { productId_branchId: { productId, branchId } },
     });
@@ -70,7 +75,7 @@ export class AdaptadorErpSimulado implements PuertoErp {
       throw new NotFoundException("No hay disponibilidad registrada para ese producto en esa sucursal");
     }
     const disponibilidad = this.calcular(row);
-    if (!disponibilidad.puedeRetirar) {
+    if (opciones.exigirSincronizacion !== false && !disponibilidad.puedeRetirar) {
       // RN-04.
       throw new BadRequestException(
         `La sucursal ${branchId} lleva más de 15 minutos sin sincronizar con el ERP y no ofrece retiro`,
