@@ -30,10 +30,13 @@ describe("grupoPorNombre", () => {
   it("usa el sustantivo final del nombre sintético", () => {
     expect(grupoPorNombre("Soft Wooden Chair")).toBe("silla");
   });
-  it("devuelve null para tipos sin equivalente en el retail (comida, Car, Pants)", () => {
+  it("asigna grupo a Car y Pants", () => {
+    expect(grupoPorNombre("Rustic Steel Car")).toBe("carro");
+    expect(grupoPorNombre("Sleek Cotton Pants")).toBe("pantalon");
+  });
+  it("devuelve null para comida y para sustantivos desconocidos", () => {
     expect(grupoPorNombre("Fresh Ceramic Chips")).toBeNull();
-    expect(grupoPorNombre("Rustic Steel Car")).toBeNull();
-    expect(grupoPorNombre("Sleek Cotton Pants")).toBeNull();
+    expect(grupoPorNombre("Producto de prueba")).toBeNull();
   });
 });
 

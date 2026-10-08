@@ -29,7 +29,8 @@ export interface ManifiestoImagenes {
 /**
  * Los nombres sintéticos (Faker) terminan en un sustantivo inglés de lista
  * cerrada. Solo los que tienen equivalente en el retail colombiano llevan
- * foto; el resto (comida, "Car"…) conserva el placeholder por categoría.
+ * foto; el resto (comida, jabón) y todo tipo sin fotos en el manifiesto
+ * conserva el placeholder por categoría.
  */
 const SUSTANTIVO_A_GRUPO: Record<string, string> = {
   Chair: "silla",
@@ -44,6 +45,8 @@ const SUSTANTIVO_A_GRUPO: Record<string, string> = {
   Bike: "bicicleta",
   Ball: "balon",
   Keyboard: "teclado",
+  Pants: "pantalon",
+  Car: "carro",
 };
 
 export function grupoPorNombre(nombre: string): string | null {

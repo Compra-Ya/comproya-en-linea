@@ -6,7 +6,8 @@
 //
 // Reglas (ver scripts/lib/cliente-etico.ts): robots.txt, 1 req/s por sitio,
 // User-Agent identificable, caché local, y parada sin evasión ante 403/429/CAPTCHA.
-// Éxito (VTEX) prohíbe /api/ en su robots.txt y respondió 429, así que no se usa.
+// Sitios descartados (ver docs/imagenes-catalogo.md): Éxito (429 y /api/ prohibido), Jumbo (su CDN
+// de imágenes respondió 429), Olímpica, Carulla, Open Food Facts y Wikimedia Commons (robots.txt).
 import { execSync } from "child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { join, resolve } from "path";
@@ -33,6 +34,8 @@ const REGLAS: Record<string, Regla> = {
   computador: { incluir: /^(portatil|computador)/, excluir: /(bolso|funda|base|cargador|maletin|mochila|escritorio)/ },
   mesa: { incluir: /^mesa-(de-)?(comedor|centro|auxiliar|noche|plegable|escritorio|cafe|redonda)/, excluir: /(picnic|infantil|tv|televisor|billar|ping|dj|mezcl|futbol|juguete|bebe)/ },
   guantes: { incluir: /^guantes?/, excluir: /(nitrilo|latex|desechable)/ },
+  pantalon: { incluir: /^(pantalon|jean)/ },
+  carro: { incluir: /^carro-a-control-remoto/, excluir: /(^|-)(moto|camion|helic|bus|tractor)(-|$)/ },
   gorra: { incluir: /(^|-)(gorra|sombrero)(-|$)/ },
   tenis: { incluir: /^(tenis|zapato)/, excluir: /(mesa|raqueta|pelota)/ },
   camiseta: { incluir: /^(camiseta|camisa)/ },
@@ -42,6 +45,7 @@ const REGLAS: Record<string, Regla> = {
   balon: { incluir: /^balon-(de-)?(futbol|baloncesto|basquet|voleibol|microfutbol|rugby|golty|fut)/, excluir: /(bomba|inflador|malla)/ },
   teclado: { incluir: /^teclado/, excluir: /(piano|musical|yamaha|casio|psr|arranger|organo|tablet|ipad|funda|case|estuche|magic)/ },
 };
+
 
 const TIENDAS = [
   { nombre: "Alkosto", origen: "https://www.alkosto.com", cacheSitemap: "alkosto-sitemap.xml" },
@@ -131,6 +135,7 @@ async function main() {
     }
     console.log(`${grupo}: ${manifiesto.grupos[grupo].length} fotos (${candidatos.length} candidatos)`);
   }
+
 
   // 2) DummyJSON: la foto oficial de cada producto, guardada en local.
   const lista = JSON.parse(

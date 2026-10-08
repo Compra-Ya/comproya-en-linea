@@ -39,7 +39,7 @@ Imprime `evaluados / actualizados / sinCambio / sinImagen` y los productos con i
 
 - `evaluados` coincide con el número de productos esperado en la base desplegada.
 - Los cuatro productos curados (`CURA-000001` a `CURA-000004`) aparecen como actualizados (cambian de `/media/…jpg` a `/productos/curados/…webp`).
-- `sinImagen` es plausible (productos de comida y de prueba).
+- `sinImagen` es plausible (productos de comida, jabón y de prueba).
 
 ## 4. Aplicación
 
@@ -77,4 +77,4 @@ También sirve restaurar desde el respaldo del paso 2.
 - **Derechos de las imágenes.** Las fotos de Alkosto y Ktronix pertenecen a sus titulares. Mitigaciones: sitio con `noindex`, `robots.txt` que bloquea todo, aviso en el pie, trazabilidad por producto, uso académico sin fines comerciales. No retirar estas protecciones.
 - **Repetición de fotos.** Un tipo de producto reutiliza entre 4 y 6 fotos.
 - **Desfase foto–categoría** en productos sintéticos (el nombre es aleatorio).
-- **Peso del repositorio:** 3,63 MB de imágenes; aceptable. Si el catálogo crece, pasar a un bucket de Cloud Storage (`docs/despliegue-gcp.md`, sección 4).
+- **Peso del repositorio:** 3,84 MB de imágenes; aceptable. Si el catálogo crece, pasar a un bucket de Cloud Storage (`docs/despliegue-gcp.md`, sección 4).

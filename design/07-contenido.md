@@ -27,36 +27,36 @@ Productos complementarios: hasta 4 por producto, con los mismos datos que cualqu
 | Medida | Valor |
 |---|---|
 | Productos en la base local | 2117 |
-| Con imagen | 1083 |
-| Sin imagen (placeholder) | 1034 |
+| Con imagen | 1236 |
+| Sin imagen (placeholder) | 881 |
 | Publicados | 1896 |
-| Publicados con imagen | 970 |
+| Publicados con imagen | 1105 |
 
-Con imagen, por origen de la foto (de `imagenes-origen.csv`): DummyJSON 194, Alkosto 588, Ktronix 297, Unsplash 4. Detalle de la procedencia en [imagenes-origen.csv](imagenes-origen.csv).
+Con imagen, por origen de la foto (de `imagenes-origen.csv`): DummyJSON 194, Alkosto 741, Ktronix 297, Unsplash 4. Detalle de la procedencia en [imagenes-origen.csv](imagenes-origen.csv).
 
-Los productos **sin foto** son: los sintéticos cuyo tipo no tiene equivalente en el retail (comida: tocino, pescado, queso, pizza, ensalada, atún, salchichas, pollo, papas fritas; además "Car", "Pants" y "Soap"), y los 2 productos de prueba. Para ellos el frontend muestra un placeholder por categoría (ícono y nombre de la categoría sobre fondo gris claro), nunca una imagen rota.
+Los productos **sin foto** son: los sintéticos de comida y jabón (tocino, pescado, queso, pizza, ensalada, atún, salchichas, pollo, papas fritas y "Soap"), para los que no se encontró una fuente que permita la descarga automática (ver `docs/imagenes-catalogo.md`), y los 2 productos de prueba. "Car" muestra carros de juguete a control remoto y "Pants" pantalones de motociclista, porque son los únicos que venden Alkosto y Ktronix. Para ellos el frontend muestra un placeholder por categoría (ícono y nombre de la categoría sobre fondo gris claro), nunca una imagen rota.
 
 **Advertencia de calidad para el diseño:** en los 1921 productos sintéticos el nombre es aleatorio y no coincide con la categoría (por ejemplo "Awesome Bamboo Hat" en la categoría `motorcycle`). La foto se eligió por el **tipo de producto del nombre** (una "Chair" muestra una silla), no por la categoría. Un mismo tipo reutiliza entre 4 y 6 fotos, por lo que en una grilla se repiten. El diseño no debe depender de que foto y categoría coincidan.
 
-Cobertura de fotos por categoría (productos con foto / productos de la categoría): beauty 37/89, fragrances 47/97, furniture 48/86, groceries 63/107, home-decoration 35/85, kitchen-accessories 68/113, laptops 46/95, mens-shirts 40/89, mens-shoes 36/73, mens-watches 43/95, mobile-accessories 57/99, motorcycle 46/93, skin-care 42/78, smartphones 49/85, sports-accessories 46/75, sunglasses 39/82, tablets 41/85, tops 49/92, vehicle 53/100, womens-bags 37/83, womens-dresses 35/77, womens-jewellery 40/69, womens-shoes 38/83, womens-watches 44/81, Electrodomésticos 4/4, Pruebas 0/2.
+Cobertura de fotos por categoría (productos con foto / productos de la categoría): beauty 44/89, fragrances 54/97, furniture 57/86, groceries 70/107, home-decoration 43/85, kitchen-accessories 71/113, laptops 53/95, mens-shirts 46/89, mens-shoes 41/73, mens-watches 53/95, mobile-accessories 62/99, motorcycle 50/93, skin-care 52/78, smartphones 56/85, sports-accessories 49/75, sunglasses 46/82, tablets 49/85, tops 59/92, vehicle 56/100, womens-bags 43/83, womens-dresses 45/77, womens-jewellery 44/69, womens-shoes 42/83, womens-watches 47/81, Electrodomésticos 4/4, Pruebas 0/2.
 
 ## 3. Proporciones y tamaños de imagen que el diseño debe asumir
 
-Medido sobre los 259 archivos en `frontend/public/productos/`:
+Medido sobre los 269 archivos en `frontend/public/productos/`:
 
 | Medida | Valor |
 |---|---|
 | Formato | WebP |
 | Ancho | entre 300 y 800 px (máximo 800 px por regla de la Tarea B) |
-| Peso total | 3,63 MB (curados 0,16 MB · DummyJSON 1,63 MB · retail 1,84 MB) |
-| Relación ancho/alto | 255 de 259 son cuadradas (1:1); 3 son 3:2 horizontales; 1 es casi cuadrada |
+| Peso total | 3,84 MB (curados 0,16 MB · DummyJSON 1,63 MB · retail 2,05 MB) |
+| Relación ancho/alto | 265 de 269 son cuadradas (1:1); 3 son 3:2 horizontales; 1 es casi cuadrada |
 | Fondo | Blanco en la gran mayoría (fotos de producto); las 4 fotos de los productos curados son fotografías de ambiente, no de estudio |
 
 Recomendaciones de diseño derivadas:
 
 1. **Contenedor cuadrado (1:1)** para tarjeta y detalle, con la imagen **contenida** (sin recortar) sobre fondo blanco. Es lo que hace hoy `ProductImage` (`object-fit: contain`).
 2. **Tamaños de uso:** tarjeta de catálogo ≈ 180–260 px de lado; detalle ≈ 360–480 px; miniatura de carrito 64 px y de complementario 46 px. Para el detalle de 480 px o más en pantallas de alta densidad, las fotos de DummyJSON (300 px de ancho) se verán suaves: no prometer zoom.
-3. **Imagen de reemplazo obligatoria:** 1034 de 2117 productos no tienen foto. El placeholder es parte del diseño, no una excepción.
+3. **Imagen de reemplazo obligatoria:** 881 de 2117 productos no tienen foto. El placeholder es parte del diseño, no una excepción.
 4. Las fotos son estáticas, locales y sin variantes de tamaño (una sola resolución por producto).
 5. Texto alternativo: el nombre del producto. Para el placeholder: "Sin foto: {producto}".
 
