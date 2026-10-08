@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { api, ApiError, setCartToken, setSelectedBranch, urlImagenProducto } from "@/lib/api";
+import { api, ApiError, setCartToken, setSelectedBranch } from "@/lib/api";
 import type { Carrito, Disponibilidad, Producto } from "@/lib/types";
 import ShopHeader from "@/components/ShopHeader";
+import { ProductImage } from "@/components/ProductImage";
 
 // P-3 Consulta de disponibilidad por sucursal (CU-03). "Retirar aquí" fija
 // la sucursal de retiro del pedido (RN-03/RN-04 ya evaluadas por fila) y
@@ -51,12 +52,7 @@ export default function ProductoPage() {
       <ShopHeader activeLink="catalogo" />
       <div className="container" style={{ maxWidth: 1180, display: "grid", gridTemplateColumns: "360px 1fr", gap: 40 }}>
         <div className="product-thumb" style={{ height: 360, margin: 0 }}>
-          {urlImagenProducto(producto?.imageUrl) ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={urlImagenProducto(producto?.imageUrl)!} alt={producto?.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          ) : (
-            <svg width="86" height="86" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.1"><rect x="5" y="2" width="14" height="20" rx="1.5" /><path d="M5 11h14" /></svg>
-          )}
+          <ProductImage imageUrl={producto?.imageUrl} nombre={producto?.name} categoria={producto?.category?.name} tamano={86} />
         </div>
         <div>
           {producto && (

@@ -894,3 +894,13 @@ tr:last-child td { border-bottom: none; }
   .panel-shell { flex-direction: column; }
   .panel-sidebar { width: 100%; }
 }
+
+/* ---------- Pie académico (aviso de uso de imágenes) ---------- */
+.pie-academico {
+  padding: 16px 24px;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-size: 12px;
+  text-align: center;
+}

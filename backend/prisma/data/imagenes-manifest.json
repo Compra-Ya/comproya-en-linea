@@ -1,0 +1,1838 @@
+{
+  "generadoEn": "2026-10-08T20:22:36.763Z",
+  "grupos": {
+    "silla": [
+      {
+        "imageUrl": "/productos/retail/silla-01.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/silla-ofi-naranja-ref-w-158a/p/7701023080583",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/7701023080583/7701023080583-001.webp/silla-oficina-tukasa-w-158a-negra?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/silla-02.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/silla-mia-c-brazos-blanco/p/7705152146530",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/7705152146530/7705152146530-001.webp/silla-rimax-mia-con-brazos-grafito?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/silla-03.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/silla-oficina-negra-w-120/p/7700149403658",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/7700149403658/7700149403658-001.webp/silla-oficina-tukasa-w-120-ap-negra?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/silla-04.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/silla-oficina-w120-azul/p/7705946450522",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/7705946450522/7705946450522-001.webp/silla-oficina-tukasa-w120-azul?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/silla-05.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/silla-primus-100t-gaming-negro/p/798302225275",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/798302225275/798302225275-001.webp/silla-primus-gaming-thronos-100t-negro-azul?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      }
+    ],
+    "computador": [
+      {
+        "imageUrl": "/productos/retail/computador-01.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/computador-portatil-lenovo-156-pulgadas-ideapad-slim-3-amd/p/196804839974",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/196804839974/196804839974-001.webp/computador-portatil-lenovo-156-pulgadas-ideapad-slim-3-amd-ryzen-5-ram-8gb-disco-ssd-512gb-azul?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/computador-02.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/computador-portatil-asus-zenbook-duo-14-pulgadas-ux8407aa/p/4711636541404",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/4711636541404/4711636541404-001.webp/computador-portatil-asus-zenbook-duo-14-pulgadas-ux8407aa-oled-tactil-intel-core-ultra-7-ram-32gb-disco-ssd-1tb-gris?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/computador-03.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/computador-portatil-acer-travelmate-14-pulgadas-56jf/p/4711474972934",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/4711474972934/4711474972934-001.webp/computador-portatil-acer-travelmate-14-pulgadas-56jf-tactil-intel-core-ultra-5-ram-16gb-disco-ssd-512gb-negro?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/computador-04.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/computador-portatil-gamer-hp-omen-161-pulgadas-wf1000la/p/198122718443",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/198122718443/198122718443-001.webp/computador-portatil-gamer-hp-omen-161-pulgadas-wf1000la-intel-core-i9-ram-32gb-disco-ssd-1tb-negro?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/computador-05.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/computador-reacondicionado-portatil-lenovo-ideapad-slim-3/p/9098157467019",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/9098157467019/9098157467019-001.webp/computador-reacondicionado-portatil-lenovo-ideapad-slim-3-153-pulgadas-snapdragon-x-x1-ram-24gb-disco-ssd-512gb-gris?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/computador-06.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/computador-portatil-hp-probook-14-pulgadas-4-g1i-intel/p/199764929204",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/199764929204/199764929204-001.webp/computador-portatil-hp-probook-14-pulgadas-4-g1i-intel-core-ultra-7-ram-16gb-disco-ssd-512gb-plateado?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      }
+    ],
+    "mesa": [
+      {
+        "imageUrl": "/productos/retail/mesa-01.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/mesa-centro-blanco-patas-metal/p/7709595240084",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/7709595240084/7709595240084-001.webp/mesa-centro-dko-design-victory-redonda-amaretto?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/mesa-02.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/mesa-noche-nokar-bcogermanyne/p/7709151348254",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/7709151348254/7709151348254-001.webp/mesa-noche-moduofi-nokar-caramello-blanco?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/mesa-03.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/mesa-centro-dko-design-fiji-doble-superficie-madera-blanco/p/7709436708537",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/7709436708537/7709436708537-001.webp/mesa-centro-dko-design-fiji-doble-superficie-madera-blanco?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/mesa-04.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/mesa-plegable-lifetime-multiusos-rectangular-6-puestos-182/p/841101002919",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/841101002919/841101002919-001.webp/mesa-plegable-lifetime-multiusos-rectangular-6-puestos-182-cm?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/mesa-05.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/mesa-plegable-lifetime-redonda-4-puestos-121-cm/p/841101001264",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/841101001264/841101001264-001.webp/mesa-plegable-lifetime-redonda-4-puestos-121-cm?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/mesa-06.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/mesa-plegable-lifetime-redonda-4-puestos-152-cm/p/841101002551",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/841101002551/841101002551-001.webp/mesa-plegable-lifetime-redonda-4-puestos-152-cm?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      }
+    ],
+    "guantes": [
+      {
+        "imageUrl": "/productos/retail/guantes-01.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/guante-munequer-tall-l-evolut/p/7707118733372",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/7707118733372/7707118733372-001.webp/guantes-con-munequera-evolution-talla-m?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/guantes-02.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/guantes-mc58-2-scoyco-ng-m-ac/p/7705946589086",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/7705946589086/7705946589086-001.webp/guantes-moto-scoyco-mc58-2-negro-talla-m?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/guantes-03.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/guantes-moto-alpinestars-mx-dune-rojo-talla-s/p/8033637208503",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/8033637208503/8033637208503-001.webp/guantes-moto-alpinestars-mx-dune-rojo-talla-s?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/guantes-04.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/guantes-entrenamiento-everlast-elite-12-oz/p/7707118741773",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/7707118741773/7707118741773-001.webp/guantes-entrenamiento-everlast-elite-12-oz?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/guantes-05.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/guante-weider-mujer-m-l/p/7707118747669",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/7707118747669/7707118747669-001.webp/guante-weider-mujer-m-l?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      }
+    ],
+    "gorra": [
+      {
+        "imageUrl": "/productos/retail/gorra-01.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/gorra-alp-indul-gr-l-xl-ac/p/8059175010897",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/8059175010897/8059175010897-001.webp/gorra-moto-alpinestars-indulgent-gris-talla-l-xl?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/gorra-02.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/gorra-alp-formula-gr-s-ac/p/8059175145179",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/8059175145179/8059175145179-001.webp/gorra-moto-alpinestars-formula-negro-talla-universal?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/gorra-03.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/gorra-alp-indul-gr-l-xl-ac/p/8059175010866",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/8059175010866/8059175010866-001.webp/gorra-moto-alpinestars-indulgent-negro-talla-s-m?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/gorra-04.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/gorra-alp-elemental-rojo-s-m/p/8059347512365",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/8059347512365/8059347512365-001.webp/gorra-moto-alpinestars-elemental-rojo-talla-l-xl?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/gorra-05.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/gorra-moto-alpinestars-corp-trucker-verde-negro-talla/p/8059175311529",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/8059175311529/8059175311529-001.webp/gorra-moto-alpinestars-corp-trucker-verde-negro-talla-unica?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/gorra-06.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/gorra-moto-alpinestars-ride-4-trucker-negro-amarillo-rojo/p/8059347337623",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/8059347337623/8059347337623-001.webp/gorra-moto-alpinestars-ride-4-trucker-negro-amarillo-rojo-talla-unica?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      }
+    ],
+    "tenis": [],
+    "camiseta": [
+      {
+        "imageUrl": "/productos/retail/camiseta-01.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/camiseta-l-blanco-64000/p/883096283447",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/883096283447/883096283447-001.webp/camiseta-gildan-softstyleadulto-ring-spun-suavizada-rojo-s?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/camiseta-02.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/camiseta-l-blanco-64000/p/821780645386",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/821780645386/821780645386-001.webp/camiseta-gildan-softstyleadulto-ring-spun-suavizada?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/camiseta-03.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/camiseta-fh-brushed-ng-s/p/843520164049",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/843520164049/843520164049-001.webp/camiseta-moto-fasthouse-brushed-negro-m?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/camiseta-04.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/camiseta-fh-subside-az-s/p/843520174581",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/843520174581/843520174581-001.webp/camiseta-moto-fasthouse-subside-azul-s?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      }
+    ],
+    "toallas": [
+      {
+        "imageUrl": "/productos/retail/toallas-01.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/toalla-setx2-amanecer-grs-400g/p/7702995721726",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/7702995721726/7702995721726-001.webp/set-x-2-toallas-cuerpo-kline-amanecer-70-x-140-cms-400-gramosblanco-con-cenefa-azul?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/toallas-02.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/toalla-lima-70x140-azul-500-gr/p/7702995438235",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/7702995438235/7702995438235-001.webp/toalla-cuerpo-fatelares-lima-70-x-140-cms-500-grms-blanco?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/toallas-03.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/toalla-aitana-70x140-gris/p/7702985686448",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/7702985686448/7702985686448-001.webp/toalla-cuerpo-cannon-aitana-70-x-140-cm-490-grms-lila?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/toallas-04.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/toalla-fatima-70x140-azul/p/7702985616292",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/7702985616292/7702985616292-001.webp/toalla-cuerpo-cannon-fatima-70-x-140-cm-490-gramos-camel?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/toallas-05.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/toalla-cuerpo-fatelares-hotelera-70-x-140-cms-550-grms/p/7702995040414",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/7702995040414/7702995040414-001.webp/toalla-cuerpo-fatelares-hotelera-70-x-140-cms-550-grms-blanco?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/toallas-06.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/toalla-manos-cannon-kriss-50-x-70-cm-600-grms-gris/p/7702985598215",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/7702985598215/7702985598215-001.webp/toalla-manos-cannon-kriss-50-x-70-cm-600-grms-gris?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      }
+    ],
+    "mouse": [
+      {
+        "imageUrl": "/productos/retail/mouse-01.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/mouse-log-inal-optico-m185-az/p/097855094278",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/097855094278/097855094278-001.webp/mouse-logitech-inalambrico-optico-m185-rojo?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/mouse-02.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/mouse-kall-inal-optico-usb-ng/p/7705946794404",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/7705946794404/7705946794404-001.webp/mouse-kalley-inalambrico-optico-usb-gris?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/mouse-03.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/mouse-primus-alambrico-ergonomico-gaming-pmo-103-12800dpi/p/798302225053",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/798302225053/798302225053-001.webp/mouse-primus-alambrico-ergonomico-gaming-pmo-103-12800dpi-negro?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/mouse-04.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/mouse-log-inal-optico-m185-az/p/097855094285",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/097855094285/097855094285-001.webp/mouse-logitech-inalambrico-optico-m185-azul?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/mouse-05.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/mouse-log-inal-optico-m196-ng/p/097855200655",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/097855200655/097855200655-001.webp/mouse-logitech-optico-inalambrico-m196-rosado?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/mouse-06.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/mouse-asus-inalambrico-optico-bluetooth-md100-purpura/p/4711081303848",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/4711081303848/4711081303848-001.webp/mouse-asus-inalambrico-optico-bluetooth-md100-purpura?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      }
+    ],
+    "bicicleta": [
+      {
+        "imageUrl": "/productos/retail/bicicleta-01.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/bicicleta-evolution-golf/p/7707118740738",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/7707118740738/7707118740738-001.webp/bicicleta-evolution-golf?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/bicicleta-02.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/bicicleta-gravel-beclass-zipa-verde-8v-talla-54/p/0736372109422",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/0736372109422/0736372109422-001.webp/bicicleta-gravel-beclass-zipa-verde-8v-talla-54?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/bicicleta-03.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/bicicleta-todoterreno-emove-lund-29/p/7707118746327",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/7707118746327/7707118746327-001.webp/bicicleta-todoterreno-emove-lund-29?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/bicicleta-04.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/bicicleta-pinon-fijo-beclass-rage-azul-blanco-talla-51/p/0736372109279",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/0736372109279/0736372109279-001.webp/bicicleta-pinon-fijo-beclass-rage-azul-blanco-talla-51?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/bicicleta-05.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/bicicleta-mtb-en-aluminio-fossi-9v-negro-naranja-talla-29/p/0736372109750",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/0736372109750/0736372109750-001.webp/bicicleta-mtb-en-aluminio-fossi-9v-negro-naranja-talla-29?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/bicicleta-06.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/bicicleta-todoterreno-emove-lund-275/p/7707118746310",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/7707118746310/7707118746310-001.webp/bicicleta-todoterreno-emove-lund-275?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      }
+    ],
+    "balon": [
+      {
+        "imageUrl": "/productos/retail/balon-01.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/balon-basquetbol-clasico-7-zoom-sport/p/7707236660000",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/7707236660000/7707236660000-001.webp/balon-basquetbol-clasico-7-zoom-sport?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/balon-02.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/balon-futbol-no5-emove-2022/p/7707118748338",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/7707118748338/7707118748338-001.webp/balon-futbol-no5-emove-2022?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/balon-03.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/balon-baloncesto-golty-buzzer-n5-naranja-con-negro/p/7702080672230",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/7702080672230/7702080672230-001.webp/balon-baloncesto-golty-buzzer-n5-naranja-con-negro?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/balon-04.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/balon-baloncesto-wilson-nba-authentic-indoor-outdoor-no5/p/194979030844",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/194979030844/194979030844-001.webp/balon-baloncesto-wilson-nba-authentic-indoor-outdoor-no5?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/balon-05.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/balon-baloncesto-wilson-nba-lakers/p/194979033708",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/194979033708/194979033708-001.webp/balon-baloncesto-wilson-nba-lakers?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      }
+    ],
+    "teclado": [
+      {
+        "imageUrl": "/productos/retail/teclado-01.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/teclado-trust-inal-lyra-ng/p/8713439250596",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/8713439250596/8713439250596-001.webp/teclado-trust-inalambrico-lyra-multidispositivo-negro?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/teclado-02.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/teclado-logitech-inalambrico-bluetooth-k380-rosado/p/097855155726",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/097855155726/097855155726-001.webp/teclado-logitech-inalambrico-bluetooth-k380-rosado?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/teclado-03.webp",
+        "tienda": "Alkosto",
+        "paginaUrl": "https://www.alkosto.com/teclado-hyperx-alambrico-mecanico-alloy-rise-negro/p/197192334133",
+        "imagenUrl": "https://cdn.dam.alkosto.com/products/197192334133/197192334133-001.webp/teclado-hyperx-alambrico-mecanico-alloy-rise-negro?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/teclado-04.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/teclado-hp-inal-bluet-350-ng/p/196548516698",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/196548516698/196548516698-001.webp/teclado-hp-inalambrico-bluetooth-350-blanco?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/teclado-05.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/teclado-hp-dual-usb-bluetooth-ergonomico-680-negro/p/197498231327",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/197498231327/197498231327-001.webp/teclado-hp-dual-usb-bluetooth-ergonomico-680-negro?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      },
+      {
+        "imageUrl": "/productos/retail/teclado-06.webp",
+        "tienda": "Ktronix",
+        "paginaUrl": "https://www.ktronix.com/teclado-logitech-g-g413-se-tkl-gaming/p/097855168856",
+        "imagenUrl": "https://cdn.dam.ktronix.com/products/097855168856/097855168856-001.webp/teclado-logitech-g-g413-se-tkl-gaming?w=1400",
+        "descargadoEn": "2026-10-08T20:22:36.763Z"
+      }
+    ]
+  },
+  "dummyjson": {
+    "Essence Mascara Lash Princess": {
+      "imageUrl": "/productos/dummyjson/1.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/1",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Eyeshadow Palette with Mirror": {
+      "imageUrl": "/productos/dummyjson/2.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/2",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Powder Canister": {
+      "imageUrl": "/productos/dummyjson/3.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/3",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/beauty/powder-canister/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Red Lipstick": {
+      "imageUrl": "/productos/dummyjson/4.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/4",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/beauty/red-lipstick/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Red Nail Polish": {
+      "imageUrl": "/productos/dummyjson/5.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/5",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/beauty/red-nail-polish/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Calvin Klein CK One": {
+      "imageUrl": "/productos/dummyjson/6.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/6",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Chanel Coco Noir Eau De": {
+      "imageUrl": "/productos/dummyjson/7.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/7",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Dior J'adore": {
+      "imageUrl": "/productos/dummyjson/8.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/8",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/fragrances/dior-j'adore/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Dolce Shine Eau de": {
+      "imageUrl": "/productos/dummyjson/9.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/9",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/fragrances/dolce-shine-eau-de/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Gucci Bloom Eau de": {
+      "imageUrl": "/productos/dummyjson/10.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/10",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/fragrances/gucci-bloom-eau-de/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Annibale Colombo Bed": {
+      "imageUrl": "/productos/dummyjson/11.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/11",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-bed/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Annibale Colombo Sofa": {
+      "imageUrl": "/productos/dummyjson/12.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/12",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-sofa/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Bedside Table African Cherry": {
+      "imageUrl": "/productos/dummyjson/13.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/13",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/furniture/bedside-table-african-cherry/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Knoll Saarinen Executive Conference Chair": {
+      "imageUrl": "/productos/dummyjson/14.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/14",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/furniture/knoll-saarinen-executive-conference-chair/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Wooden Bathroom Sink With Mirror": {
+      "imageUrl": "/productos/dummyjson/15.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/15",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/furniture/wooden-bathroom-sink-with-mirror/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Apple": {
+      "imageUrl": "/productos/dummyjson/16.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/16",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/apple/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Beef Steak": {
+      "imageUrl": "/productos/dummyjson/17.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/17",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/beef-steak/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Cat Food": {
+      "imageUrl": "/productos/dummyjson/18.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/18",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/cat-food/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Chicken Meat": {
+      "imageUrl": "/productos/dummyjson/19.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/19",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/chicken-meat/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Cooking Oil": {
+      "imageUrl": "/productos/dummyjson/20.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/20",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/cooking-oil/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Cucumber": {
+      "imageUrl": "/productos/dummyjson/21.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/21",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/cucumber/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Dog Food": {
+      "imageUrl": "/productos/dummyjson/22.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/22",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/dog-food/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Eggs": {
+      "imageUrl": "/productos/dummyjson/23.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/23",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/eggs/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Fish Steak": {
+      "imageUrl": "/productos/dummyjson/24.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/24",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/fish-steak/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Green Bell Pepper": {
+      "imageUrl": "/productos/dummyjson/25.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/25",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/green-bell-pepper/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Green Chili Pepper": {
+      "imageUrl": "/productos/dummyjson/26.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/26",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/green-chili-pepper/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Honey Jar": {
+      "imageUrl": "/productos/dummyjson/27.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/27",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/honey-jar/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Ice Cream": {
+      "imageUrl": "/productos/dummyjson/28.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/28",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/ice-cream/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Juice": {
+      "imageUrl": "/productos/dummyjson/29.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/29",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/juice/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Kiwi": {
+      "imageUrl": "/productos/dummyjson/30.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/30",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/kiwi/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Lemon": {
+      "imageUrl": "/productos/dummyjson/31.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/31",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/lemon/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Milk": {
+      "imageUrl": "/productos/dummyjson/32.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/32",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/milk/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Mulberry": {
+      "imageUrl": "/productos/dummyjson/33.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/33",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/mulberry/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Nescafe Coffee": {
+      "imageUrl": "/productos/dummyjson/34.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/34",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/nescafe-coffee/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Potatoes": {
+      "imageUrl": "/productos/dummyjson/35.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/35",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/potatoes/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Protein Powder": {
+      "imageUrl": "/productos/dummyjson/36.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/36",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/protein-powder/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Red Onions": {
+      "imageUrl": "/productos/dummyjson/37.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/37",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/red-onions/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Rice": {
+      "imageUrl": "/productos/dummyjson/38.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/38",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/rice/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Soft Drinks": {
+      "imageUrl": "/productos/dummyjson/39.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/39",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/soft-drinks/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Strawberry": {
+      "imageUrl": "/productos/dummyjson/40.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/40",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/strawberry/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Tissue Paper Box": {
+      "imageUrl": "/productos/dummyjson/41.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/41",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/tissue-paper-box/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Water": {
+      "imageUrl": "/productos/dummyjson/42.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/42",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/groceries/water/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Decoration Swing": {
+      "imageUrl": "/productos/dummyjson/43.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/43",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/home-decoration/decoration-swing/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Family Tree Photo Frame": {
+      "imageUrl": "/productos/dummyjson/44.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/44",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/home-decoration/family-tree-photo-frame/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "House Showpiece Plant": {
+      "imageUrl": "/productos/dummyjson/45.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/45",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/home-decoration/house-showpiece-plant/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Plant Pot": {
+      "imageUrl": "/productos/dummyjson/46.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/46",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/home-decoration/plant-pot/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Table Lamp": {
+      "imageUrl": "/productos/dummyjson/47.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/47",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/home-decoration/table-lamp/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Bamboo Spatula": {
+      "imageUrl": "/productos/dummyjson/48.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/48",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/bamboo-spatula/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Black Aluminium Cup": {
+      "imageUrl": "/productos/dummyjson/49.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/49",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/black-aluminium-cup/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Black Whisk": {
+      "imageUrl": "/productos/dummyjson/50.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/50",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/black-whisk/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Boxed Blender": {
+      "imageUrl": "/productos/dummyjson/51.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/51",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/boxed-blender/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Carbon Steel Wok": {
+      "imageUrl": "/productos/dummyjson/52.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/52",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/carbon-steel-wok/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Chopping Board": {
+      "imageUrl": "/productos/dummyjson/53.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/53",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/chopping-board/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Citrus Squeezer Yellow": {
+      "imageUrl": "/productos/dummyjson/54.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/54",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/citrus-squeezer-yellow/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Egg Slicer": {
+      "imageUrl": "/productos/dummyjson/55.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/55",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/egg-slicer/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Electric Stove": {
+      "imageUrl": "/productos/dummyjson/56.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/56",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/electric-stove/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Fine Mesh Strainer": {
+      "imageUrl": "/productos/dummyjson/57.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/57",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/fine-mesh-strainer/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Fork": {
+      "imageUrl": "/productos/dummyjson/58.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/58",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/fork/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Glass": {
+      "imageUrl": "/productos/dummyjson/59.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/59",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/glass/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Grater Black": {
+      "imageUrl": "/productos/dummyjson/60.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/60",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/grater-black/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Hand Blender": {
+      "imageUrl": "/productos/dummyjson/61.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/61",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/hand-blender/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Ice Cube Tray": {
+      "imageUrl": "/productos/dummyjson/62.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/62",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/ice-cube-tray/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Kitchen Sieve": {
+      "imageUrl": "/productos/dummyjson/63.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/63",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/kitchen-sieve/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Knife": {
+      "imageUrl": "/productos/dummyjson/64.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/64",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/knife/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Lunch Box": {
+      "imageUrl": "/productos/dummyjson/65.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/65",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/lunch-box/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Microwave Oven": {
+      "imageUrl": "/productos/dummyjson/66.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/66",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/microwave-oven/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Mug Tree Stand": {
+      "imageUrl": "/productos/dummyjson/67.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/67",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/mug-tree-stand/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Pan": {
+      "imageUrl": "/productos/dummyjson/68.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/68",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/pan/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Plate": {
+      "imageUrl": "/productos/dummyjson/69.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/69",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/plate/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Red Tongs": {
+      "imageUrl": "/productos/dummyjson/70.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/70",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/red-tongs/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Silver Pot With Glass Cap": {
+      "imageUrl": "/productos/dummyjson/71.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/71",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/silver-pot-with-glass-cap/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Slotted Turner": {
+      "imageUrl": "/productos/dummyjson/72.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/72",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/slotted-turner/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Spice Rack": {
+      "imageUrl": "/productos/dummyjson/73.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/73",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/spice-rack/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Spoon": {
+      "imageUrl": "/productos/dummyjson/74.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/74",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/spoon/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Tray": {
+      "imageUrl": "/productos/dummyjson/75.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/75",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/tray/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Wooden Rolling Pin": {
+      "imageUrl": "/productos/dummyjson/76.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/76",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/wooden-rolling-pin/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Yellow Peeler": {
+      "imageUrl": "/productos/dummyjson/77.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/77",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/kitchen-accessories/yellow-peeler/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Apple MacBook Pro 14 Inch Space Grey": {
+      "imageUrl": "/productos/dummyjson/78.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/78",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/laptops/apple-macbook-pro-14-inch-space-grey/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Asus Zenbook Pro Dual Screen Laptop": {
+      "imageUrl": "/productos/dummyjson/79.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/79",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/laptops/asus-zenbook-pro-dual-screen-laptop/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Huawei Matebook X Pro": {
+      "imageUrl": "/productos/dummyjson/80.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/80",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/laptops/huawei-matebook-x-pro/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Lenovo Yoga 920": {
+      "imageUrl": "/productos/dummyjson/81.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/81",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/laptops/lenovo-yoga-920/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "New DELL XPS 13 9300 Laptop": {
+      "imageUrl": "/productos/dummyjson/82.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/82",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/laptops/new-dell-xps-13-9300-laptop/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Blue & Black Check Shirt": {
+      "imageUrl": "/productos/dummyjson/83.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/83",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mens-shirts/blue-&-black-check-shirt/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Gigabyte Aorus Men Tshirt": {
+      "imageUrl": "/productos/dummyjson/84.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/84",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mens-shirts/gigabyte-aorus-men-tshirt/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Man Plaid Shirt": {
+      "imageUrl": "/productos/dummyjson/85.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/85",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mens-shirts/man-plaid-shirt/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Man Short Sleeve Shirt": {
+      "imageUrl": "/productos/dummyjson/86.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/86",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mens-shirts/man-short-sleeve-shirt/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Men Check Shirt": {
+      "imageUrl": "/productos/dummyjson/87.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/87",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mens-shirts/men-check-shirt/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Nike Air Jordan 1 Red And Black": {
+      "imageUrl": "/productos/dummyjson/88.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/88",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mens-shoes/nike-air-jordan-1-red-and-black/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Nike Baseball Cleats": {
+      "imageUrl": "/productos/dummyjson/89.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/89",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mens-shoes/nike-baseball-cleats/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Puma Future Rider Trainers": {
+      "imageUrl": "/productos/dummyjson/90.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/90",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mens-shoes/puma-future-rider-trainers/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Sports Sneakers Off White & Red": {
+      "imageUrl": "/productos/dummyjson/91.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/91",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mens-shoes/sports-sneakers-off-white-&-red/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Sports Sneakers Off White Red": {
+      "imageUrl": "/productos/dummyjson/92.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/92",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mens-shoes/sports-sneakers-off-white-red/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Brown Leather Belt Watch": {
+      "imageUrl": "/productos/dummyjson/93.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/93",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mens-watches/brown-leather-belt-watch/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Longines Master Collection": {
+      "imageUrl": "/productos/dummyjson/94.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/94",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mens-watches/longines-master-collection/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Rolex Cellini Date Black Dial": {
+      "imageUrl": "/productos/dummyjson/95.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/95",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mens-watches/rolex-cellini-date-black-dial/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Rolex Cellini Moonphase": {
+      "imageUrl": "/productos/dummyjson/191.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/191",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-watches/rolex-cellini-moonphase/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Rolex Datejust": {
+      "imageUrl": "/productos/dummyjson/97.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/97",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mens-watches/rolex-datejust/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Rolex Submariner Watch": {
+      "imageUrl": "/productos/dummyjson/98.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/98",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mens-watches/rolex-submariner-watch/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Amazon Echo Plus": {
+      "imageUrl": "/productos/dummyjson/99.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/99",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mobile-accessories/amazon-echo-plus/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Apple Airpods": {
+      "imageUrl": "/productos/dummyjson/100.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/100",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-airpods/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Apple AirPods Max Silver": {
+      "imageUrl": "/productos/dummyjson/101.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/101",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-airpods-max-silver/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Apple Airpower Wireless Charger": {
+      "imageUrl": "/productos/dummyjson/102.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/102",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-airpower-wireless-charger/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Apple HomePod Mini Cosmic Grey": {
+      "imageUrl": "/productos/dummyjson/103.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/103",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-homepod-mini-cosmic-grey/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Apple iPhone Charger": {
+      "imageUrl": "/productos/dummyjson/104.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/104",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-iphone-charger/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Apple MagSafe Battery Pack": {
+      "imageUrl": "/productos/dummyjson/105.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/105",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-magsafe-battery-pack/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Apple Watch Series 4 Gold": {
+      "imageUrl": "/productos/dummyjson/106.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/106",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mobile-accessories/apple-watch-series-4-gold/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Beats Flex Wireless Earphones": {
+      "imageUrl": "/productos/dummyjson/107.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/107",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mobile-accessories/beats-flex-wireless-earphones/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "iPhone 12 Silicone Case with MagSafe Plum": {
+      "imageUrl": "/productos/dummyjson/108.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/108",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mobile-accessories/iphone-12-silicone-case-with-magsafe-plum/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Monopod": {
+      "imageUrl": "/productos/dummyjson/109.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/109",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mobile-accessories/monopod/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Selfie Lamp with iPhone": {
+      "imageUrl": "/productos/dummyjson/110.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/110",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mobile-accessories/selfie-lamp-with-iphone/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Selfie Stick Monopod": {
+      "imageUrl": "/productos/dummyjson/111.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/111",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mobile-accessories/selfie-stick-monopod/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "TV Studio Camera Pedestal": {
+      "imageUrl": "/productos/dummyjson/112.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/112",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/mobile-accessories/tv-studio-camera-pedestal/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Generic Motorcycle": {
+      "imageUrl": "/productos/dummyjson/113.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/113",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/motorcycle/generic-motorcycle/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Kawasaki Z800": {
+      "imageUrl": "/productos/dummyjson/114.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/114",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/motorcycle/kawasaki-z800/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "MotoGP CI.H1": {
+      "imageUrl": "/productos/dummyjson/115.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/115",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/motorcycle/motogp-ci.h1/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Scooter Motorcycle": {
+      "imageUrl": "/productos/dummyjson/116.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/116",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/motorcycle/scooter-motorcycle/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Sportbike Motorcycle": {
+      "imageUrl": "/productos/dummyjson/117.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/117",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/motorcycle/sportbike-motorcycle/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Attitude Super Leaves Hand Soap": {
+      "imageUrl": "/productos/dummyjson/118.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/118",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/skin-care/attitude-super-leaves-hand-soap/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Olay Ultra Moisture Shea Butter Body Wash": {
+      "imageUrl": "/productos/dummyjson/119.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/119",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/skin-care/olay-ultra-moisture-shea-butter-body-wash/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Vaseline Men Body and Face Lotion": {
+      "imageUrl": "/productos/dummyjson/120.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/120",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/skin-care/vaseline-men-body-and-face-lotion/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "iPhone 5s": {
+      "imageUrl": "/productos/dummyjson/121.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/121",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/smartphones/iphone-5s/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "iPhone 6": {
+      "imageUrl": "/productos/dummyjson/122.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/122",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/smartphones/iphone-6/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "iPhone 13 Pro": {
+      "imageUrl": "/productos/dummyjson/123.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/123",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/smartphones/iphone-13-pro/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "iPhone X": {
+      "imageUrl": "/productos/dummyjson/124.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/124",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/smartphones/iphone-x/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Oppo A57": {
+      "imageUrl": "/productos/dummyjson/125.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/125",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/smartphones/oppo-a57/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Oppo F19 Pro Plus": {
+      "imageUrl": "/productos/dummyjson/126.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/126",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/smartphones/oppo-f19-pro-plus/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Oppo K1": {
+      "imageUrl": "/productos/dummyjson/127.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/127",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/smartphones/oppo-k1/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Realme C35": {
+      "imageUrl": "/productos/dummyjson/128.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/128",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/smartphones/realme-c35/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Realme X": {
+      "imageUrl": "/productos/dummyjson/129.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/129",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/smartphones/realme-x/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Realme XT": {
+      "imageUrl": "/productos/dummyjson/130.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/130",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/smartphones/realme-xt/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Samsung Galaxy S7": {
+      "imageUrl": "/productos/dummyjson/131.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/131",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/smartphones/samsung-galaxy-s7/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Samsung Galaxy S8": {
+      "imageUrl": "/productos/dummyjson/132.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/132",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/smartphones/samsung-galaxy-s8/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Samsung Galaxy S10": {
+      "imageUrl": "/productos/dummyjson/133.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/133",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/smartphones/samsung-galaxy-s10/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Vivo S1": {
+      "imageUrl": "/productos/dummyjson/134.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/134",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/smartphones/vivo-s1/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Vivo V9": {
+      "imageUrl": "/productos/dummyjson/135.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/135",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/smartphones/vivo-v9/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Vivo X21": {
+      "imageUrl": "/productos/dummyjson/136.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/136",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/smartphones/vivo-x21/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "American Football": {
+      "imageUrl": "/productos/dummyjson/137.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/137",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sports-accessories/american-football/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Baseball Ball": {
+      "imageUrl": "/productos/dummyjson/138.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/138",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sports-accessories/baseball-ball/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Baseball Glove": {
+      "imageUrl": "/productos/dummyjson/139.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/139",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sports-accessories/baseball-glove/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Basketball": {
+      "imageUrl": "/productos/dummyjson/140.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/140",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sports-accessories/basketball/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Basketball Rim": {
+      "imageUrl": "/productos/dummyjson/141.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/141",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sports-accessories/basketball-rim/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Cricket Ball": {
+      "imageUrl": "/productos/dummyjson/142.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/142",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sports-accessories/cricket-ball/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Cricket Bat": {
+      "imageUrl": "/productos/dummyjson/143.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/143",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sports-accessories/cricket-bat/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Cricket Helmet": {
+      "imageUrl": "/productos/dummyjson/144.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/144",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sports-accessories/cricket-helmet/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Cricket Wicket": {
+      "imageUrl": "/productos/dummyjson/145.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/145",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sports-accessories/cricket-wicket/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Feather Shuttlecock": {
+      "imageUrl": "/productos/dummyjson/146.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/146",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sports-accessories/feather-shuttlecock/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Football": {
+      "imageUrl": "/productos/dummyjson/147.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/147",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sports-accessories/football/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Golf Ball": {
+      "imageUrl": "/productos/dummyjson/148.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/148",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sports-accessories/golf-ball/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Iron Golf": {
+      "imageUrl": "/productos/dummyjson/149.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/149",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sports-accessories/iron-golf/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Metal Baseball Bat": {
+      "imageUrl": "/productos/dummyjson/150.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/150",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sports-accessories/metal-baseball-bat/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Tennis Ball": {
+      "imageUrl": "/productos/dummyjson/151.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/151",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sports-accessories/tennis-ball/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Tennis Racket": {
+      "imageUrl": "/productos/dummyjson/152.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/152",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sports-accessories/tennis-racket/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Volleyball": {
+      "imageUrl": "/productos/dummyjson/153.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/153",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sports-accessories/volleyball/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Black Sun Glasses": {
+      "imageUrl": "/productos/dummyjson/154.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/154",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sunglasses/black-sun-glasses/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Classic Sun Glasses": {
+      "imageUrl": "/productos/dummyjson/155.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/155",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sunglasses/classic-sun-glasses/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Green and Black Glasses": {
+      "imageUrl": "/productos/dummyjson/156.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/156",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sunglasses/green-and-black-glasses/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Party Glasses": {
+      "imageUrl": "/productos/dummyjson/157.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/157",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sunglasses/party-glasses/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Sunglasses": {
+      "imageUrl": "/productos/dummyjson/158.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/158",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/sunglasses/sunglasses/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "iPad Mini 2021 Starlight": {
+      "imageUrl": "/productos/dummyjson/159.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/159",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/tablets/ipad-mini-2021-starlight/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Samsung Galaxy Tab S8 Plus Grey": {
+      "imageUrl": "/productos/dummyjson/160.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/160",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/tablets/samsung-galaxy-tab-s8-plus-grey/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Samsung Galaxy Tab White": {
+      "imageUrl": "/productos/dummyjson/161.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/161",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/tablets/samsung-galaxy-tab-white/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Blue Frock": {
+      "imageUrl": "/productos/dummyjson/162.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/162",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/tops/blue-frock/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Girl Summer Dress": {
+      "imageUrl": "/productos/dummyjson/163.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/163",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/tops/girl-summer-dress/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Gray Dress": {
+      "imageUrl": "/productos/dummyjson/164.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/164",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/tops/gray-dress/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Short Frock": {
+      "imageUrl": "/productos/dummyjson/165.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/165",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/tops/short-frock/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Tartan Dress": {
+      "imageUrl": "/productos/dummyjson/166.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/166",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/tops/tartan-dress/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "300 Touring": {
+      "imageUrl": "/productos/dummyjson/167.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/167",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/vehicle/300-touring/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Charger SXT RWD": {
+      "imageUrl": "/productos/dummyjson/168.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/168",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/vehicle/charger-sxt-rwd/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Dodge Hornet GT Plus": {
+      "imageUrl": "/productos/dummyjson/169.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/169",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/vehicle/dodge-hornet-gt-plus/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Durango SXT RWD": {
+      "imageUrl": "/productos/dummyjson/170.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/170",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/vehicle/durango-sxt-rwd/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Pacifica Touring": {
+      "imageUrl": "/productos/dummyjson/171.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/171",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/vehicle/pacifica-touring/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Blue Women's Handbag": {
+      "imageUrl": "/productos/dummyjson/172.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/172",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-bags/blue-women's-handbag/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Heshe Women's Leather Bag": {
+      "imageUrl": "/productos/dummyjson/173.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/173",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-bags/heshe-women's-leather-bag/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Prada Women Bag": {
+      "imageUrl": "/productos/dummyjson/174.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/174",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-bags/prada-women-bag/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "White Faux Leather Backpack": {
+      "imageUrl": "/productos/dummyjson/175.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/175",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-bags/white-faux-leather-backpack/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Women Handbag Black": {
+      "imageUrl": "/productos/dummyjson/176.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/176",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-bags/women-handbag-black/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Black Women's Gown": {
+      "imageUrl": "/productos/dummyjson/177.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/177",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-dresses/black-women's-gown/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Corset Leather With Skirt": {
+      "imageUrl": "/productos/dummyjson/178.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/178",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-dresses/corset-leather-with-skirt/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Corset With Black Skirt": {
+      "imageUrl": "/productos/dummyjson/179.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/179",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-dresses/corset-with-black-skirt/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Dress Pea": {
+      "imageUrl": "/productos/dummyjson/180.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/180",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-dresses/dress-pea/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Marni Red & Black Suit": {
+      "imageUrl": "/productos/dummyjson/181.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/181",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-dresses/marni-red-&-black-suit/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Green Crystal Earring": {
+      "imageUrl": "/productos/dummyjson/182.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/182",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-jewellery/green-crystal-earring/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Green Oval Earring": {
+      "imageUrl": "/productos/dummyjson/183.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/183",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-jewellery/green-oval-earring/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Tropical Earring": {
+      "imageUrl": "/productos/dummyjson/184.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/184",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-jewellery/tropical-earring/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Black & Brown Slipper": {
+      "imageUrl": "/productos/dummyjson/185.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/185",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-shoes/black-&-brown-slipper/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Calvin Klein Heel Shoes": {
+      "imageUrl": "/productos/dummyjson/186.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/186",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-shoes/calvin-klein-heel-shoes/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Golden Shoes Woman": {
+      "imageUrl": "/productos/dummyjson/187.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/187",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-shoes/golden-shoes-woman/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Pampi Shoes": {
+      "imageUrl": "/productos/dummyjson/188.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/188",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-shoes/pampi-shoes/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Red Shoes": {
+      "imageUrl": "/productos/dummyjson/189.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/189",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-shoes/red-shoes/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "IWC Ingenieur Automatic Steel": {
+      "imageUrl": "/productos/dummyjson/190.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/190",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-watches/iwc-ingenieur-automatic-steel/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Rolex Datejust Women": {
+      "imageUrl": "/productos/dummyjson/192.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/192",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-watches/rolex-datejust-women/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Watch Gold for Women": {
+      "imageUrl": "/productos/dummyjson/193.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/193",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-watches/watch-gold-for-women/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    },
+    "Women's Wrist Watch": {
+      "imageUrl": "/productos/dummyjson/194.webp",
+      "tienda": "DummyJSON",
+      "paginaUrl": "https://dummyjson.com/products/194",
+      "imagenUrl": "https://cdn.dummyjson.com/product-images/womens-watches/women's-wrist-watch/thumbnail.webp",
+      "descargadoEn": "2026-10-08T20:22:36.763Z"
+    }
+  },
+  "curados": {
+    "CURA-000001": {
+      "imageUrl": "/productos/curados/refrigerador.webp",
+      "tienda": "Unsplash",
+      "paginaUrl": "https://unsplash.com/photos/1588854337115-1c67d9247e4d",
+      "imagenUrl": "https://unsplash.com/photos/1588854337115-1c67d9247e4d",
+      "descargadoEn": "2026-09-17T19:05:39-05:00"
+    },
+    "CURA-000002": {
+      "imageUrl": "/productos/curados/lavadora.webp",
+      "tienda": "Unsplash",
+      "paginaUrl": "https://unsplash.com/photos/1626806787461-102c1bfaaea1",
+      "imagenUrl": "https://unsplash.com/photos/1626806787461-102c1bfaaea1",
+      "descargadoEn": "2026-09-17T19:05:39-05:00"
+    },
+    "CURA-000003": {
+      "imageUrl": "/productos/curados/televisor.webp",
+      "tienda": "Unsplash",
+      "paginaUrl": "https://unsplash.com/photos/1595935736128-db1f0a261263",
+      "imagenUrl": "https://unsplash.com/photos/1595935736128-db1f0a261263",
+      "descargadoEn": "2026-09-17T19:05:39-05:00"
+    },
+    "CURA-000004": {
+      "imageUrl": "/productos/curados/licuadora.webp",
+      "tienda": "Unsplash",
+      "paginaUrl": "https://unsplash.com/photos/1585237672814-8f85a8118bf6",
+      "imagenUrl": "https://unsplash.com/photos/1585237672814-8f85a8118bf6",
+      "descargadoEn": "2026-09-17T19:05:39-05:00"
+    }
+  }
+}

@@ -1,0 +1,782 @@
+[
+  {
+    "ancho": 1440,
+    "archivo": "1440/01-catalogo-exito.png",
+    "ruta": "/",
+    "nota": "Catálogo con productos (éxito)",
+    "avisos": []
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/02-catalogo-vacio.png",
+    "ruta": "/?q=zzzzqqq",
+    "nota": "Búsqueda sin resultados",
+    "avisos": []
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/03-catalogo-busqueda-corta.png",
+    "ruta": "/?q=ab",
+    "nota": "Búsqueda de menos de 3 caracteres",
+    "avisos": [
+      "La búsqueda requiere al menos 3 caracteres"
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/04-catalogo-busqueda-chair.png",
+    "ruta": "/?q=Chair",
+    "nota": "Búsqueda con resultados (fotos retail)",
+    "avisos": []
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/05-catalogo-cargando.png",
+    "ruta": "/",
+    "nota": "Mientras llega la respuesta de /catalogo/productos (retrasada 3,5 s)",
+    "avisos": []
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/06-catalogo-error.png",
+    "ruta": "/",
+    "nota": "Fallo de red al pedir el catálogo",
+    "avisos": [
+      "No se pudo cargar el catálogo"
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/07-producto-detalle-televisor.png",
+    "ruta": "/producto/2405",
+    "nota": "Detalle con disponibilidad por sucursal (2 sincronizadas, el resto sin sincronizar)",
+    "avisos": [
+      "Sin sincronizar hace 30096 min",
+      "Sin sincronizar hace 30088 min",
+      "Sin sincronizar hace 30085 min",
+      "Sin sincronizar hace 30086 min",
+      "Sin sincronizar hace 30089 min",
+      "Sin sincronizar hace 30083 min",
+      "Sin sincronizar hace 30086 min",
+      "Una sucursal con más de 15 minutos sin sincronizar con el ERP no puede ofrecer retiro (RN-04). Las unidades disponibles publicadas ya descuentan el umbral de seguridad y las reservas de otros pedidos (RN-03)."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/08-producto-detalle-silla.png",
+    "ruta": "/producto/209",
+    "nota": "Detalle con foto retail",
+    "avisos": [
+      "Sin sincronizar hace 39275 min",
+      "Sin sincronizar hace 39278 min",
+      "Sin sincronizar hace 39274 min",
+      "Sin sincronizar hace 39276 min",
+      "Sin sincronizar hace 39280 min",
+      "Sin sincronizar hace 39277 min",
+      "Sin sincronizar hace 39276 min",
+      "Una sucursal con más de 15 minutos sin sincronizar con el ERP no puede ofrecer retiro (RN-04). Las unidades disponibles publicadas ya descuentan el umbral de seguridad y las reservas de otros pedidos (RN-03)."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/09-producto-sin-foto.png",
+    "ruta": "/producto/1",
+    "nota": "Producto sin foto (placeholder)",
+    "avisos": [
+      "Sin sincronizar hace 39291 min",
+      "Sin sincronizar hace 39282 min",
+      "Sin sincronizar hace 39382 min",
+      "Sin sincronizar hace 39277 min",
+      "Sin sincronizar hace 39279 min",
+      "Sin sincronizar hace 39285 min",
+      "Sin sincronizar hace 39284 min",
+      "Una sucursal con más de 15 minutos sin sincronizar con el ERP no puede ofrecer retiro (RN-04). Las unidades disponibles publicadas ya descuentan el umbral de seguridad y las reservas de otros pedidos (RN-03)."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/10-producto-no-publicado.png",
+    "ruta": "/producto/3",
+    "nota": "Excepción: producto no publicado",
+    "avisos": [
+      "Sin sincronizar hace 39275 min",
+      "Sin sincronizar hace 39284 min",
+      "Sin sincronizar hace 39275 min",
+      "Sin sincronizar hace 39279 min",
+      "Sin sincronizar hace 39280 min",
+      "Sin sincronizar hace 39274 min",
+      "Sin sincronizar hace 39294 min",
+      "Una sucursal con más de 15 minutos sin sincronizar con el ERP no puede ofrecer retiro (RN-04). Las unidades disponibles publicadas ya descuentan el umbral de seguridad y las reservas de otros pedidos (RN-03)."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/11-producto-inexistente.png",
+    "ruta": "/producto/9999999",
+    "nota": "Producto inexistente",
+    "avisos": [
+      "Una sucursal con más de 15 minutos sin sincronizar con el ERP no puede ofrecer retiro (RN-04). Las unidades disponibles publicadas ya descuentan el umbral de seguridad y las reservas de otros pedidos (RN-03)."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/12-producto-error-disponibilidad.png",
+    "ruta": "/producto/2405",
+    "nota": "Fallo al consultar la disponibilidad",
+    "avisos": [
+      "No se pudo consultar la disponibilidad",
+      "Una sucursal con más de 15 minutos sin sincronizar con el ERP no puede ofrecer retiro (RN-04). Las unidades disponibles publicadas ya descuentan el umbral de seguridad y las reservas de otros pedidos (RN-03)."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/13-carrito-vacio-invitado.png",
+    "ruta": "/carrito",
+    "nota": "Excepción: carrito vacío",
+    "avisos": []
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/14-carrito-cargando.png",
+    "ruta": "/carrito",
+    "nota": "Mientras llega GET /carrito (retrasado 3 s)",
+    "avisos": []
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/15-producto-agregado-al-carrito.png",
+    "ruta": "/producto/2405",
+    "nota": "Aviso de éxito tras 'Retirar aquí'",
+    "avisos": [
+      "Producto agregado al carrito para retirar en esta sucursal.\nVer carrito",
+      "Sin sincronizar hace 30096 min",
+      "Sin sincronizar hace 30088 min",
+      "Sin sincronizar hace 30085 min",
+      "Sin sincronizar hace 30086 min",
+      "Sin sincronizar hace 30089 min",
+      "Sin sincronizar hace 30083 min",
+      "Sin sincronizar hace 30086 min",
+      "Una sucursal con más de 15 minutos sin sincronizar con el ERP no puede ofrecer retiro (RN-04). Las unidades disponibles publicadas ya descuentan el umbral de seguridad y las reservas de otros pedidos (RN-03)."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/16-carrito-invitado-con-productos.png",
+    "ruta": "/carrito",
+    "nota": "Carrito de invitado con productos y complementarios",
+    "avisos": []
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/17-registro.png",
+    "ruta": "/registro",
+    "nota": "Registro (paso previo)",
+    "avisos": [
+      "Tu cuenta quedará vinculada a tu identificador de lealtad si ya tienes uno registrado en el programa de lealtad."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/18-registro-error-documento-duplicado.png",
+    "ruta": "/registro",
+    "nota": "Excepción E-1: documento ya registrado",
+    "avisos": [
+      "Ya existe una cuenta registrada con ese documento",
+      "Tu cuenta quedará vinculada a tu identificador de lealtad si ya tienes uno registrado en el programa de lealtad."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/19-ingresar.png",
+    "ruta": "/ingresar",
+    "nota": "Inicio de sesión (paso previo)",
+    "avisos": []
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/20-ingresar-error-credenciales.png",
+    "ruta": "/ingresar",
+    "nota": "Credenciales inválidas",
+    "avisos": [
+      "Credenciales inválidas"
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/21-pedidos-sin-sesion.png",
+    "ruta": "/pedidos",
+    "nota": "Mis pedidos sin iniciar sesión",
+    "avisos": [
+      "Unauthorized"
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/22-pedidos-vacio.png",
+    "ruta": "/pedidos",
+    "nota": "Mis pedidos sin pedidos (cliente nuevo)",
+    "avisos": []
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/23-privacidad-consentimiento.png",
+    "ruta": "/privacidad",
+    "nota": "Consentimiento (destino tras el registro)",
+    "avisos": [
+      "Toda solicitud de supresión se ejecuta dentro de las 72 horas siguientes (RN-11)."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/24-carrito-registrado-con-productos.png",
+    "ruta": "/carrito",
+    "nota": "Carrito de cliente registrado",
+    "avisos": []
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/25-confirmar-pedido.png",
+    "ruta": "/pedido/confirmar",
+    "nota": "Confirmación de pedido (sucursal por defecto: la primera de la lista)",
+    "avisos": [
+      "Al confirmar, tus unidades quedan reservadas en el ERP antes de cualquier cobro (RN-05)."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/26-confirmar-error-unidades-insuficientes.png",
+    "ruta": "/pedido/confirmar",
+    "nota": "Excepción: unidades insuficientes (cantidad 9999)",
+    "avisos": [
+      "Solo hay 132 unidades disponibles para el producto 209 en la sucursal 6",
+      "Al confirmar, tus unidades quedan reservadas en el ERP antes de cualquier cobro (RN-05)."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/27-confirmar-error-sucursal-desincronizada.png",
+    "ruta": "/pedido/confirmar",
+    "nota": "Excepción: sucursal sin sincronizar hace más de 15 min",
+    "avisos": [
+      "La sucursal 3 lleva más de 15 minutos sin sincronizar con el ERP y no ofrece retiro",
+      "Al confirmar, tus unidades quedan reservadas en el ERP antes de cualquier cobro (RN-05)."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/28-confirmar-cupon-aplicado-sin-validar.png",
+    "ruta": "/pedido/confirmar",
+    "nota": "Tras 'Aplicar' con un código inventado (aún sin validar)",
+    "avisos": [
+      "Cupón aplicado al confirmar (se valida en el servidor)",
+      "Al confirmar, tus unidades quedan reservadas en el ERP antes de cualquier cobro (RN-05)."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/29-confirmar-error-cupon-invalido.png",
+    "ruta": "/pedido/confirmar",
+    "nota": "Excepción: cupón inválido",
+    "avisos": [
+      "Cupón aplicado al confirmar (se valida en el servidor)",
+      "El cupón de lealtad no existe o no está vigente",
+      "Al confirmar, tus unidades quedan reservadas en el ERP antes de cualquier cobro (RN-05)."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/30-confirmar-cupon-valido.png",
+    "ruta": "/pedido/confirmar",
+    "nota": "Cupón LEALTAD10 aplicado",
+    "avisos": [
+      "Cupón aplicado al confirmar (se valida en el servidor)",
+      "Al confirmar, tus unidades quedan reservadas en el ERP antes de cualquier cobro (RN-05)."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/31-pago-tarjeta.png",
+    "ruta": "/pago/19",
+    "nota": "Pago: pestaña Tarjeta",
+    "avisos": [
+      "Este pago lo administra Stripe, en modo de prueba. ComproYa no almacena ni procesa el número de tarjeta: solo recibe un token emitido por la pasarela (RN-06)."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/32-pago-debito-inicio.png",
+    "ruta": "/pago/19",
+    "nota": "Pago: pestaña Débito bancario",
+    "avisos": [
+      "Se simula la confirmación del banco (no hay una pasarela de débito bancario real conectada). Si no hay confirmación en 30 minutos, el pedido se cancela."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/33-pago-debito-esperando.png",
+    "ruta": "/pago/19",
+    "nota": "Estado: esperando confirmación del débito",
+    "avisos": [
+      "Esperando confirmación del débito bancario…"
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/34-pago-debito-simular-falla.png",
+    "ruta": "/pago/19",
+    "nota": "Resultado real de 'Simular confirmación' (el frontend no envía X-Debito-Secreto)",
+    "avisos": [
+      "Encabezado X-Debito-Secreto ausente o inválido",
+      "Esperando confirmación del débito bancario…"
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/35-comprobante-exito.png",
+    "ruta": "/comprobante/19",
+    "nota": "Comprobante con código de retiro",
+    "avisos": []
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/36-pago-tarjeta-error-pedido-ya-pagado.png",
+    "ruta": "/pago/19",
+    "nota": "Excepción: pago con tarjeta no admitido (pedido ya pagado)",
+    "avisos": [
+      "El pedido ya no admite un nuevo intento de pago",
+      "Este pago lo administra Stripe, en modo de prueba. ComproYa no almacena ni procesa el número de tarjeta: solo recibe un token emitido por la pasarela (RN-06)."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/37-pago-tarjeta-cancelado.png",
+    "ruta": "/pago/19?cancelado=1",
+    "nota": "Excepción: pago con tarjeta cancelado o fallido (regreso desde Stripe)",
+    "avisos": [
+      "El pago con tarjeta fue cancelado o no se completó.",
+      "Este pago lo administra Stripe, en modo de prueba. ComproYa no almacena ni procesa el número de tarjeta: solo recibe un token emitido por la pasarela (RN-06)."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/38-pedidos-con-estados.png",
+    "ruta": "/pedidos",
+    "nota": "Mis pedidos: pagado y cancelado por débito rechazado",
+    "avisos": []
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/39-comprobante-reintentando.png",
+    "ruta": "/comprobante/21",
+    "nota": "Estado intermedio: 'Confirmando el pago con la pasarela…'",
+    "avisos": []
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/40-comprobante-no-disponible.png",
+    "ruta": "/comprobante/21",
+    "nota": "Excepción: comprobante no disponible (pedido sin pagar)",
+    "avisos": [
+      "El pago aún no se ha confirmado. Si acabas de pagar con tarjeta, espera unos segundos y recarga."
+    ]
+  },
+  {
+    "ancho": 1440,
+    "archivo": "1440/41-comprobante-pedido-de-otro-cliente-403.png",
+    "ruta": "/comprobante/19",
+    "nota": "Excepción: pedido de otro cliente (la API responde 403)",
+    "avisos": [
+      "El pago aún no se ha confirmado. Si acabas de pagar con tarjeta, espera unos segundos y recarga."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/01-catalogo-exito.png",
+    "ruta": "/",
+    "nota": "Catálogo con productos (éxito)",
+    "avisos": []
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/02-catalogo-vacio.png",
+    "ruta": "/?q=zzzzqqq",
+    "nota": "Búsqueda sin resultados",
+    "avisos": []
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/03-catalogo-busqueda-corta.png",
+    "ruta": "/?q=ab",
+    "nota": "Búsqueda de menos de 3 caracteres",
+    "avisos": [
+      "La búsqueda requiere al menos 3 caracteres"
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/04-catalogo-busqueda-chair.png",
+    "ruta": "/?q=Chair",
+    "nota": "Búsqueda con resultados (fotos retail)",
+    "avisos": []
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/05-catalogo-cargando.png",
+    "ruta": "/",
+    "nota": "Mientras llega la respuesta de /catalogo/productos (retrasada 3,5 s)",
+    "avisos": []
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/06-catalogo-error.png",
+    "ruta": "/",
+    "nota": "Fallo de red al pedir el catálogo",
+    "avisos": [
+      "No se pudo cargar el catálogo"
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/07-producto-detalle-televisor.png",
+    "ruta": "/producto/2405",
+    "nota": "Detalle con disponibilidad por sucursal (2 sincronizadas, el resto sin sincronizar)",
+    "avisos": [
+      "Sin sincronizar hace 30097 min",
+      "Sin sincronizar hace 30089 min",
+      "Sin sincronizar hace 30086 min",
+      "Sin sincronizar hace 30087 min",
+      "Sin sincronizar hace 30090 min",
+      "Sin sincronizar hace 30084 min",
+      "Sin sincronizar hace 30087 min",
+      "Una sucursal con más de 15 minutos sin sincronizar con el ERP no puede ofrecer retiro (RN-04). Las unidades disponibles publicadas ya descuentan el umbral de seguridad y las reservas de otros pedidos (RN-03)."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/08-producto-detalle-silla.png",
+    "ruta": "/producto/209",
+    "nota": "Detalle con foto retail",
+    "avisos": [
+      "Sin sincronizar hace 39276 min",
+      "Sin sincronizar hace 39279 min",
+      "Sin sincronizar hace 39275 min",
+      "Sin sincronizar hace 39277 min",
+      "Sin sincronizar hace 39281 min",
+      "Sin sincronizar hace 39278 min",
+      "Sin sincronizar hace 39277 min",
+      "Una sucursal con más de 15 minutos sin sincronizar con el ERP no puede ofrecer retiro (RN-04). Las unidades disponibles publicadas ya descuentan el umbral de seguridad y las reservas de otros pedidos (RN-03)."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/09-producto-sin-foto.png",
+    "ruta": "/producto/1",
+    "nota": "Producto sin foto (placeholder)",
+    "avisos": [
+      "Sin sincronizar hace 39292 min",
+      "Sin sincronizar hace 39283 min",
+      "Sin sincronizar hace 39383 min",
+      "Sin sincronizar hace 39278 min",
+      "Sin sincronizar hace 39280 min",
+      "Sin sincronizar hace 39286 min",
+      "Sin sincronizar hace 39285 min",
+      "Una sucursal con más de 15 minutos sin sincronizar con el ERP no puede ofrecer retiro (RN-04). Las unidades disponibles publicadas ya descuentan el umbral de seguridad y las reservas de otros pedidos (RN-03)."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/10-producto-no-publicado.png",
+    "ruta": "/producto/3",
+    "nota": "Excepción: producto no publicado",
+    "avisos": [
+      "Sin sincronizar hace 39276 min",
+      "Sin sincronizar hace 39285 min",
+      "Sin sincronizar hace 39276 min",
+      "Sin sincronizar hace 39280 min",
+      "Sin sincronizar hace 39281 min",
+      "Sin sincronizar hace 39275 min",
+      "Sin sincronizar hace 39295 min",
+      "Una sucursal con más de 15 minutos sin sincronizar con el ERP no puede ofrecer retiro (RN-04). Las unidades disponibles publicadas ya descuentan el umbral de seguridad y las reservas de otros pedidos (RN-03)."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/11-producto-inexistente.png",
+    "ruta": "/producto/9999999",
+    "nota": "Producto inexistente",
+    "avisos": [
+      "Una sucursal con más de 15 minutos sin sincronizar con el ERP no puede ofrecer retiro (RN-04). Las unidades disponibles publicadas ya descuentan el umbral de seguridad y las reservas de otros pedidos (RN-03)."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/12-producto-error-disponibilidad.png",
+    "ruta": "/producto/2405",
+    "nota": "Fallo al consultar la disponibilidad",
+    "avisos": [
+      "No se pudo consultar la disponibilidad",
+      "Una sucursal con más de 15 minutos sin sincronizar con el ERP no puede ofrecer retiro (RN-04). Las unidades disponibles publicadas ya descuentan el umbral de seguridad y las reservas de otros pedidos (RN-03)."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/13-carrito-vacio-invitado.png",
+    "ruta": "/carrito",
+    "nota": "Excepción: carrito vacío",
+    "avisos": []
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/14-carrito-cargando.png",
+    "ruta": "/carrito",
+    "nota": "Mientras llega GET /carrito (retrasado 3 s)",
+    "avisos": []
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/15-producto-agregado-al-carrito.png",
+    "ruta": "/producto/2405",
+    "nota": "Aviso de éxito tras 'Retirar aquí'",
+    "avisos": [
+      "Producto agregado al carrito para retirar en esta sucursal.\nVer carrito",
+      "Sin sincronizar hace 30098 min",
+      "Sin sincronizar hace 30090 min",
+      "Sin sincronizar hace 30087 min",
+      "Sin sincronizar hace 30088 min",
+      "Sin sincronizar hace 30091 min",
+      "Sin sincronizar hace 30085 min",
+      "Sin sincronizar hace 30088 min",
+      "Una sucursal con más de 15 minutos sin sincronizar con el ERP no puede ofrecer retiro (RN-04). Las unidades disponibles publicadas ya descuentan el umbral de seguridad y las reservas de otros pedidos (RN-03)."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/16-carrito-invitado-con-productos.png",
+    "ruta": "/carrito",
+    "nota": "Carrito de invitado con productos y complementarios",
+    "avisos": []
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/17-registro.png",
+    "ruta": "/registro",
+    "nota": "Registro (paso previo)",
+    "avisos": [
+      "Tu cuenta quedará vinculada a tu identificador de lealtad si ya tienes uno registrado en el programa de lealtad."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/18-registro-error-documento-duplicado.png",
+    "ruta": "/registro",
+    "nota": "Excepción E-1: documento ya registrado",
+    "avisos": [
+      "Ya existe una cuenta registrada con ese documento",
+      "Tu cuenta quedará vinculada a tu identificador de lealtad si ya tienes uno registrado en el programa de lealtad."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/19-ingresar.png",
+    "ruta": "/ingresar",
+    "nota": "Inicio de sesión (paso previo)",
+    "avisos": []
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/20-ingresar-error-credenciales.png",
+    "ruta": "/ingresar",
+    "nota": "Credenciales inválidas",
+    "avisos": [
+      "Credenciales inválidas"
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/21-pedidos-sin-sesion.png",
+    "ruta": "/pedidos",
+    "nota": "Mis pedidos sin iniciar sesión",
+    "avisos": [
+      "Unauthorized"
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/22-pedidos-vacio.png",
+    "ruta": "/pedidos",
+    "nota": "Mis pedidos sin pedidos (cliente nuevo)",
+    "avisos": []
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/23-privacidad-consentimiento.png",
+    "ruta": "/privacidad",
+    "nota": "Consentimiento (destino tras el registro)",
+    "avisos": [
+      "Toda solicitud de supresión se ejecuta dentro de las 72 horas siguientes (RN-11)."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/24-carrito-registrado-con-productos.png",
+    "ruta": "/carrito",
+    "nota": "Carrito de cliente registrado",
+    "avisos": []
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/25-confirmar-pedido.png",
+    "ruta": "/pedido/confirmar",
+    "nota": "Confirmación de pedido (sucursal por defecto: la primera de la lista)",
+    "avisos": [
+      "Al confirmar, tus unidades quedan reservadas en el ERP antes de cualquier cobro (RN-05)."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/26-confirmar-error-unidades-insuficientes.png",
+    "ruta": "/pedido/confirmar",
+    "nota": "Excepción: unidades insuficientes (cantidad 9999)",
+    "avisos": [
+      "Solo hay 130 unidades disponibles para el producto 209 en la sucursal 6",
+      "Al confirmar, tus unidades quedan reservadas en el ERP antes de cualquier cobro (RN-05)."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/27-confirmar-error-sucursal-desincronizada.png",
+    "ruta": "/pedido/confirmar",
+    "nota": "Excepción: sucursal sin sincronizar hace más de 15 min",
+    "avisos": [
+      "La sucursal 3 lleva más de 15 minutos sin sincronizar con el ERP y no ofrece retiro",
+      "Al confirmar, tus unidades quedan reservadas en el ERP antes de cualquier cobro (RN-05)."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/28-confirmar-cupon-aplicado-sin-validar.png",
+    "ruta": "/pedido/confirmar",
+    "nota": "Tras 'Aplicar' con un código inventado (aún sin validar)",
+    "avisos": [
+      "Cupón aplicado al confirmar (se valida en el servidor)",
+      "Al confirmar, tus unidades quedan reservadas en el ERP antes de cualquier cobro (RN-05)."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/29-confirmar-error-cupon-invalido.png",
+    "ruta": "/pedido/confirmar",
+    "nota": "Excepción: cupón inválido",
+    "avisos": [
+      "Cupón aplicado al confirmar (se valida en el servidor)",
+      "El cupón de lealtad no existe o no está vigente",
+      "Al confirmar, tus unidades quedan reservadas en el ERP antes de cualquier cobro (RN-05)."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/30-confirmar-cupon-valido.png",
+    "ruta": "/pedido/confirmar",
+    "nota": "Cupón LEALTAD10 aplicado",
+    "avisos": [
+      "Cupón aplicado al confirmar (se valida en el servidor)",
+      "Al confirmar, tus unidades quedan reservadas en el ERP antes de cualquier cobro (RN-05)."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/31-pago-tarjeta.png",
+    "ruta": "/pago/22",
+    "nota": "Pago: pestaña Tarjeta",
+    "avisos": [
+      "Este pago lo administra Stripe, en modo de prueba. ComproYa no almacena ni procesa el número de tarjeta: solo recibe un token emitido por la pasarela (RN-06)."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/32-pago-debito-inicio.png",
+    "ruta": "/pago/22",
+    "nota": "Pago: pestaña Débito bancario",
+    "avisos": [
+      "Se simula la confirmación del banco (no hay una pasarela de débito bancario real conectada). Si no hay confirmación en 30 minutos, el pedido se cancela."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/33-pago-debito-esperando.png",
+    "ruta": "/pago/22",
+    "nota": "Estado: esperando confirmación del débito",
+    "avisos": [
+      "Esperando confirmación del débito bancario…"
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/34-pago-debito-simular-falla.png",
+    "ruta": "/pago/22",
+    "nota": "Resultado real de 'Simular confirmación' (el frontend no envía X-Debito-Secreto)",
+    "avisos": [
+      "Encabezado X-Debito-Secreto ausente o inválido",
+      "Esperando confirmación del débito bancario…"
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/35-comprobante-exito.png",
+    "ruta": "/comprobante/22",
+    "nota": "Comprobante con código de retiro",
+    "avisos": []
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/36-pago-tarjeta-error-pedido-ya-pagado.png",
+    "ruta": "/pago/22",
+    "nota": "Excepción: pago con tarjeta no admitido (pedido ya pagado)",
+    "avisos": [
+      "El pedido ya no admite un nuevo intento de pago",
+      "Este pago lo administra Stripe, en modo de prueba. ComproYa no almacena ni procesa el número de tarjeta: solo recibe un token emitido por la pasarela (RN-06)."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/37-pago-tarjeta-cancelado.png",
+    "ruta": "/pago/22?cancelado=1",
+    "nota": "Excepción: pago con tarjeta cancelado o fallido (regreso desde Stripe)",
+    "avisos": [
+      "El pago con tarjeta fue cancelado o no se completó.",
+      "Este pago lo administra Stripe, en modo de prueba. ComproYa no almacena ni procesa el número de tarjeta: solo recibe un token emitido por la pasarela (RN-06)."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/38-pedidos-con-estados.png",
+    "ruta": "/pedidos",
+    "nota": "Mis pedidos: pagado y cancelado por débito rechazado",
+    "avisos": []
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/39-comprobante-reintentando.png",
+    "ruta": "/comprobante/24",
+    "nota": "Estado intermedio: 'Confirmando el pago con la pasarela…'",
+    "avisos": []
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/40-comprobante-no-disponible.png",
+    "ruta": "/comprobante/24",
+    "nota": "Excepción: comprobante no disponible (pedido sin pagar)",
+    "avisos": [
+      "El pago aún no se ha confirmado. Si acabas de pagar con tarjeta, espera unos segundos y recarga."
+    ]
+  },
+  {
+    "ancho": 390,
+    "archivo": "390/41-comprobante-pedido-de-otro-cliente-403.png",
+    "ruta": "/comprobante/22",
+    "nota": "Excepción: pedido de otro cliente (la API responde 403)",
+    "avisos": [
+      "El pago aún no se ha confirmado. Si acabas de pagar con tarjeta, espera unos segundos y recarga."
+    ]
+  }
+]

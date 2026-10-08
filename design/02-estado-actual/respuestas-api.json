@@ -1,0 +1,34 @@
+{
+  "firma_webhook_invalida": {
+    "status": 400,
+    "cuerpo": {
+      "message": "Firma de webhook inválida: No signatures found matching the expected signature for payload. Are you passing the raw request body you received from Stripe? \n If a webhook request is being forwarded by a third-party tool, ensure that the exact request body, including JSON formatting and new line style, is preserved.\n\nLearn more about webhook signing and explore webhook integration examples for various frameworks at https://github.com/stripe/stripe-node#webhook-signing\n",
+      "error": "Bad Request",
+      "statusCode": 400
+    }
+  },
+  "secreto_debito_invalido": {
+    "status": 401,
+    "cuerpo": {
+      "message": "Encabezado X-Debito-Secreto ausente o inválido",
+      "error": "Unauthorized",
+      "statusCode": 401
+    }
+  },
+  "secreto_debito_ausente": {
+    "status": 401,
+    "cuerpo": {
+      "message": "Encabezado X-Debito-Secreto ausente o inválido",
+      "error": "Unauthorized",
+      "statusCode": 401
+    }
+  },
+  "producto_no_publicado": {
+    "status": 404,
+    "cuerpo": {
+      "message": "El producto no existe o no está publicado en el canal",
+      "error": "Not Found",
+      "statusCode": 404
+    }
+  }
+}

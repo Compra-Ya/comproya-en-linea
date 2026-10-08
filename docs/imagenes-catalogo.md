@@ -10,3 +10,17 @@ Cuatro productos del catálogo (`backend/prisma/lib/generate-curated.ts`, códig
 | Licuadora de Vaso 1.5L | `licuadora.jpg` | https://unsplash.com/photos/1585237672814-8f85a8118bf6 |
 
 Servidas por el backend en `http://localhost:3001/media/productos-curados/*.jpg` (`backend/src/main.ts`, `useStaticAssets`), fuera del prefijo `/api`.
+
+## Imágenes reales del catálogo (Tarea B del handoff de diseño)
+
+Las fotos de producto viven en `frontend/public/productos/` (WebP, ancho máximo 800 px) y se sirven desde el propio frontend; **no** se enlaza en caliente a ningún sitio externo. Decisión: carpeta local por ahora; migrar a un bucket de Cloud Storage (`docs/despliegue-gcp.md`, sección 4) solo si el catálogo crece.
+
+- `frontend/public/productos/dummyjson/{id}.webp` — foto oficial de cada producto de DummyJSON (nombre real).
+- `frontend/public/productos/retail/{tipo}-NN.webp` — fotos de Alkosto y Ktronix para los productos sintéticos, elegidas por el **tipo de producto** del nombre (silla, mesa, teclado…), porque el nombre sintético no coincide con la categoría.
+- `frontend/public/productos/curados/*.webp` — los 4 productos curados (Unsplash, tabla anterior), convertidos a WebP.
+- `backend/prisma/data/imagenes-manifest.json` — origen de cada foto (tienda, URL de la página, URL original, fecha de descarga).
+- `design/imagenes-origen.csv` — una fila por producto con imagen (productId, nombre, tienda, URL de la página, URL de la imagen, fecha de descarga, archivo local).
+
+Cómo se obtuvieron: `backend/scripts/scrape-images.ts` lee los sitemaps de producto de Alkosto y Ktronix (permitidos por su `robots.txt`; se descartó la búsqueda interna y la API de Éxito, que sus `robots.txt` prohíben), con máximo 1 solicitud por segundo por sitio, User-Agent identificable y caché local en `backend/scripts/.cache/` (no versionada). Ante 403, 429 o CAPTCHA el sitio se marca como no disponible y no se reintenta: Éxito respondió 429 en la primera solicitud y quedó descartado.
+
+Cómo se aplican a la base: `backend/scripts/apply-product-images.ts` (idempotente; `--dry-run` para ensayar), con su prueba en `backend/prisma/lib/product-images.spec.ts`. Plan para la base desplegada: `design/plan-ejecucion-bd-desplegada.md`.

@@ -18,7 +18,7 @@ export const CURATED_PRODUCTS: ProductSeed[] = [
     digitalPrice: 3299900,
     published: true,
     source: "SYNTHETIC",
-    imageUrl: "/media/productos-curados/refrigerador.jpg",
+    imageUrl: "/productos/curados/refrigerador.webp",
   },
   {
     homologatedCode: "CURA-000002",
@@ -29,7 +29,7 @@ export const CURATED_PRODUCTS: ProductSeed[] = [
     digitalPrice: 2459900,
     published: true,
     source: "SYNTHETIC",
-    imageUrl: "/media/productos-curados/lavadora.jpg",
+    imageUrl: "/productos/curados/lavadora.webp",
   },
   {
     homologatedCode: "CURA-000003",
@@ -40,7 +40,7 @@ export const CURATED_PRODUCTS: ProductSeed[] = [
     digitalPrice: 1899900,
     published: true,
     source: "SYNTHETIC",
-    imageUrl: "/media/productos-curados/televisor.jpg",
+    imageUrl: "/productos/curados/televisor.webp",
   },
   {
     homologatedCode: "CURA-000004",
@@ -51,6 +51,6 @@ export const CURATED_PRODUCTS: ProductSeed[] = [
     digitalPrice: 184900,
     published: true,
     source: "SYNTHETIC",
-    imageUrl: "/media/productos-curados/licuadora.jpg",
+    imageUrl: "/productos/curados/licuadora.webp",
   },
 ];

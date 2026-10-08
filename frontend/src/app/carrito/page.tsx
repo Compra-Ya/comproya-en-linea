@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { api, ApiError, setCartToken } from "@/lib/api";
 import type { Carrito, Producto } from "@/lib/types";
 import ShopHeader from "@/components/ShopHeader";
+import { ProductImage } from "@/components/ProductImage";
 
 // P-7 Administración del carrito (CU-07) + P-8 Productos complementarios
 // (CU-08, hasta 4 — tope del canon, C-05; extensión de P-7, no una pantalla
@@ -86,7 +87,7 @@ export default function CarritoPage() {
           {carrito?.items.map((item) => (
             <div className="line-item" key={item.id}>
               <div className="thumb">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4"><rect x="5" y="2" width="14" height="20" rx="1.5" /><path d="M5 11h14" /></svg>
+                <ProductImage imageUrl={item.product.imageUrl} nombre={item.product.name} tamano={28} />
               </div>
               <div style={{ flex: 1, minWidth: 160 }}>
                 <span style={{ fontSize: 13, fontWeight: 600 }}>{item.product.name}</span>
@@ -112,7 +113,7 @@ export default function CarritoPage() {
                 {complementarios.map((p) => (
                   <div className="line-item" key={p.id} style={{ padding: "14px 16px" }}>
                     <div className="thumb" style={{ width: 46, height: 46 }}>
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="4" y="4" width="16" height="16" rx="2" /></svg>
+                      <ProductImage imageUrl={p.imageUrl} nombre={p.name} tamano={22} />
                     </div>
                     <div style={{ flex: 1 }}>
                       <span style={{ fontSize: 12.5, fontWeight: 600 }}>{p.name}</span>
