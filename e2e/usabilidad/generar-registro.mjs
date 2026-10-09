@@ -6,7 +6,7 @@ import ExcelJS from "exceljs";
 import { readFileSync, mkdirSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { CASOS, INVENTARIOS, PARTICIPANTES, SUS, TAREAS } from "./tareas.mjs";
+import { CASOS, PARTICIPANTES, SUS, TAREAS } from "./tareas.mjs";
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
 const SALIDA = path.resolve(AQUI, "../../docs/usabilidad");
@@ -57,8 +57,8 @@ const lineas = [
   ["Cómo se usa", true],
   ["1. Las celdas amarillas son las que se llenan. Todo lo demás se calcula solo: no escribas sobre las celdas blancas ni grises.", false],
   ["2. «Parametros»: factor del usuario nuevo y límites; los tiempos objetivo se recalculan. «Participantes»: perfil de cada persona.", false],
-  [`3. Una hoja por persona (${PARTICIPANTES.join(", ")}): una fila por tarea (T01 a T27). Anota tiempo en segundos, clics, errores (N navegación, S selección, D datos), ayudas, consultas externas, si completó o acertó, y el SEQ (1 a 7).`, false],
-  ["4. «Iconos» (caso 2): marca 1 si la persona comprendió el control sin ayuda y 0 si no, una columna por persona. «SUS»: las respuestas de 1 a 5 de cada persona.", false],
+  [`3. Una hoja por persona (${PARTICIPANTES.join(", ")}): una fila por tarea (24 tareas; T04 a T06 están retiradas porque el caso 2 no se aplica). Anota tiempo en segundos, clics, errores (N navegación, S selección, D datos), ayudas, consultas externas, si completó o acertó, y el SEQ (1 a 7).`, false],
+  ["4. «SUS»: las respuestas de 1 a 5 de cada persona. El caso 2 (íconos y textos) no se aplica en esta evaluación.", false],
   ["5. «Metricas»: el valor de cada caso por persona, si cumple, y del grupo: cuántas personas cumplen, la media y el error estándar entre personas.", false],
   ["6. «Grupo»: por tarea, el tiempo de cada persona con su media y error estándar, la razón con el tiempo del equipo, los clics, los errores y las ayudas; y un resumen general.", false],
   ["", false],
@@ -124,10 +124,6 @@ const COLS = [
 const FILA0 = 5;
 const fila = (k) => FILA0 + k - 1; // T01 -> 5
 const ultima = FILA0 + TAREAS.length - 1; // 31
-const bloquesIconos = { T04: [5, 14], T05: [15, 22], T06: [23, 30] };
-const totalIconos = INVENTARIOS.T04.length + INVENTARIOS.T05.length + INVENTARIOS.T06.length; // 26
-const COL_ICONO = (p) => colLetra(5 + p); // E..I comprendió
-const COL_GLOBO = (p) => colLetra(5 + NP + p); // J..N globo
 
 for (const [pi, cod] of PARTICIPANTES.entries()) {
   const ta = wb.addWorksheet(cod, { views: [{ state: "frozen", xSplit: 3, ySplit: 4 }] });
@@ -135,8 +131,8 @@ for (const [pi, cod] of PARTICIPANTES.entries()) {
   titulo(ta, `Registro de tareas del participante ${cod}`, "Amarillo = se llena. Las tareas de comprensión (T01 a T06, T10 a T12, T16 a T18) no llevan tiempo ni clics; se responden de palabra.");
   ta.getRow(4).values = COLS.map(([n]) => n);
   encabezado(ta.getRow(4));
-  TAREAS.forEach((t, i) => {
-    const r = FILA0 + i;
+  TAREAS.forEach((t) => {
+    const r = fila(Number(t.id.slice(1)));
     const b = base(t.id);
     const op = t.tipo === "operacion";
     ta.getCell(`A${r}`).value = t.id; ta.getCell(`B${r}`).value = t.caso; ta.getCell(`C${r}`).value = t.titulo; ta.getCell(`D${r}`).value = t.enunciado;
@@ -172,47 +168,14 @@ for (const [pi, cod] of PARTICIPANTES.entries()) {
     ta.getCell(`U${r}`).alignment = { horizontal: "center", vertical: "top" };
   }
   colorSiNo(ta, `L${FILA0}:L${ultima}`); colorSiNo(ta, `U${FILA0}:U${ultima}`);
-  // T04 a T06: el resultado de la tarea sale de la hoja Iconos
-  const colIc = COL_ICONO(pi);
-  for (const [id, [a, b]] of Object.entries(bloquesIconos)) {
-    const r = fila(Number(id.slice(1)));
-    ta.getCell(`U${r}`).value = { formula: `IF(COUNT(Iconos!${colIc}${a}:${colIc}${b})=0,"",SUM(Iconos!${colIc}${a}:${colIc}${b})&" de "&ROWS(Iconos!${colIc}${a}:${colIc}${b}))` };
-    ta.getCell(`U${r}`).dataValidation = undefined; ta.getCell(`U${r}`).fill = relleno(GRIS);
+  // T04 a T06: tareas retiradas (el caso 2 no se aplica)
+  for (const k of [4, 5, 6]) {
+    const r = fila(k);
+    ta.getCell(`A${r}`).value = `T0${k}`; ta.getCell(`C${r}`).value = "Retirada: el caso 2 (íconos y textos) no se aplica";
+    for (let c = 1; c <= COLS.length; c++) gris(ta.getCell(r, c));
+    ta.getRow(r).height = 22;
   }
 }
-
-// ------------------------------------------------------------ Iconos (caso 2), una columna por persona
-const ic = wb.addWorksheet("Iconos", { views: [{ state: "frozen", xSplit: 4, ySplit: 4 }] });
-ic.columns = [{ width: 8 }, { width: 6 }, { width: 56 }, { width: 46 }, ...PARTICIPANTES.map(() => ({ width: 8 })), ...PARTICIPANTES.map(() => ({ width: 8 })), { width: 40 }];
-titulo(ic, "Caso 2: comprensión de íconos y textos", "Marca 1 si la persona describió el control correctamente sin ayuda, 0 si no. «Globo de ayuda» = el texto que aparece al pasar el mouse.");
-ic.getRow(4).values = ["Tarea", "N.º", "Elemento de la interfaz", "Significado esperado (rúbrica)", ...PARTICIPANTES.map((p) => `${p}\n¿comprendió?\n(1/0)`), ...PARTICIPANTES.map((p) => `${p}\n¿vio el globo?\n(1/0)`), "Observaciones"];
-encabezado(ic.getRow(4), 56);
-let rI = 5;
-for (const id of ["T04", "T05", "T06"]) {
-  INVENTARIOS[id].forEach(([elem, esperado], i) => {
-    ic.getCell(`A${rI}`).value = id; ic.getCell(`B${rI}`).value = i + 1; ic.getCell(`C${rI}`).value = elem; ic.getCell(`D${rI}`).value = esperado;
-    for (const c of ["A", "B", "C", "D"]) { const x = ic.getCell(`${c}${rI}`); x.border = borde; x.alignment = { wrapText: true, vertical: "top", horizontal: c === "A" || c === "B" ? "center" : "left" }; }
-    for (let p = 0; p < NP; p++) for (const c of [COL_ICONO(p), COL_GLOBO(p)]) {
-      const cel = ic.getCell(`${c}${rI}`);
-      entrada(cel); cel.alignment = { horizontal: "center" };
-      cel.dataValidation = { type: "list", allowBlank: true, formulae: ['"0,1"'] };
-    }
-    entrada(ic.getCell(`${colLetra(5 + 2 * NP)}${rI}`));
-    ic.getRow(rI).height = 32;
-    rI++;
-  });
-}
-const rA = rI + 1, rB = rI + 2, rX = rI + 3; // 32, 33, 34
-ic.getCell(`C${rA}`).value = "A: controles comprendidos sin ayuda"; ic.getCell(`C${rB}`).value = "B: controles del inventario"; ic.getCell(`C${rX}`).value = "X = A / B (criterio: ≥ 0,80)";
-for (let p = 0; p < NP; p++) {
-  const c = COL_ICONO(p);
-  ic.getCell(`${c}${rA}`).value = { formula: `SUM(${c}5:${c}${rI - 1})` };
-  ic.getCell(`${c}${rB}`).value = { formula: `ROWS(${c}5:${c}${rI - 1})` };
-  ic.getCell(`${c}${rX}`).value = { formula: `IF(COUNT(${c}5:${c}${rI - 1})<ROWS(${c}5:${c}${rI - 1}),"",${c}${rA}/${c}${rB})` };
-  ic.getCell(`${c}${rX}`).numFmt = "0%";
-  for (const r of [rA, rB, rX]) { ic.getCell(`${c}${r}`).font = { bold: true }; ic.getCell(`${c}${r}`).alignment = { horizontal: "center" }; }
-}
-for (const r of [rA, rB, rX]) ic.getCell(`C${r}`).font = { bold: true };
 
 // ------------------------------------------------------------ SUS, una columna por persona
 const su = wb.addWorksheet("SUS");
@@ -258,7 +221,7 @@ const umbral = (v) => `IF(${v}="","",IF(${v}>=Parametros!$B$8,"Sí","No"))`;
 const igual1 = (v) => `IF(${v}="","",IF(${v}=1,"Sí","No"))`;
 const FORM = {
   1: (h, ids) => ({ v: prop("U", h, ids), c: umbral, nota: "Pantallas con el propósito bien descrito, de 3." }),
-  2: (h, ids, p) => ({ v: `Iconos!${COL_ICONO(p)}${rX}`, c: umbral, nota: `Controles comprendidos sin ayuda, de ${totalIconos}.` }),
+  2: () => ({ v: '"—"', c: () => '"—"', nota: "No aplicado (decisión del equipo): sin tareas ni métrica." }),
   3: (h, ids) => ({ v: prop("U", h, ids), c: (v) => `IF(OR(${v}="",COUNT(${rg(h, "I", ids)})<3),"",IF(AND(${v}=1,COUNTIF(${rg(h, "L", ids)},"No")=0),"Sí","No"))`, nota: "Compras completadas sin ayuda y dentro del tiempo objetivo, de 3." }),
   4: (h, ids) => ({ v: prop("U", h, ids), c: umbral, nota: "Mensajes de error entendidos con la acción correcta, de 3." }),
   5: (h, ids) => ({ v: `IF(COUNT(${rg(h, "T", ids)})<3,"",SUMPRODUCT(--(${rg(h, "T", ids)}=0))/3)`, c: (v) => `IF(${v}="","",IF(AND(${v}=1,SUM(${rg(h, "T", ids)})=0),"Sí","No"))`, nota: "Compras (T07 a T09) sin consultas externas, de 3." }),
@@ -297,6 +260,7 @@ CASOS.forEach((c, i) => {
   }
   me.getCell(`A${r}`).alignment = { horizontal: "center", vertical: "top" };
   me.getRow(r).height = 48;
+  if (c.aplicado === false) for (let k = 1; k <= G0 + 6; k++) gris(me.getCell(r, k));
 });
 colorSiNo(me, `E5:${gOk}16`);
 
@@ -310,8 +274,8 @@ encabezado(gr.getRow(4), 48);
 const cT0 = 7; // columna G = T de P01
 const cMedia = colLetra(cT0 + NP), cEE = colLetra(cT0 + NP + 1), cn = colLetra(cT0 + NP + 2), cRazon = colLetra(cT0 + NP + 3), cIdeal = colLetra(cT0 + NP + 4), cClics = colLetra(cT0 + NP + 5), cEfic = colLetra(cT0 + NP + 6), cErr = colLetra(cT0 + NP + 7), cAyu = colLetra(cT0 + NP + 8), cCum = colLetra(cT0 + NP + 9), cOk = colLetra(cT0 + NP + 10), cSeq = colLetra(cT0 + NP + 11);
 const a = (col, r) => PARTICIPANTES.map((c) => `${q(c)}!${col}${r}`).join(",");
-TAREAS.forEach((t, i) => {
-  const r = FILA0 + i;
+TAREAS.forEach((t) => {
+  const r = fila(Number(t.id.slice(1)));
   const op = t.tipo === "operacion" && base(t.id) && !base(t.id).error;
   gr.getCell(`A${r}`).value = t.id; gr.getCell(`B${r}`).value = t.caso; gr.getCell(`C${r}`).value = t.titulo; gr.getCell(`D${r}`).value = op ? "Operativa" : "Comprensión";
   for (let k = 1; k <= 4; k++) { const x = gr.getCell(r, k); x.border = borde; x.fill = relleno(AZUL_CLARO); x.alignment = { wrapText: true, vertical: "top", horizontal: k === 3 ? "left" : "center" }; }
@@ -336,9 +300,7 @@ TAREAS.forEach((t, i) => {
   gr.getCell(`${cErr}${r}`).value = { formula: `IF(COUNT(${a("R", r)})=0,"",AVERAGE(${a("R", r)}))` };
   gr.getCell(`${cAyu}${r}`).value = { formula: `IF(COUNT(${a("S", r)})=0,"",AVERAGE(${a("S", r)}))` };
   gr.getCell(`${cSeq}${r}`).value = { formula: `IF(COUNT(${a("V", r)})=0,"",AVERAGE(${a("V", r)}))` };
-  const esIcono = t.id in bloquesIconos;
-  if (esIcono) gris(gr.getCell(`${cOk}${r}`));
-  else {
+  {
     const nn = PARTICIPANTES.map((c) => `(${q(c)}!U${r}="Sí")+(${q(c)}!U${r}="No")`).join("+");
     const si = PARTICIPANTES.map((c) => `(${q(c)}!U${r}="Sí")`).join("+");
     gr.getCell(`${cOk}${r}`).value = { formula: `IF((${nn})=0,"",(${si})&" de "&(${nn}))` };
@@ -347,6 +309,11 @@ TAREAS.forEach((t, i) => {
   for (const col of [cErr, cAyu, cSeq]) gr.getCell(`${col}${r}`).numFmt = "0.0";
   gr.getRow(r).height = 30;
 });
+for (const k of [4, 5, 6]) {
+  const r = fila(k);
+  gr.getCell(`A${r}`).value = `T0${k}`; gr.getCell(`C${r}`).value = "Retirada: el caso 2 no se aplica";
+  for (let c = 1; c <= cT0 + NP + 11; c++) gris(gr.getCell(r, c));
+}
 gr.getCell(`A${ultima + 3}`).value = "Resumen general";
 gr.getCell(`A${ultima + 3}`).font = { bold: true, size: 12, color: { argb: AZUL } };
 const rs = ultima + 4;
@@ -354,7 +321,7 @@ const unos = (c) => `(COUNTIF(${q(c)}!U${FILA0}:U${ultima},"Sí")+COUNTIF(${q(c)
 const resumen = [
   ["Participantes con datos registrados", `${PARTICIPANTES.map(unos).join("+")}`, "de " + NP, "0"],
   ["Casos que cumple el grupo", `COUNTIF(Metricas!${gOk}5:${gOk}16,"Sí")`, "al menos el 80 % de las personas cumple el caso", "0"],
-  ["Casos evaluados", `COUNTIF(Metricas!${gOk}5:${gOk}16,"Sí")+COUNTIF(Metricas!${gOk}5:${gOk}16,"No")`, "de 12", "0"],
+  ["Casos evaluados", `COUNTIF(Metricas!${gOk}5:${gOk}16,"Sí")+COUNTIF(Metricas!${gOk}5:${gOk}16,"No")`, "de 11 (el caso 2 no se aplica)", "0"],
   ["Porcentaje de casos que cumple el grupo", `IF(D${rs + 2}=0,"",D${rs + 1}/D${rs + 2})`, "casos que cumple el grupo ÷ casos evaluados", "0%"],
   ["Razón media T usuario / T ref (tareas operativas)", `IFERROR(AVERAGE(${cRazon}${FILA0}:${cRazon}${ultima}),"")`, "1,00 = igual que el experto; el objetivo suele ser 3,00", "0.00"],
   ["Eficiencia media de clics (ideales / usuario)", `IFERROR(AVERAGE(${cEfic}${FILA0}:${cEfic}${ultima}),"")`, "1,00 = ruta ideal", "0.00"],

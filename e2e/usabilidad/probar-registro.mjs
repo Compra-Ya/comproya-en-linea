@@ -45,8 +45,6 @@ put("P04", "T23", { U: "No" });
 put("P04", "T27", { O: 2, P: 1, Q: 0 });
 // P05: solo respondió T01 a T03
 si("P05", ids("T01", "T03"));
-// íconos comprendidos por participante (de 26)
-const iconos = { P01: 24, P02: 20, P03: 26, P04: 22, P05: 0 };
 // SUS: respuestas por participante
 const susResp = { P01: Array(10).fill(0).map((_, i) => (i % 2 === 0 ? 5 : 1)), P02: Array(10).fill(4), P03: Array(10).fill(3), P04: Array(10).fill(0).map((_, i) => (i % 2 === 0 ? 4 : 2)), P05: [] };
 
@@ -54,8 +52,6 @@ for (const p of PART) {
   const h = wb.getWorksheet(p);
   for (const [id, v] of Object.entries(datos[p])) for (const [col, val] of Object.entries(v)) h.getCell(`${col}${fila(id)}`).value = val;
 }
-const ic = wb.getWorksheet("Iconos");
-PART.forEach((p, k) => { for (let r = 5; r <= 30; r++) if (p !== "P05") ic.getCell(r, 5 + k).value = r - 5 < iconos[p] ? 1 : 0; });
 const su = wb.getWorksheet("SUS");
 PART.forEach((p, k) => susResp[p].forEach((v, i) => (su.getCell(5 + i, 3 + k).value = v)));
 
@@ -70,7 +66,7 @@ function esperado(p, n) {
   const res = (v, ok) => ({ v, ok: v === null ? null : ok });
   switch (n) {
     case 1: { const v = sums(ids("T01", "T03")); return res(v, v >= 0.8); }
-    case 2: { if (p === "P05") return res(null); const v = iconos[p] / 26; return res(v, v >= 0.8); }
+    case 2: return { v: "—", ok: "—" }; // caso 2 no aplicado: la hoja muestra «—»
     case 3: { const L = ids("T07", "T09"); const v = sums(L); if (v === null || !todos(p, L, "I")) return res(null); return res(v, v === 1 && L.every((id) => d(p, id, "I") <= obj(id))); }
     case 4: { const v = sums(ids("T10", "T12")); return res(v, v >= 0.8); }
     case 5: { const L = ids("T07", "T09"); if (!todos(p, L, "T")) return res(null); const v = L.filter((id) => d(p, id, "T") === 0).length / 3; return res(v, v === 1 && L.every((id) => d(p, id, "T") === 0)); }
@@ -120,8 +116,8 @@ for (let n = 1; n <= 12; n++) {
   PART.forEach((p, k) => {
     const e = esperado(p, n);
     verificar(`Metricas caso ${n} ${p} valor`, valor("Metricas", `${letra(5 + 2 * k)}${r}`), e.v);
-    verificar(`Metricas caso ${n} ${p} cumple`, valor("Metricas", `${letra(6 + 2 * k)}${r}`), e.ok === null ? null : e.ok ? "Sí" : "No");
-    if (e.v !== null) { vals.push(e.v); cum.push(e.ok); }
+    verificar(`Metricas caso ${n} ${p} cumple`, valor("Metricas", `${letra(6 + 2 * k)}${r}`), e.ok === null ? null : e.ok === "—" ? "—" : e.ok ? "Sí" : "No");
+    if (typeof e.v === "number") { vals.push(e.v); cum.push(e.ok); }
   });
   verificar(`Metricas caso ${n} n`, valor("Metricas", `O${r}`), vals.length);
   verificar(`Metricas caso ${n} cumplen`, valor("Metricas", `P${r}`), cum.filter(Boolean).length);
@@ -153,7 +149,6 @@ for (const id of ["T07", "T09", "T20", "T27"]) {
   const con = PART.filter((p) => d(p, "T07", "U") !== undefined).length;
   verificar("Grupo T07 completaron", valor("Grupo", `V${r}`), `${sis} de ${con}`);
   verificar("Grupo T07 SEQ medio", valor("Grupo", `W${r}`), 6);
-  verificar("Grupo T04 completaron (íconos)", valor("Grupo", `V${fila("T04")}`), null);
 }
 
 // SUS por persona y del grupo
@@ -167,8 +162,6 @@ PART.forEach((p, k) => {
 verificar("SUS media", valor("SUS", "M16"), media(susVals));
 verificar("SUS error estándar", valor("SUS", "N16"), ee(susVals));
 
-// Íconos por persona
-PART.forEach((p, k) => verificar(`Iconos X ${p}`, valor("Iconos", `${letra(5 + k)}34`), p === "P05" ? null : iconos[p] / 26));
 
 // Resumen del grupo
 const resumenFila = (etq) => {
@@ -176,7 +169,7 @@ const resumenFila = (etq) => {
   for (let r = 0; r < dim.height; r++) if (hf.getCellValue({ sheet: hf.getSheetId("Grupo"), row: r, col: 0 }) === etq) return hf.getCellValue({ sheet: hf.getSheetId("Grupo"), row: r, col: 3 });
   return "no encontrada";
 };
-const gruposOk = []; for (let n = 1; n <= 12; n++) { const v = []; const c = []; PART.forEach((p) => { const e = esperado(p, n); if (e.v !== null) { v.push(e.v); c.push(e.ok); } }); if (v.length) gruposOk.push(c.filter(Boolean).length / v.length >= 0.8); }
+const gruposOk = []; for (let n = 1; n <= 12; n++) { const v = []; const c = []; PART.forEach((p) => { const e = esperado(p, n); if (typeof e.v === "number") { v.push(e.v); c.push(e.ok); } }); if (v.length) gruposOk.push(c.filter(Boolean).length / v.length >= 0.8); }
 verificar("Resumen: participantes con datos", resumenFila("Participantes con datos registrados"), 5);
 verificar("Resumen: casos que cumple el grupo", resumenFila("Casos que cumple el grupo"), gruposOk.filter(Boolean).length);
 verificar("Resumen: casos evaluados", resumenFila("Casos evaluados"), gruposOk.length);

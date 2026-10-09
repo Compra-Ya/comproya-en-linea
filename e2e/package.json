@@ -5,7 +5,7 @@
   "scripts": {
     "test": "playwright test",
     "usabilidad:medir": "node usabilidad/medir-linea-base.mjs",
-    "usabilidad:documentos": "node usabilidad/generar-evaluacion.mjs && node usabilidad/generar-guia.mjs && node usabilidad/generar-registro.mjs",
+    "usabilidad:documentos": "node usabilidad/generar-evaluacion.mjs && node usabilidad/generar-guia.mjs && node usabilidad/generar-guia-evaluador.mjs && node usabilidad/generar-registro.mjs",
     "usabilidad:probar": "node usabilidad/probar-registro.mjs"
   },
   "devDependencies": {

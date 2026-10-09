@@ -10,7 +10,7 @@ import { writeFileSync } from "fs";
 import {
   ANCHO_H, ANCHO_V, COLOR, ESTILOS, FUENTE, H1, H2, H3, NUMERACIONES, NUMEROS, P, PC, SALTO, VACIO, VERTICAL, VINETAS, celda, ficha, fmtSeg, pie, tabla, runs,
 } from "./lib/doc.mjs";
-import { BLOQUES, CASOS, DATOS_PRUEBA, DATOS_UNICOS, EQUIPO, INVENTARIOS, PARTICIPANTES, REFERENCIAS, SEQ, SUS, TAREAS } from "./tareas.mjs";
+import { BLOQUES, CASOS, DATOS_PRUEBA, DATOS_UNICOS, EQUIPO, PARTICIPANTES, REFERENCIAS, SEQ, SUS, TAREAS } from "./tareas.mjs";
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
 const RAIZ = path.resolve(AQUI, "../..");
@@ -60,7 +60,7 @@ const portada = [
 const intro = [
   H1("1. Introducción"),
   P("Este documento evalúa la usabilidad del Caso de Uso 2 (Compra completa en el canal digital) con las métricas externas del estándar ISO/IEC 9126-2, sección 8.3 «Métricas de usabilidad» (ISO/IEC, 2003a; material de clase «7. Métricas externas de usabilidad», Sierra González, 2026). A diferencia de las métricas internas de funcionalidad (Cancimance Pabón & Serrano Rojas, 2026d), que se miden sobre el código, estas se miden con una persona que usa el sistema en ejecución: comprensibilidad (casos de prueba 1 a 7) y facilidad de aprendizaje (casos 8 a 12). Los casos coinciden, en el mismo orden, con los requisitos UT-01 a UT-12 del diseño (design/04-requisitos-usabilidad.md)."),
-  P("Se aplican los doce casos asignados, con tres tareas por caso. Cada sesión se registra con video de la pantalla, medición de la interacción (tiempo, clics, errores y ayudas, con Camtasia o una herramienta similar) y el audio del participante pensando en voz alta (Think Aloud). Participan **cinco personas** (P01 a P05). El docente indicó un solo usuario para este primer sprint; el equipo decidió ampliar a cinco para que la media y el error estándar se calculen entre personas, como pide el material de clase. El estándar recomienda al menos ocho (ISO/IEC, 2003a), de modo que los resultados son indicativos y no concluyentes (sección 4.5)."),
+  P("De los doce casos asignados se aplican once: el caso 2 (comprensión de iconografía y textos) **no se aplica** por decisión del equipo y conserva su número para no perder la trazabilidad con el material de clase (sección 5.1). Cada caso aplicado lleva tres tareas. Cada sesión se registra con video de la pantalla, medición de la interacción (tiempo, clics, errores y ayudas, con Camtasia o una herramienta similar) y el audio del participante pensando en voz alta (Think Aloud). Participan **cinco personas** (P01 a P05). El docente indicó un solo usuario para este primer sprint; el equipo decidió ampliar a cinco para que la media y el error estándar se calculen entre personas, como pide el material de clase. El estándar recomienda al menos ocho (ISO/IEC, 2003a), de modo que los resultados son indicativos y no concluyentes (sección 4.5)."),
   P("El documento llega **preparado**: trae las tareas redactadas, la ruta ideal de cada una, los tiempos de referencia del equipo medidos sobre el sistema real y las tablas para registrar a los cinco participantes y comparar su desempeño con el del equipo. Las celdas sombreadas en amarillo se llenan durante y después de las sesiones; ninguna de ellas fue estimada de antemano. Lo acompañan la **guía del participante** (las tareas, listas para imprimir y entregar) y una **hoja de cálculo** con una hoja por persona que calcula las métricas de cada una y del grupo."),
   P("Además del material de clase, la sección 9 revisa otras pruebas de usabilidad viables en un proyecto de software (mapas de calor, seguimiento ocular, pruebas remotas y cuestionarios estandarizados, entre otras) y recomienda cuáles aplicar en este sprint."),
   P("**Estado del documento:** preparado el 9 de octubre de 2026. Resultados pendientes de las sesiones con el participante.", { alinear: AlignmentType.LEFT }),
@@ -70,10 +70,10 @@ const pantallas = tabla(
   [2300, 2700, 4840],
   ["Pantalla", "Ruta", "Tareas que la usan"],
   [
-    ["Catálogo", "/ y /?q=", "T01, T04, T05, T19, T20, T21"],
+    ["Catálogo", "/ y /?q=", "T01, T19, T20, T21"],
     ["Categoría", "/categoria/[id]", "T08, T14, T20"],
     ["Detalle de producto", "/producto/[id]", "T09, T14, T21"],
-    ["Carrito", "/carrito", "T02, T06, T13, T14, T15"],
+    ["Carrito", "/carrito", "T02, T13, T14, T15"],
     ["Datos y envío", "/pedido/confirmar", "T03, T11, T12, T23, T25, T26, T27"],
     ["Pago", "/pago/[pedido]", "T16"],
     ["Pedido confirmado", "/comprobante/[pedido]", "T07, T08, T09, T17, T22"],
@@ -162,11 +162,11 @@ const metodo = [
   H1("4. Método"),
   H2("4.1 Diseño de la evaluación"),
   ...VINETAS([
-    `**Cinco participantes (P01 a P05)** y **doce casos de prueba**, con **tres tareas por caso** (27 tareas: T01 a T27). Cada persona hace las 27 tareas en su propia sesión: ${NP} sesiones 1 y ${NP} sesiones 2. Las compras T07 a T09 sirven a cuatro casos (3, 5, 9 y 10) porque en cada uno se mide una cosa distinta sobre la misma grabación; las preguntas de los estados del sistema (T16 a T18) y la de «Datos y envío» (T03) se hacen dentro de las compras.`,
-    "**Dos sesiones.** La sesión 1 (unos 60 minutos, bloques 1 a 8) cubre los casos 1 a 10 y 12. La sesión 2, **al día siguiente** (unos 15 minutos), cubre el caso 11 (retención).",
+    `**Cinco participantes (P01 a P05)** y **once casos de prueba** (el caso 2 no se aplica), con **tres tareas por caso** (24 tareas: T01 a T27 sin T04, T05 ni T06, que eran del caso 2 y no se renumeran). Cada persona hace las 24 tareas en su propia sesión: ${NP} sesiones 1 y ${NP} sesiones 2. Las compras T07 a T09 sirven a cuatro casos (3, 5, 9 y 10) porque en cada uno se mide una cosa distinta sobre la misma grabación; las preguntas de los estados del sistema (T16 a T18) y la de «Datos y envío» (T03) se hacen dentro de las compras.`,
+    "**Dos sesiones.** La sesión 1 (unos 50 minutos, bloques 1 a 8) cubre los casos 1 y 3 a 10 y 12. La sesión 2, **al día siguiente** (unos 12 minutos), cubre el caso 11 (retención).",
     "**Sin ayuda.** El evaluador lee cada tarea tal cual, no explica nombres de botones y no corrige (sección 4.6).",
     "**Mismo protocolo para todas las personas:** el mismo orden de bloques, las mismas frases y el mismo estado inicial; cada persona usa su propia cuenta (anexo F), así que las sesiones no se interfieren.",
-    "**Orden.** Los casos 1 y 2 van primero, con la persona sin tocar nada, porque dependen de la primera impresión; la función básica (caso 8) va antes de cualquier compra para medir el aprendizaje de la primera vez; el cupón (caso 12) va antes de los errores (caso 4) para no revelar que existe el campo de cupón.",
+    "**Orden.** El caso 1 va primero, con la persona sin tocar nada, porque depende de la primera impresión; la función básica (caso 8) va antes de cualquier compra para medir el aprendizaje de la primera vez; el cupón (caso 12) va antes de los errores (caso 4) para no revelar que existe el campo de cupón.",
   ]),
   H2("4.2 Instrumentos y registro"),
   ...VINETAS([
@@ -190,7 +190,7 @@ const metodo = [
     "Si la persona se atasca, esperar. Si pregunta, responder «¿qué intentarías ahora?». Intervenir solo tras 60 s sin avanzar o si lo pide, y **registrar una ayuda** con su nivel: 1 pista general, 2 pista de zona, 3 indicar el control.",
     "No elogiar ni corregir («bien», «mal»). Sondeos permitidos: «¿qué esperabas que pasara?», «¿qué estás buscando?», «¿qué piensas de lo que ves?».",
     "Los estados de espera se observan sin interrumpir; la pregunta se hace al terminar el estado. Si el estado dura menos de 2 s, usar la red lenta del anexo E.",
-    "Al terminar cada tarea, preguntar la facilidad (SEQ, 1 a 7) y, al final, aplicar el SUS (sección 8). Son complementos y no reemplazan los doce casos.",
+    "Al terminar cada tarea, preguntar la facilidad (SEQ, 1 a 7) y, al final, aplicar el SUS (sección 8). Son complementos y no reemplazan los casos de prueba.",
   ]),
   H2("4.7 Consideraciones éticas"),
   P("La participación es voluntaria y la persona puede parar en cualquier momento. Firma un consentimiento (anexo A) que explica qué se graba y para qué. Todos los datos que escribe son ficticios y la pasarela está en modo de prueba: no se usa ninguna tarjeta real ni se hace ningún cobro. Los videos se usan solo para el curso, se guardan con el código de cada persona (P01 a P05) y no se publican."),
@@ -202,7 +202,7 @@ const plan = [
   tabla(
     [600, 3000, 800, 1500, 2100, 1840],
     ["Caso", "Nombre", "UT", "Tareas", "Se mide", "Grupo"],
-    CASOS.map((c) => [String(c.n), c.nombre, c.ut, c.tareas.join(", "), c.mide.map((m) => ({ tiempo: "tiempo", clics: "clics", exito: "éxito", errores: "errores", ayudas: "ayudas" }[m])).join(", "), c.grupo]),
+    CASOS.map((c) => [String(c.n), c.nombre, c.ut, c.tareas.length ? c.tareas.join(", ") : "No se aplica", c.mide.length ? c.mide.map((m) => ({ tiempo: "tiempo", clics: "clics", exito: "éxito", errores: "errores", ayudas: "ayudas" }[m])).join(", ") : "—", c.grupo]),
     { centrar: [0, 2], cebra: true },
   ),
   P("Las tareas T07, T08 y T09 se registran **una sola vez** (en el caso 3) y alimentan los casos 3, 5, 9 y 10. Las tareas T03 y T16 a T18 son preguntas que el evaluador hace durante las compras; no se repiten pasos.", { antes: 120 }),
@@ -274,16 +274,6 @@ function tablaRespuestas(ids) {
   );
 }
 
-function tablaInventario(id) {
-  const filas = INVENTARIOS[id].map(([elemento, esperado], i) => [String(i + 1), elemento, esperado, ...PARTICIPANTES.map(() => ""), "", "", ""]);
-  return tabla(
-    [400, 4400, 3400, ...PARTICIPANTES.map(() => 620), 700, 700, 1140],
-    ["N.º", `Elemento de la interfaz (${id}: ${tarea(id).titulo})`, "Significado esperado (rúbrica)", ...PARTICIPANTES.map((p) => `${p} (1/0)`), "Σ de 5", "%", "Comentarios (¿vio el globo de ayuda?)"],
-    filas,
-    { llenar: Array.from({ length: colsP + 3 }, (_, i) => i + 3), centrar: [0, ...Array.from({ length: colsP + 2 }, (_, i) => i + 3)], altoFila: 380, tam: 17 },
-  );
-}
-
 // Cálculo del caso: una fila por medida, una columna por persona, y los estadísticos del grupo.
 function tablaCalculo(filas) {
   return tabla(
@@ -307,7 +297,6 @@ function calculoCaso(c) {
     case 1: return pantallas({ a: "pantallas con el propósito bien descrito (de 3)", b: "3", crit: "X ≥ 0,80" });
     case 4: return pantallas({ a: "mensajes interpretados con la acción correcta (de 3)", b: "3", crit: "X ≥ 0,80" });
     case 7: return pantallas({ a: "estados del sistema descritos correctamente (de 3)", b: "3", crit: "X ≥ 0,80" });
-    case 2: return [["A: controles comprendidos sin ayuda (de 26)", "—"], ["X = A / 26", "X ≥ 0,80 (21 o más)"], cumple, ["Controles comprendidos solo por el globo de ayuda", "Informativo"]];
     case 3: return [["A: compras completadas sin ayuda (de 3)", "—"], ["X = A / 3", "X = 1,00"], ["T medio de las 3 compras (s)", `≤ T obj medio ${objetivoMedio(ids)} s`], cumple];
     case 5: return [["A: compras sin consultas externas (de 3)", "—"], ["X = A / 3", "X = 1,00"], ["D: consultas externas en T07, T08 y T09", "D = 0"], cumple];
     case 6: return [["A: rutas sin error de navegación (de 3)", "—"], ["X = A / 3", "X = 1,00"], ["Clics usuario ÷ clics ideales", `Informativo (≤ 1,5; ideales: ${ids.reduce((a, id) => a + base(id).clics, 0)})`], cumple];
@@ -321,6 +310,13 @@ function calculoCaso(c) {
 }
 
 function seccionCaso(c) {
+  if (c.aplicado === false) {
+    return [
+      H2(`6.${c.n} Caso de prueba ${c.n}: ${c.nombre} (${c.ut}): no se aplica`),
+      ficha([["Estado", "No se aplica en esta evaluación"], ["Motivo", c.motivoNoAplicado], ["Qué evaluaría", `${c.objetivo} (${c.procedimiento})`], ["Resultado esperado (material de clase)", c.esperado], ["Efecto en el documento", "Las tareas T04 a T06 se retiraron y sus números no se reutilizan. La métrica de este caso no se calcula y el resumen del grupo se hace sobre los 11 casos aplicados."]], 3300, A_H - 3300, { tam: 18 }),
+      VACIO(160),
+    ];
+  }
   const ids = c.tareas;
   const op = ids.every(esOperativa);
   const comp = ids.every((id) => !esOperativa(id));
@@ -341,10 +337,7 @@ function seccionCaso(c) {
     VACIO(80),
   ];
   const registro = [];
-  if (c.n === 2) {
-    registro.push(H3("Registro: inventario de controles (1 = comprendió sin ayuda, 0 = no)"));
-    for (const id of ids) registro.push(tablaInventario(id), VACIO(80));
-  } else if (c.n === 7) {
+  if (c.n === 7) {
     const dur = (clave) => {
       const v = ["T07", "T08", "T09", "T22"].map((k) => base(k)?.estadosSistemaMs?.[clave]).filter((x) => x != null);
       return v.length ? `${coma(Math.min(...v) / 1000, 2)} a ${coma(Math.max(...v) / 1000, 2)} s` : "sin dato";
@@ -371,16 +364,16 @@ const resultados = [H1("6. Resultados por caso de prueba"), P("Cada caso trae: s
 
 // ---------------------------------------------------------------- 7 (horizontal): resumen y comparación equipo–grupo
 const resumen = [
-  H1("7. Resumen de las doce métricas y comparación equipo–grupo"),
-  H2("7.1 Resumen de las doce métricas"),
+  H1("7. Resumen de las métricas y comparación equipo–grupo"),
+  H2("7.1 Resumen de las métricas de los casos aplicados"),
   P("**Cómo se decide:** cada persona cumple o no el criterio del caso; el grupo cumple el caso si al menos el 80 % de las personas lo cumple (decisión del equipo). El valor es la proporción del criterio que cumple cada persona, y se reporta su media y su error estándar entre personas.", { tam: 19, alinear: AlignmentType.LEFT }),
   tabla(
     [700, 3300, 2400, 2400, 1300, 1500, 1100, 1140],
     ["Caso", "Nombre", "Métrica ISO", "Criterio por persona", "Personas que cumplen (de 5)", "Valor medio ± error estándar", "¿Cumple el grupo?", "Hallazgo principal"],
-    CASOS.map((c) => [String(c.n), c.nombre, c.metricaIso, c.criterio, "", "", "", ""]),
+    CASOS.map((c) => (c.aplicado === false ? [String(c.n), c.nombre, c.metricaIso, "No se aplica", "—", "—", "—", "—"] : [String(c.n), c.nombre, c.metricaIso, c.criterio, "", "", "", ""])),
     { llenar: [4, 5, 6, 7], centrar: [0, 4, 5, 6], altoFila: 520, tam: 17 },
   ),
-  P("Al terminar, cuente cuántos casos cumple el grupo: ____ de 12. La hoja de cálculo lo calcula en la pestaña «Metricas» y lo resume en «Grupo».", { antes: 120, alinear: AlignmentType.LEFT }),
+  P("Al terminar, cuente cuántos casos cumple el grupo: ____ de 11. La hoja de cálculo lo calcula en la pestaña «Metricas» y lo resume en «Grupo».", { antes: 120, alinear: AlignmentType.LEFT }),
   H2("7.2 Comparación del grupo con el equipo (tareas operativas)"),
   P("Razón = tiempo medio del grupo ÷ T ref. Eficiencia de clics = clics ideales ÷ clics medios (1,00 es la ruta ideal). El tiempo se cumple si la persona termina en T obj o menos.", { tam: 19, alinear: AlignmentType.LEFT }),
   tabla(
@@ -394,7 +387,7 @@ const resumen = [
 // ---------------------------------------------------------------- 8: cuestionarios
 const cuestionarios = [
   H1("8. Cuestionarios de satisfacción (complementarios)"),
-  P("Los dos cuestionarios son opcionales y **no reemplazan los doce casos**; se incluyen porque son baratos, estandarizados y aportan la percepción de cada persona. Con cinco participantes son indicativos.", { alinear: AlignmentType.LEFT }),
+  P("Los dos cuestionarios son opcionales y **no reemplazan los casos de prueba**; se incluyen porque son baratos, estandarizados y aportan la percepción de cada persona. Con cinco participantes son indicativos.", { alinear: AlignmentType.LEFT }),
   H2("8.1 SEQ: facilidad percibida por tarea"),
   P(`${SEQ} Se pregunta al terminar cada tarea de las compras y de las funciones básica y avanzada.`, { alinear: AlignmentType.LEFT }),
   tabla(
@@ -424,7 +417,7 @@ const adicionales = [
     [2100, 2800, 1700, 3800, 3440],
     ["Técnica o herramienta", "Qué aporta", "¿Viable en este sprint?", "Herramientas y condiciones", "Limitaciones"],
     [
-      ["Video de pantalla y voz con Think Aloud", "Por qué la persona duda, qué piensa y qué no entiende; es la base de los 12 casos.", "**Sí, obligatoria.** Con 1 usuario sirve.", "Camtasia (con un efecto de clic visible en el cursor para contar clics), OBS Studio, grabación de Teams o Zoom.", "Pensar en voz alta puede alargar los tiempos; se hace igual en todas las tareas para que la comparación sea justa."],
+      ["Video de pantalla y voz con Think Aloud", "Por qué la persona duda, qué piensa y qué no entiende; es la base de los casos de prueba.", "**Sí, obligatoria.** Con 1 usuario sirve.", "Camtasia (con un efecto de clic visible en el cursor para contar clics), OBS Studio, grabación de Teams o Zoom.", "Pensar en voz alta puede alargar los tiempos; se hace igual en todas las tareas para que la comparación sea justa."],
       ["Mapas de calor y grabaciones de sesión (clics y desplazamiento)", "Dónde hace clic, hasta dónde baja la página, clics repetidos o que no responden; el recorrido se puede reproducir como video.", "**Sí, recomendada y opcional.** Se instala con un fragmento de código.", "Microsoft Clarity: según su sitio oficial es gratuito, sin límites de tráfico, e incluye grabaciones de sesión y mapas de calor de clics y desplazamiento (Microsoft, s. f.). Hotjar (ahora parte de Contentsquare) ofrece un plan gratuito con límites; verificar el plan vigente.", "Pide crear un proyecto y agregar el script al sitio; no ve la página de Stripe (otro dominio); hay que avisarlo en el consentimiento. Con una sola persona el «mapa de calor» es solo su recorrido."],
       ["Seguimiento ocular con cámara web", "Hacia dónde mira la persona: zonas vistas e ignoradas y orden de lectura.", "**Exploratoria.** Sin hardware, pero con calibración y buena luz.", "WebGazer.js: código abierto (GPLv3) de Brown University y Pomona College; estima la mirada con la cámara y aprende de los clics (Papoutsaki et al., 2016). Su página oficial avisa que desde el 24 de febrero de 2026 las actualizaciones ya no están garantizadas (Brown WebGazer Team, 2026). Servicios en línea como RealEye o GazeRecorder.", "Menos preciso que un equipo dedicado: estudios independientes encuentran estimaciones más ruidosas (Kandel & Snedeker, 2024), sensibles a la luz y a la calibración; poco fiable para leer texto largo."],
       ["Seguimiento ocular con equipo dedicado", "Fijaciones y movimientos oculares con alta precisión.", "**No para este sprint.** Solo si la universidad tiene un rastreador y un laboratorio.", "Rastreadores de pantalla (por ejemplo, de la marca Tobii).", "Costo, instalación y calibración; con un solo participante no hay mapa agregado."],
@@ -444,7 +437,7 @@ const adicionales = [
       "**Obligatorio:** video de pantalla y voz con Think Aloud, mediciones de tiempo, clics, errores y ayudas, y la comparación con la línea base (secciones 4 a 7).",
       "**Complemento barato:** SEQ por tarea y SUS al final (sección 8).",
       "**Evidencia visual de clics:** Microsoft Clarity activado durante la sesión (unos 20 minutos de preparación): da grabaciones y mapas de clics que respaldan lo contado en el video. Es opcional y requiere agregar un fragmento de código al sitio; no está implementado en el proyecto.",
-      "**Apoyo al diseño sin usuarios:** mapas de atención predictivos sobre las capturas ya generadas y una evaluación heurística de dos integrantes, para los casos 1 y 2.",
+      "**Apoyo al diseño sin usuarios:** mapas de atención predictivos sobre las capturas ya generadas y una evaluación heurística de dos integrantes, para el caso 1.",
       "**Trabajo futuro:** al menos ocho participantes, pruebas de cinco segundos y de primer clic en línea para los casos 1 y 6, y seguimiento ocular con cámara web en un entorno de luz controlada.",
     ],
     "lista0",
@@ -492,7 +485,7 @@ const conclusiones = [
   H1("12. Conclusiones"),
   P("Se escribe al terminar. Sugerencia de estructura, un párrafo por punto:", { alinear: AlignmentType.LEFT }),
   ...VINETAS([
-    "Cuántos de los 12 casos de prueba cumplen su criterio y cuáles no, con el valor obtenido.",
+    "Cuántos de los 11 casos aplicados cumplen su criterio y cuáles no, con el valor obtenido.",
     "Comparación del participante con la línea base del equipo: en qué tareas tardó más de lo esperado y por qué (según el Think Aloud).",
     "Los tres problemas de usabilidad más graves, con su evidencia y la mejora propuesta.",
     "Limitaciones: un solo usuario (el estándar recomienda ocho), entorno de la sesión, herramientas usadas.",

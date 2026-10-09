@@ -45,12 +45,14 @@ export const CASOS = [
   },
   {
     n: 2, ut: "UT-02", grupo: "Comprensibilidad", nombre: "Comprensión de iconografía y textos",
+    aplicado: false,
+    motivoNoAplicado: "El equipo decidió no aplicar este caso en esta evaluación. Se conserva su número y su UT para mantener la trazabilidad con el material de clase y con los requisitos de usabilidad; queda pendiente confirmar con el docente que el caso no es obligatorio.",
     objetivo: "Comprobar que la persona entiende qué hace cada ícono y cada texto de control sin ayuda.",
     procedimiento: "Pedir al usuario que describa qué hace cada control de la GUI y registrar las respuestas.",
     metricaIso: "Comprensibilidad de las funciones y funciones evidentes (8.3.1)",
-    formula: "X = A / B", variables: "A = controles descritos correctamente sin ayuda; B = controles del inventario (26, ver tablas de las tareas T04 a T06).",
-    esperado: "El usuario comprende al menos el 80 % de los íconos sin ayuda.", criterio: "X ≥ 0,80.",
-    tareas: ["T04", "T05", "T06"], mide: ["exito"],
+    formula: "—", variables: "—",
+    esperado: "El usuario comprende al menos el 80 % de los íconos sin ayuda.", criterio: "No aplicado.",
+    tareas: [], mide: [],
   },
   {
     n: 3, ut: "UT-03", grupo: "Comprensibilidad", nombre: "Comprensión del flujo de una tarea simple",
@@ -144,42 +146,6 @@ export const CASOS = [
   },
 ];
 
-// Inventarios de controles del caso 2 (leídos del portal con inventario-controles.mjs).
-export const INVENTARIOS = {
-  T04: [
-    ["Barra superior: ícono de camión y «Compra en línea y recíbelo en la dirección que escribas»", "La compra es en línea y se envía a domicilio, a la dirección que uno escribe."],
-    ["Barra superior: ícono de candado y «Pago con tarjeta en la pasarela segura»", "El pago es con tarjeta y se hace en un sitio seguro."],
-    ["Logo «ComproYa»", "Lleva a la pantalla de inicio (catálogo)."],
-    ["Campo de búsqueda con lupa («Buscar productos…»)", "Se escribe el nombre de un producto para encontrarlo."],
-    ["Botón «Buscar»", "Ejecuta la búsqueda de lo escrito."],
-    ["«Iniciar sesión» (ícono de persona)", "Permite entrar con una cuenta que ya existe."],
-    ["«Carrito» de la cabecera (ícono de carrito)", "Muestra el carrito con lo que se ha agregado."],
-    ["Menú «Catálogo» (ícono de cuadrícula)", "Lleva a la lista de productos."],
-    ["Menú «Mis pedidos» (ícono de recibo)", "Muestra las compras hechas y su estado."],
-    ["Menú «Mi cuenta» (ícono de persona)", "Lleva a los datos y la privacidad de la cuenta."],
-  ],
-  T05: [
-    ["Foto y nombre del producto", "Abren la página de detalle del producto."],
-    ["Precio del producto", "Es el valor en pesos colombianos."],
-    ["Texto «N unidades disponibles»", "Indica cuántas unidades se pueden comprar."],
-    ["Botón «Agregar al carrito» (ícono de carrito con signo más)", "Agrega el producto al carrito."],
-    ["Carrusel de categorías: botón de pausa", "Detiene el movimiento automático de las categorías."],
-    ["Carrusel de categorías: flecha «Ver categorías anteriores»", "Muestra las categorías de la izquierda."],
-    ["Carrusel de categorías: flecha «Ver más categorías»", "Muestra las categorías de la derecha."],
-    ["Tarjeta de categoría (foto y nombre, por ejemplo «Electrodomésticos»)", "Muestra los productos de esa categoría."],
-  ],
-  T06: [
-    ["Botón «−» junto a la cantidad", "Disminuye en uno la cantidad del producto."],
-    ["Botón «+» junto a la cantidad", "Aumenta en uno la cantidad del producto."],
-    ["«Quitar» (ícono de papelera)", "Saca el producto del carrito."],
-    ["Ícono de carrito con signo más en «Productos complementarios»", "Agrega ese producto sugerido al carrito."],
-    ["«Subtotal» y «Total» del resumen del pedido", "Es la suma de lo que se va a pagar."],
-    ["Botón «Continuar con tus datos de envío»", "Pasa al siguiente paso: escribir quién recibe y dónde."],
-    ["Enlace «Seguir comprando»", "Vuelve al catálogo sin perder el carrito."],
-    ["Aviso con ícono de cupón («¿Tienes un cupón de lealtad?…»)", "Informa que hay un cupón de descuento que se aplica en el siguiente paso."],
-  ],
-};
-
 const PUNTO = "Pausar el cronómetro mientras la persona responde cada pregunta del evaluador.";
 
 // Tareas. «estado» = estado inicial que deja el evaluador; «termina» = condición de término (detiene el cronómetro).
@@ -192,7 +158,7 @@ export const TAREAS = [
     rubrica: "Acierta si dice que es una tienda en línea o catálogo de productos y que se puede buscar o explorar y comprar con envío." },
   { id: "T02", caso: 1, tipo: "comprension", titulo: "Propósito del carrito",
     enunciado: "Abre tu carrito. Cuéntame para qué sirve esta pantalla.",
-    estado: "Una licuadora ya está en el carrito (la dejó el evaluador). La persona está en el inicio.",
+    estado: "El carrito ya tiene productos: los que la persona agregó en el bloque 2 o, si no, una licuadora que deja el evaluador. La persona está en el inicio.",
     termina: "Cuando la persona termina de explicar el propósito de la pantalla.",
     rubrica: "Acierta si dice que sirve para revisar lo elegido, cambiar cantidades o quitar productos y ver el total para seguir con la compra." },
   { id: "T03", caso: 1, tipo: "comprension", titulo: "Propósito de «Datos y envío»",
@@ -200,19 +166,6 @@ export const TAREAS = [
     estado: "Se aplica en la compra T07, al llegar a «Datos y envío» (con sesión iniciada y una licuadora en el carrito).",
     termina: "Cuando la persona termina de explicar el propósito de la pantalla.",
     rubrica: "Acierta si dice que debe escribir los datos de quien recibe y la dirección de envío (y, opcionalmente, que ahí puede usar un cupón)." },
-  // ---- Caso 2: íconos y textos ----
-  { id: "T04", caso: 2, tipo: "comprension", titulo: "Íconos y textos de la cabecera",
-    enunciado: "Mira la parte de arriba de la página. Señálame con el mouse, sin hacer clic, cada elemento y dime qué crees que hace.",
-    estado: "Inicio del portal, sin sesión.", termina: "Cuando la persona ha descrito (o dicho que no sabe) cada elemento.",
-    rubrica: "Cada elemento se califica 1 (descripción correcta sin ayuda) o 0. Anotar si entendió gracias al globo de ayuda que aparece al pasar el mouse." },
-  { id: "T05", caso: 2, tipo: "comprension", titulo: "Íconos y textos del catálogo",
-    enunciado: "Baja un poco por la página. Señálame con el mouse, sin hacer clic, la tarjeta de un producto y el recuadro de categorías y dime qué hace cada parte.",
-    estado: "Inicio del portal, sin sesión.", termina: "Cuando la persona ha descrito (o dicho que no sabe) cada elemento.",
-    rubrica: "Cada elemento se califica 1 o 0, igual que en T04." },
-  { id: "T06", caso: 2, tipo: "comprension", titulo: "Íconos y textos del carrito",
-    enunciado: "Abre tu carrito. Señálame con el mouse, sin hacer clic, cada botón y cada texto y dime qué crees que hace.",
-    estado: "Carrito con al menos un producto (el evaluador deja una licuadora).", termina: "Cuando la persona ha descrito (o dicho que no sabe) cada elemento.",
-    rubrica: "Cada elemento se califica 1 o 0, igual que en T04." },
   // ---- Casos 3, 5, 9 y 10: compras ----
   { id: "T07", caso: 3, tipo: "operacion", titulo: "Primera compra: licuadora",
     enunciado: "Quieres comprar una licuadora para tu casa. Haz el pedido completo con envío a tu dirección, paga con tarjeta y termina cuando veas que tu pedido quedó confirmado. Cuando termines, dime el número de tu pedido. Usa los datos de la hoja «Datos de prueba».",
@@ -310,10 +263,11 @@ export const TAREAS = [
 ];
 
 // Orden recomendado de la sesión 1 (sesión 2 = bloque 9). Las tareas T03 y T16 a T18 van dentro de las compras.
+// Las tareas T04 a T06 (caso 2, íconos y textos) no se aplican; sus números no se reutilizan para no perder la trazabilidad.
 export const BLOQUES = [
-  { n: 1, nombre: "Primer contacto (sin hacer clic)", tareas: ["T01", "T04", "T05"], min: 8, nota: "El participante no toca nada hasta responder. Es la primera vez que ve el sistema." },
+  { n: 1, nombre: "Primer contacto (sin hacer clic)", tareas: ["T01"], min: 3, nota: "El participante no toca nada hasta responder. Es la primera vez que ve el sistema." },
   { n: 2, nombre: "Función básica", tareas: ["T19", "T20", "T21"], min: 6, nota: "Antes de cualquier compra, para medir el aprendizaje de la primera vez. Al terminar, el evaluador deja una licuadora en el carrito." },
-  { n: 3, nombre: "El carrito", tareas: ["T02", "T06"], min: 5, nota: "Al terminar, el evaluador vacía el carrito." },
+  { n: 3, nombre: "El carrito", tareas: ["T02"], min: 3, nota: "Al terminar, el evaluador vacía el carrito." },
   { n: 4, nombre: "Primera compra", tareas: ["T07"], min: 9, nota: "Incluye crear la cuenta. Dentro: T03 (pregunta en «Datos y envío») y T16 (pregunta al pagar)." },
   { n: 5, nombre: "Segunda y tercera compra", tareas: ["T08", "T09"], min: 12, nota: "Dentro de T08: T17. Dentro de T09: T18." },
   { n: 6, nombre: "Función avanzada: cupón", tareas: ["T25", "T26", "T27"], min: 7, nota: "Va antes del bloque de errores para no regalar la existencia del campo de cupón." },
