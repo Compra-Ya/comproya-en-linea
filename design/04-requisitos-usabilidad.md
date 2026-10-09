@@ -4,6 +4,8 @@ Doce casos de prueba, aplicados con un usuario real sobre el portal desplegado, 
 
 Referencias de pantalla: ver [03-flujo-cu2.md](03-flujo-cu2.md) y [05-auditoria-ui.md](05-auditoria-ui.md) (`A-nn`).
 
+> **Actualización (venta digital con envío).** La prueba se aplica sobre el flujo sin retiro en sucursal (`docs/modo-venta-digital.md`). Donde este documento dice «Confirmar pedido» léase **Datos y envío**; donde dice «código de retiro» o «comprobante», léase **pedido confirmado con su número de pedido**. Los cuatro pasos visibles son Carrito, Datos y envío, Pago y Pedido confirmado. Los casos de prueba y sus metas no cambian. La implementación de cada pantalla y sus estados está en [rediseno/README.md](rediseno/README.md), y la evidencia (36 estados a 1440 y 390 px, recorrido con teclado) en [verificacion-rediseno/](verificacion-rediseno/).
+
 ## 1. Comprensibilidad
 
 | ID | Caso de prueba | Pantalla o elemento que ejercita | Qué debe garantizar el diseño para pasarlo | Problemas actuales que lo bloquean |

@@ -3,11 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "playwright test"
+    "test": "playwright test",
+    "usabilidad:medir": "node usabilidad/medir-linea-base.mjs",
+    "usabilidad:documentos": "node usabilidad/generar-evaluacion.mjs && node usabilidad/generar-guia.mjs && node usabilidad/generar-registro.mjs",
+    "usabilidad:probar": "node usabilidad/probar-registro.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.47.0",
+    "axe-core": "^4.14.0",
+    "docx": "^9.9.0",
     "dotenv": "^16.4.5",
+    "exceljs": "^4.4.0",
     "stripe": "^16.12.0"
   }
 }

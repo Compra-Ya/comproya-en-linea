@@ -1,0 +1,394 @@
+{
+  "generado": "2026-10-09T12:14:43.126Z",
+  "metodo": {
+    "klm": {
+      "K": 0.28,
+      "P": 1.1,
+      "BB": 0.2,
+      "H": 0.4,
+      "M": 1.35
+    },
+    "factorNovato": 3,
+    "redondeoS": 5,
+    "nota": "referenciaExpertoS = KLM del humano + espera medida del sistema; objetivoNovatoS = referencia × factor, redondeado hacia arriba"
+  },
+  "tareas": {
+    "T07": {
+      "clics": 22,
+      "teclas": 168,
+      "cambiosMouseTeclado": 26,
+      "pasosMentales": 10,
+      "esperaSistemaS": 6.6,
+      "klmHumanoS": 99.5,
+      "referenciaExpertoS": 106.2,
+      "objetivoNovatoS": 320,
+      "estadosSistemaMs": {
+        "resultados de búsqueda": 220,
+        "producto agregado": 32,
+        "reservando tus unidades (Continuar al pago)": 133,
+        "abriendo la pasarela segura (Pagar con tarjeta)": 905,
+        "confirmando tu pago (después de la pasarela)": 153
+      },
+      "pasos": [
+        "Buscar «licuadora» en el buscador y pulsar Enter",
+        "Pulsar «Agregar al carrito» del producto",
+        "Pulsar «Ver carrito»",
+        "Pulsar «Continuar con tus datos de envío»",
+        "Pulsar «Crear cuenta»",
+        "Escribir nombre, documento, correo y contraseña, aceptar el tratamiento de datos y pulsar «Crear cuenta»",
+        "Escribir teléfono, dirección y ciudad",
+        "Pulsar «Continuar al pago»",
+        "Pulsar «Pagar con tarjeta»",
+        "Escribir correo, tarjeta, vencimiento, código y nombre en la pasarela, y pulsar «Pagar»"
+      ],
+      "duracionAutomatizacionS": 8.9
+    },
+    "T08": {
+      "clics": 17,
+      "teclas": 102,
+      "cambiosMouseTeclado": 16,
+      "pasosMentales": 10,
+      "esperaSistemaS": 6.9,
+      "klmHumanoS": 70.6,
+      "referenciaExpertoS": 77.5,
+      "objetivoNovatoS": 235,
+      "estadosSistemaMs": {
+        "producto agregado": 39,
+        "reservando tus unidades (Continuar al pago)": 125,
+        "abriendo la pasarela segura (Pagar con tarjeta)": 1166,
+        "confirmando tu pago (después de la pasarela)": 127
+      },
+      "pasos": [
+        "Pulsar la categoría «Electrodomésticos» del carrusel",
+        "Abrir el televisor (pulsar su nombre)",
+        "Subir la cantidad a 2 con «+»",
+        "Pulsar «Agregar al carrito»",
+        "Pulsar «Ver carrito»",
+        "Pulsar «Continuar con tus datos de envío»",
+        "Escribir teléfono, dirección y ciudad",
+        "Pulsar «Continuar al pago»",
+        "Pulsar «Pagar con tarjeta»",
+        "Escribir correo, tarjeta, vencimiento, código y nombre en la pasarela, y pulsar «Pagar»"
+      ],
+      "duracionAutomatizacionS": 9.3
+    },
+    "T09": {
+      "clics": 17,
+      "teclas": 111,
+      "cambiosMouseTeclado": 18,
+      "pasosMentales": 10,
+      "esperaSistemaS": 7,
+      "klmHumanoS": 73.9,
+      "referenciaExpertoS": 80.9,
+      "objetivoNovatoS": 245,
+      "estadosSistemaMs": {
+        "resultados de búsqueda": 231,
+        "producto agregado": 42,
+        "carrito con sugerencias": 89,
+        "carrito actualizado": 88,
+        "reservando tus unidades (Continuar al pago)": 125,
+        "abriendo la pasarela segura (Pagar con tarjeta)": 969,
+        "confirmando tu pago (después de la pasarela)": 124
+      },
+      "pasos": [
+        "Buscar «lavadora» en el buscador y pulsar Enter",
+        "Abrir la lavadora (pulsar su nombre)",
+        "Pulsar «Agregar al carrito»",
+        "Pulsar «Ver carrito»",
+        "Agregar la licuadora desde «Productos complementarios» (ícono de carrito)",
+        "Pulsar «Continuar con tus datos de envío»",
+        "Escribir teléfono, dirección y ciudad",
+        "Pulsar «Continuar al pago»",
+        "Pulsar «Pagar con tarjeta»",
+        "Escribir correo, tarjeta, vencimiento, código y nombre en la pasarela, y pulsar «Pagar»"
+      ],
+      "duracionAutomatizacionS": 9.1
+    },
+    "T10": {
+      "clics": 1,
+      "teclas": 0,
+      "cambiosMouseTeclado": 0,
+      "pasosMentales": 1,
+      "esperaSistemaS": 0,
+      "klmHumanoS": 2.7,
+      "referenciaExpertoS": 2.7,
+      "objetivoNovatoS": 10,
+      "estadosSistemaMs": {
+        "mensaje de error del registro": 4
+      },
+      "pasos": [
+        "Pulsar «Crear cuenta» con el formulario vacío"
+      ],
+      "duracionAutomatizacionS": 0.7
+    },
+    "T11": {
+      "clics": 1,
+      "teclas": 0,
+      "cambiosMouseTeclado": 0,
+      "pasosMentales": 1,
+      "esperaSistemaS": 0,
+      "klmHumanoS": 2.7,
+      "referenciaExpertoS": 2.7,
+      "objetivoNovatoS": 10,
+      "estadosSistemaMs": {
+        "mensaje de error de datos de envío": 6
+      },
+      "pasos": [
+        "Pulsar «Continuar al pago» sin llenar los datos de envío"
+      ],
+      "duracionAutomatizacionS": 0.7
+    },
+    "T12": {
+      "clics": 2,
+      "teclas": 9,
+      "cambiosMouseTeclado": 2,
+      "pasosMentales": 1,
+      "esperaSistemaS": 0,
+      "klmHumanoS": 7.3,
+      "referenciaExpertoS": 7.3,
+      "objetivoNovatoS": 25,
+      "estadosSistemaMs": {
+        "mensaje de cupón inválido": 41
+      },
+      "pasos": [
+        "Escribir el código «PROMO2026» en el cupón y pulsar «Aplicar»"
+      ],
+      "duracionAutomatizacionS": 0.7
+    },
+    "T13": {
+      "clics": 3,
+      "teclas": 0,
+      "cambiosMouseTeclado": 0,
+      "pasosMentales": 3,
+      "esperaSistemaS": 0.2,
+      "klmHumanoS": 8,
+      "referenciaExpertoS": 8.1,
+      "objetivoNovatoS": 25,
+      "estadosSistemaMs": {},
+      "pasos": [
+        "Pulsar «Carrito» en el menú",
+        "Pulsar «Mis pedidos» en el menú",
+        "Volver al inicio con el logo «ComproYa»"
+      ],
+      "duracionAutomatizacionS": 1
+    },
+    "T14": {
+      "clics": 4,
+      "teclas": 0,
+      "cambiosMouseTeclado": 0,
+      "pasosMentales": 4,
+      "esperaSistemaS": 0.5,
+      "klmHumanoS": 10.6,
+      "referenciaExpertoS": 11.1,
+      "objetivoNovatoS": 35,
+      "estadosSistemaMs": {},
+      "pasos": [
+        "Pulsar la categoría «Electrodomésticos»",
+        "Abrir un producto (pulsar su nombre)",
+        "Pulsar «Carrito» en el menú",
+        "Volver al inicio con el logo «ComproYa»"
+      ],
+      "duracionAutomatizacionS": 1.7
+    },
+    "T15": {
+      "clics": 3,
+      "teclas": 0,
+      "cambiosMouseTeclado": 0,
+      "pasosMentales": 3,
+      "esperaSistemaS": 0.5,
+      "klmHumanoS": 8,
+      "referenciaExpertoS": 8.4,
+      "objetivoNovatoS": 30,
+      "estadosSistemaMs": {},
+      "pasos": [
+        "Pulsar «Mi cuenta» en el menú",
+        "Pulsar «Mis pedidos» en el menú",
+        "Pulsar «Catálogo» en el menú"
+      ],
+      "duracionAutomatizacionS": 1.3
+    },
+    "T19": {
+      "clics": 2,
+      "teclas": 10,
+      "cambiosMouseTeclado": 2,
+      "pasosMentales": 2,
+      "esperaSistemaS": 0.3,
+      "klmHumanoS": 8.9,
+      "referenciaExpertoS": 9.2,
+      "objetivoNovatoS": 30,
+      "estadosSistemaMs": {
+        "resultados de búsqueda": 226,
+        "producto agregado": 35
+      },
+      "pasos": [
+        "Buscar «licuadora» en el buscador y pulsar Enter",
+        "Pulsar «Agregar al carrito» del producto"
+      ],
+      "duracionAutomatizacionS": 1.1
+    },
+    "T20": {
+      "clics": 2,
+      "teclas": 0,
+      "cambiosMouseTeclado": 0,
+      "pasosMentales": 2,
+      "esperaSistemaS": 0.3,
+      "klmHumanoS": 5.3,
+      "referenciaExpertoS": 5.6,
+      "objetivoNovatoS": 20,
+      "estadosSistemaMs": {
+        "producto agregado": 44
+      },
+      "pasos": [
+        "Pulsar la categoría «Electrodomésticos» del carrusel",
+        "Pulsar «Agregar al carrito» del televisor"
+      ],
+      "duracionAutomatizacionS": 1.5
+    },
+    "T21": {
+      "clics": 4,
+      "teclas": 13,
+      "cambiosMouseTeclado": 2,
+      "pasosMentales": 4,
+      "esperaSistemaS": 0.5,
+      "klmHumanoS": 15,
+      "referenciaExpertoS": 15.5,
+      "objetivoNovatoS": 50,
+      "estadosSistemaMs": {
+        "resultados de búsqueda": 208,
+        "producto agregado": 44
+      },
+      "pasos": [
+        "Buscar «refrigerador» en el buscador y pulsar Enter",
+        "Abrir el refrigerador (pulsar su nombre)",
+        "Subir la cantidad a 2 con «+»",
+        "Pulsar «Agregar al carrito»"
+      ],
+      "duracionAutomatizacionS": 1.3
+    },
+    "T22": {
+      "clics": 19,
+      "teclas": 158,
+      "cambiosMouseTeclado": 22,
+      "pasosMentales": 10,
+      "esperaSistemaS": 10,
+      "klmHumanoS": 91.2,
+      "referenciaExpertoS": 101.2,
+      "objetivoNovatoS": 305,
+      "estadosSistemaMs": {
+        "resultados de búsqueda": 218,
+        "producto agregado": 37,
+        "reservando tus unidades (Continuar al pago)": 132,
+        "abriendo la pasarela segura (Pagar con tarjeta)": 1055,
+        "confirmando tu pago (después de la pasarela)": 132
+      },
+      "pasos": [
+        "Pulsar «Iniciar sesión» en la cabecera",
+        "Escribir correo y contraseña y pulsar «Iniciar sesión»",
+        "Buscar «refrigerador» en el buscador y pulsar Enter",
+        "Pulsar «Agregar al carrito» del producto",
+        "Pulsar «Ver carrito»",
+        "Pulsar «Continuar con tus datos de envío»",
+        "Escribir teléfono, dirección y ciudad",
+        "Pulsar «Continuar al pago»",
+        "Pulsar «Pagar con tarjeta»",
+        "Escribir correo, tarjeta, vencimiento, código y nombre en la pasarela, y pulsar «Pagar»"
+      ],
+      "duracionAutomatizacionS": 12.1
+    },
+    "T23": {
+      "clics": 6,
+      "teclas": 19,
+      "cambiosMouseTeclado": 4,
+      "pasosMentales": 5,
+      "esperaSistemaS": 0.5,
+      "klmHumanoS": 21.5,
+      "referenciaExpertoS": 22,
+      "objetivoNovatoS": 70,
+      "estadosSistemaMs": {
+        "resultados de búsqueda": 207,
+        "producto agregado": 44,
+        "validando el cupón": 34
+      },
+      "pasos": [
+        "Buscar «licuadora» en el buscador y pulsar Enter",
+        "Pulsar «Agregar al carrito» del producto",
+        "Pulsar «Ver carrito»",
+        "Pulsar «Continuar con tus datos de envío»",
+        "Escribir el código «LEALTAD10» en el cupón y pulsar «Aplicar»"
+      ],
+      "duracionAutomatizacionS": 1.7
+    },
+    "T24": {
+      "clics": 1,
+      "teclas": 0,
+      "cambiosMouseTeclado": 0,
+      "pasosMentales": 1,
+      "esperaSistemaS": 0.2,
+      "klmHumanoS": 2.7,
+      "referenciaExpertoS": 2.9,
+      "objetivoNovatoS": 10,
+      "estadosSistemaMs": {
+        "cargando tus pedidos": 207
+      },
+      "pasos": [
+        "Pulsar «Mis pedidos» en el menú"
+      ],
+      "duracionAutomatizacionS": 0.9
+    },
+    "T25": {
+      "clics": 2,
+      "teclas": 9,
+      "cambiosMouseTeclado": 2,
+      "pasosMentales": 1,
+      "esperaSistemaS": 0,
+      "klmHumanoS": 7.3,
+      "referenciaExpertoS": 7.3,
+      "objetivoNovatoS": 25,
+      "estadosSistemaMs": {
+        "validando el cupón": 11
+      },
+      "pasos": [
+        "Escribir el código «LEALTAD10» en el cupón y pulsar «Aplicar»"
+      ],
+      "duracionAutomatizacionS": 0.8
+    },
+    "T26": {
+      "clics": 3,
+      "teclas": 9,
+      "cambiosMouseTeclado": 2,
+      "pasosMentales": 2,
+      "esperaSistemaS": 0,
+      "klmHumanoS": 9.9,
+      "referenciaExpertoS": 10,
+      "objetivoNovatoS": 30,
+      "estadosSistemaMs": {
+        "validando el cupón": 44
+      },
+      "pasos": [
+        "Pulsar «Quitar» en el cupón aplicado",
+        "Escribir de nuevo «LEALTAD10» (el campo quedó vacío) y pulsar «Aplicar»"
+      ],
+      "duracionAutomatizacionS": 1
+    },
+    "T27": {
+      "clics": 6,
+      "teclas": 51,
+      "cambiosMouseTeclado": 8,
+      "pasosMentales": 3,
+      "esperaSistemaS": 0.2,
+      "klmHumanoS": 29.3,
+      "referenciaExpertoS": 29.6,
+      "objetivoNovatoS": 90,
+      "estadosSistemaMs": {
+        "validando el cupón": 12,
+        "reservando tus unidades (Continuar al pago)": 135
+      },
+      "pasos": [
+        "Escribir el código «LEALTAD10» en el cupón y pulsar «Aplicar»",
+        "Escribir teléfono, dirección y ciudad",
+        "Pulsar «Continuar al pago» y leer el total a pagar"
+      ],
+      "duracionAutomatizacionS": 1.1
+    }
+  }
+}
