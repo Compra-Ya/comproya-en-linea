@@ -14,6 +14,7 @@ import { chromium, request as pwRequest } from "@playwright/test";
 import { execFileSync } from "child_process";
 import { mkdirSync, readdirSync, rmSync, writeFileSync } from "fs";
 import path from "path";
+import { createRequire } from "module";
 import { fileURLToPath } from "url";
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
@@ -21,6 +22,9 @@ const SALIDA = path.join(RAIZ, "design/verificacion-rediseno/pantallas");
 const WEB = "http://localhost:3000";
 const API = "http://localhost:3001/api";
 const FILTRO = process.argv[2] ?? "";
+// AXE=1: en vez de capturar, corre axe-core (WCAG 2.1 A y AA, incluye contraste 4,5:1) sobre cada estado y escribe axe.json.
+const AXE = process.env.AXE === "1";
+const AXE_RUTA = AXE ? createRequire(import.meta.url).resolve("axe-core/axe.min.js") : "";
 const VISTAS = [
   { ancho: 1440, alto: 900 },
   { ancho: 390, alto: 844 },
@@ -28,7 +32,7 @@ const VISTAS = [
 const PROHIBIDAS = /\b(checkout|stock|PSE|cross-?sell|SKU|API|SaaS|ERP|homologad[oa]s?)\b|\bRN-\d+|\bCU-\d+/i;
 
 mkdirSync(SALIDA, { recursive: true });
-if (!FILTRO) for (const f of readdirSync(SALIDA)) if (f.endsWith(".png")) rmSync(path.join(SALIDA, f));
+if (!FILTRO && !AXE) for (const f of readdirSync(SALIDA)) if (f.endsWith(".png")) rmSync(path.join(SALIDA, f));
 
 function sql(consulta) {
   execFileSync("docker", ["exec", "comproya-en-linea-db-1", "psql", "-U", "postgres", "-d", "comproya", "-c", consulta], { stdio: "pipe" });
@@ -101,19 +105,19 @@ const productoUno = esRuta(`/catalogo/productos/${P1}`);
 // espera: texto o selector que prueba que el estado ya se pintó. sesion: quién navega.
 const E = [
   // 1. Catálogo
-  { pantalla: "Catálogo", estado: "éxito", ruta: "/", espera: "role=button[name=/Agregar .* al carrito/]" },
+  { pantalla: "Catálogo", estado: "éxito", ruta: "/", espera: "role=button[name=/Agregar al carrito: /]" },
   { pantalla: "Catálogo", estado: "cargando", ruta: "/", antes: (p) => retener(p, productosGeneral), espera: "text=Cargando productos…" },
   { pantalla: "Catálogo", estado: "búsqueda sin resultados", ruta: "/?q=zzqxwv", espera: "text=No encontramos productos para" },
   { pantalla: "Catálogo", estado: "error", ruta: "/", antes: (p) => fallar(p, productosGeneral), espera: "text=No pudimos cargar los productos." },
   {
-    pantalla: "Catálogo", estado: "producto agregado", ruta: "/", espera: "role=button[name=/Agregar .* al carrito/]",
-    despues: async (p) => { await p.getByRole("button", { name: /Agregar .* al carrito/ }).first().click(); await p.waitForSelector("text=/Agregamos [0-9]+ unidad/"); },
+    pantalla: "Catálogo", estado: "producto agregado", ruta: "/", espera: "role=button[name=/Agregar al carrito: /]",
+    despues: async (p) => { await p.getByRole("button", { name: /Agregar al carrito: / }).first().click(); await p.waitForSelector("text=/Agregamos [0-9]+ unidad/"); },
   },
   // 2. Categoría
-  { pantalla: "Categoría", estado: "éxito", ruta: "/categoria/8", espera: "role=button[name=/Agregar .* al carrito/]" },
+  { pantalla: "Categoría", estado: "éxito", ruta: "/categoria/8", espera: "role=button[name=/Agregar al carrito: /]" },
   { pantalla: "Categoría", estado: "cargando", ruta: "/categoria/8", antes: (p) => retener(p, productosGeneral), espera: "text=Cargando productos…" },
   {
-    pantalla: "Categoría", estado: "categoría con pocos productos", ruta: "/categoria/8", espera: "role=button[name=/Agregar .* al carrito/]",
+    pantalla: "Categoría", estado: "categoría con pocos productos", ruta: "/categoria/8", espera: "role=button[name=/Agregar al carrito: /]",
     antes: (p) => modificar(p, productosGeneral, (j) => ({ ...j, items: j.items.slice(0, 2), total: 2 })),
   },
   // 3. Detalle
@@ -254,7 +258,21 @@ for (const esc of E) {
       await page.waitForLoadState("networkidle", { timeout: 4_000 }).catch(() => undefined);
       await page.waitForTimeout(400); // asienta animaciones de entrada
       const m = await medir(page);
-      await page.screenshot({ path: path.join(SALIDA, resultado.captura), fullPage: true });
+      if (!AXE) await page.screenshot({ path: path.join(SALIDA, resultado.captura), fullPage: true });
+      if (AXE) {
+        await page.addScriptTag({ path: AXE_RUTA });
+        resultado.axe = await page.evaluate(async () => {
+          const r = await window.axe.run(document, { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] } });
+          return r.violations.map((v) => ({
+            id: v.id,
+            impacto: v.impact,
+            ayuda: v.help,
+            nodos: v.nodes.length,
+            ejemplo: `${v.nodes[0]?.target?.join(" ")} :: ${(v.nodes[0]?.any?.[0]?.message || v.nodes[0]?.failureSummary || "").replace(/\s+/g, " ").slice(0, 160)}`,
+          }));
+        });
+        for (const v of resultado.axe) resultado.notas.push(`axe ${v.id} (${v.impacto}, ${v.nodos} nodo/s): ${v.ejemplo}`);
+      }
       resultado.sinDesborde = m.contenido <= m.ventana;
       resultado.h1 = m.h1;
       if (!resultado.sinDesborde) resultado.notas.push(`desborde horizontal: contenido ${m.contenido} px > ventana ${m.ventana} px`);
@@ -262,7 +280,7 @@ for (const esc of E) {
       if (m.sinNombre.length) resultado.notas.push(`controles sin nombre accesible: ${m.sinNombre.join(", ")}`);
       if (m.sinAlt) resultado.notas.push(`${m.sinAlt} imagen(es) sin alt`);
       if (errores.length) resultado.notas.push(`errores de página: ${errores.join(" | ").slice(0, 160)}`);
-      resultado.ok = resultado.sinDesborde && !m.prohibida && !m.sinNombre.length && !m.sinAlt && !errores.length;
+      resultado.ok = resultado.sinDesborde && !m.prohibida && !m.sinNombre.length && !m.sinAlt && !errores.length && !(resultado.axe?.length);
     } catch (e) {
       resultado.notas.push(`no se pudo capturar: ${String(e.message).split("\n")[0].slice(0, 160)}`);
       await page.screenshot({ path: path.join(SALIDA, `FALLO-${resultado.captura}`), fullPage: true }).catch(() => undefined);
@@ -295,7 +313,9 @@ for (const f of filas) {
 const total = filas.length;
 const bien = filas.filter((f) => f.vistas[1440].ok && f.vistas[390].ok).length;
 lineas.push("", `**${bien} de ${total} estados sin observaciones** (${total * 2} capturas).`, "");
-if (!FILTRO) {
+if (AXE) {
+  writeFileSync(path.join(RAIZ, "design/verificacion-rediseno/axe.json"), JSON.stringify(filas, null, 2), "utf8");
+} else if (!FILTRO) {
   writeFileSync(path.join(RAIZ, "design/verificacion-rediseno/tabla-verificacion.md"), lineas.join("\n"), "utf8");
   writeFileSync(path.join(RAIZ, "design/verificacion-rediseno/resultados.json"), JSON.stringify(filas, null, 2), "utf8");
 }

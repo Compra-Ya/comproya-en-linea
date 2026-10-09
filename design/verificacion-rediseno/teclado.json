@@ -41,7 +41,7 @@
       {
         "paso": "«Continuar al pago» crea el pedido y lleva a Pago con Enter",
         "ok": true,
-        "detalle": "/pago/93"
+        "detalle": "/pago/113"
       },
       {
         "paso": "«Pagar con tarjeta» con Enter abre la pasarela de pagos",
@@ -98,7 +98,7 @@
       {
         "paso": "«Continuar al pago» crea el pedido y lleva a Pago con Enter",
         "ok": true,
-        "detalle": "/pago/94"
+        "detalle": "/pago/114"
       },
       {
         "paso": "«Pagar con tarjeta» con Enter abre la pasarela de pagos",

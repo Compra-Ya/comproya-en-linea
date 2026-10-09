@@ -31,7 +31,7 @@ export function ProductCard({ name, category, price, units, image, href, onAdd, 
         icon="cart-plus"
         loading={state === "adding"}
         onClick={onAdd}
-        aria-label={state === "adding" ? undefined : `Agregar ${name} al carrito`}
+        aria-label={state === "adding" ? undefined : `Agregar al carrito: ${name}`}
         tooltip={`Agregar ${name} al carrito`}
         tooltipOpen={tooltipOpen}
       >

@@ -186,7 +186,7 @@ async function recorrer(ancho, alto) {
 
     // 5. Shift+Tab y atrapamiento: de vuelta en el catálogo, Tab y Shift+Tab avanzan y retroceden
     await page.goto(`${WEB}/`);
-    await page.waitForSelector("role=button[name=/Agregar .* al carrito/]");
+    await page.waitForSelector("role=button[name=/Agregar al carrito: /]");
     await page.locator("body").click({ position: { x: 1, y: 1 } });
     const a = [];
     for (let i = 0; i < 6; i += 1) { await page.keyboard.press("Tab"); a.push((await page.evaluate(describirFoco))?.nombre); }

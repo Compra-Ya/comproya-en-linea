@@ -15,7 +15,7 @@ Paradas de Tab: **63** · con foco visible: **63** · con nombre accesible: **63
 | «Ver carrito» lleva a /carrito con Enter | OK |  |
 | «Continuar con tus datos de envío» lleva a Datos y envío con Enter | OK |  |
 | Cupón LEALTAD10 se aplica con Enter y el resumen muestra el descuento | OK |  |
-| «Continuar al pago» crea el pedido y lleva a Pago con Enter | OK | /pago/93 |
+| «Continuar al pago» crea el pedido y lleva a Pago con Enter | OK | /pago/113 |
 | «Pagar con tarjeta» con Enter abre la pasarela de pagos | OK | checkout.stripe.com |
 | Shift+Tab regresa por el mismo orden (sin atrapar el foco) | OK | esperado «Buscar», quedó en «Buscar» |
 
@@ -35,7 +35,7 @@ Paradas de Tab: **59** · con foco visible: **59** · con nombre accesible: **59
 | «Ver carrito» lleva a /carrito con Enter | OK |  |
 | «Continuar con tus datos de envío» lleva a Datos y envío con Enter | OK |  |
 | Cupón LEALTAD10 se aplica con Enter y el resumen muestra el descuento | OK |  |
-| «Continuar al pago» crea el pedido y lleva a Pago con Enter | OK | /pago/94 |
+| «Continuar al pago» crea el pedido y lleva a Pago con Enter | OK | /pago/114 |
 | «Pagar con tarjeta» con Enter abre la pasarela de pagos | OK | checkout.stripe.com |
 | Shift+Tab regresa por el mismo orden (sin atrapar el foco) | OK | esperado «Buscar», quedó en «Buscar» |
 
