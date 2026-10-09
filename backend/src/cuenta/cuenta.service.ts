@@ -31,6 +31,11 @@ export class CuentaService {
       // E-1: documento duplicado.
       throw new ConflictException("Ya existe una cuenta registrada con ese documento");
     }
+    // El correo también es único: sin esta revisión el segundo registro con el mismo correo fallaba con un error interno.
+    const correoEnUso = await this.prisma.customer.findUnique({ where: { email: dto.email } });
+    if (correoEnUso) {
+      throw new ConflictException("Ya existe una cuenta registrada con ese correo electrónico");
+    }
     const passwordHash = await bcrypt.hash(dto.password, 10);
 
     const customer = await this.prisma.$transaction(async (tx) => {

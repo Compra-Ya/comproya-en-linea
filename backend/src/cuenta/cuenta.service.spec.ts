@@ -28,6 +28,13 @@ describe("CuentaService (E-1, RN-10, RN-11)", () => {
     ).rejects.toThrow(/Ya existe una cuenta/);
   });
 
+  it("rechaza el registro cuando el correo ya existe, con un mensaje claro (no un error interno)", async () => {
+    await cuenta.registrar({ document: "CC111", name: "Uno", email: "mismo@test.com", password: "claveClave1" });
+    await expect(
+      cuenta.registrar({ document: "CC222", name: "Dos", email: "mismo@test.com", password: "claveClave1" }),
+    ).rejects.toThrow(/ese correo electrónico/);
+  });
+
   it("RN-10: sin consentimiento activo, el evento se registra sin identificador de cliente", async () => {
     const { customer } = await cuenta.registrar({
       document: "CC1000",

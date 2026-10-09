@@ -4,6 +4,8 @@ import { PrismaService } from "../prisma/prisma.service";
 import { CatalogoService } from "../catalogo/catalogo.service";
 import { AgregarItemDto } from "./dto/agregar-item.dto";
 import { ActualizarItemDto } from "./dto/actualizar-item.dto";
+import { MAX_UNIDADES_POR_PRODUCTO } from "../comun/limites";
+import { conTotales } from "./dominio/totales";
 
 // Módulo carrito: SP-03 (sostenimiento de la intención de compra) — sprint 3.
 // C-04: carrito persistente y fusionable entre invitado y registrado.
@@ -26,8 +28,8 @@ export class CarritoService {
         where: { customerId },
         include: this.incluirItems(),
       });
-      if (existente) return existente;
-      return this.prisma.cart.create({ data: { customerId }, include: this.incluirItems() });
+      if (existente) return conTotales(existente);
+      return conTotales(await this.prisma.cart.create({ data: { customerId }, include: this.incluirItems() }));
     }
 
     if (guestToken) {
@@ -35,12 +37,14 @@ export class CarritoService {
         where: { guestToken },
         include: this.incluirItems(),
       });
-      if (existente) return existente;
+      if (existente) return conTotales(existente);
     }
-    return this.prisma.cart.create({
-      data: { guestToken: guestToken ?? randomUUID() },
-      include: this.incluirItems(),
-    });
+    return conTotales(
+      await this.prisma.cart.create({
+        data: { guestToken: guestToken ?? randomUUID() },
+        include: this.incluirItems(),
+      }),
+    );
   }
 
   async agregarItem(customerId: number | null, guestToken: string | null, dto: AgregarItemDto) {
@@ -49,6 +53,16 @@ export class CarritoService {
       throw new NotFoundException("El producto no existe o no está publicado en el canal");
     }
     const cart = await this.obtenerOCrear(customerId, guestToken);
+
+    // Tope por producto (lo muestra la interfaz como "Máximo 10 unidades por pedido").
+    const yaEnCarrito = cart.items.find((i) => i.productId === dto.productId)?.quantity ?? 0;
+    if (yaEnCarrito + dto.quantity > MAX_UNIDADES_POR_PRODUCTO) {
+      throw new BadRequestException(
+        yaEnCarrito > 0
+          ? `Máximo ${MAX_UNIDADES_POR_PRODUCTO} unidades por pedido: ya tienes ${yaEnCarrito} de este producto en tu carrito`
+          : `Máximo ${MAX_UNIDADES_POR_PRODUCTO} unidades por pedido de cada producto`,
+      );
+    }
 
     await this.prisma.cartItem.upsert({
       where: { cartId_productId: { cartId: cart.id, productId: dto.productId } },
@@ -73,6 +87,9 @@ export class CarritoService {
   }
 
   async actualizarItem(cartId: number, productId: number, dto: ActualizarItemDto) {
+    if (dto.quantity > MAX_UNIDADES_POR_PRODUCTO) {
+      throw new BadRequestException(`Máximo ${MAX_UNIDADES_POR_PRODUCTO} unidades por pedido de cada producto`);
+    }
     if (dto.quantity === 0) {
       await this.prisma.cartItem.deleteMany({ where: { cartId, productId } });
     } else {
@@ -92,7 +109,7 @@ export class CarritoService {
   async obtenerPorId(cartId: number) {
     const cart = await this.prisma.cart.findUnique({ where: { id: cartId }, include: this.incluirItems() });
     if (!cart) throw new NotFoundException("Carrito no encontrado");
-    return cart;
+    return conTotales(cart);
   }
 
   // Fusión del carrito de invitado al iniciar sesión (C-04). Suma cantidades
@@ -115,6 +132,11 @@ export class CarritoService {
       }
       await tx.cartItem.deleteMany({ where: { cartId: guestCart.id } });
       await tx.cart.delete({ where: { id: guestCart.id } });
+      // Al sumar los dos carritos nadie queda por encima del tope por producto.
+      await tx.cartItem.updateMany({
+        where: { cartId: customerCart.id, quantity: { gt: MAX_UNIDADES_POR_PRODUCTO } },
+        data: { quantity: MAX_UNIDADES_POR_PRODUCTO },
+      });
     });
     return this.obtenerPorId(customerCart.id);
   }

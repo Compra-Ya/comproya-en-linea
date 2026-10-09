@@ -5,6 +5,7 @@ import { PrismaService } from "../prisma/prisma.service";
 import { CatalogoService } from "../catalogo/catalogo.service";
 import { CarritoService } from "../carrito/carrito.service";
 import { ConfirmarPedidoDto } from "./dto/confirmar-pedido.dto";
+import { aplicarCupon, calcularTotales } from "./dominio/totales";
 
 // Módulo pedido: SP-04 (cierre de la transacción de venta) — sprint 4.
 // RN-05: ninguna unidad se cobra sin reserva previa en el ERP.
@@ -57,7 +58,7 @@ export class PedidoService {
 
     let cupon: { id: number; percentage: unknown } | null = null;
     if (dto.couponCode) {
-      cupon = await this.prisma.loyaltyCoupon.findUnique({ where: { code: dto.couponCode } });
+      cupon = await this.prisma.loyaltyCoupon.findUnique({ where: { code: dto.couponCode.trim().toUpperCase() } });
       if (!cupon || !(cupon as any).active) {
         for (const reserva of reservas) {
           await this.catalogo.liberarReserva(reserva.availabilityId, reserva.quantity);
@@ -139,30 +140,34 @@ export class PedidoService {
       },
     });
     if (!order) throw new NotFoundException("Pedido no encontrado");
-    return order;
+    return { ...order, ...calcularTotales(order) };
   }
 
   async listarPorCliente(customerId: number) {
-    return this.prisma.order.findMany({
+    const pedidos = await this.prisma.order.findMany({
       where: { customerId },
       orderBy: { createdAt: "desc" },
-      include: { items: true, payment: true },
+      include: { items: { include: { product: true } }, payment: true, couponRedemption: { include: { coupon: true } } },
     });
+    return pedidos.map((p) => ({ ...p, ...calcularTotales(p) }));
   }
 
   // Total a cobrar (unitPrice ya congelado en el pedido) menos el cupón
   // redimido, si aplica. Lo usa el módulo pago para crear la sesión de Stripe.
   async calcularTotal(orderId: number): Promise<number> {
-    const order = await this.obtener(orderId);
-    const subtotal = order.items.reduce(
-      (acc, item) => acc + Number(item.unitPrice) * item.quantity,
-      0,
-    );
-    if (order.couponRedemption) {
-      const descuento = Number(order.couponRedemption.coupon.percentage) / 100;
-      return Math.round(subtotal * (1 - descuento) * 100) / 100;
+    return (await this.obtener(orderId)).total;
+  }
+
+  // CU-10: valida un cupón de lealtad contra el carrito del cliente y devuelve el descuento y el total reales,
+  // sin redimirlo (la redención ocurre al confirmar, RN-07).
+  async validarCupon(customerId: number, codigo: string) {
+    const cupon = await this.prisma.loyaltyCoupon.findUnique({ where: { code: codigo.trim().toUpperCase() } });
+    if (!cupon || !cupon.active) {
+      throw new BadRequestException("El cupón de lealtad no existe o no está vigente");
     }
-    return subtotal;
+    const carrito = await this.carrito.obtenerOCrear(customerId, null);
+    const porcentaje = Number(cupon.percentage);
+    return { codigo: cupon.code, porcentaje, subtotal: carrito.subtotal, ...aplicarCupon(carrito.subtotal, porcentaje) };
   }
 
   // RN-09: un pedido solo puede cancelarse mientras no haya iniciado su

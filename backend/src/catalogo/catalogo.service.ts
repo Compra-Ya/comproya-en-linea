@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from "@nestjs/comm
 import { PrismaService } from "../prisma/prisma.service";
 import { AdaptadorErpSimulado } from "./puertos/adaptador-erp-simulado";
 import { PublicarProductoDto } from "./dto/publicar-producto.dto";
+import { MAX_UNIDADES_POR_PRODUCTO } from "../comun/limites";
 
 // Módulo catalogo: sub-problemas SP-01 (gobierno del catálogo) y SP-02
 // (disponibilidad) — docs/arquitectura.md sección 3. Sprint 1, sin
@@ -81,7 +82,17 @@ export class CatalogoService {
       }),
       this.prisma.product.count({ where }),
     ]);
-    return { items, total, page, pageSize };
+    return { items: await this.conUnidades(items), total, page, pageSize };
+  }
+
+  // Agrega a cada producto las unidades disponibles (RN-03) y el máximo que se puede pedir de una vez
+  // (el menor entre las disponibles y el tope por producto), calculados por el servidor.
+  private async conUnidades<T extends { id: number }>(productos: T[]) {
+    const unidades = await this.erp.unidadesDisponiblesPorProductos(productos.map((p) => p.id));
+    return productos.map((p) => {
+      const unidadesDisponibles = unidades.get(p.id) ?? 0;
+      return { ...p, unidadesDisponibles, maximoPorPedido: Math.min(unidadesDisponibles, MAX_UNIDADES_POR_PRODUCTO) };
+    });
   }
 
   async listarPublicados(page = 1, pageSize = 20, categoryId?: number) {
@@ -96,7 +107,7 @@ export class CatalogoService {
       }),
       this.prisma.product.count({ where }),
     ]);
-    return { items, total, page, pageSize };
+    return { items: await this.conUnidades(items), total, page, pageSize };
   }
 
   async obtenerProducto(id: number) {
@@ -104,7 +115,8 @@ export class CatalogoService {
     if (!producto || !producto.published) {
       throw new NotFoundException("El producto no existe o no está publicado en el canal");
     }
-    return producto;
+    const [conUnidades] = await this.conUnidades([producto]);
+    return conUnidades;
   }
 
   // CU-03 Consulta de disponibilidad por sucursal.

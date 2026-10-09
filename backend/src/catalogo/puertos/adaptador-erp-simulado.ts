@@ -62,6 +62,17 @@ export class AdaptadorErpSimulado implements PuertoErp {
     return rows.map((row) => this.calcular(row));
   }
 
+  async unidadesDisponiblesPorProductos(productIds: number[]): Promise<Map<number, number>> {
+    const mapa = new Map<number, number>(productIds.map((id) => [id, 0]));
+    if (productIds.length === 0) return mapa;
+    const filas = await this.prisma.availability.findMany({ where: { productId: { in: productIds } } });
+    for (const fila of filas) {
+      const unidades = this.calcular(fila).unidadesDisponibles;
+      mapa.set(fila.productId, Math.max(mapa.get(fila.productId) ?? 0, unidades));
+    }
+    return mapa;
+  }
+
   async reservarUnidades(
     productId: number,
     branchId: number,

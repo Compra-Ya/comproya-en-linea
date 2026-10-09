@@ -188,7 +188,10 @@ export class PagoService {
       // Corrección: antes el frontend recalculaba sumando `items` sin
       // descuento; este es el mismo total que ya calculó y cobró Stripe
       // (incluye el descuento de cupón, RN-07), no una nueva fórmula.
-      total: await this.pedido.calcularTotal(orderId),
+      subtotal: order.subtotal,
+      descuento: order.descuento,
+      codigoCupon: order.codigoCupon,
+      total: order.total,
     };
   }
 

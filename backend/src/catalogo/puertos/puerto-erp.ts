@@ -25,6 +25,9 @@ export interface PuertoErp {
   esCodigoHomologado(homologatedCode: string): boolean;
   calcularDisponibilidad(productId: number, branchId: number): Promise<DisponibilidadCalculada>;
   listarDisponibilidadPorProducto(productId: number): Promise<DisponibilidadCalculada[]>;
+  // Unidades que una sola sucursal puede despachar de cada producto (RN-03, la mayor entre sucursales);
+  // 0 si el producto no tiene disponibilidad registrada.
+  unidadesDisponiblesPorProductos(productIds: number[]): Promise<Map<number, number>>;
   // RN-05: reserva atómica sobre `Availability.reservedUnits`; lanza error de
   // negocio si no hay unidades suficientes. Devuelve el id de la fila de
   // disponibilidad afectada para que el módulo pedido cree su propia
