@@ -1,0 +1,758 @@
+[
+  {
+    "id": "01-catalogo-exito",
+    "pantalla": "Catálogo",
+    "estado": "éxito",
+    "vistas": {
+      "390": {
+        "captura": "01-catalogo-exito-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Compra fácil y recíbelo en casa"
+      },
+      "1440": {
+        "captura": "01-catalogo-exito-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Compra fácil y recíbelo en casa"
+      }
+    }
+  },
+  {
+    "id": "02-catalogo-cargando",
+    "pantalla": "Catálogo",
+    "estado": "cargando",
+    "vistas": {
+      "390": {
+        "captura": "02-catalogo-cargando-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Compra fácil y recíbelo en casa"
+      },
+      "1440": {
+        "captura": "02-catalogo-cargando-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Compra fácil y recíbelo en casa"
+      }
+    }
+  },
+  {
+    "id": "03-catalogo-busqueda-sin-resultados",
+    "pantalla": "Catálogo",
+    "estado": "búsqueda sin resultados",
+    "vistas": {
+      "390": {
+        "captura": "03-catalogo-busqueda-sin-resultados-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Resultados para «zzqxwv»"
+      },
+      "1440": {
+        "captura": "03-catalogo-busqueda-sin-resultados-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Resultados para «zzqxwv»"
+      }
+    }
+  },
+  {
+    "id": "04-catalogo-error",
+    "pantalla": "Catálogo",
+    "estado": "error",
+    "vistas": {
+      "390": {
+        "captura": "04-catalogo-error-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Compra fácil y recíbelo en casa"
+      },
+      "1440": {
+        "captura": "04-catalogo-error-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Compra fácil y recíbelo en casa"
+      }
+    }
+  },
+  {
+    "id": "05-catalogo-producto-agregado",
+    "pantalla": "Catálogo",
+    "estado": "producto agregado",
+    "vistas": {
+      "390": {
+        "captura": "05-catalogo-producto-agregado-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Compra fácil y recíbelo en casa"
+      },
+      "1440": {
+        "captura": "05-catalogo-producto-agregado-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Compra fácil y recíbelo en casa"
+      }
+    }
+  },
+  {
+    "id": "06-categoria-exito",
+    "pantalla": "Categoría",
+    "estado": "éxito",
+    "vistas": {
+      "390": {
+        "captura": "06-categoria-exito-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Portátiles"
+      },
+      "1440": {
+        "captura": "06-categoria-exito-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Portátiles"
+      }
+    }
+  },
+  {
+    "id": "07-categoria-cargando",
+    "pantalla": "Categoría",
+    "estado": "cargando",
+    "vistas": {
+      "390": {
+        "captura": "07-categoria-cargando-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Portátiles"
+      },
+      "1440": {
+        "captura": "07-categoria-cargando-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Portátiles"
+      }
+    }
+  },
+  {
+    "id": "08-categoria-categoria-con-pocos-productos",
+    "pantalla": "Categoría",
+    "estado": "categoría con pocos productos",
+    "vistas": {
+      "390": {
+        "captura": "08-categoria-categoria-con-pocos-productos-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Portátiles"
+      },
+      "1440": {
+        "captura": "08-categoria-categoria-con-pocos-productos-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Portátiles"
+      }
+    }
+  },
+  {
+    "id": "09-detalle-disponible",
+    "pantalla": "Detalle",
+    "estado": "disponible",
+    "vistas": {
+      "390": {
+        "captura": "09-detalle-disponible-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "300 Touring"
+      },
+      "1440": {
+        "captura": "09-detalle-disponible-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "300 Touring"
+      }
+    }
+  },
+  {
+    "id": "10-detalle-agregado",
+    "pantalla": "Detalle",
+    "estado": "agregado",
+    "vistas": {
+      "390": {
+        "captura": "10-detalle-agregado-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "300 Touring"
+      },
+      "1440": {
+        "captura": "10-detalle-agregado-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "300 Touring"
+      }
+    }
+  },
+  {
+    "id": "11-detalle-agotado",
+    "pantalla": "Detalle",
+    "estado": "agotado",
+    "vistas": {
+      "390": {
+        "captura": "11-detalle-agotado-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "300 Touring"
+      },
+      "1440": {
+        "captura": "11-detalle-agotado-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "300 Touring"
+      }
+    }
+  },
+  {
+    "id": "12-detalle-cargando",
+    "pantalla": "Detalle",
+    "estado": "cargando",
+    "vistas": {
+      "390": {
+        "captura": "12-detalle-cargando-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": ""
+      },
+      "1440": {
+        "captura": "12-detalle-cargando-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": ""
+      }
+    }
+  },
+  {
+    "id": "13-detalle-no-disponible",
+    "pantalla": "Detalle",
+    "estado": "no disponible",
+    "vistas": {
+      "390": {
+        "captura": "13-detalle-no-disponible-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": ""
+      },
+      "1440": {
+        "captura": "13-detalle-no-disponible-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": ""
+      }
+    }
+  },
+  {
+    "id": "14-carrito-con-productos",
+    "pantalla": "Carrito",
+    "estado": "con productos",
+    "vistas": {
+      "390": {
+        "captura": "14-carrito-con-productos-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Tu carrito"
+      },
+      "1440": {
+        "captura": "14-carrito-con-productos-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Tu carrito"
+      }
+    }
+  },
+  {
+    "id": "15-carrito-vacio",
+    "pantalla": "Carrito",
+    "estado": "vacío",
+    "vistas": {
+      "390": {
+        "captura": "15-carrito-vacio-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Tu carrito"
+      },
+      "1440": {
+        "captura": "15-carrito-vacio-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Tu carrito"
+      }
+    }
+  },
+  {
+    "id": "16-carrito-cargando",
+    "pantalla": "Carrito",
+    "estado": "cargando",
+    "vistas": {
+      "390": {
+        "captura": "16-carrito-cargando-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Tu carrito"
+      },
+      "1440": {
+        "captura": "16-carrito-cargando-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Tu carrito"
+      }
+    }
+  },
+  {
+    "id": "17-carrito-error",
+    "pantalla": "Carrito",
+    "estado": "error",
+    "vistas": {
+      "390": {
+        "captura": "17-carrito-error-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Tu carrito"
+      },
+      "1440": {
+        "captura": "17-carrito-error-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Tu carrito"
+      }
+    }
+  },
+  {
+    "id": "18-datos-y-envio-normal",
+    "pantalla": "Datos y envío",
+    "estado": "normal",
+    "vistas": {
+      "390": {
+        "captura": "18-datos-y-envio-normal-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Datos y envío"
+      },
+      "1440": {
+        "captura": "18-datos-y-envio-normal-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Datos y envío"
+      }
+    }
+  },
+  {
+    "id": "19-datos-y-envio-errores-por-campo",
+    "pantalla": "Datos y envío",
+    "estado": "errores por campo",
+    "vistas": {
+      "390": {
+        "captura": "19-datos-y-envio-errores-por-campo-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Datos y envío"
+      },
+      "1440": {
+        "captura": "19-datos-y-envio-errores-por-campo-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Datos y envío"
+      }
+    }
+  },
+  {
+    "id": "20-datos-y-envio-cupon-valido",
+    "pantalla": "Datos y envío",
+    "estado": "cupón válido",
+    "vistas": {
+      "390": {
+        "captura": "20-datos-y-envio-cupon-valido-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Datos y envío"
+      },
+      "1440": {
+        "captura": "20-datos-y-envio-cupon-valido-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Datos y envío"
+      }
+    }
+  },
+  {
+    "id": "21-datos-y-envio-cupon-invalido",
+    "pantalla": "Datos y envío",
+    "estado": "cupón inválido",
+    "vistas": {
+      "390": {
+        "captura": "21-datos-y-envio-cupon-invalido-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Datos y envío"
+      },
+      "1440": {
+        "captura": "21-datos-y-envio-cupon-invalido-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Datos y envío"
+      }
+    }
+  },
+  {
+    "id": "22-datos-y-envio-sin-sesion",
+    "pantalla": "Datos y envío",
+    "estado": "sin sesión",
+    "vistas": {
+      "390": {
+        "captura": "22-datos-y-envio-sin-sesion-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Datos y envío"
+      },
+      "1440": {
+        "captura": "22-datos-y-envio-sin-sesion-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Datos y envío"
+      }
+    }
+  },
+  {
+    "id": "23-pago-normal",
+    "pantalla": "Pago",
+    "estado": "normal",
+    "vistas": {
+      "390": {
+        "captura": "23-pago-normal-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Pagar pedido #89"
+      },
+      "1440": {
+        "captura": "23-pago-normal-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Pagar pedido #89"
+      }
+    }
+  },
+  {
+    "id": "24-pago-abriendo-la-pasarela",
+    "pantalla": "Pago",
+    "estado": "abriendo la pasarela",
+    "vistas": {
+      "390": {
+        "captura": "24-pago-abriendo-la-pasarela-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Pagar pedido #89"
+      },
+      "1440": {
+        "captura": "24-pago-abriendo-la-pasarela-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Pagar pedido #89"
+      }
+    }
+  },
+  {
+    "id": "25-pago-no-se-completo-cancelado-1",
+    "pantalla": "Pago",
+    "estado": "no se completó (?cancelado=1)",
+    "vistas": {
+      "390": {
+        "captura": "25-pago-no-se-completo-cancelado-1-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Pagar pedido #89"
+      },
+      "1440": {
+        "captura": "25-pago-no-se-completo-cancelado-1-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Pagar pedido #89"
+      }
+    }
+  },
+  {
+    "id": "26-pedido-confirmado-confirmado",
+    "pantalla": "Pedido confirmado",
+    "estado": "confirmado",
+    "vistas": {
+      "390": {
+        "captura": "26-pedido-confirmado-confirmado-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "¡Pedido confirmado!"
+      },
+      "1440": {
+        "captura": "26-pedido-confirmado-confirmado-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "¡Pedido confirmado!"
+      }
+    }
+  },
+  {
+    "id": "27-pedido-confirmado-confirmando",
+    "pantalla": "Pedido confirmado",
+    "estado": "confirmando",
+    "vistas": {
+      "390": {
+        "captura": "27-pedido-confirmado-confirmando-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Pedido #89"
+      },
+      "1440": {
+        "captura": "27-pedido-confirmado-confirmando-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Pedido #89"
+      }
+    }
+  },
+  {
+    "id": "28-pedido-confirmado-la-confirmacion-tarda",
+    "pantalla": "Pedido confirmado",
+    "estado": "la confirmación tarda",
+    "vistas": {
+      "390": {
+        "captura": "28-pedido-confirmado-la-confirmacion-tarda-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Pedido #89"
+      },
+      "1440": {
+        "captura": "28-pedido-confirmado-la-confirmacion-tarda-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Pedido #89"
+      }
+    }
+  },
+  {
+    "id": "29-mis-pedidos-con-pedidos",
+    "pantalla": "Mis pedidos",
+    "estado": "con pedidos",
+    "vistas": {
+      "390": {
+        "captura": "29-mis-pedidos-con-pedidos-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Mis pedidos"
+      },
+      "1440": {
+        "captura": "29-mis-pedidos-con-pedidos-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Mis pedidos"
+      }
+    }
+  },
+  {
+    "id": "30-mis-pedidos-vacio",
+    "pantalla": "Mis pedidos",
+    "estado": "vacío",
+    "vistas": {
+      "390": {
+        "captura": "30-mis-pedidos-vacio-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Mis pedidos"
+      },
+      "1440": {
+        "captura": "30-mis-pedidos-vacio-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Mis pedidos"
+      }
+    }
+  },
+  {
+    "id": "31-mis-pedidos-sin-sesion",
+    "pantalla": "Mis pedidos",
+    "estado": "sin sesión",
+    "vistas": {
+      "390": {
+        "captura": "31-mis-pedidos-sin-sesion-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Mis pedidos"
+      },
+      "1440": {
+        "captura": "31-mis-pedidos-sin-sesion-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Mis pedidos"
+      }
+    }
+  },
+  {
+    "id": "32-mis-pedidos-cargando",
+    "pantalla": "Mis pedidos",
+    "estado": "cargando",
+    "vistas": {
+      "390": {
+        "captura": "32-mis-pedidos-cargando-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Mis pedidos"
+      },
+      "1440": {
+        "captura": "32-mis-pedidos-cargando-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Mis pedidos"
+      }
+    }
+  },
+  {
+    "id": "33-acceso-ingresar",
+    "pantalla": "Acceso",
+    "estado": "ingresar",
+    "vistas": {
+      "390": {
+        "captura": "33-acceso-ingresar-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Ingresar a ComproYa"
+      },
+      "1440": {
+        "captura": "33-acceso-ingresar-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Ingresar a ComproYa"
+      }
+    }
+  },
+  {
+    "id": "34-acceso-ingresar-con-error",
+    "pantalla": "Acceso",
+    "estado": "ingresar con error",
+    "vistas": {
+      "390": {
+        "captura": "34-acceso-ingresar-con-error-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Ingresar a ComproYa"
+      },
+      "1440": {
+        "captura": "34-acceso-ingresar-con-error-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Ingresar a ComproYa"
+      }
+    }
+  },
+  {
+    "id": "35-acceso-crear-cuenta",
+    "pantalla": "Acceso",
+    "estado": "crear cuenta",
+    "vistas": {
+      "390": {
+        "captura": "35-acceso-crear-cuenta-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Crear cuenta"
+      },
+      "1440": {
+        "captura": "35-acceso-crear-cuenta-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Crear cuenta"
+      }
+    }
+  },
+  {
+    "id": "36-acceso-crear-cuenta-con-errores",
+    "pantalla": "Acceso",
+    "estado": "crear cuenta con errores",
+    "vistas": {
+      "390": {
+        "captura": "36-acceso-crear-cuenta-con-errores-390.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Crear cuenta"
+      },
+      "1440": {
+        "captura": "36-acceso-crear-cuenta-con-errores-1440.png",
+        "ok": true,
+        "notas": [],
+        "sinDesborde": true,
+        "h1": "Crear cuenta"
+      }
+    }
+  }
+]

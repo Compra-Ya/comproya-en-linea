@@ -1,0 +1,116 @@
+[
+  {
+    "ancho": 1440,
+    "paradas": 63,
+    "pasos": [
+      {
+        "paso": "Tooltip se abre al enfocar «Aumentar cantidad»",
+        "ok": true,
+        "detalle": ""
+      },
+      {
+        "paso": "Esc cierra el tooltip y el foco se queda en el control",
+        "ok": true,
+        "detalle": ""
+      },
+      {
+        "paso": "Enter en «Aumentar cantidad» sube la cantidad a 2",
+        "ok": true,
+        "detalle": "cantidad mostrada: 2"
+      },
+      {
+        "paso": "Enter en «Agregar al carrito» confirma «Agregamos 2 unidades a tu carrito»",
+        "ok": true,
+        "detalle": ""
+      },
+      {
+        "paso": "«Ver carrito» lleva a /carrito con Enter",
+        "ok": true,
+        "detalle": ""
+      },
+      {
+        "paso": "«Continuar con tus datos de envío» lleva a Datos y envío con Enter",
+        "ok": true,
+        "detalle": ""
+      },
+      {
+        "paso": "Cupón LEALTAD10 se aplica con Enter y el resumen muestra el descuento",
+        "ok": true,
+        "detalle": ""
+      },
+      {
+        "paso": "«Continuar al pago» crea el pedido y lleva a Pago con Enter",
+        "ok": true,
+        "detalle": "/pago/93"
+      },
+      {
+        "paso": "«Pagar con tarjeta» con Enter abre la pasarela de pagos",
+        "ok": true,
+        "detalle": "checkout.stripe.com"
+      },
+      {
+        "paso": "Shift+Tab regresa por el mismo orden (sin atrapar el foco)",
+        "ok": true,
+        "detalle": "esperado «Buscar», quedó en «Buscar»"
+      }
+    ],
+    "hallazgos": []
+  },
+  {
+    "ancho": 390,
+    "paradas": 59,
+    "pasos": [
+      {
+        "paso": "Tooltip se abre al enfocar «Aumentar cantidad»",
+        "ok": true,
+        "detalle": ""
+      },
+      {
+        "paso": "Esc cierra el tooltip y el foco se queda en el control",
+        "ok": true,
+        "detalle": ""
+      },
+      {
+        "paso": "Enter en «Aumentar cantidad» sube la cantidad a 2",
+        "ok": true,
+        "detalle": "cantidad mostrada: 2"
+      },
+      {
+        "paso": "Enter en «Agregar al carrito» confirma «Agregamos 2 unidades a tu carrito»",
+        "ok": true,
+        "detalle": ""
+      },
+      {
+        "paso": "«Ver carrito» lleva a /carrito con Enter",
+        "ok": true,
+        "detalle": ""
+      },
+      {
+        "paso": "«Continuar con tus datos de envío» lleva a Datos y envío con Enter",
+        "ok": true,
+        "detalle": ""
+      },
+      {
+        "paso": "Cupón LEALTAD10 se aplica con Enter y el resumen muestra el descuento",
+        "ok": true,
+        "detalle": ""
+      },
+      {
+        "paso": "«Continuar al pago» crea el pedido y lleva a Pago con Enter",
+        "ok": true,
+        "detalle": "/pago/94"
+      },
+      {
+        "paso": "«Pagar con tarjeta» con Enter abre la pasarela de pagos",
+        "ok": true,
+        "detalle": "checkout.stripe.com"
+      },
+      {
+        "paso": "Shift+Tab regresa por el mismo orden (sin atrapar el foco)",
+        "ok": true,
+        "detalle": "esperado «Buscar», quedó en «Buscar»"
+      }
+    ],
+    "hallazgos": []
+  }
+]

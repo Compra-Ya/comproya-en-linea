@@ -20,6 +20,10 @@ DATABASE_URL="<url desplegada>" npx prisma migrate deploy
 
 Sin esta migración el backend nuevo falla al crear pedidos. Ver `docs/modo-venta-digital.md`.
 
+**El backend nuevo y el frontend rediseñado se despliegan juntos.** El rediseño depende de campos que el backend anterior no devuelve (`subtotal`, `unidades`, `maxPorProducto` y `lineTotal` en el carrito; `unidadesDisponibles` y `maximoPorPedido` en el catálogo; `subtotal`, `descuento`, `total` y `codigoCupon` en pedidos y comprobante) y del endpoint `POST /cupones/validar`. Con el backend anterior, la interfaz nueva mostraría totales vacíos. No hay más migraciones de esquema que la de arriba.
+
+Comprobaciones previas contra la base desplegada (solo lectura): que exista el cupón de lealtad `LEALTAD10` (`SELECT code, percentage, active FROM loyalty_coupons;`; lo crea la siembra de pagos, `prisma/lib/generate-payment.ts`) y que haya al menos una sucursal con unidades para despachar.
+
 ## 1. Requisitos previos
 
 1. Hacer pull de la rama con los cambios y **desplegar primero el frontend** (Vercel): las fotos viven en `frontend/public/productos/` y deben existir en el sitio antes de que la base apunte a ellas. Si la base se actualizara antes, el frontend mostraría el placeholder por categoría (no una imagen rota), pero sin foto.
@@ -94,7 +98,18 @@ DATABASE_URL="<url desplegada>" npx ts-node scripts/normalizar-precios-cop.ts --
 # con confirmación: repetir sin --dry-run
 ```
 
-Orden completo en una base recién sembrada: 4 (imágenes), 4c (nombres y categorías), 4d (precios), 4b (publicación).
+## 4e. Productos complementarios (confirmación aparte)
+
+Agrega filas a `complementary_products` (hasta 4 por producto, de otras categorías). Solo inserta: no modifica ni borra filas existentes y es idempotente. En la base local quedó en 8460 filas; en la desplegada la cifra depende de cuántos productos haya, así que se recalcula con el ensayo.
+
+```bash
+DATABASE_URL="<url desplegada>" npx ts-node scripts/sembrar-complementarios.ts --dry-run
+# con confirmación: repetir sin --dry-run
+```
+
+Reversión: `DELETE FROM complementary_products WHERE …` solo si antes se anotó el máximo `id` existente; por eso el respaldo del paso 2 debe incluir esa tabla.
+
+Orden completo en una base recién sembrada: 4 (imágenes), 4c (nombres y categorías), 4d (precios), 4b (publicación), 4e (complementarios).
 
 ## 5. Verificación
 
