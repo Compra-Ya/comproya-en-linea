@@ -5,6 +5,8 @@ import "@/components/ui/ui.css";
 export const metadata: Metadata = {
   title: "ComproYa en Línea",
   description: "Canal de venta digital B2C de Tiendas ComproYa",
+  // Favicon: símbolo de la marca sobre cuadrado naranja (design/design-system/assets/Logos/logo-app.svg).
+  icons: { icon: "/marca/logo-app.svg", apple: "/marca/logo-app.svg" },
   // Proyecto académico: el sitio desplegado no debe indexarse.
   robots: { index: false, follow: false },
 };
