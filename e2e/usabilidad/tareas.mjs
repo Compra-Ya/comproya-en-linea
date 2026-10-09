@@ -13,11 +13,18 @@ export const EQUIPO = {
   fecha: "Octubre de 2026",
 };
 
-// Hoja «Datos de prueba» que recibe el participante: son datos ficticios y se pueden escribir tal cual.
+// Participantes de la evaluación (cinco personas; el estándar recomienda al menos ocho).
+export const PARTICIPANTES = ["P01", "P02", "P03", "P04", "P05"];
+
+// Datos que cada persona escribe en el sistema. Son ficticios. El portal rechaza un documento o un correo repetido, y cada
+// participante crea su propia cuenta en la primera compra (T07), así que el documento y el correo son distintos por persona.
+export const DATOS_UNICOS = PARTICIPANTES.map((p, i) => [p, `10123456${String(i + 1).padStart(2, "0")}`, `laura.${p.toLowerCase()}@ejemplo.com`]);
+
+// Hoja «Datos de prueba» que recibe cada participante (lo único que cambia entre personas es el documento y el correo).
 export const DATOS_PRUEBA = [
   ["Nombre completo", "Laura Martínez"],
-  ["Documento de identidad", "1012345678 (cambia los dos últimos números si ya se usó)"],
-  ["Correo electrónico", "laura.p01@ejemplo.com (cambia p01 si ya se usó)"],
+  ["Documento de identidad", "el de tu fila en la tabla «Tus datos únicos»"],
+  ["Correo electrónico", "el de tu fila en la tabla «Tus datos únicos»"],
   ["Contraseña", "Prueba2026"],
   ["Teléfono", "3101234567"],
   ["Dirección de envío", "Calle 45 # 13-20, apto 301"],

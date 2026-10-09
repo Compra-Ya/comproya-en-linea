@@ -6,7 +6,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { AlignmentType, Document, Packer, Paragraph, Table, TableCell, TableRow, TextRun, WidthType, ShadingType, TableLayoutType, BorderStyle, VerticalAlign } from "docx";
 import { COLOR, ESTILOS, FUENTE, H1, H2, NUMERACIONES, NUMEROS, P, PC, SALTO, VACIO, VERTICAL, VINETAS, ficha, pie, tabla } from "./lib/doc.mjs";
-import { BLOQUES, DATOS_PRUEBA, EQUIPO, SEQ, SUS, TAREAS } from "./tareas.mjs";
+import { BLOQUES, DATOS_PRUEBA, DATOS_UNICOS, EQUIPO, SEQ, SUS, TAREAS } from "./tareas.mjs";
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
 const SALIDA = path.resolve(AQUI, "../../docs/usabilidad");
@@ -56,7 +56,7 @@ const portada = [
   PC("Prueba de usabilidad", { tam: 30, color: "555555", despues: 100 }),
   PC("ComproYa en Línea", { tam: 52, negrita: true, color: COLOR.azul, despues: 100 }),
   PC("Guía del participante", { tam: 34, despues: 800 }),
-  ficha([["Código del participante", "P01", false], ["Fecha de la sesión 1", "", true], ["Fecha de la sesión 2", "", true], ["Quien dirige la prueba", "", true]], 4000, 5840, { tam: 24, altoFila: 520 }),
+  ficha([["Código del participante (P01 a P05)", "", true], ["Fecha de la sesión 1", "", true], ["Fecha de la sesión 2", "", true], ["Quien dirige la prueba", "", true]], 4000, 5840, { tam: 24, altoFila: 520 }),
   VACIO(500),
   PC(`${EQUIPO.curso} · ${EQUIPO.universidad}`, { tam: 20, color: "555555", despues: 40 }),
   PC(EQUIPO.integrantes.join(" y "), { tam: 20, color: "555555", despues: 40 }),
@@ -81,7 +81,7 @@ const bienvenida = [
 
 const consentimiento = [
   H1("Consentimiento informado"),
-  P("Entiendo que: (1) se evalúa el sistema y no mi desempeño; (2) haré varias tareas de compra con datos ficticios, y la pasarela de pagos está en modo de prueba, por lo que no se usa ninguna tarjeta real ni se hace ningún cobro; (3) se grabará la pantalla y mi voz mientras pienso en voz alta, y, si lo autorizo, mi rostro; (4) las grabaciones se usarán solo para el curso, se identificarán con un código (P01) y no se publicarán; (5) puedo detener la prueba en cualquier momento sin consecuencias.", G),
+  P("Entiendo que: (1) se evalúa el sistema y no mi desempeño; (2) haré varias tareas de compra con datos ficticios, y la pasarela de pagos está en modo de prueba, por lo que no se usa ninguna tarjeta real ni se hace ningún cobro; (3) se grabará la pantalla y mi voz mientras pienso en voz alta, y, si lo autorizo, mi rostro; (4) las grabaciones se usarán solo para el curso, se identificarán con un código (P01 a P05) y no se publicarán; (5) puedo detener la prueba en cualquier momento sin consecuencias.", G),
   VACIO(200),
   ficha(
     [["Acepto participar (sí / no)", "", true], ["Autorizo grabar pantalla y voz (sí / no)", "", true], ["Autorizo grabar mi rostro con la cámara (sí / no)", "", true], ["Nombre", "", true], ["Firma", "", true], ["Fecha", "", true]],
@@ -104,6 +104,9 @@ const datos = [
   H1("Datos de prueba"),
   P("Usa estos datos cuando una tarea te pida escribir información. Son ficticios; puedes escribirlos tal cual.", G),
   tabla([4300, 5540], ["Dato", "Lo que debes escribir"], DATOS_PRUEBA.map(([a, b]) => [a, b]), { primeraNegrita: true, tam: 22, tamCab: 22, altoFila: 560 }),
+  H2("Tus datos únicos"),
+  P("Cada persona crea su propia cuenta, por eso el documento y el correo son distintos. Usa los de tu fila.", G),
+  tabla([2000, 3400, 4440], ["Participante", "Documento de identidad", "Correo electrónico"], DATOS_UNICOS.map(([c, d, e]) => [c, d, e]), { primeraNegrita: true, tam: 22, tamCab: 22, altoFila: 520 }),
   P("Para pagar, la propia pantalla de pago te dirá qué tarjeta de prueba usar.", { ...G, antes: 200 }),
   SALTO(),
 ];

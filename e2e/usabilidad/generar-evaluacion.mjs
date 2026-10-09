@@ -10,7 +10,7 @@ import { writeFileSync } from "fs";
 import {
   ANCHO_H, ANCHO_V, COLOR, ESTILOS, FUENTE, H1, H2, H3, NUMERACIONES, NUMEROS, P, PC, SALTO, VACIO, VERTICAL, VINETAS, celda, ficha, fmtSeg, pie, tabla, runs,
 } from "./lib/doc.mjs";
-import { BLOQUES, CASOS, DATOS_PRUEBA, EQUIPO, INVENTARIOS, REFERENCIAS, SEQ, SUS, TAREAS } from "./tareas.mjs";
+import { BLOQUES, CASOS, DATOS_PRUEBA, DATOS_UNICOS, EQUIPO, INVENTARIOS, PARTICIPANTES, REFERENCIAS, SEQ, SUS, TAREAS } from "./tareas.mjs";
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
 const RAIZ = path.resolve(AQUI, "../..");
@@ -30,6 +30,7 @@ const caso = (n) => CASOS.find((c) => c.n === n);
 const CASO_DE = (id) => tarea(id).caso;
 const esOperativa = (id) => tarea(id).tipo === "operacion";
 const KLM = LB.metodo.klm;
+const NP = PARTICIPANTES.length;
 const coma = (n, d = 1) => Number(n).toLocaleString("es-CO", { minimumFractionDigits: d, maximumFractionDigits: d });
 
 // ---------------------------------------------------------------- Portada
@@ -39,7 +40,7 @@ const portada = [
   PC("Venta de Electrodomésticos y Productos de Retail", { tam: 24, color: "555555", despues: 500 }),
   PC(EQUIPO.titulo, { tam: 44, negrita: true, color: COLOR.azul, despues: 160 }),
   PC(EQUIPO.subtitulo, { tam: 24, despues: 160 }),
-  PC("Incluye la línea base de tiempos y clics del equipo, las tablas de registro del participante, la comparación equipo–usuario y la revisión de otras pruebas de usabilidad viables en pruebas de software", { tam: 20, cursiva: true, color: "555555", despues: 700 }),
+  PC("Incluye la línea base de tiempos y clics del equipo, las tablas de registro de cinco participantes, la comparación equipo–usuarios y la revisión de otras pruebas de usabilidad viables en pruebas de software", { tam: 20, cursiva: true, color: "555555", despues: 700 }),
   PC("Integrantes:", { negrita: true, despues: 60 }),
   ...EQUIPO.integrantes.map((n) => PC(n, { despues: 40 })),
   VACIO(200),
@@ -59,8 +60,8 @@ const portada = [
 const intro = [
   H1("1. Introducción"),
   P("Este documento evalúa la usabilidad del Caso de Uso 2 (Compra completa en el canal digital) con las métricas externas del estándar ISO/IEC 9126-2, sección 8.3 «Métricas de usabilidad» (ISO/IEC, 2003a; material de clase «7. Métricas externas de usabilidad», Sierra González, 2026). A diferencia de las métricas internas de funcionalidad (Cancimance Pabón & Serrano Rojas, 2026d), que se miden sobre el código, estas se miden con una persona que usa el sistema en ejecución: comprensibilidad (casos de prueba 1 a 7) y facilidad de aprendizaje (casos 8 a 12). Los casos coinciden, en el mismo orden, con los requisitos UT-01 a UT-12 del diseño (design/04-requisitos-usabilidad.md)."),
-  P("Se aplican los doce casos asignados, con tres tareas por caso. Cada sesión se registra con video de la pantalla, medición de la interacción (tiempo, clics, errores y ayudas, con Camtasia o una herramienta similar) y el audio del participante pensando en voz alta (Think Aloud). Por simplicidad, en este primer sprint participa **un solo usuario**, como indicó el docente; el estándar recomienda al menos ocho (ISO/IEC, 2003a), de modo que los resultados son indicativos y no concluyentes (sección 4.5)."),
-  P("El documento llega **preparado**: trae las tareas redactadas, la ruta ideal de cada una, los tiempos de referencia del equipo medidos sobre el sistema real y las tablas para registrar al participante y comparar su desempeño con el del equipo. Las celdas sombreadas en amarillo se llenan durante y después de las sesiones; ninguna de ellas fue estimada de antemano. Lo acompañan la **guía del participante** (las tareas, listas para imprimir y entregar) y una **hoja de cálculo** que calcula las métricas a partir de los datos registrados."),
+  P("Se aplican los doce casos asignados, con tres tareas por caso. Cada sesión se registra con video de la pantalla, medición de la interacción (tiempo, clics, errores y ayudas, con Camtasia o una herramienta similar) y el audio del participante pensando en voz alta (Think Aloud). Participan **cinco personas** (P01 a P05). El docente indicó un solo usuario para este primer sprint; el equipo decidió ampliar a cinco para que la media y el error estándar se calculen entre personas, como pide el material de clase. El estándar recomienda al menos ocho (ISO/IEC, 2003a), de modo que los resultados son indicativos y no concluyentes (sección 4.5)."),
+  P("El documento llega **preparado**: trae las tareas redactadas, la ruta ideal de cada una, los tiempos de referencia del equipo medidos sobre el sistema real y las tablas para registrar a los cinco participantes y comparar su desempeño con el del equipo. Las celdas sombreadas en amarillo se llenan durante y después de las sesiones; ninguna de ellas fue estimada de antemano. Lo acompañan la **guía del participante** (las tareas, listas para imprimir y entregar) y una **hoja de cálculo** con una hoja por persona que calcula las métricas de cada una y del grupo."),
   P("Además del material de clase, la sección 9 revisa otras pruebas de usabilidad viables en un proyecto de software (mapas de calor, seguimiento ocular, pruebas remotas y cuestionarios estandarizados, entre otras) y recomienda cuáles aplicar en este sprint."),
   P("**Estado del documento:** preparado el 9 de octubre de 2026. Resultados pendientes de las sesiones con el participante.", { alinear: AlignmentType.LEFT }),
 ];
@@ -110,17 +111,13 @@ const sistema = [
 ];
 
 const participante = [
-  H1("3. Participante"),
-  P("Se evalúa un solo usuario (P01), representativo del Cliente digital: una persona adulta que ha comprado en línea alguna vez y **no conoce el sistema** (precondición del caso 1). No debe haber participado en el diseño ni en el desarrollo. Los datos se llenan en la sesión, con su consentimiento (anexo A); el documento solo lo identifica como P01."),
-  ficha(
-    [
-      ["Código del participante", "P01", false], ["Edad", "", true], ["Ocupación", "", true], ["Nivel de estudios", "", true],
-      ["Frecuencia de compras en línea (nunca, mensual, semanal…)", "", true], ["Tiendas en línea que ha usado", "", true],
-      ["Dispositivo y navegador que usa habitualmente", "", true], ["¿Conocía antes ComproYa o este sistema? (debe ser «no»)", "", true],
-      ["¿Ha pagado antes con tarjeta en una pasarela web?", "", true], ["Firmó el consentimiento (sí/no)", "", true],
-      ["Autoriza grabar pantalla, voz y (opcional) rostro (sí/no)", "", true], ["Observaciones sobre el perfil", "", true],
-    ],
-    4600, 5240, { altoFila: 340 },
+  H1("3. Participantes"),
+  P("Participan cinco personas (P01 a P05), representativas del Cliente digital: adultas que han comprado en línea alguna vez y **no conocen el sistema** (precondición del caso 1). No deben haber participado en el diseño ni en el desarrollo. Los datos se llenan en cada sesión, con su consentimiento (anexo A); el documento solo las identifica con su código."),
+  tabla(
+    [3640, ...PARTICIPANTES.map(() => 1240)],
+    ["Dato", ...PARTICIPANTES],
+    ["Edad", "Ocupación", "Nivel de estudios", "Frecuencia de compras en línea (nunca, mensual, semanal…)", "Tiendas en línea que ha usado", "Dispositivo y navegador habituales", "¿Conocía antes ComproYa? (debe ser «no»)", "¿Ha pagado antes con tarjeta en una pasarela web?", "Firmó el consentimiento (sí/no)", "Autoriza grabar pantalla, voz y (opcional) rostro", "Fecha de la sesión 1", "Fecha de la sesión 2"].map((c) => [{ t: c, fondo: COLOR.azulClaro }, ...PARTICIPANTES.map(() => "")]),
+    { llenar: PARTICIPANTES.map((_, i) => i + 1), altoFila: 420 },
   ),
 ];
 
@@ -165,9 +162,10 @@ const metodo = [
   H1("4. Método"),
   H2("4.1 Diseño de la evaluación"),
   ...VINETAS([
-    "**Un participante (P01)** y **doce casos de prueba**, con **tres tareas por caso** (27 tareas: T01 a T27). Las compras T07 a T09 sirven a cuatro casos (3, 5, 9 y 10) porque en cada uno se mide una cosa distinta sobre la misma grabación; las preguntas de los estados del sistema (T16 a T18) y la de «Datos y envío» (T03) se hacen dentro de las compras.",
+    `**Cinco participantes (P01 a P05)** y **doce casos de prueba**, con **tres tareas por caso** (27 tareas: T01 a T27). Cada persona hace las 27 tareas en su propia sesión: ${NP} sesiones 1 y ${NP} sesiones 2. Las compras T07 a T09 sirven a cuatro casos (3, 5, 9 y 10) porque en cada uno se mide una cosa distinta sobre la misma grabación; las preguntas de los estados del sistema (T16 a T18) y la de «Datos y envío» (T03) se hacen dentro de las compras.`,
     "**Dos sesiones.** La sesión 1 (unos 60 minutos, bloques 1 a 8) cubre los casos 1 a 10 y 12. La sesión 2, **al día siguiente** (unos 15 minutos), cubre el caso 11 (retención).",
     "**Sin ayuda.** El evaluador lee cada tarea tal cual, no explica nombres de botones y no corrige (sección 4.6).",
+    "**Mismo protocolo para todas las personas:** el mismo orden de bloques, las mismas frases y el mismo estado inicial; cada persona usa su propia cuenta (anexo F), así que las sesiones no se interfieren.",
     "**Orden.** Los casos 1 y 2 van primero, con la persona sin tocar nada, porque dependen de la primera impresión; la función básica (caso 8) va antes de cualquier compra para medir el aprendizaje de la primera vez; el cupón (caso 12) va antes de los errores (caso 4) para no revelar que existe el campo de cupón.",
   ]),
   H2("4.2 Instrumentos y registro"),
@@ -185,7 +183,7 @@ const metodo = [
   parametros, VACIO(),
   P("**Limitaciones.** El KLM describe a un experto sin errores, por eso el tiempo objetivo incluye un margen. La espera del sistema se midió en el entorno local; en el portal desplegado puede ser mayor (red, servidor y pasarela). No se estima el tiempo de lectura de los textos, que en una persona nueva puede ser importante. Todos los números de la línea base salen de la ejecución del script, no de una estimación manual."),
   H2("4.5 Estadísticos: media y error estándar"),
-  P("El material de clase pide reportar el valor medio y el error estándar de la media. Con un solo usuario no hay variación entre usuarios; por eso la media y el error estándar de cada métrica se calculan **sobre las tres tareas del caso (n = 3)**: media = Σx / 3; desviación estándar muestral s = √(Σ(x − media)² / 2); error estándar = s / √3. Esto describe la variación entre tareas de una misma persona y **no permite generalizar** a otros usuarios; con ocho o más participantes se calcularía sobre usuarios, como recomienda el estándar."),
+  P("El material de clase pide reportar el valor medio y el error estándar de la media. Con cinco participantes se calculan **entre personas (n = 5)**: media = Σx / n; desviación estándar muestral s = √(Σ(x − media)² / (n − 1)); error estándar = s / √n. La media y el error estándar se reportan para el valor de cada caso (la proporción del criterio que cumple cada persona) y para el tiempo de cada tarea. Además, el **grupo cumple un caso si al menos el 80 % de las personas lo cumple** (decisión del equipo). Con cinco personas los resultados son indicativos y **no permiten generalizar**; el estándar recomienda ocho o más."),
   H2("4.6 Reglas del evaluador"),
   ...VINETAS([
     "Leer cada tarea **tal cual** está escrita, sin explicar nombres de botones ni dar pistas.",
@@ -195,7 +193,7 @@ const metodo = [
     "Al terminar cada tarea, preguntar la facilidad (SEQ, 1 a 7) y, al final, aplicar el SUS (sección 8). Son complementos y no reemplazan los doce casos.",
   ]),
   H2("4.7 Consideraciones éticas"),
-  P("La participación es voluntaria y la persona puede parar en cualquier momento. Firma un consentimiento (anexo A) que explica qué se graba y para qué. Todos los datos que escribe son ficticios y la pasarela está en modo de prueba: no se usa ninguna tarjeta real ni se hace ningún cobro. Los videos se usan solo para el curso, se guardan con el código P01 y no se publican."),
+  P("La participación es voluntaria y la persona puede parar en cualquier momento. Firma un consentimiento (anexo A) que explica qué se graba y para qué. Todos los datos que escribe son ficticios y la pasarela está en modo de prueba: no se usa ninguna tarjeta real ni se hace ningún cobro. Los videos se usan solo para el curso, se guardan con el código de cada persona (P01 a P05) y no se publican."),
 ];
 
 const plan = [
@@ -216,15 +214,25 @@ const plan = [
     { centrar: [0, 3], cebra: true },
   ),
   P(`Duración total estimada de la sesión 1: ${BLOQUES.filter((b) => b.n < 9).reduce((a, b) => a + b.min, 0)} minutos, más ${BLOQUES.find((b) => b.n === 9).min} de la sesión 2 (suma de los minutos de la tabla; el tiempo real lo confirma el primer ensayo).`, { antes: 120 }),
+,
+  H2("5.3 Calendario de las sesiones"),
+  P(`Cada persona hace una sesión 1 (unos ${BLOQUES.filter((b) => b.n < 9).reduce((a, b) => a + b.min, 0)} minutos) y, al día siguiente, una sesión 2 (unos ${BLOQUES.find((b) => b.n === 9).min} minutos): ${NP} personas suman unas ${coma((NP * BLOQUES.reduce((a, b) => a + b.min, 0)) / 60)} horas de sesión, sin contar la preparación. Se recomienda que un integrante dirija y otro observe, y alternar los roles entre personas.`, { alinear: AlignmentType.LEFT }),
+  tabla(
+    [900, 2400, 2400, 2000, 2140],
+    ["Persona", "Sesión 1 (fecha y hora)", "Sesión 2 (fecha y hora)", "Evaluador / observador", "Estado"],
+    PARTICIPANTES.map((p) => [{ t: `**${p}**`, fondo: COLOR.azulClaro }, "", "", "", ""]),
+    { llenar: [1, 2, 3, 4], altoFila: 420 },
+  ),
 ];
 
-// ---------------------------------------------------------------- 6 (horizontal): resultados por caso
+// ---------------------------------------------------------------- 6 (horizontal): resultados por caso (cinco participantes)
 const A_H = ANCHO_H;
 const celdasRuta = (id) => {
   const b = base(id);
   if (!b || !b.pasos) return ["No aplica: se responde de palabra."];
   return [...b.pasos.map((p, i) => `${i + 1}. ${p}`), `**Clics ideales: ${b.clics} · Teclas: ${b.teclas}**`];
 };
+const colsP = PARTICIPANTES.length;
 
 function tablaDescripcion(ids) {
   return tabla(
@@ -237,95 +245,78 @@ function tablaDescripcion(ids) {
   );
 }
 
+// Tareas operativas: tiempo de cada persona, media y error estándar entre personas, clics, errores y ayudas medios.
 function tablaOperativa(ids) {
+  const anchos = [800, 800, 800, ...PARTICIPANTES.map(() => 800), 900, 900, 800, 900, 900, 900, 1040, 1100];
+  const idxIdeal = 3 + colsP + 2;
+  const llenar = Array.from({ length: anchos.length - 3 }, (_, i) => i + 3).filter((i) => i !== idxIdeal);
   return tabla(
-    [900, 900, 900, 1000, 900, 900, 1000, 900, 900, 1000, 4540],
-    ["Tarea", "T ref (s)", "T obj (s)", "T usuario (s)", "Δ T (usuario − ref)", "Clics ideales", "Clics usuario", "Errores", "Ayudas", "¿Completó?", "Observaciones (consultas externas, vacilaciones…)"],
+    anchos,
+    ["Tarea", "T ref (s)", "T obj (s)", ...PARTICIPANTES.map((p) => `T ${p} (s)`), "Media (s)", "Error estándar", "Clics ideales", "Clics medios", "Errores medios", "Ayudas medias", "Cumplen el tiempo", "Observaciones"],
     ids.map((id) => {
       const b = base(id);
-      return [{ t: `**${id}**`, fondo: COLOR.azulClaro }, coma(b.referenciaExpertoS), String(b.objetivoNovatoS), "", "", String(b.clics), "", "", "", "", ""];
+      return [{ t: `**${id}**`, fondo: COLOR.azulClaro }, coma(b.referenciaExpertoS), String(b.objetivoNovatoS), ...PARTICIPANTES.map(() => ""), "", "", String(b.clics), "", "", "", "", ""];
     }),
-    { llenar: [3, 4, 6, 7, 8, 9, 10], centrar: [1, 2, 3, 4, 5, 6, 7, 8, 9], altoFila: 520 },
+    { llenar, centrar: Array.from({ length: anchos.length - 1 }, (_, i) => i + 1), altoFila: 520, tam: 17 },
   );
 }
 
+// Tareas de comprensión: 1 si la persona acertó, 0 si no, una columna por persona.
 function tablaRespuestas(ids) {
   return tabla(
-    [900, 3400, 4200, 3340, 900, 1100],
-    ["Tarea", "Lo que se le pregunta o pide", "Respuesta textual del participante (Think Aloud)", "Rúbrica de acierto", "¿Acertó? (1/0)", "Minuto del video"],
+    [900, 3300, ...PARTICIPANTES.map(() => 760), 900, 800, 4140],
+    ["Tarea", "Lo que se le pregunta o pide", ...PARTICIPANTES.map((p) => `${p} (1/0)`), "Aciertos (de 5)", "%", "Rúbrica de acierto"],
     ids.map((id) => {
       const t = tarea(id);
-      return [{ t: [`**${id}**`, t.titulo], fondo: COLOR.azulClaro }, `«${t.enunciado}»`, "", t.rubrica, "", ""];
+      return [{ t: [`**${id}**`, t.titulo], fondo: COLOR.azulClaro }, `«${t.enunciado}»`, ...PARTICIPANTES.map(() => ""), "", "", t.rubrica];
     }),
-    { llenar: [2, 4, 5], centrar: [4, 5], altoFila: 900 },
+    { llenar: Array.from({ length: colsP + 2 }, (_, i) => i + 2), centrar: Array.from({ length: colsP + 2 }, (_, i) => i + 2), altoFila: 800, tam: 17 },
   );
 }
 
 function tablaInventario(id) {
-  const filas = INVENTARIOS[id].map(([elemento, esperado], i) => [String(i + 1), elemento, esperado, "", "", ""]);
+  const filas = INVENTARIOS[id].map(([elemento, esperado], i) => [String(i + 1), elemento, esperado, ...PARTICIPANTES.map(() => ""), "", "", ""]);
   return tabla(
-    [400, 4600, 4000, 1200, 1100, 2540],
-    ["N.º", `Elemento de la interfaz (${id}: ${tarea(id).titulo})`, "Significado esperado (rúbrica)", "¿Comprendió sin ayuda? (1/0)", "¿Vio el globo de ayuda?", "Lo que dijo el participante"],
+    [400, 4400, 3400, ...PARTICIPANTES.map(() => 620), 700, 700, 1140],
+    ["N.º", `Elemento de la interfaz (${id}: ${tarea(id).titulo})`, "Significado esperado (rúbrica)", ...PARTICIPANTES.map((p) => `${p} (1/0)`), "Σ de 5", "%", "Comentarios (¿vio el globo de ayuda?)"],
     filas,
-    { llenar: [3, 4, 5], centrar: [0, 3, 4], altoFila: 380 },
+    { llenar: Array.from({ length: colsP + 3 }, (_, i) => i + 3), centrar: [0, ...Array.from({ length: colsP + 2 }, (_, i) => i + 3)], altoFila: 380, tam: 17 },
   );
 }
 
+// Cálculo del caso: una fila por medida, una columna por persona, y los estadísticos del grupo.
 function tablaCalculo(filas) {
   return tabla(
-    [3700, 1500, 3700, 1800, 2100, 1040],
-    ["Variable o medida", "Valor", "Cálculo", "Resultado", "Criterio", "¿Cumple?"],
-    filas.map(([a, b, c, d, e, f]) => [a, b ?? "", c, d ?? "", e, f ?? ""]),
-    { llenar: [1, 3, 5], centrar: [1, 3, 5] },
+    [4200, ...PARTICIPANTES.map(() => 1000), 1000, 1000, 1000, 1640],
+    ["Variable o medida", ...PARTICIPANTES, "Media", "Error estándar", "Personas que cumplen", "Criterio por persona"],
+    filas.map(([med, criterio]) => [med, ...PARTICIPANTES.map(() => ""), "", "", "", criterio]),
+    { llenar: Array.from({ length: colsP + 3 }, (_, i) => i + 1), centrar: Array.from({ length: colsP + 3 }, (_, i) => i + 1), altoFila: 380 },
   );
 }
 
 const tablaThinkAloud = () =>
-  tabla([1600, 6200, 6040], ["Minuto del video", "Cita textual del participante (Think Aloud)", "Interpretación o hallazgo"], [["", "", ""], ["", "", ""], ["", "", ""]], { llenar: [0, 1, 2], altoFila: 460 });
+  tabla([1100, 1300, 6000, 5440], ["Participante", "Minuto del video", "Cita textual (Think Aloud)", "Interpretación o hallazgo"], [["", "", "", ""], ["", "", "", ""], ["", "", "", ""], ["", "", "", ""]], { llenar: [0, 1, 2, 3], altoFila: 440 });
 
 const objetivoMedio = (ids) => coma(ids.reduce((a, id) => a + base(id).objetivoNovatoS, 0) / ids.length);
-const referenciaMedia = (ids) => coma(ids.reduce((a, id) => a + base(id).referenciaExpertoS, 0) / ids.length);
 
 function calculoCaso(c) {
   const ids = c.tareas;
-  const ob = (id) => `T obj ${base(id)?.objetivoNovatoS ?? ""} s`;
+  const cumple = ["¿Cumple? (Sí / No)", "Sí o No"];
+  const pantallas = (n) => [["A: " + n.a, "—"], ["X = A / " + n.b, n.crit], cumple];
   switch (c.n) {
-    case 1: case 4: case 7:
-      return [["A: " + (c.n === 1 ? "pantallas cuyo propósito describió correctamente" : c.n === 4 ? "errores en los que interpretó el mensaje y propuso la acción correcta" : "estados del sistema descritos correctamente"), "", "Suma de «¿Acertó?» de " + ids.join(", "), "", "—", ""],
-        ["B: " + (c.n === 1 ? "pantallas evaluadas" : c.n === 4 ? "errores provocados" : "estados observados"), "3", "Fijo", "3", "—", "—"],
-        ["X = A / B", "", "A ÷ 3", "", c.n === 1 ? "X ≥ 0,80" : "X ≥ 0,80", ""]];
-    case 2:
-      return [["A: controles comprendidos sin ayuda", "", "Suma de la columna «¿Comprendió?» de T04, T05 y T06", "", "—", ""],
-        ["B: controles del inventario", "26", "T04: 10 + T05: 8 + T06: 8", "26", "—", "—"],
-        ["X = A / B", "", "A ÷ 26", "", "X ≥ 0,80 (21 o más)", ""],
-        ["Controles comprendidos solo gracias al globo de ayuda", "", "Cuenta de «¿Vio el globo de ayuda?» = 1", "", "Informativo", "—"]];
-    case 3:
-      return [["A: compras completadas sin ayuda", "", "Cuenta de «¿Completó?» = sí en T07, T08, T09", "", "—", ""],
-        ["X = A / B", "", "A ÷ 3", "", "X = 1,00", ""],
-        ["T media del usuario (s)", "", "(T07 + T08 + T09) ÷ 3", "", `T obj medio ${objetivoMedio(ids)} s`, ""],
-        ["Error estándar del tiempo (s)", "", "s ÷ √3", "", "Informativo", "—"]];
-    case 5:
-      return [["A: compras completadas sin consultas externas", "", "Cuenta de transacciones sin marca C en T07, T08, T09", "", "—", ""],
-        ["X = A / B", "", "A ÷ 3", "", "X = 1,00", ""],
-        ["D: consultas externas", "", "Suma de marcas C en T07, T08 y T09", "", "D = 0", ""]];
-    case 6:
-      return [["A: rutas recorridas y vuelta al inicio sin error", "", "Cuenta de «¿Completó?» = sí en T13, T14, T15", "", "—", ""],
-        ["X = A / B", "", "A ÷ 3", "", "X = 1,00", ""],
-        ["Clics usuario ÷ clics ideales", "", `Suma de clics usuario ÷ ${ids.reduce((a, id) => a + base(id).clics, 0)}`, "", "Informativo (≤ 1,5)", ""]];
-    case 8:
-      return ids.map((id) => [`T${id.slice(1)} (s): ${tarea(id).titulo}`, "", "Del video", "", `≤ 180 s y ≤ ${base(id).objetivoNovatoS} s`, ""]).concat([["Media y error estándar del tiempo (s)", "", "media; s ÷ √3", "", "Informativo", "—"]]);
-    case 9:
-      return ids.map((id) => [`E en ${id} (errores de navegación + selección + datos)`, "", "Marcas N + S + D", "", "E < 3", ""]).concat([["Media y error estándar de E", "", "media; s ÷ √3", "", "Informativo", "—"]]);
-    case 10:
-      return ids.map((id) => [`H en ${id} (ayudas)`, "", "Marcas A", "", "H ≤ 1", ""]).concat([["Media y error estándar de H", "", "media; s ÷ √3", "", "Informativo", "—"]]);
-    case 11:
-      return [["A: tareas del día 2 sin reaprendizaje ni ayuda", "", "Cuenta de «¿Completó?» = sí en T22, T23, T24", "", "—", ""],
-        ["X = A / B", "", "A ÷ 3", "", "X = 1,00", ""],
-        ...ids.filter(esOperativa).map((id) => [`R = T usuario ÷ T obj en ${id}`, "", `T usuario ÷ ${base(id).objetivoNovatoS}`, "", "Informativo (≤ 1)", ""])];
-    case 12:
-      return ids.flatMap((id) => [[`T en ${id} (s)`, "", "Del video", "", `≤ ${base(id).objetivoNovatoS} s`, ""], [`E y H en ${id}`, "", "Marcas N+S+D y A", "", "E < 3 y H ≤ 1", ""]]);
-    default:
-      return [];
+    case 1: return pantallas({ a: "pantallas con el propósito bien descrito (de 3)", b: "3", crit: "X ≥ 0,80" });
+    case 4: return pantallas({ a: "mensajes interpretados con la acción correcta (de 3)", b: "3", crit: "X ≥ 0,80" });
+    case 7: return pantallas({ a: "estados del sistema descritos correctamente (de 3)", b: "3", crit: "X ≥ 0,80" });
+    case 2: return [["A: controles comprendidos sin ayuda (de 26)", "—"], ["X = A / 26", "X ≥ 0,80 (21 o más)"], cumple, ["Controles comprendidos solo por el globo de ayuda", "Informativo"]];
+    case 3: return [["A: compras completadas sin ayuda (de 3)", "—"], ["X = A / 3", "X = 1,00"], ["T medio de las 3 compras (s)", `≤ T obj medio ${objetivoMedio(ids)} s`], cumple];
+    case 5: return [["A: compras sin consultas externas (de 3)", "—"], ["X = A / 3", "X = 1,00"], ["D: consultas externas en T07, T08 y T09", "D = 0"], cumple];
+    case 6: return [["A: rutas sin error de navegación (de 3)", "—"], ["X = A / 3", "X = 1,00"], ["Clics usuario ÷ clics ideales", `Informativo (≤ 1,5; ideales: ${ids.reduce((a, id) => a + base(id).clics, 0)})`], cumple];
+    case 8: return [...ids.map((id) => [`T en ${id} (s): ${tarea(id).titulo}`, `≤ 180 s y ≤ ${base(id).objetivoNovatoS} s`]), ["X = tareas dentro del límite / 3", "X = 1,00"], cumple];
+    case 9: return [...ids.map((id) => [`E en ${id} (errores N + S + D)`, "E < 3"]), ["X = compras con E < 3, de 3", "X = 1,00"], cumple];
+    case 10: return [...ids.map((id) => [`H en ${id} (ayudas)`, "H ≤ 1"]), ["X = compras con H ≤ 1, de 3", "X = 1,00"], cumple];
+    case 11: return [["A: tareas del día 2 sin reaprendizaje ni ayuda (de 3)", "—"], ["X = A / 3", "X = 1,00"], ["R = T usuario ÷ T obj (media de las 3)", "Informativo (≤ 1)"], cumple];
+    case 12: return [...ids.map((id) => [`T en ${id} (s)`, `≤ ${base(id).objetivoNovatoS} s`]), ["E máximo entre las 3 tareas", "E < 3"], ["H máximo entre las 3 tareas", "H ≤ 1"], ["X = tareas que cumplen T, E y H, de 3", "X = 1,00"], cumple];
+    default: return [];
   }
 }
 
@@ -338,7 +329,8 @@ function seccionCaso(c) {
     ficha(
       [
         ["Objetivo", c.objetivo], ["Procedimiento del material de clase", c.procedimiento], ["Métrica ISO/IEC 9126-2", c.metricaIso],
-        ["Fórmula", `${c.formula}. ${c.variables}`], ["Resultado esperado (material de clase)", c.esperado], ["Criterio del equipo", c.criterio],
+        ["Fórmula (por persona)", `${c.formula}. ${c.variables}`], ["Resultado esperado (material de clase)", c.esperado], ["Criterio del equipo (por persona)", c.criterio],
+        ["Criterio del grupo", "El grupo cumple el caso si al menos el 80 % de las personas cumple el criterio. Se reportan además la media y el error estándar entre personas."],
         ...(c.comparte ? [["Nota", c.comparte]] : []),
       ],
       3300, A_H - 3300, { tam: 18 },
@@ -350,7 +342,7 @@ function seccionCaso(c) {
   ];
   const registro = [];
   if (c.n === 2) {
-    registro.push(H3("Registro: inventario de controles"));
+    registro.push(H3("Registro: inventario de controles (1 = comprendió sin ayuda, 0 = no)"));
     for (const id of ids) registro.push(tablaInventario(id), VACIO(80));
   } else if (c.n === 7) {
     const dur = (clave) => {
@@ -359,59 +351,41 @@ function seccionCaso(c) {
     };
     registro.push(
       P(`**Duración medida de cada estado en el entorno local** (varias ejecuciones de la línea base): «Reservando tus unidades» ${dur("reservando tus unidades (Continuar al pago)")}; «Abriendo la pasarela segura» ${dur("abriendo la pasarela segura (Pagar con tarjeta)")}; «Estamos confirmando tu pago» ${dur("confirmando tu pago (después de la pasarela)")}. Son estados muy breves: si la persona no alcanza a verlos, repetir con la red lenta del anexo E o preguntar justo al terminar el estado, y anotarlo en observaciones.`, { tam: 19, alinear: AlignmentType.LEFT }),
-      H3("Registro de respuestas"),
-      tablaRespuestas(ids), VACIO(80),
+      H3("Registro de respuestas (1 = acertó, 0 = no)"), tablaRespuestas(ids), VACIO(80),
     );
   } else if (comp) {
-    registro.push(H3("Registro de respuestas"), tablaRespuestas(ids), VACIO(80));
+    registro.push(H3("Registro de respuestas (1 = acertó, 0 = no)"), tablaRespuestas(ids), VACIO(80));
   } else if (op) {
-    if (c.n === 3) {
-      registro.push(H3("Registro y comparación con el equipo"), tablaOperativa(ids),
-        P("T ref = tiempo de referencia del equipo (experto, medido). T obj = tiempo objetivo sugerido para un usuario nuevo. Δ T = T usuario − T ref. Errores = marcas N + S + D. Ayudas = marcas A. Esta tabla alimenta también los casos 5, 9 y 10.", { tam: 17, cursiva: true, alinear: AlignmentType.LEFT }), VACIO(80));
-    } else if (c.n === 5 || c.n === 9 || c.n === 10) {
-      registro.push(H3("Registro"), P("Los datos de T07, T08 y T09 se toman de la tabla de registro del caso 3 (sección 6.3); aquí solo se calcula la métrica de este caso.", { tam: 19, alinear: AlignmentType.LEFT }));
+    if (c.n === 5 || c.n === 9 || c.n === 10) {
+      registro.push(H3("Registro"), P("Los datos de T07, T08 y T09 de cada persona se toman de la tabla de registro del caso 3 (sección 6.3); aquí solo se calcula la métrica de este caso.", { tam: 19, alinear: AlignmentType.LEFT }));
     } else {
-      registro.push(H3("Registro y comparación con el equipo"), tablaOperativa(ids), VACIO(80));
+      registro.push(H3("Registro y comparación con el equipo (promedios entre personas; el detalle por persona está en la hoja de cálculo)"), tablaOperativa(ids),
+        P("T ref = tiempo de referencia del equipo (experto, medido). T obj = tiempo objetivo sugerido para un usuario nuevo. Errores = marcas N + S + D. Ayudas = marcas A. Cumplen el tiempo = personas con T ≤ T obj, de las que tienen dato." + (c.n === 3 ? " Esta tabla alimenta también los casos 5, 9 y 10." : ""), { tam: 17, cursiva: true, alinear: AlignmentType.LEFT }), VACIO(80));
     }
   }
-  const calculo = [H3("Cálculo de la métrica"), tablaCalculo(calculoCaso(c)), VACIO(80), H3("Think Aloud: citas y hallazgos"), tablaThinkAloud(), VACIO(120)];
+  const calculo = [H3("Cálculo de la métrica (una columna por persona y estadísticos del grupo)"), tablaCalculo(calculoCaso(c)), VACIO(80), H3("Think Aloud: citas y hallazgos"), tablaThinkAloud(), VACIO(120)];
   return [...cab, ...registro, ...calculo];
 }
 
-const resultados = [H1("6. Resultados por caso de prueba"), P("Cada caso trae: su definición del material de clase, las tareas con su ruta ideal medida, la tabla donde se registra al participante y se compara con el equipo, el cálculo de la métrica y un espacio para las citas del Think Aloud. Las celdas amarillas se llenan en la sesión.", { alinear: AlignmentType.LEFT }), ...CASOS.flatMap(seccionCaso)];
+const resultados = [H1("6. Resultados por caso de prueba"), P("Cada caso trae: su definición del material de clase, las tareas con su ruta ideal medida, las tablas donde se registran las cinco personas y se comparan con el equipo, el cálculo de la métrica por persona y para el grupo, y un espacio para las citas del Think Aloud. Las celdas amarillas se llenan con las sesiones; la hoja de cálculo que acompaña al documento calcula los promedios.", { alinear: AlignmentType.LEFT }), ...CASOS.flatMap(seccionCaso)];
 
-// ---------------------------------------------------------------- 7 (horizontal): resumen, estadística y comparación
+// ---------------------------------------------------------------- 7 (horizontal): resumen y comparación equipo–grupo
 const resumen = [
-  H1("7. Resumen de las doce métricas y comparación equipo–usuario"),
+  H1("7. Resumen de las doce métricas y comparación equipo–grupo"),
   H2("7.1 Resumen de las doce métricas"),
+  P("**Cómo se decide:** cada persona cumple o no el criterio del caso; el grupo cumple el caso si al menos el 80 % de las personas lo cumple (decisión del equipo). El valor es la proporción del criterio que cumple cada persona, y se reporta su media y su error estándar entre personas.", { tam: 19, alinear: AlignmentType.LEFT }),
   tabla(
-    [700, 3500, 2600, 1500, 2400, 900, 2240],
-    ["Caso", "Nombre", "Métrica ISO", "Valor obtenido", "Criterio", "¿Cumple?", "Hallazgo principal"],
-    CASOS.map((c) => [String(c.n), c.nombre, c.metricaIso, "", c.criterio, "", ""]),
-    { llenar: [3, 5, 6], centrar: [0, 5], altoFila: 520 },
+    [700, 3300, 2400, 2400, 1300, 1500, 1100, 1140],
+    ["Caso", "Nombre", "Métrica ISO", "Criterio por persona", "Personas que cumplen (de 5)", "Valor medio ± error estándar", "¿Cumple el grupo?", "Hallazgo principal"],
+    CASOS.map((c) => [String(c.n), c.nombre, c.metricaIso, c.criterio, "", "", "", ""]),
+    { llenar: [4, 5, 6, 7], centrar: [0, 4, 5, 6], altoFila: 520, tam: 17 },
   ),
-  P("Al terminar, cuente cuántos casos cumplen: ____ de 12. La hoja de cálculo lo calcula en la pestaña «Metricas».", { antes: 120, alinear: AlignmentType.LEFT }),
-  H2("7.2 Media y error estándar por métrica (n = 3 tareas por caso)"),
-  tabla(
-    [4200, 1500, 1500, 1500, 1500, 1800, 1840],
-    ["Medida", "Tarea 1", "Tarea 2", "Tarea 3", "Media", "Desviación s", "Error estándar s/√3"],
-    [
-      ["Tiempo (s), caso 3: T07, T08, T09", "", "", "", "", "", ""],
-      ["Tiempo (s), caso 6: T13, T14, T15", "", "", "", "", "", ""],
-      ["Tiempo (s), caso 8: T19, T20, T21", "", "", "", "", "", ""],
-      ["Tiempo (s), caso 11: T22, T23, T24", "", "", "", "", "", ""],
-      ["Tiempo (s), caso 12: T25, T26, T27", "", "", "", "", "", ""],
-      ["Errores, caso 9: T07, T08, T09", "", "", "", "", "", ""],
-      ["Ayudas, caso 10: T07, T08, T09", "", "", "", "", "", ""],
-      ["Clics del usuario, caso 3: T07, T08, T09", "", "", "", "", "", ""],
-    ],
-    { llenar: [1, 2, 3, 4, 5, 6], centrar: [1, 2, 3, 4, 5, 6], altoFila: 360 },
-  ),
-  H2("7.3 Comparación del participante con el equipo (tareas operativas)"),
-  P("Razón = T usuario ÷ T ref. Eficiencia de clics = clics ideales ÷ clics del usuario (1,00 es la ruta ideal). Cumple el tiempo si T usuario ≤ T obj.", { tam: 19, alinear: AlignmentType.LEFT }),
+  P("Al terminar, cuente cuántos casos cumple el grupo: ____ de 12. La hoja de cálculo lo calcula en la pestaña «Metricas» y lo resume en «Grupo».", { antes: 120, alinear: AlignmentType.LEFT }),
+  H2("7.2 Comparación del grupo con el equipo (tareas operativas)"),
+  P("Razón = tiempo medio del grupo ÷ T ref. Eficiencia de clics = clics ideales ÷ clics medios (1,00 es la ruta ideal). El tiempo se cumple si la persona termina en T obj o menos.", { tam: 19, alinear: AlignmentType.LEFT }),
   tabla(
     [1000, 3600, 1100, 1100, 1200, 1100, 1100, 1200, 1100, 1340],
-    ["Tarea", "Descripción", "T ref (s)", "T obj (s)", "T usuario (s)", "Razón", "Clics ideales", "Clics usuario", "Eficiencia de clics", "¿Cumple el tiempo?"],
+    ["Tarea", "Descripción", "T ref (s)", "T obj (s)", "T medio del grupo (s)", "Razón", "Clics ideales", "Clics medios", "Eficiencia de clics", "Cumplen el tiempo (de 5)"],
     TAREAS.filter((t) => t.tipo === "operacion").map((t) => [{ t: `**${t.id}**`, fondo: COLOR.azulClaro }, t.titulo, coma(base(t.id).referenciaExpertoS), String(base(t.id).objetivoNovatoS), "", "", String(base(t.id).clics), "", "", ""]),
     { llenar: [4, 5, 7, 8, 9], centrar: [0, 2, 3, 4, 5, 6, 7, 8, 9], altoFila: 320, tam: 17 },
   ),
@@ -420,24 +394,26 @@ const resumen = [
 // ---------------------------------------------------------------- 8: cuestionarios
 const cuestionarios = [
   H1("8. Cuestionarios de satisfacción (complementarios)"),
-  P("Los dos cuestionarios son opcionales y **no reemplazan los doce casos**; se incluyen porque son baratos, estandarizados y aportan la percepción de la persona. Con un solo participante son indicativos.", { alinear: AlignmentType.LEFT }),
+  P("Los dos cuestionarios son opcionales y **no reemplazan los doce casos**; se incluyen porque son baratos, estandarizados y aportan la percepción de cada persona. Con cinco participantes son indicativos.", { alinear: AlignmentType.LEFT }),
   H2("8.1 SEQ: facilidad percibida por tarea"),
   P(`${SEQ} Se pregunta al terminar cada tarea de las compras y de las funciones básica y avanzada.`, { alinear: AlignmentType.LEFT }),
   tabla(
-    [2200, 2200, 2200, 2200, 4640],
-    ["Tarea", "SEQ (1 a 7)", "Tarea", "SEQ (1 a 7)", "Comentario"],
-    [["T07", "", "T19", "", ""], ["T08", "", "T20", "", ""], ["T09", "", "T21", "", ""], ["T25", "", "T26", "", ""], ["T27", "", "T22", "", ""], ["T23", "", "T24", "", ""]],
-    { llenar: [1, 3, 4], centrar: [0, 1, 2, 3], altoFila: 330 },
+    [2000, ...PARTICIPANTES.map(() => 1500), 1500, 2840],
+    ["Tarea", ...PARTICIPANTES, "Media", "Comentario"],
+    ["T07", "T08", "T09", "T19", "T20", "T21", "T22", "T23", "T24", "T25", "T26", "T27"].map((id) => [{ t: `**${id}** ${tarea(id).titulo}`, fondo: COLOR.azulClaro }, ...PARTICIPANTES.map(() => ""), "", ""]),
+    { llenar: Array.from({ length: colsP + 2 }, (_, i) => i + 1), centrar: Array.from({ length: colsP + 1 }, (_, i) => i + 1), altoFila: 330, tam: 17 },
   ),
   H2("8.2 SUS: escala de usabilidad del sistema"),
-  P("Escala de 1 (totalmente en desacuerdo) a 5 (totalmente de acuerdo) (Brooke, 1996). Puntuación: en los ítems impares se resta 1 a la respuesta; en los pares, se resta la respuesta de 5; se suma todo y se multiplica por 2,5 para obtener un valor de 0 a 100.", { alinear: AlignmentType.LEFT }),
+  P("Escala de 1 (totalmente en desacuerdo) a 5 (totalmente de acuerdo) (Brooke, 1996). Puntuación: en los ítems impares se resta 1 a la respuesta; en los pares, se resta la respuesta de 5; se suma todo y se multiplica por 2,5 para obtener un valor de 0 a 100. Se reporta la media y el error estándar entre personas.", { alinear: AlignmentType.LEFT }),
   tabla(
-    [600, 8400, 1200, 1200, 2440],
-    ["N.º", "Afirmación", "Respuesta (1 a 5)", "Puntos", "Cálculo"],
-    SUS.map((s, i) => [String(i + 1), s, "", "", i % 2 === 0 ? "respuesta − 1" : "5 − respuesta"]),
-    { llenar: [2, 3], centrar: [0, 2, 3], altoFila: 330 },
+    [600, 6240, ...PARTICIPANTES.map(() => 1000), 2000],
+    ["N.º", "Afirmación", ...PARTICIPANTES, "Puntos"],
+    [
+      ...SUS.map((s, i) => [String(i + 1), s, ...PARTICIPANTES.map(() => ""), i % 2 === 0 ? "respuesta − 1" : "5 − respuesta"]),
+      [{ t: "", fondo: COLOR.azulClaro }, { t: "**Puntaje SUS de la persona** = (suma de puntos) × 2,5", fondo: COLOR.azulClaro }, ...PARTICIPANTES.map(() => ""), "Media ± error estándar: ______"],
+    ],
+    { llenar: PARTICIPANTES.map((_, i) => i + 2), centrar: [0, ...PARTICIPANTES.map((_, i) => i + 2)], altoFila: 330, tam: 17 },
   ),
-  P("Puntuación SUS = (suma de puntos) × 2,5 = ________", { antes: 120, negrita: true, alinear: AlignmentType.LEFT }),
 ];
 
 // ---------------------------------------------------------------- 9: otras pruebas
@@ -541,10 +517,10 @@ const referencias = [
 const anexos = [
   SALTO(),
   H1("Anexo A. Consentimiento informado"),
-  P("**Evaluación de usabilidad del canal digital ComproYa en Línea.** Universidad Central, Ingeniería de Software II."),
-  P("Se me invita a participar en una prueba de usabilidad de una tienda en línea de práctica, desarrollada por estudiantes. Entiendo que: (1) se evalúa el sistema y no mi desempeño; (2) haré varias tareas de compra con datos ficticios, y la pasarela de pagos está en modo de prueba, por lo que no se usa ninguna tarjeta real ni se hace ningún cobro; (3) se grabará la pantalla y mi voz mientras pienso en voz alta, y, si lo autorizo, mi rostro; (4) las grabaciones se usarán solo para el curso, se identificarán con un código (P01) y no se publicarán; (5) puedo detener la prueba en cualquier momento sin consecuencias."),
+  P("**Evaluación de usabilidad del canal digital ComproYa en Línea.** Universidad Central, Ingeniería de Software II. Se imprime y firma **uno por persona**."),
+  P("Se me invita a participar en una prueba de usabilidad de una tienda en línea de práctica, desarrollada por estudiantes. Entiendo que: (1) se evalúa el sistema y no mi desempeño; (2) haré varias tareas de compra con datos ficticios, y la pasarela de pagos está en modo de prueba, por lo que no se usa ninguna tarjeta real ni se hace ningún cobro; (3) se grabará la pantalla y mi voz mientras pienso en voz alta, y, si lo autorizo, mi rostro; (4) las grabaciones se usarán solo para el curso, se identificarán con un código (P01 a P05) y no se publicarán; (5) puedo detener la prueba en cualquier momento sin consecuencias."),
   ficha(
-    [["Acepto participar (sí/no)", "", true], ["Autorizo grabar pantalla y voz (sí/no)", "", true], ["Autorizo grabar mi rostro con la cámara (sí/no)", "", true], ["Nombre del participante", "", true], ["Firma", "", true], ["Fecha", "", true], ["Evaluador", "", true]],
+    [["Código del participante", "", true], ["Acepto participar (sí/no)", "", true], ["Autorizo grabar pantalla y voz (sí/no)", "", true], ["Autorizo grabar mi rostro con la cámara (sí/no)", "", true], ["Nombre del participante", "", true], ["Firma", "", true], ["Fecha", "", true], ["Evaluador", "", true]],
     4300, 5540, { altoFila: 420 },
   ),
   H1("Anexo B. Guion del evaluador"),
@@ -559,7 +535,7 @@ const anexos = [
   H3("Cierre"),
   P("Preguntar: «¿qué fue lo más fácil?», «¿qué fue lo más difícil?», «¿qué cambiarías?». Aplicar el SUS (sección 8.2). Agradecer. Para la sesión 2, recordar solo la hora y que traiga la hoja «Datos de prueba».", { alinear: AlignmentType.LEFT }),
   H1("Anexo C. Hoja de campo (se llena durante la sesión)"),
-  P("Una fila por tarea. Errores: N = navegación, S = selección, D = datos. Ayudas: nivel 1, 2 o 3. Consultas externas: C.", { tam: 19, alinear: AlignmentType.LEFT }),
+  P("**Una hoja por persona** (se imprime cinco veces). Código del participante: ______. Una fila por tarea. Errores: N = navegación, S = selección, D = datos. Ayudas: nivel 1, 2 o 3. Consultas externas: C.", { tam: 19, alinear: AlignmentType.LEFT }),
   tabla(
     [800, 1050, 1050, 1000, 1500, 1400, 800, 2240],
     ["Tarea", "Inicio (mm:ss del video)", "Fin (mm:ss)", "Clics (marcas)", "Errores N / S / D", "Ayudas (nivel)", "C", "Notas"],
@@ -570,16 +546,18 @@ const anexos = [
   ...VINETAS([
     "**Antes de grabar:** probar el micrófono diciendo una frase y escuchándola; cerrar notificaciones; abrir el navegador en ventana nueva sin extensiones ni sesión previa; poner el zoom del navegador al 100 %.",
     "**Camtasia:** grabar la pantalla completa con audio del micrófono; activar un efecto de clic visible en el cursor (en Camtasia están en los efectos de cursor, para el clic izquierdo) para que cada clic quede marcado y se pueda contar en el video. Alternativa: OBS Studio con un complemento de resaltado de clics.",
-    "**Una grabación por bloque** (o por tarea, si se prefiere) y un nombre que no deje dudas: `CU2_P01_S1_B4_T07.mp4` (sesión 1, bloque 4, tarea 7) y `CU2_P01_S2_B9_T22.mp4` (sesión 2).",
+    "**Una grabación por bloque** (o por tarea, si se prefiere) y un nombre que no deje dudas: `CU2_P03_S1_B4_T07.mp4` (participante 3, sesión 1, bloque 4, tarea 7) y `CU2_P03_S2_B9_T22.mp4` (sesión 2).",
     "**Tiempos:** anotar en la hoja de campo el minuto del video donde empieza y termina cada tarea; el tiempo es la diferencia, sin las pausas de preguntas.",
-    "**Después:** guardar los videos y la hoja de campo en una carpeta con el código P01, hacer una copia de respaldo y registrar las rutas en el documento.",
+    "**Después:** guardar los videos y la hoja de campo en una carpeta con el código de la persona (P01 a P05), hacer una copia de respaldo y registrar las rutas en el documento.",
   ]),
   H1("Anexo E. Cómo hacer más lento un estado del sistema"),
   P("Los estados «Reservando tus unidades», «Abriendo la pasarela segura» y «Estamos confirmando tu pago» duran menos de un segundo en una red rápida y la persona puede no verlos. Para observarlos (caso 7):", { alinear: AlignmentType.LEFT }),
   ...NUMEROS(["Abrir las herramientas del desarrollador del navegador (F12) y la pestaña «Red» (Network).", "En la lista de limitación de red (Throttling, que por defecto dice «Sin limitación») elegir un preajuste lento, como «3G lenta» o el más lento disponible.", "Hacer la tarea con la limitación activa y, al terminar el estado, volver a «Sin limitación».", "Anotar en observaciones que se usó la red lenta, para interpretar los tiempos de esa tarea."], "lista2"),
   H1("Anexo F. Datos de prueba que recibe el participante"),
   tabla([3800, 6040], ["Dato", "Valor"], DATOS_PRUEBA.map(([a, b]) => [a, b]), { primeraNegrita: true }),
-  P("Si el documento, el correo o la cuenta ya se usaron en otra prueba, cambiar los últimos números o la parte «p01». El portal rechaza un correo o un documento repetido.", { antes: 100, tam: 19, alinear: AlignmentType.LEFT }),
+  H3("Datos únicos de cada persona"),
+  tabla([1600, 3600, 4640], ["Persona", "Documento de identidad", "Correo electrónico"], DATOS_UNICOS.map(([c, d, e]) => [{ t: `**${c}**`, fondo: COLOR.azulClaro }, d, e]), { centrar: [0] }),
+  P("Cada persona crea su propia cuenta en la primera compra (T07); el portal rechaza un correo o un documento repetido, por eso estos dos datos son distintos. Si se repite una sesión, cambiar los dos últimos números del documento y la parte «p01» del correo.", { antes: 100, tam: 19, alinear: AlignmentType.LEFT }),
   H1("Anexo G. Lista de verificación previa y reinicio"),
   H3("Antes de la sesión 1"),
   ...VINETAS([
@@ -590,6 +568,8 @@ const anexos = [
     "Grabadora y micrófono probados; hoja de campo, hojas de tareas y «Datos de prueba» impresas; cronómetro de respaldo.",
     "Un ensayo completo del equipo (sin el participante) para confirmar el orden y la duración.",
   ]),
+  H3("Entre participantes"),
+  ...VINETAS(["Cerrar la sesión de la persona anterior y abrir una ventana nueva del navegador sin sesión.", "Cancelar desde «Mis pedidos» los pedidos sin pagar de la persona anterior (cada una tiene su cuenta, pero conviene liberar las unidades reservadas).", "El cupón LEALTAD10 no se agota entre participantes: la regla es una redención por pedido (RN-07), no una por cuenta; basta confirmar que sigue activo."]),
   H3("Entre bloques"),
   ...VINETAS(["Vaciar el carrito con «Quitar» (después de los bloques 2 y 3).", "Dejar el estado inicial que pide cada tarea (columna «Estado inicial»)."]),
   H3("Al terminar la sesión 2"),
