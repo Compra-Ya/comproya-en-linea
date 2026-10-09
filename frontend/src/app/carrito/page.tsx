@@ -1,169 +1,198 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { api, ApiError, setCartToken } from "@/lib/api";
-import { MODO_ENVIO, PASOS_COMPRA } from "@/lib/modo";
-import type { Carrito, Producto } from "@/lib/types";
-import ShopHeaderConectado from "@/components/ShopHeaderConectado";
-import { ProductImage } from "@/components/ProductImage";
-import { Button, CheckoutSteps, Notice, QuantityStepper, formatoCOP } from "@/components/ui";
+import { api, haySesion, urlImagenProducto } from "@/lib/api";
+import { agregarAlCarrito, useCarrito } from "@/lib/useCarrito";
+import type { Producto } from "@/lib/types";
+import Pantalla from "@/components/Pantalla";
+import { Button, CheckoutSteps, EmptyState, Icon, IconButton, LineItem, Notice, OrderSummary, ProductImage, Skeleton, Spinner, formatCOP } from "@/components/ui";
 
-// P-7 Administración del carrito (CU-07) + P-8 Productos complementarios (CU-08, hasta 4 — tope del
-// canon, C-05; extensión de P-7, no una pantalla aparte). Paso 1 de 4 de la compra: el cliente elige
-// la cantidad de cada producto y pasa a sus datos de envío (o a confirmar el pedido en el modo retiro).
+// P-7 Administración del carrito (CU-07) + P-8 Productos complementarios (CU-08, hasta 4). Paso 1 de 4: la persona
+// ajusta la cantidad de cada producto y pasa a sus datos de envío. Subtotal, totales de línea y el máximo por
+// producto los calcula el servidor. Estados de design/rediseno/pantallas/Carrito.dc.html: con productos, vacío,
+// cargando y error.
 export default function CarritoPage() {
-  const router = useRouter();
-  const [carrito, setCarrito] = useState<Carrito | null>(null);
+  const { carrito, estado, recargar, cambiarCantidad, errorLinea } = useCarrito();
   const [complementarios, setComplementarios] = useState<Producto[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [errorLinea, setErrorLinea] = useState<{ productId: number; texto: string } | null>(null);
-  const [cargando, setCargando] = useState(true);
+  const [conSesion, setConSesion] = useState(true);
+  const [errorCompl, setErrorCompl] = useState<string | null>(null);
 
-  async function cargar() {
-    setCargando(true);
-    setError(null);
-    try {
-      const actual = await api<Carrito>("/carrito");
-      if (actual.guestToken) setCartToken(actual.guestToken);
-      setCarrito(actual);
-      if (actual.items[0]) {
-        const sugeridos = await api<{ suggestedProduct: Producto }[]>(
-          `/carrito/complementarios/${actual.items[0].productId}`,
-          { auth: false, cartToken: false },
-        );
-        setComplementarios(sugeridos.map((s) => s.suggestedProduct));
-      } else {
-        setComplementarios([]);
-      }
-    } catch (e) {
-      void (e instanceof ApiError);
-      setError("No pudimos cargar tu carrito. Revisa tu conexión e inténtalo de nuevo.");
-    } finally {
-      setCargando(false);
-    }
-  }
+  useEffect(() => setConSesion(haySesion()), []);
 
+  // Sugerencias para los primeros productos del carrito, sin repetir los que ya están y hasta 4.
+  const clave = carrito?.items.map((i) => i.productId).join(",") ?? "";
   useEffect(() => {
-    cargar();
-  }, []);
-
-  async function actualizarCantidad(productId: number, quantity: number) {
-    if (!carrito) return;
-    setErrorLinea(null);
-    try {
-      const actualizado = await api<Carrito>(`/carrito/${carrito.id}/items/${productId}`, {
-        method: "PATCH",
-        body: { quantity },
+    const ids = clave ? clave.split(",").map(Number) : [];
+    if (ids.length === 0) {
+      setComplementarios([]);
+      return;
+    }
+    let vigente = true;
+    Promise.all(ids.slice(0, 3).map((id) => api<{ suggestedProduct: Producto }[]>(`/carrito/complementarios/${id}`, { auth: false, cartToken: false }).catch(() => [])))
+      .then((listas) => {
+        if (!vigente) return;
+        const vistos = new Set(ids);
+        const unicos: Producto[] = [];
+        for (const s of listas.flat()) {
+          if (!vistos.has(s.suggestedProduct.id)) {
+            vistos.add(s.suggestedProduct.id);
+            unicos.push(s.suggestedProduct);
+          }
+        }
+        setComplementarios(unicos.slice(0, 4));
       });
-      setCarrito(actualizado);
-    } catch {
-      setErrorLinea({ productId, texto: "No pudimos cambiar la cantidad. Inténtalo de nuevo." });
-    }
-  }
+    return () => {
+      vigente = false;
+    };
+  }, [clave]);
 
-  async function agregarComplementario(productId: number) {
+  async function agregarComplementario(p: Producto) {
+    setErrorCompl(null);
     try {
-      const actualizado = await api<Carrito>("/carrito/items", { method: "POST", body: { productId, quantity: 1 } });
-      if (actualizado.guestToken) setCartToken(actualizado.guestToken);
-      setCarrito(actualizado);
+      await agregarAlCarrito(p.id, 1);
+      await recargar();
     } catch {
-      setError("No pudimos agregar el producto. Inténtalo de nuevo.");
+      setErrorCompl(`No pudimos agregar ${p.name}. Inténtalo de nuevo.`);
     }
   }
 
-  const total = carrito?.items.reduce((acc, i) => acc + Number(i.product.digitalPrice) * i.quantity, 0) ?? 0;
-  const unidades = carrito?.items.reduce((acc, i) => acc + i.quantity, 0) ?? 0;
-  const vacio = !cargando && !error && !carrito?.items.length;
+  const vacio = estado === "listo" && carrito?.items.length === 0;
+  const lleno = estado === "listo" && !!carrito && carrito.items.length > 0;
 
   return (
-    <div>
-      <ShopHeaderConectado active="carrito" />
-      <main className="pantalla">
-        <CheckoutSteps current={1} steps={PASOS_COMPRA} back={{ label: "Seguir comprando", href: "/" }} />
-        <h1 className="pantalla-titulo">Tu carrito</h1>
+    <Pantalla active="carrito">
+      <div className="wrap" style={{ paddingTop: 24 }}>
+        <CheckoutSteps current={1} back={{ label: "Seguir comprando", href: "/" }} />
 
-        {cargando && <Notice tone="progress">Cargando tu carrito…</Notice>}
-        {error && (
-          <Notice tone="danger" title="No pudimos cargar tu carrito" action={<Button variant="secondary" onClick={cargar}>Reintentar</Button>}>
-            Revisa tu conexión e inténtalo de nuevo.
-          </Notice>
-        )}
+        <div className="between" style={{ margin: "24px 0 16px" }}>
+          <div>
+            <h1 className="h-title">Tu carrito</h1>
+            <p className="muted" style={{ marginTop: 4 }}>
+              {estado === "cargando"
+                ? ""
+                : vacio
+                  ? "Aún no has agregado productos."
+                  : lleno
+                    ? `${carrito.unidades} ${carrito.unidades === 1 ? "producto" : "productos"} · Lo guardamos aunque cierres la página.`
+                    : ""}
+            </p>
+          </div>
+        </div>
+
         {vacio && (
-          <Notice tone="info" title="Tu carrito está vacío" action={<Button variant="secondary" href="/">Ver productos</Button>}>
-            Agrega productos para continuar con tu compra.
+          <div className="panel">
+            <EmptyState icon="cart" title="Tu carrito está vacío" text="Explora el catálogo y agrega lo que te guste. Aquí lo guardamos mientras decides.">
+              <Button icon="grid" href="/">Ver productos</Button>
+            </EmptyState>
+          </div>
+        )}
+
+        {estado === "error" && (
+          <Notice
+            tone="danger"
+            title="No pudimos cargar tu carrito."
+            action={
+              <>
+                <Button variant="secondary" size="sm" icon="refresh" onClick={recargar}>Reintentar</Button>
+                <Button variant="ghost" size="sm" href="/">Seguir comprando</Button>
+              </>
+            }
+          >
+            <p>Revisa tu conexión e inténtalo de nuevo. Lo que agregaste sigue guardado.</p>
           </Notice>
         )}
 
-        {!cargando && !error && !!carrito?.items.length && (
-          <div className="confirmar-grid">
-            <div className="confirmar-principal">
-              <section className="card card-pad">
-                {carrito.items.map((item) => (
-                  <div className="linea-carrito" key={item.id}>
-                    <div className="linea-foto">
-                      <ProductImage imageUrl={item.product.imageUrl} nombre={item.product.name} categoria={item.product.category?.name} tamano={28} />
-                    </div>
-                    <div className="linea-info">
-                      <p className="linea-nombre">{item.product.name}</p>
-                      <p className="faint">{formatoCOP(item.product.digitalPrice)} cada uno</p>
-                      {errorLinea?.productId === item.productId && (
-                        <p className="error-campo" role="alert">{errorLinea.texto}</p>
-                      )}
-                    </div>
-                    <QuantityStepper
-                      value={item.quantity}
-                      label={`Cantidad de ${item.product.name}`}
-                      onChange={(v) => actualizarCantidad(item.productId, v)}
+        {estado === "cargando" && (
+          <div className="checkout">
+            <div className="panel">
+              <Skeleton variant="line-item" count={2} label="Cargando tu carrito…" />
+            </div>
+            <div className="panel stack-sm">
+              <Spinner label="Calculando el resumen…" />
+              <div className="cy-skel" style={{ height: 14, width: "70%" }} />
+              <div className="cy-skel" style={{ height: 14, width: "50%" }} />
+              <div className="cy-skel" style={{ height: 48, marginTop: 12 }} />
+            </div>
+          </div>
+        )}
+
+        {lleno && (
+          <div className="checkout">
+            <div className="stack">
+              {!conSesion && (
+                <Notice
+                  tone="info"
+                  icon="user"
+                  title="Estás comprando como invitado."
+                  action={<Button variant="secondary" size="sm" href="/ingresar?volver=/carrito" icon="user">Iniciar sesión</Button>}
+                >
+                  <p>Inicia sesión para guardar el carrito en tu cuenta. No pierdes lo que agregaste.</p>
+                </Notice>
+              )}
+
+              <section className="panel" aria-label="Productos en tu carrito" style={{ paddingTop: 4, paddingBottom: 4 }}>
+                {carrito.items.map((it) => (
+                  <div key={it.id}>
+                    <LineItem
+                      name={it.product.name}
+                      image={urlImagenProducto(it.product.imageUrl)}
+                      unitPrice={Number(it.product.digitalPrice)}
+                      quantity={it.quantity}
+                      max={carrito.maxPorProducto}
+                      lineTotal={it.lineTotal}
+                      onQuantity={(v) => cambiarCantidad(it.productId, v)}
+                      onRemove={() => cambiarCantidad(it.productId, 0)}
                     />
-                    <p className="linea-total">{formatoCOP(Number(item.product.digitalPrice) * item.quantity)}</p>
-                    <Button
-                      variant="ghost"
-                      icon="x"
-                      title={`Quitar ${item.product.name} del carrito`}
-                      onClick={() => actualizarCantidad(item.productId, 0)}
-                    >
-                      Quitar
-                    </Button>
+                    {errorLinea?.productId === it.productId && (
+                      <p className="cy-error" role="alert" style={{ paddingBottom: 12 }}>
+                        <Icon name="alert" size={16} />
+                        {errorLinea.texto}
+                      </p>
+                    )}
                   </div>
                 ))}
               </section>
 
               {complementarios.length > 0 && (
-                <section className="card card-pad">
-                  <h2 className="pantalla-seccion">Productos complementarios</h2>
-                  {complementarios.map((p) => (
-                    <div className="linea-carrito" key={p.id}>
-                      <div className="linea-foto" style={{ width: 46, height: 46 }}>
-                        <ProductImage imageUrl={p.imageUrl} nombre={p.name} categoria={p.category?.name} tamano={22} />
-                      </div>
-                      <div className="linea-info">
-                        <p className="linea-nombre">{p.name}</p>
-                        <p className="faint">{formatoCOP(p.digitalPrice)}</p>
-                      </div>
-                      <Button variant="secondary" icon="cart" title={`Agregar ${p.name} al carrito`} onClick={() => agregarComplementario(p.id)}>
-                        Agregar
-                      </Button>
+                <section aria-labelledby="compl" style={{ paddingTop: 8 }}>
+                  <div className="between" style={{ marginBottom: 10 }}>
+                    <h2 id="compl" style={{ fontSize: 15, lineHeight: "20px", fontWeight: 700 }}>Productos complementarios</h2>
+                    <p className="small muted">Hasta 4 sugerencias para tu compra</p>
+                  </div>
+                  {errorCompl && (
+                    <div style={{ marginBottom: 10 }}>
+                      <Notice tone="danger" title="No pudimos agregarlo."><p>{errorCompl}</p></Notice>
                     </div>
-                  ))}
+                  )}
+                  <div className="compl">
+                    {complementarios.map((c) => (
+                      <div className="compl-item" key={c.id}>
+                        <ProductImage src={urlImagenProducto(c.imageUrl)} alt={c.name} size="mini" />
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <p>{c.name}</p>
+                          <strong>{formatCOP(c.digitalPrice)}</strong>
+                        </div>
+                        <IconButton icon="cart-plus" label={`Agregar ${c.name} al carrito`} align="end" onClick={() => agregarComplementario(c)} />
+                      </div>
+                    ))}
+                  </div>
                 </section>
               )}
             </div>
 
-            <aside className="confirmar-lateral">
-              <section className="card card-pad">
-                <h2 className="pantalla-seccion">Resumen</h2>
-                <div className="totalsrow"><span>Productos</span><span>{unidades}</span></div>
-                <div className="totalsrow"><span>Subtotal</span><span>{formatoCOP(total)}</span></div>
-                <div className="totalsrow grand"><span>Total</span><span>{formatoCOP(total)}</span></div>
-              </section>
-              <Button size="lg" full icon="chevron-right" onClick={() => router.push("/pedido/confirmar")}>
-                {MODO_ENVIO ? "Continuar con tus datos de envío" : "Confirmar pedido"}
-              </Button>
-            </aside>
+            <div className="sticky">
+              <OrderSummary itemsCount={carrito.unidades} subtotal={carrito.subtotal} total={carrito.subtotal}>
+                <Button size="lg" full iconRight="arrow-right" href="/pedido/confirmar">Continuar con tus datos de envío</Button>
+                <Button variant="ghost" full href="/">Seguir comprando</Button>
+              </OrderSummary>
+              <p className="small muted" style={{ display: "flex", gap: 8, alignItems: "flex-start", padding: "0 4px" }}>
+                <Icon name="ticket" size={18} />
+                ¿Tienes un cupón de lealtad? Lo aplicas en el siguiente paso.
+              </p>
+            </div>
           </div>
         )}
-      </main>
-    </div>
+      </div>
+    </Pantalla>
   );
 }

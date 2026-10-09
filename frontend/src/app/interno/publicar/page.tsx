@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { api, ApiError } from "@/lib/api";
+import { AcademicFooter } from "@/components/ui";
 import type { Producto } from "@/lib/types";
 
 // P-1 Publicación de producto en el catálogo (CU-01). Actor: Coordinador de
@@ -53,6 +54,7 @@ export default function PublicarProductoPage() {
   }
 
   return (
+    <>
     <div className="panel-shell">
       <div className="panel-sidebar">
         <div className="brand-row"><span className="brand-mark" style={{ width: 28, height: 28, fontSize: 12 }}>CY</span>ComproYa</div>
@@ -155,5 +157,7 @@ export default function PublicarProductoPage() {
         </div>
       </div>
     </div>
+    <AcademicFooter />
+    </>
   );
 }

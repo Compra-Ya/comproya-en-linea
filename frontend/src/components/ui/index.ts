@@ -1,10 +1,34 @@
-// Componentes del sistema de diseño (design/design-system). Se migran de a poco: por ahora
-// los cuatro primeros más Icon, que todos usan.
+// Componentes del sistema de diseño (design/design-system): los 29 del sistema, con las props de
+// components/index.d.ts (tipos.ts, generado) y los estilos de components/bundle.css (ui.css, generado).
+export { AcademicFooter } from "./AcademicFooter";
+export { AddedToCart } from "./AddedToCart";
+export { Badge } from "./Badge";
+export { Breadcrumbs } from "./Breadcrumbs";
 export { Button } from "./Button";
+export { Card } from "./Card";
+export { CategoryCard } from "./CategoryCard";
+export { CategoryCarousel } from "./CategoryCarousel";
+export { Checkbox } from "./Checkbox";
 export { CheckoutSteps } from "./CheckoutSteps";
-export { Icon } from "./Icon";
+export { CouponField } from "./CouponField";
+export { EmptyState } from "./EmptyState";
+export { Enlace } from "./Enlace";
+export { Field } from "./Field";
+export { Icon, NOMBRES_DE_ICONO } from "./Icon";
+export { IconButton } from "./IconButton";
+export { InfoTip } from "./InfoTip";
+export { LineItem } from "./LineItem";
 export { Notice } from "./Notice";
+export { OrderRow } from "./OrderRow";
+export { ORDER_STATUS, OrderStatus } from "./OrderStatus";
+export { OrderSummary } from "./OrderSummary";
+export { ProductCard } from "./ProductCard";
+export { ProductImage } from "./ProductImage";
 export { QuantityStepper } from "./QuantityStepper";
+export { ShippingSummary } from "./ShippingSummary";
 export { ShopHeader } from "./ShopHeader";
-export { formatoCOP } from "./formato";
+export { Skeleton } from "./Skeleton";
+export { Spinner } from "./Spinner";
+export { Tooltip } from "./Tooltip";
+export { cx, formatCOP, unidades } from "./formato";
 export type * from "./tipos";

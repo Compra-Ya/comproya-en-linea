@@ -1,5 +1,7 @@
-// Tipos del lado del cliente — reflejan la forma de las respuestas del
-// backend (backend/prisma/schema.prisma), no una entidad nueva.
+// Tipos del lado del cliente — reflejan la forma de las respuestas del backend
+// (backend/prisma/schema.prisma y los servicios de cada módulo), no una entidad nueva. Los totales
+// (subtotal, descuento, total, total de línea) y las unidades disponibles los calcula el servidor:
+// la interfaz los muestra, no los recalcula.
 export interface Categoria {
   id: number;
   name: string;
@@ -17,6 +19,17 @@ export interface Producto {
   digitalPrice: string;
   published: boolean;
   imageUrl?: string | null;
+  /** Unidades que una sola sucursal puede despachar (RN-03). Viene en catálogo y detalle. */
+  unidadesDisponibles?: number;
+  /** Máximo que se puede pedir de una vez: el menor entre las unidades disponibles y el tope por producto. */
+  maximoPorPedido?: number;
+}
+
+export interface ListaDeProductos {
+  items: Producto[];
+  total: number;
+  page: number;
+  pageSize: number;
 }
 
 export interface Sucursal {
@@ -64,6 +77,8 @@ export interface ItemCarrito {
   productId: number;
   quantity: number;
   product: Producto;
+  /** Total de la línea, calculado por el servidor. */
+  lineTotal: number;
 }
 
 export interface Carrito {
@@ -71,6 +86,19 @@ export interface Carrito {
   customerId: number | null;
   guestToken: string | null;
   items: ItemCarrito[];
+  subtotal: number;
+  /** Suma de las cantidades de todas las líneas. */
+  unidades: number;
+  maxPorProducto: number;
+}
+
+/** Respuesta de POST /cupones/validar: el descuento y el total reales sobre el carrito. */
+export interface CuponValidado {
+  codigo: string;
+  porcentaje: number;
+  subtotal: number;
+  descuento: number;
+  total: number;
 }
 
 export interface ItemPedido {
@@ -101,13 +129,23 @@ export interface DatosEnvio {
   shippingNotes?: string | null;
 }
 
-export interface Pedido extends DatosEnvio {
+/** Totales del pedido calculados por el servidor (los mismos que se cobran en la pasarela). */
+export interface TotalesDelPedido {
+  subtotal: number;
+  descuento: number;
+  total: number;
+  codigoCupon: string | null;
+  porcentajeCupon: number | null;
+}
+
+export interface Pedido extends DatosEnvio, TotalesDelPedido {
   id: number;
-  deliveryMode?: ModalidadEntrega;
   customerId: number;
   branchId: number;
+  deliveryMode?: ModalidadEntrega;
   status: EstadoPedido;
   committedAt: string;
+  createdAt: string;
   pickupCode: string;
   pickupCodeExpiresAt: string;
   correlationId: string;
@@ -125,5 +163,8 @@ export interface Comprobante extends DatosEnvio {
   branch: Sucursal;
   items: ItemPedido[];
   pagadoEl: string;
+  subtotal: number;
+  descuento: number;
+  codigoCupon: string | null;
   total: number;
 }

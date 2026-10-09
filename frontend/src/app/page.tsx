@@ -1,210 +1,326 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
-import Link from "next/link";
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { api, ApiError, setCartToken } from "@/lib/api";
+import { api, ApiError, urlImagenProducto } from "@/lib/api";
 import { infoCategoria } from "@/lib/categorias";
-import { MODO_ENVIO, TEXTOS } from "@/lib/modo";
-import type { Categoria, Producto } from "@/lib/types";
-import ShopHeaderConectado from "@/components/ShopHeaderConectado";
-import TarjetaProducto from "@/components/TarjetaProducto";
-import CarruselCategorias from "@/components/CarruselCategorias";
-import { Button, Icon, Notice } from "@/components/ui";
+import { agregarAlCarrito } from "@/lib/useCarrito";
+import type { Categoria, ListaDeProductos, Producto } from "@/lib/types";
+import Pantalla from "@/components/Pantalla";
+import { Badge, Breadcrumbs, Button, CategoryCarousel, EmptyState, Icon, Notice, ProductCard, Skeleton } from "@/components/ui";
 
-// P-2 Búsqueda de productos (CU-02) + catálogo. Los productos van primero: el titular es corto, las
-// categorías son un carrusel de una sola fila (cada una tiene su página) y los beneficios y el
-// banner de lealtad quedan después del listado. Textos de design/06-copy.md. Se dejaron fuera a
-// propósito las secciones de "ofertas" y calificaciones: el modelo de datos no tiene un campo real
-// de "destacado" ni de reseñas (están fuera del alcance).
-type EstadoTarjeta = "reposo" | "agregando" | "agregado" | "error";
+// P-2 Búsqueda de productos (CU-02) y catálogo. Titular corto con los tres pasos, carrusel de categorías y los
+// productos desde la primera pantalla; beneficios y cupón de lealtad después. Textos y estados de
+// design/rediseno/pantallas/Catalogo.dc.html. Las unidades disponibles de cada producto las calcula el servidor.
+type EstadoTarjeta = "idle" | "adding" | "added" | "error";
 
 function Catalogo() {
-  const searchParams = useSearchParams();
-  const qParam = searchParams.get("q") ?? "";
+  const q = useSearchParams().get("q")?.trim() ?? "";
+  const esBusqueda = q.length > 0;
+  const [categorias, setCategorias] = useState<Categoria[] | null>(null);
   const [productos, setProductos] = useState<Producto[]>([]);
   const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(1);
-  const [categorias, setCategorias] = useState<Categoria[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [pagina, setPagina] = useState(1);
   const [cargando, setCargando] = useState(true);
+  const [fallo, setFallo] = useState<"red" | "corta" | null>(null);
   const [estados, setEstados] = useState<Record<number, EstadoTarjeta>>({});
+  const [aviso, setAviso] = useState<string | null>(null);
 
   useEffect(() => {
-    api<Categoria[]>("/catalogo/categorias", { auth: false, cartToken: false }).then(setCategorias).catch(() => undefined);
+    api<Categoria[]>("/catalogo/categorias", { auth: false, cartToken: false }).then(setCategorias).catch(() => setCategorias([]));
   }, []);
 
-  useEffect(() => {
-    setPage(1);
-    buscar(1, true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [qParam]);
-
-  async function buscar(pageToLoad: number, reemplazar: boolean) {
-    setError(null);
-    setCargando(true);
-    try {
-      if (qParam && qParam.length < 3) {
-        setError("Escribe al menos 3 letras para buscar.");
+  const cargar = useCallback(
+    async (numero: number, reemplazar: boolean) => {
+      setCargando(true);
+      setFallo(null);
+      if (esBusqueda && q.length < 3) {
         setProductos([]);
+        setTotal(0);
+        setFallo("corta");
+        setCargando(false);
         return;
       }
-      const params = new URLSearchParams();
-      if (qParam) params.set("q", qParam);
-      params.set("page", String(pageToLoad));
-      const respuesta = await api<{ items: Producto[]; total: number }>(
-        `/catalogo/productos?${params.toString()}`,
-        { auth: false, cartToken: false },
-      );
-      setTotal(respuesta.total);
-      setProductos((prev) => (reemplazar ? respuesta.items : [...prev, ...respuesta.items]));
-    } catch (e) {
-      void (e instanceof ApiError);
-      setError("No pudimos cargar los productos. Revisa tu conexión e inténtalo de nuevo.");
-    } finally {
-      setCargando(false);
-    }
-  }
+      try {
+        const params = new URLSearchParams({ page: String(numero) });
+        if (esBusqueda) params.set("q", q);
+        const r = await api<ListaDeProductos>(`/catalogo/productos?${params}`, { auth: false, cartToken: false });
+        setTotal(r.total);
+        setPagina(numero);
+        setProductos((prev) => (reemplazar ? r.items : [...prev, ...r.items]));
+      } catch {
+        setFallo("red");
+      } finally {
+        setCargando(false);
+      }
+    },
+    [q, esBusqueda],
+  );
 
-  async function cargarMas() {
-    const siguiente = page + 1;
-    setPage(siguiente);
-    await buscar(siguiente, false);
-  }
+  useEffect(() => {
+    setProductos([]);
+    setEstados({});
+    setAviso(null);
+    cargar(1, true);
+  }, [cargar]);
 
-  async function agregarAlCarrito(productId: number) {
-    setEstados((e) => ({ ...e, [productId]: "agregando" }));
+  async function agregar(p: Producto) {
+    setAviso(null);
+    setEstados((e) => ({ ...e, [p.id]: "adding" }));
     try {
-      const carrito = await api<{ guestToken: string | null }>("/carrito/items", {
-        method: "POST",
-        body: { productId, quantity: 1 },
-      });
-      if (carrito.guestToken) setCartToken(carrito.guestToken);
-      setEstados((e) => ({ ...e, [productId]: "agregado" }));
-    } catch {
-      setEstados((e) => ({ ...e, [productId]: "error" }));
+      await agregarAlCarrito(p.id, 1);
+      setEstados((e) => ({ ...e, [p.id]: "added" }));
+    } catch (e) {
+      if (e instanceof ApiError && e.status === 400) {
+        setAviso(`${e.message}.`);
+        setEstados((s) => ({ ...s, [p.id]: "idle" }));
+      } else {
+        setEstados((s) => ({ ...s, [p.id]: "error" }));
+      }
     }
   }
+
+  // Electrodomésticos primero (la línea principal de la tienda); el resto, por número de productos.
+  const paraCarrusel = useMemo(
+    () =>
+      [...(categorias ?? [])]
+        .sort((a, b) => (a.name === "Electrodomésticos" ? -1 : b.name === "Electrodomésticos" ? 1 : (b.productCount ?? 0) - (a.productCount ?? 0)))
+        .map((c) => {
+          const info = infoCategoria(c.name);
+          return { name: info.nombre, image: info.imagen ?? undefined, href: `/categoria/${c.id}` };
+        }),
+    [categorias],
+  );
+
+  const sinResultados = esBusqueda && !cargando && !fallo && productos.length === 0;
+  const cargandoLista = cargando && productos.length === 0;
 
   return (
-    <div>
-      <ShopHeaderConectado active="catalogo" />
-
-      <div className="container" style={{ maxWidth: 1300, paddingBottom: 0 }}>
-        <div className="hero hero-compacto">
-          <div className="hero-copy">
-            <h1>{qParam ? `Resultados para "${qParam}"` : TEXTOS.heroTitulo}</h1>
-            <p>{TEXTOS.heroSubtitulo}</p>
+    <Pantalla active="catalogo">
+      {!esBusqueda && (
+        <section className="wrap sec" aria-labelledby="titular">
+          <div className="hero">
+            <div className="hero-copy">
+              <Badge tone="brand" icon="truck">
+                Envío a la dirección que escribas
+              </Badge>
+              <h1 id="titular" className="h-display" style={{ maxWidth: 520 }}>
+                Compra fácil y <span className="accent">recíbelo en casa</span>
+              </h1>
+              <p className="hero-sub">Electrodomésticos, tecnología y todo para tu hogar. Pagas con tarjeta en la pasarela segura y te lo enviamos.</p>
+              <ol className="steps3" aria-label="Cómo comprar en tres pasos">
+                <li>
+                  <span className="step-ic">
+                    <Icon name="cart-plus" size={22} />
+                    <span className="step-n" aria-hidden="true">1</span>
+                  </span>
+                  <span>
+                    <strong>Elige</strong>
+                    <span className="small">Busca o explora por categoría</span>
+                  </span>
+                </li>
+                <li>
+                  <span className="step-ic">
+                    <Icon name="card" size={22} />
+                    <span className="step-n" aria-hidden="true">2</span>
+                  </span>
+                  <span>
+                    <strong>Paga en línea</strong>
+                    <span className="small">Con tarjeta, en la pasarela segura</span>
+                  </span>
+                </li>
+                <li>
+                  <span className="step-ic">
+                    <Icon name="truck" size={22} />
+                    <span className="step-n" aria-hidden="true">3</span>
+                  </span>
+                  <span>
+                    <strong>Recíbelo en casa</strong>
+                    <span className="small">En la dirección que escribas</span>
+                  </span>
+                </li>
+              </ol>
+            </div>
+            <div className="hero-art" aria-hidden="true">
+              <div className="hero-block hero-block-orange" />
+              <div className="hero-block hero-block-navy" />
+              <div className="hero-photo hero-photo-main">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/productos/curados/televisor.webp" alt="" />
+              </div>
+              <div className="hero-photo hero-photo-sm">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/productos/curados/licuadora.webp" alt="" />
+              </div>
+              <div className="hero-chip">
+                <Icon name="lock" size={16} />
+                Pago seguro con tarjeta
+              </div>
+            </div>
           </div>
-          <div className="hero-pasos" aria-label="Cómo funciona">
-            <span><Icon name="search" size={18} /> {TEXTOS.pasosHero[0]}</span>
-            <span><Icon name="card" size={18} /> {TEXTOS.pasosHero[1]}</span>
-            <span><Icon name={MODO_ENVIO ? "package" : "store"} size={18} /> {TEXTOS.pasosHero[2]}</span>
+        </section>
+      )}
+
+      {esBusqueda && (
+        <section className="wrap sec">
+          <Breadcrumbs items={[{ label: "Inicio", href: "/" }, { label: "Búsqueda" }]} />
+          <h1 className="h-title" style={{ marginTop: 8 }}>
+            Resultados para «{q}»
+          </h1>
+          {!cargando && !fallo && <p className="muted" style={{ marginTop: 4 }}>{total.toLocaleString("es-CO")} {total === 1 ? "producto" : "productos"}</p>}
+          {fallo === "corta" && (
+            <div className="panel" style={{ marginTop: 16 }}>
+              <EmptyState
+                icon="search"
+                title="Escribe al menos 3 letras para buscar"
+                text="Con menos letras hay demasiados resultados. Prueba, por ejemplo, «licuadora» o «televisor»."
+                action={<Button icon="grid" href="/">Ver todos los productos</Button>}
+              />
+            </div>
+          )}
+          {sinResultados && (
+            <div className="panel" style={{ marginTop: 16 }}>
+              <EmptyState
+                icon="search"
+                title={`No encontramos productos para «${q}»`}
+                text="Revisa la ortografía o prueba con una palabra más general, por ejemplo «licuadora» o «televisor»."
+                action={<Button icon="grid" href="/">Ver todos los productos</Button>}
+              />
+            </div>
+          )}
+        </section>
+      )}
+
+      <section className="wrap sec" aria-label="Categorías">
+        {categorias === null ? (
+          <>
+            <h2 className="h-sec" style={{ marginBottom: 12 }}>Explora por categoría</h2>
+            <Skeleton variant="category" count={8} label="Cargando categorías…" />
+          </>
+        ) : (
+          <CategoryCarousel categories={paraCarrusel} title="Explora por categoría" />
+        )}
+      </section>
+
+      {fallo !== "corta" && !sinResultados && (
+        <section className="wrap sec" aria-labelledby="productos">
+          <div className="between" style={{ marginBottom: 16 }}>
+            <div>
+              <h2 id="productos" className="h-sec">Productos</h2>
+              <p className="muted small">{cargandoLista ? "Buscando productos…" : fallo ? "" : `${total.toLocaleString("es-CO")} productos`}</p>
+            </div>
+            <p className="small muted" style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <Icon name="info" size={16} />
+              Precios en pesos colombianos.
+            </p>
           </div>
-        </div>
-      </div>
 
-      <div className="container" style={{ maxWidth: 1300, paddingTop: 12, paddingBottom: 0 }}>
-        <CarruselCategorias categorias={categorias} />
-      </div>
+          {aviso && (
+            <div style={{ marginBottom: 16 }}>
+              <Notice tone="warn" title="No pudimos agregar más unidades." action={<Button variant="secondary" size="sm" icon="cart" href="/carrito">Ver carrito</Button>}>
+                <p>{aviso}</p>
+              </Notice>
+            </div>
+          )}
 
-      <div className="container" id="catalogo" style={{ maxWidth: 1300 }}>
-        <div className="section-head"><h2>Productos</h2></div>
-        <p className="muted" style={{ marginBottom: 16 }}>{total.toLocaleString("es-CO")} productos</p>
+          {cargandoLista && !fallo && <Skeleton variant="product-card" count={10} label="Cargando productos…" />}
 
-        {error && (
-          <div style={{ marginBottom: 16 }}>
-            <Notice tone="danger" title="No pudimos mostrar los productos" action={<Button variant="secondary" onClick={() => buscar(1, true)}>Reintentar</Button>}>
-              {error}
+          {fallo === "red" && (
+            <Notice
+              tone="danger"
+              title="No pudimos cargar los productos."
+              action={
+                <>
+                  <Button variant="secondary" size="sm" icon="refresh" onClick={() => cargar(1, true)}>Reintentar</Button>
+                  <Button variant="ghost" size="sm" href="/carrito">Ver mi carrito</Button>
+                </>
+              }
+            >
+              <p>Revisa tu conexión a internet e inténtalo de nuevo. Tu carrito sigue guardado.</p>
             </Notice>
-          </div>
-        )}
+          )}
 
-        <div className="grid5">
-          {productos.map((p) => (
-            <TarjetaProducto key={p.id} producto={p} estado={estados[p.id] ?? "reposo"} onAgregar={() => agregarAlCarrito(p.id)} />
-          ))}
-        </div>
+          {productos.length > 0 && (
+            <>
+              <div className="grid-products">
+                {productos.map((p) => (
+                  <ProductCard
+                    key={p.id}
+                    name={p.name}
+                    category={infoCategoria(p.category?.name).nombre}
+                    price={Number(p.digitalPrice)}
+                    units={p.unidadesDisponibles}
+                    image={urlImagenProducto(p.imageUrl)}
+                    href={`/producto/${p.id}`}
+                    state={estados[p.id] ?? "idle"}
+                    addedQuantity={1}
+                    onAdd={() => agregar(p)}
+                    onContinue={() => setEstados((e) => ({ ...e, [p.id]: "idle" }))}
+                  />
+                ))}
+              </div>
+              {productos.length < total && (
+                <div className="more">
+                  <Button variant="secondary" iconRight="chevron-down" loading={cargando} onClick={() => cargar(pagina + 1, false)}>
+                    {cargando ? "Cargando…" : "Ver más productos"}
+                  </Button>
+                  <p className="small muted">
+                    Estás viendo {productos.length.toLocaleString("es-CO")} de {total.toLocaleString("es-CO")} productos
+                  </p>
+                </div>
+              )}
+            </>
+          )}
+        </section>
+      )}
 
-        {cargando && productos.length === 0 && !error && <Notice tone="progress">Cargando productos…</Notice>}
-        {!cargando && productos.length === 0 && !error && (
-          <Notice tone="info" title={`No encontramos productos para "${qParam}"`} action={<Button variant="secondary" href="/">Ver todos los productos</Button>}>
-            Revisa la ortografía o prueba con otra palabra.
-          </Notice>
-        )}
-
-        {productos.length < total && (
-          <div style={{ textAlign: "center", margin: "24px 0" }}>
-            <Button variant="secondary" loading={cargando} onClick={cargarMas}>
-              {`Ver más productos (${productos.length} de ${total})`}
-            </Button>
+      <section className="wrap sec-lg" aria-label="Por qué comprar en ComproYa">
+        <div className="grid-benefits">
+          <div className="benefit" id="pago">
+            <span className="benefit-ic"><Icon name="lock" size={22} /></span>
+            <span>
+              <strong>Pago con tarjeta seguro</strong>
+              <span className="small muted">Escribes tu tarjeta en la pasarela; ComproYa nunca la ve.</span>
+            </span>
           </div>
-        )}
-      </div>
-
-      <div className="container" style={{ maxWidth: 1300, paddingTop: 0 }}>
-        <div className="badges-grid">
-          <div className="badge-card">
-            <div className="badge-ic"><Icon name={MODO_ENVIO ? "package" : "store"} size={20} /></div>
-            <div>{MODO_ENVIO ? <><p>Envío a tu dirección</p><span>Escribe dónde quieres recibir tu pedido</span></> : <><p>Retiro en sucursal</p><span>Elige dónde retirar al confirmar el pedido</span></>}</div>
+          <div className="benefit" id="envio">
+            <span className="benefit-ic"><Icon name="truck" size={22} /></span>
+            <span>
+              <strong>Envío a tu dirección</strong>
+              <span className="small muted">Lo recibes donde nos digas al hacer el pedido.</span>
+            </span>
           </div>
-          <div className="badge-card">
-            <div className="badge-ic"><Icon name="package" size={20} /></div>
-            <div>{MODO_ENVIO ? <><p>Pago seguro</p><span>Pagas en la pasarela: ComproYa nunca ve tu tarjeta</span></> : <><p>Unidades reservadas</p><span>Al confirmar el pedido reservamos tus unidades</span></>}</div>
+          <div className="benefit">
+            <span className="benefit-ic"><Icon name="clock" size={22} /></span>
+            <span>
+              <strong>Unidades reservadas</strong>
+              <span className="small muted">Las apartamos para ti mientras pagas.</span>
+            </span>
           </div>
-          <div className="badge-card">
-            <div className="badge-ic"><Icon name="card" size={20} /></div>
-            <div>{MODO_ENVIO ? <><p>Paga con tarjeta</p><span>Débito o crédito, en la pasarela segura</span></> : <><p>Dos formas de pago</p><span>Tarjeta o pago con débito bancario</span></>}</div>
-          </div>
-          <div className="badge-card">
-            <div className="badge-ic"><Icon name="receipt" size={20} /></div>
-            <div><p>Sigue tu pedido</p><span>Consulta su estado en Mis pedidos</span></div>
-          </div>
-        </div>
-
-        <div className="wide-banner">
-          <div>
-            <h2>Cupones de lealtad</h2>
-            <p>Vincula tu cuenta al programa de lealtad y aplica tus cupones al confirmar el pedido.</p>
-          </div>
-          <Link href="/privacidad"><button className="btn-white">Vincular mi cuenta</button></Link>
-        </div>
-      </div>
-
-      <div className="footer">
-        <div className="container footer-cols" style={{ maxWidth: 1300 }}>
-          <div>
-            <h4>Categorías</h4>
-            <ul style={{ padding: 0, margin: 0 }}>
-              {categorias.slice(0, 5).map((c) => (
-                <li key={c.id}><Link className="footer-link" href={`/categoria/${c.id}`}>{infoCategoria(c.name).nombre}</Link></li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h4>Ayuda</h4>
-            <ul style={{ padding: 0, margin: 0 }}>
-              <li><Link href="/pedidos" className="footer-link">Mis pedidos</Link></li>
-              <li><Link href="/privacidad" className="footer-link">Privacidad y consentimiento</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4>Cuenta</h4>
-            <ul style={{ padding: 0, margin: 0 }}>
-              <li><Link href="/registro" className="footer-link">Crear cuenta</Link></li>
-              <li><Link href="/ingresar" className="footer-link">Iniciar sesión</Link></li>
-            </ul>
+          <div className="benefit">
+            <span className="benefit-ic"><Icon name="receipt" size={22} /></span>
+            <span>
+              <strong>Sigue tu pedido</strong>
+              <span className="small muted">Su estado y lo que sigue, en Mis pedidos.</span>
+            </span>
           </div>
         </div>
-        <div className="footer-bottom">© 2026 ComproYa. Todos los derechos reservados.</div>
-      </div>
-    </div>
+        <div className="loyalty" id="cupon" style={{ marginTop: 16 }}>
+          <span className="loyalty-ic"><Icon name="ticket" size={26} /></span>
+          <div style={{ flex: 1, minWidth: 220 }}>
+            <strong style={{ fontSize: 16 }}>¿Tienes un cupón de lealtad?</strong>
+            <p className="small">Escríbelo en el paso «Datos y envío» antes de pagar. Cada cupón se usa una sola vez por pedido.</p>
+          </div>
+          <Button variant="navy" size="sm" href="/pedido/confirmar" iconRight="arrow-right">Cómo usar mi cupón</Button>
+        </div>
+      </section>
+    </Pantalla>
   );
 }
 
 export default function CatalogoPage() {
   return (
-    <Suspense fallback={<Notice tone="progress">Cargando…</Notice>}>
+    <Suspense fallback={<Pantalla active="catalogo"><section className="wrap sec"><Skeleton variant="product-card" count={10} label="Cargando…" /></section></Pantalla>}>
       <Catalogo />
     </Suspense>
   );

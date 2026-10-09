@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "@/components/ui/ui.css";
+import "./pantallas.css";
 
 export const metadata: Metadata = {
   title: "ComproYa en Línea",
@@ -19,10 +20,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es">
       <body>
         {children}
-        <footer className="pie-academico">
-          Proyecto académico — Ingeniería de Software II, Universidad Central. Sin fines comerciales. Las imágenes de producto
-          pertenecen a sus respectivos titulares.
-        </footer>
       </body>
     </html>
   );

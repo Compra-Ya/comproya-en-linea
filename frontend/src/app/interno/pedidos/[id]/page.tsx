@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import { api, ApiError } from "@/lib/api";
+import { AcademicFooter } from "@/components/ui";
 import type { Pedido } from "@/lib/types";
 
 // Pantalla interna mínima para las transiciones de Pedido hacia alistamiento,
@@ -38,6 +39,7 @@ export default function PedidoInternoPage() {
   }
 
   return (
+    <>
     <div className="panel-shell">
       <div className="panel-sidebar">
         <div className="brand-row"><span className="brand-mark" style={{ width: 28, height: 28, fontSize: 12 }}>CY</span>ComproYa</div>
@@ -104,5 +106,7 @@ export default function PedidoInternoPage() {
         </div>
       </div>
     </div>
+    <AcademicFooter />
+    </>
   );
 }

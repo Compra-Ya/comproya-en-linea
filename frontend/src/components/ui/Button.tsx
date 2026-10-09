@@ -1,11 +1,15 @@
-import Link from "next/link";
+"use client";
+
+import type { AnchorHTMLAttributes } from "react";
+import { Enlace } from "./Enlace";
 import { Icon } from "./Icon";
+import { Tooltip } from "./Tooltip";
+import { cx } from "./formato";
 import type { ButtonProps } from "./tipos";
 
-// Botón único de todo el flujo (design/design-system/components/Button/README.md):
-// reemplaza btn-primary, btn-primary-lg, btn-navy, btn-outline-red y btn-login.
-// Una sola variante `primary` por pantalla; un botón deshabilitado no se explica solo,
-// así que quien lo usa muestra el motivo al lado.
+// Botón único de todas las acciones: verbo + objeto, ícono de apoyo, tooltip que precisa sobre qué actúa.
+// Un botón deshabilitado siempre dice por qué (disabledReason, debajo del botón). loading cambia el texto
+// a gerundio y anuncia aria-busy. Con href se pinta un enlace con forma de botón.
 export function Button({
   variant = "primary",
   size = "md",
@@ -16,13 +20,14 @@ export function Button({
   href,
   className,
   children,
+  tooltip,
+  tooltipOpen,
+  disabledReason,
   disabled,
-  ...rest
+  ...resto
 }: ButtonProps) {
-  const clases = ["cy-btn", `cy-btn-${variant}`, size === "lg" && "cy-btn-lg", full && "cy-btn-full", className]
-    .filter(Boolean)
-    .join(" ");
-  const contenido = (
+  const clases = cx("cy-btn", `cy-btn-${variant}`, size === "lg" && "cy-btn-lg", size === "sm" && "cy-btn-sm", full && "cy-btn-full", className);
+  const interior = (
     <>
       {loading ? <span className="cy-spinner cy-spinner-btn" aria-hidden="true" /> : icon ? <Icon name={icon} /> : null}
       <span>{children}</span>
@@ -30,20 +35,34 @@ export function Button({
     </>
   );
 
-  if (href && !disabled) {
-    return href.startsWith("/") ? (
-      <Link className={clases} href={href}>
-        {contenido}
-      </Link>
+  let elemento =
+    href && !disabled ? (
+      <Enlace href={href} className={clases} {...(resto as unknown as AnchorHTMLAttributes<HTMLAnchorElement>)}>
+        {interior}
+      </Enlace>
     ) : (
-      <a className={clases} href={href}>
-        {contenido}
-      </a>
+      <button type="button" className={clases} aria-busy={loading ? true : undefined} {...resto} disabled={disabled || loading}>
+        {interior}
+      </button>
+    );
+
+  if (tooltip) {
+    elemento = (
+      <Tooltip label={tooltip} open={tooltipOpen} block={full}>
+        {elemento}
+      </Tooltip>
     );
   }
-  return (
-    <button type="button" className={clases} aria-busy={loading ? true : undefined} {...rest} disabled={disabled || loading}>
-      {contenido}
-    </button>
-  );
+  if (disabled && disabledReason) {
+    return (
+      <div className={cx("cy-btn-with-reason", full && "cy-btn-full")}>
+        {elemento}
+        <p className="cy-btn-reason">
+          <Icon name="info" size={16} />
+          {disabledReason}
+        </p>
+      </div>
+    );
+  }
+  return elemento;
 }

@@ -1,21 +1,23 @@
-import Link from "next/link";
+import { Enlace } from "./Enlace";
 import { Icon } from "./Icon";
+import { cx } from "./formato";
 import type { CheckoutStepsProps } from "./tipos";
 
-// Progreso de los cuatro pasos de la compra, con "Volver" explícito (A-05, UT-03).
-// Los nombres de los pasos son los títulos de las pantallas.
-const PASOS_CANON = ["Carrito", "Confirmar pedido", "Pago", "Comprobante"];
+// Los 4 pasos de la compra con "Volver" explícito. Los nombres son los títulos de pantalla.
+// A 390 px se resume en "Paso 2 de 4 · Datos y envío" sobre los círculos (en CSS).
+const PASOS = ["Carrito", "Datos y envío", "Pago", "Pedido confirmado"];
 
-export function CheckoutSteps({ current, steps, back, className }: CheckoutStepsProps) {
-  const PASOS = steps && steps.length === 4 ? steps : PASOS_CANON;
+export function CheckoutSteps({ current, back, className }: CheckoutStepsProps) {
   return (
-    <div className={["cy-steps-wrap", className].filter(Boolean).join(" ")}>
+    <div className={cx("cy-steps-wrap", className)}>
       {back ? (
-        <Link className="cy-back" href={back.href}>
-          <Icon name="chevron-left" size={16} />
+        <Enlace className="cy-back" href={back.href}>
+          <Icon name="arrow-left" size={18} />
           {back.label}
-        </Link>
-      ) : null}
+        </Enlace>
+      ) : (
+        <span />
+      )}
       <p className="cy-steps-mobile">
         Paso {current} de 4 · <strong>{PASOS[current - 1]}</strong>
       </p>

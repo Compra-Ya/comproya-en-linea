@@ -1,27 +1,45 @@
-import { Icon } from "./Icon";
+"use client";
 
-// Cantidad con botones que se anuncian y muestran su ayuda (design/design-system/components/
-// QuantityStepper/README.md). En el mínimo "Disminuir" se deshabilita; para quitar el producto se usa "Quitar".
-export interface QuantityStepperProps {
-  value: number;
-  onChange?: (value: number) => void;
-  min?: number;
-  max?: number;
-  label?: string;
-  className?: string;
-}
+import { useState } from "react";
+import { IconButton } from "./IconButton";
+import { cx } from "./formato";
+import type { QuantityStepperProps } from "./tipos";
 
-export function QuantityStepper({ value, onChange, min = 1, max, label, className }: QuantityStepperProps) {
-  const set = (v: number) => onChange?.(v);
+// Selector de cantidad con botones de 44 px y tooltips con verbo. En el mínimo "Disminuir" se deshabilita
+// (para sacar el producto se usa "Quitar"); en el máximo, "Aumentar" se deshabilita con su motivo.
+// Controlado (value + onChange) o no controlado (defaultValue).
+export function QuantityStepper({ value, defaultValue, onChange, min = 1, max, hint, label, tipOpen, className }: QuantityStepperProps) {
+  const [interno, setInterno] = useState(defaultValue ?? value ?? 1);
+  const actual = onChange ? (value ?? 1) : interno;
+  const fijar = (v: number) => (onChange ? onChange(v) : setInterno(v));
+  const enMinimo = actual <= min;
+  const enMaximo = max != null && actual >= max;
   return (
-    <div className={["cy-stepper", className].filter(Boolean).join(" ")} role="group" aria-label={label ?? "Cantidad"}>
-      <button type="button" aria-label="Disminuir cantidad" title="Disminuir cantidad" disabled={value <= min} onClick={() => set(value - 1)}>
-        <Icon name="minus" size={16} />
-      </button>
-      <span aria-live="polite">{value}</span>
-      <button type="button" aria-label="Aumentar cantidad" title={max != null && value >= max ? `Máximo ${max} unidades` : "Aumentar cantidad"} disabled={max != null && value >= max} onClick={() => set(value + 1)}>
-        <Icon name="plus" size={16} />
-      </button>
+    <div className={cx("cy-stepper-wrap", className)}>
+      <div className="cy-stepper" role="group" aria-label={label || "Cantidad"}>
+        <IconButton
+          icon="minus"
+          variant="plain"
+          label="Disminuir cantidad"
+          tooltip={enMinimo ? `Disminuir cantidad (mínimo ${min})` : "Disminuir cantidad"}
+          disabled={enMinimo}
+          tooltipOpen={tipOpen === "minus"}
+          onClick={() => fijar(actual - 1)}
+        />
+        <output aria-live="polite" className="cy-stepper-value">
+          {actual}
+        </output>
+        <IconButton
+          icon="plus"
+          variant="plain"
+          label="Aumentar cantidad"
+          tooltip={enMaximo ? "Llegaste al máximo por pedido" : "Aumentar cantidad"}
+          disabled={enMaximo}
+          tooltipOpen={tipOpen === "plus"}
+          onClick={() => fijar(actual + 1)}
+        />
+      </div>
+      {hint ? <p className="cy-hint">{hint}</p> : null}
     </div>
   );
 }

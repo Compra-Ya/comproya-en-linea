@@ -1,8 +1,10 @@
-// Cliente HTTP hacia el backend (NestJS). Un solo punto de entrada para que
-// cada pantalla no repita el manejo de token / X-Cart-Token / errores.
+// Cliente HTTP hacia el backend (NestJS). Un solo punto de entrada para que cada pantalla no repita el
+// manejo de token / X-Cart-Token / errores.
+import { avisarCambioDeSesion } from "./eventos";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001/api";
-// Origen del backend sin el prefijo /api, para recursos estáticos (imágenes
-// del catálogo curado, legado) servidos fuera de la API — ver backend/src/main.ts.
+// Origen del backend sin el prefijo /api, para recursos estáticos (imágenes del catálogo curado, legado)
+// servidos fuera de la API — ver backend/src/main.ts.
 const API_ORIGIN = API_URL.replace(/\/api\/?$/, "");
 
 export function urlImagenProducto(imageUrl: string | null | undefined): string | null {
@@ -12,7 +14,10 @@ export function urlImagenProducto(imageUrl: string | null | undefined): string |
 }
 
 export class ApiError extends Error {
-  constructor(public status: number, message: string) {
+  constructor(
+    public status: number,
+    message: string,
+  ) {
     super(message);
   }
 }
@@ -20,6 +25,11 @@ export class ApiError extends Error {
 function getToken(): string | null {
   if (typeof window === "undefined") return null;
   return localStorage.getItem("comproya_token");
+}
+
+/** ¿Hay una sesión guardada en este navegador? (El servidor sigue siendo quien la valida.) */
+export function haySesion(): boolean {
+  return !!getToken();
 }
 
 export function setToken(token: string | null) {
@@ -39,8 +49,8 @@ export function setCartToken(token: string | null) {
   else localStorage.removeItem("comproya_cart_token");
 }
 
-// Solo para mostrar "Hola, <nombre>" en el encabezado sin una llamada extra
-// por pantalla — el backend sigue siendo la única fuente de verdad de la sesión.
+// Solo para mostrar "Hola, <nombre>" en la cabecera sin una llamada extra por pantalla — el backend sigue
+// siendo la única fuente de verdad de la sesión.
 export interface CustomerResumen {
   id: number;
   name: string;
@@ -58,22 +68,17 @@ export function setStoredCustomer(customer: CustomerResumen | null) {
   else localStorage.removeItem("comproya_customer");
 }
 
-// Sucursal de retiro elegida en la ficha de producto (P-3) y llevada a la
-// confirmación del pedido (P-9) — el pedido solo admite una sucursal.
-export function getSelectedBranch(): number | null {
-  if (typeof window === "undefined") return null;
-  const raw = localStorage.getItem("comproya_branch_id");
-  return raw ? Number(raw) : null;
-}
-
-export function setSelectedBranch(branchId: number) {
-  if (typeof window === "undefined") return;
-  localStorage.setItem("comproya_branch_id", String(branchId));
+/** Guarda la sesión que devolvió el servidor y avisa a la cabecera. */
+export function iniciarSesionLocal(accessToken: string, cliente: CustomerResumen) {
+  setToken(accessToken);
+  setStoredCustomer({ id: cliente.id, name: cliente.name });
+  avisarCambioDeSesion();
 }
 
 export function cerrarSesion() {
   setToken(null);
   setStoredCustomer(null);
+  avisarCambioDeSesion();
 }
 
 export async function api<T>(
@@ -81,10 +86,8 @@ export async function api<T>(
   options: { method?: string; body?: unknown; auth?: boolean; cartToken?: boolean } = {},
 ): Promise<T> {
   const headers: Record<string, string> = { "Content-Type": "application/json" };
-  if (options.auth !== false) {
-    const token = getToken();
-    if (token) headers["Authorization"] = `Bearer ${token}`;
-  }
+  const token = options.auth !== false ? getToken() : null;
+  if (token) headers["Authorization"] = `Bearer ${token}`;
   if (options.cartToken !== false) {
     const cartToken = getCartToken();
     if (cartToken) headers["X-Cart-Token"] = cartToken;
@@ -96,11 +99,14 @@ export async function api<T>(
     body: options.body ? JSON.stringify(options.body) : undefined,
   });
 
-  const isJson = res.headers.get("content-type")?.includes("application/json");
-  const data = isJson ? await res.json() : null;
+  const esJson = res.headers.get("content-type")?.includes("application/json");
+  const data = esJson ? await res.json() : null;
 
   if (!res.ok) {
-    throw new ApiError(res.status, data?.message ?? "Error inesperado del servidor");
+    // Sesión vencida o inválida: se limpia para que la cabecera pida iniciar sesión en vez de mostrar un nombre viejo.
+    if (res.status === 401 && token) cerrarSesion();
+    const mensaje = Array.isArray(data?.message) ? data.message.join(". ") : data?.message;
+    throw new ApiError(res.status, mensaje ?? "Error inesperado del servidor");
   }
   return data as T;
 }

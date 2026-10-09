@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { api, ApiError } from "@/lib/api";
 import type { Consentimiento } from "@/lib/types";
-import ShopHeader from "@/components/ShopHeader";
+import ShopHeader from "@/components/ShopHeaderConectado";
+import { AcademicFooter } from "@/components/ui";
 
 // P-5 Administración del consentimiento (CU-05). Actor: Cliente digital ·
 // Oficial de Protección de Datos (vigencia de la política). Canon, sección
@@ -58,7 +59,7 @@ export default function PrivacidadPage() {
 
   return (
     <div>
-      <ShopHeader activeLink="cuenta" />
+      <ShopHeader active="cuenta" />
       <div className="container container-narrow">
         <h2 style={{ fontSize: 22, marginBottom: 6 }}>Privacidad y consentimiento</h2>
         <p className="muted" style={{ marginBottom: 22 }}>{TEXTO_POLITICA_VIGENTE}</p>
@@ -110,6 +111,7 @@ export default function PrivacidadPage() {
           </div>
         </div>
       </div>
+      <AcademicFooter />
     </div>
   );
 }
