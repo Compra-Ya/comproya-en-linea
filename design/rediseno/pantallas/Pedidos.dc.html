@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Mis pedidos</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/comproya/tokens.css">
+<link rel="stylesheet" href="ds/comproya/components/bundle.css">
+<link rel="stylesheet" href="screens.css">
+<script src="ds/comproya/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="pg" style="font-family: var(--font-sans); color: var(--ink);">
+  <x-import component-from-global-scope="ComproYa.ShopHeader" logo-src="/_blob/cb12035d6620475dd0d805671b129f77" active="pedidos" cart-count="{{zero}}" cart-total="{{zero}}" customer-name="{{customer}}"></x-import>
+
+  <main class="wrap" style="padding-top: 16px;">
+    <x-import component-from-global-scope="ComproYa.Breadcrumbs" items="{{crumbs}}"></x-import>
+    <div style="margin: 12px 0 20px;">
+      <h1 class="h-title">Mis pedidos</h1>
+      <p class="muted" style="margin-top: 4px;">{{subtitle}}</p>
+    </div>
+
+    <sc-if value="{{noSession}}" hint-placeholder-val="{{ false }}">
+      <div class="panel">
+        <x-import component-from-global-scope="ComproYa.EmptyState" icon="user" title="Inicia sesión para ver tus pedidos" text="Tus pedidos se guardan en tu cuenta. Al iniciar sesión vuelves directo a esta página.">
+          <x-import component-from-global-scope="ComproYa.Button" variant="primary" href="Acceso.dc.html" icon="user">Iniciar sesión</x-import>
+          <x-import component-from-global-scope="ComproYa.Button" variant="secondary" href="Acceso-registro-1440.dc.html">Crear cuenta</x-import>
+        </x-import>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+      <div class="panel">
+        <x-import component-from-global-scope="ComproYa.EmptyState" icon="receipt" title="Todavía no tienes pedidos" text="Cuando confirmes tu primera compra, aquí verás su estado y lo que sigue.">
+          <x-import component-from-global-scope="ComproYa.Button" variant="primary" href="Main.dc.html" icon="grid">Ver productos</x-import>
+        </x-import>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}">
+      <div class="checkout">
+        <div class="stack">
+          <x-import component-from-global-scope="ComproYa.Spinner" label="Cargando tus pedidos…"></x-import>
+          <div class="panel"><x-import component-from-global-scope="ComproYa.Skeleton" variant="line-item" count="{{two}}" label="Cargando tus pedidos…"></x-import></div>
+          <div class="panel"><x-import component-from-global-scope="ComproYa.Skeleton" variant="line-item" count="{{one}}" label="Cargando tus pedidos…"></x-import></div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{list}}" hint-placeholder-val="{{ true }}">
+      <div class="checkout">
+        <div class="stack">
+          <sc-for list="{{orders}}" as="o" hint-placeholder-count="5">
+            <x-import component-from-global-scope="ComproYa.OrderRow" number="{{o.number}}" date="{{o.date}}" status="{{o.status}}" items-count="{{o.count}}" total="{{o.total}}" city="{{o.city}}" images="{{o.images}}" reason="{{o.reason}}" pay-href="Pago.dc.html" view-href="Confirmado.dc.html"></x-import>
+          </sc-for>
+        </div>
+        <aside class="sticky">
+          <section class="panel" aria-labelledby="leer">
+            <h2 id="leer" class="panel-title"><x-import component-from-global-scope="ComproYa.Icon" name="help" size="{{icon20}}"></x-import>Qué significa cada estado</h2>
+            <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px;">
+              <sc-for list="{{legend}}" as="l" hint-placeholder-count="6">
+                <li class="stack-sm" style="gap: 4px;">
+                  <x-import component-from-global-scope="ComproYa.OrderStatus" status="{{l.key}}"></x-import>
+                  <span class="small muted">{{l.text}}</span>
+                </li>
+              </sc-for>
+            </ul>
+          </section>
+          <p class="small muted" style="display: flex; gap: 8px; align-items: flex-start; padding: 0 4px;"><x-import component-from-global-scope="ComproYa.Icon" name="info" size="{{icon16}}"></x-import>Puedes cancelar un pedido mientras no hayamos empezado a alistarlo.</p>
+        </aside>
+      </div>
+    </sc-if>
+  </main>
+
+  <x-import component-from-global-scope="ComproYa.AcademicFooter" logo-src="/_blob/62890316f6f271cb48ed2a63a9067e57"></x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"estado":{"editor":"enum","options":["con-pedidos","vacio","sin-sesion","cargando"],"default":"con-pedidos"},"$preview":{"width":1440,"height":1550}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var st = this.props.estado || 'con-pedidos';
+    var C = '/_blob/';
+    var tv = C + 'a6edfead7305717797c4277a8a388033', lic = C + '1568c43b6dd8a98002eeba8ee4dc64f7';
+    var orders = [
+      { number: 10482, date: '8 de octubre de 2026', status: 'pagado', count: 3, total: 2032110, city: 'Bogotá', images: [tv, lic] },
+      { number: 10477, date: '7 de octubre de 2026', status: 'creado', count: 1, total: 389000, city: 'Medellín', images: [C + '4717a28885f77e18a6827bdd420c0432'] },
+      { number: 10460, date: '5 de octubre de 2026', status: 'en-alistamiento', count: 2, total: 458000, city: 'Bogotá', images: [C + 'e8fc6aabebe3233ef01300e2c510cc08', C + '839ae4cf9e8f5a5710d55ff329a3e2b2'] },
+      { number: 10431, date: '2 de octubre de 2026', status: 'pago-fallido', count: 1, total: 8499000, city: 'Bogotá', images: [C + '1d38e6d22bd117822ee2a382fc013555'], reason: 'La pasarela no completó el pago con tarjeta. No se hizo ningún cobro; puedes pagarlo de nuevo.' },
+      { number: 10402, date: '28 de septiembre de 2026', status: 'cancelado', count: 1, total: 1150000, city: 'Cali', images: [C + 'a000164c208dbf8be368b8c3695afb3d'], reason: 'Lo cancelaste antes del alistamiento. No se hizo ningún cobro.' },
+      { number: 10377, date: '20 de septiembre de 2026', status: 'entregado', count: 1, total: 279000, city: 'Bogotá', images: [C + 'e8fc6aabebe3233ef01300e2c510cc08'] }
+    ];
+    var legend = [
+      { key: 'creado', text: 'Falta pagarlo con tarjeta.' },
+      { key: 'pagado', text: 'Recibimos tu pago; aún puedes cancelarlo.' },
+      { key: 'en-alistamiento', text: 'Lo estamos preparando; ya no se puede cancelar.' },
+      { key: 'entregado', text: 'Llegó a tu dirección.' },
+      { key: 'pago-fallido', text: 'El pago no se completó; puedes intentarlo otra vez.' },
+      { key: 'cancelado', text: 'Se canceló y no se cobró.' }
+    ];
+    return {
+      crumbs: [{ label: 'Inicio', href: 'Main.dc.html' }, { label: 'Mis pedidos' }],
+      customer: st === 'sin-sesion' ? undefined : 'Duvan',
+      subtitle: st === 'con-pedidos' ? '6 pedidos · El más reciente primero' : st === 'vacio' ? 'Aquí verás el estado de cada compra.' : st === 'cargando' ? 'Buscando tus pedidos…' : 'Necesitas iniciar sesión.',
+      noSession: st === 'sin-sesion', empty: st === 'vacio', loading: st === 'cargando', list: st === 'con-pedidos',
+      orders: orders, legend: legend,
+      zero: 0, one: 1, two: 2, icon16: 16, icon20: 20
+    };
+  }
+}
+</script>
+</body>
+</html>

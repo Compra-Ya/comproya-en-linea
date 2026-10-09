@@ -1,12 +1,13 @@
 # Skeleton
 
-Estructura gris de la página mientras llega la respuesta: el usuario ve que algo carga y dónde aparecerá (A-07).
+Estructura gris que late suavemente mientras llega la respuesta: el usuario ve que algo carga y dónde aparecerá.
 
-## Qué aporta quien lo usa
+## Variantes
 
-`variant` (`product-card` para la grilla del catálogo, `line-item` para el carrito y el comprobante, `text`), `count`, `label` (texto para lectores de pantalla).
+`category` (círculos del carrusel), `product-card` (rejilla), `line-item` (carrito y resumen), `text`.
 
 ## Reglas
 
-- Muestra el mismo número de tarjetas que se verán (por ejemplo 8 en el catálogo).
-- La cabecera de tienda nunca se reemplaza por un skeleton: se pinta siempre.
+- El mismo número de elementos que se verán (8 tarjetas en el catálogo).
+- La cabecera y el pie nunca se reemplazan por esqueletos.
+- Con "reducir movimiento" el latido es más lento.

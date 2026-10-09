@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Página de categoría</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/comproya/tokens.css">
+<link rel="stylesheet" href="ds/comproya/components/bundle.css">
+<link rel="stylesheet" href="screens.css">
+<script src="ds/comproya/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="pg" style="font-family: var(--font-sans); color: var(--ink);">
+  <x-import component-from-global-scope="ComproYa.ShopHeader" logo-src="/_blob/cb12035d6620475dd0d805671b129f77" active="catalogo" cart-count="{{two}}" cart-total="{{cartTotal}}"></x-import>
+
+  <main>
+    <div class="wrap" style="padding-top: 16px;">
+      <x-import component-from-global-scope="ComproYa.Breadcrumbs" items="{{crumbs}}"></x-import>
+    </div>
+
+    <section class="wrap" style="padding-top: 12px;" aria-labelledby="cat-title">
+      <div class="cover">
+        <div class="cover-copy">
+          <span class="cover-count"><x-import component-from-global-scope="ComproYa.Icon" name="grid" size="{{smallIcon}}"></x-import>{{countLabel}}</span>
+          <h1 id="cat-title" class="h-display" style="color: #ffffff;">{{cat.name}}</h1>
+          <p>{{cat.description}}</p>
+        </div>
+        <div class="cover-img"><img src="{{cat.image}}" alt=""></div>
+      </div>
+    </section>
+
+    <section class="wrap sec" aria-label="Otras categorías">
+      <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}">
+        <h2 class="h-sec" style="margin-bottom: 12px;">Explora otras categorías</h2>
+        <x-import component-from-global-scope="ComproYa.Skeleton" variant="category" count="{{eight}}" label="Cargando categorías…"></x-import>
+      </sc-if>
+      <sc-if value="{{notLoading}}" hint-placeholder-val="{{ true }}">
+        <x-import component-from-global-scope="ComproYa.CategoryCarousel" categories="{{categories}}" title="Explora otras categorías"></x-import>
+      </sc-if>
+    </section>
+
+    <section class="wrap sec" aria-labelledby="cat-products">
+      <div class="toolbar">
+        <h2 id="cat-products" class="h-sec">Productos de {{cat.name}}</h2>
+        <p class="small muted">{{showingLabel}}</p>
+      </div>
+      <div style="padding-top: 16px;">
+        <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}">
+          <x-import component-from-global-scope="ComproYa.Skeleton" variant="product-card" count="{{ten}}" label="Cargando productos…"></x-import>
+        </sc-if>
+        <sc-if value="{{notLoading}}" hint-placeholder-val="{{ true }}">
+          <div class="grid-products">
+            <sc-for list="{{products}}" as="p" hint-placeholder-count="10">
+              <x-import component-from-global-scope="ComproYa.ProductCard" name="{{p.name}}" category="{{p.category}}" price="{{p.price}}" units="{{p.units}}" image="{{p.image}}" href="Producto.dc.html"></x-import>
+            </sc-for>
+          </div>
+          <sc-if value="{{few}}" hint-placeholder-val="{{ false }}">
+            <div class="loyalty" style="margin-top: 24px; background: var(--orange-100); color: var(--ink);">
+              <span class="loyalty-ic" style="color: var(--orange-600);"><x-import component-from-global-scope="ComproYa.Icon" name="grid" size="{{bigIcon}}"></x-import></span>
+              <div style="flex: 1; min-width: 220px;">
+                <strong style="font-size: 16px;">Viste todos los productos de {{cat.name}}</strong>
+                <p class="small">Sigue explorando en otras categorías o vuelve al catálogo completo.</p>
+              </div>
+              <x-import component-from-global-scope="ComproYa.Button" variant="secondary" href="Main.dc.html" icon="arrow-left">Volver al catálogo</x-import>
+            </div>
+          </sc-if>
+          <sc-if value="{{many}}" hint-placeholder-val="{{ true }}">
+            <div class="more">
+              <x-import component-from-global-scope="ComproYa.Button" variant="secondary" icon-right="chevron-down">Ver más productos</x-import>
+              <p class="small muted">{{showingLabel}}</p>
+            </div>
+          </sc-if>
+        </sc-if>
+      </div>
+    </section>
+  </main>
+
+  <x-import component-from-global-scope="ComproYa.AcademicFooter" logo-src="/_blob/62890316f6f271cb48ed2a63a9067e57"></x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"estado":{"editor":"enum","options":["exito","cargando","pocos"],"default":"exito"},"$preview":{"width":1440,"height":2150}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var st = this.props.estado || 'exito';
+    var C = '/_blob/';
+    var few = st === 'pocos';
+    var cat = few
+      ? { name: 'Electrodomésticos', description: 'Línea blanca, televisores y pequeños electrodomésticos.', image: C + '3859783f6c7563a05252bbfa28937207', count: 4 }
+      : { name: 'Portátiles', description: 'Portátiles, computadores, teclados y mouse para estudiar y trabajar.', image: C + '23cc76ae47e500f63e29f454b8436cfe', count: 232 };
+    var cats = [
+      ['Electrodomésticos', '3859783f6c7563a05252bbfa28937207'], ['Portátiles', '23cc76ae47e500f63e29f454b8436cfe'], ['Celulares', 'baabbd45d5207b513559bd0ac119cd53'],
+      ['Tabletas', '2259965e4a090f65f5de00a1be94aaf7'], ['Utensilios de cocina', 'dae893eaa1ccff8dc4523dbebd60ea51'], ['Muebles', '809dd6ed549d6e051487a5a9110796d8'],
+      ['Decoración del hogar', '2f2d3804a45153622fe1ec9d1e9c225e'], ['Artículos deportivos', '5411f917888c8c99c4890198669a46b2'], ['Calzado de hombre', '1961688e26e52388b0913b6b1a47f828'],
+      ['Ropa de hombre', '681a6e92941c9439a3a368d7fa2be1c4'], ['Alimentos y bebidas', 'd913e325c4c4b8fec6ef560655714791'], ['Cuidado de la piel', '5fe352ba1e89bd6b03305ebf21e5eb2e'],
+      ['Belleza', '456abf2696bb2630fb551d39d1edf853'], ['Fragancias', '895843e400e44d43c9c014021c567bfc'], ['Relojes de hombre', 'b172dfa806b6cc0666e9c371e0fde57d'],
+      ['Relojes de mujer', '72d99c3fe4cdb7eb420a52999af14533'], ['Accesorios para celular', '5ff25083c24e6b09c854a688e56eb269'], ['Gafas de sol', '861055785a166cb60010de569a6dfb12'],
+      ['Moda casual de mujer', '8f643a4c9c6b26159e4663137e0abc78'], ['Vestidos y trajes de mujer', '799c2a8cd71c20adc1d184c48456501b'], ['Bolsos de mujer', '9150013334e0611ac774001cbf4678de'],
+      ['Joyería de mujer', '698db437cfbc7d47d6f0c75f752054ac'], ['Calzado de mujer', '33b09da1cca8189b68728b75b5c3d2b2'], ['Motos', 'bb69d8bf7a428efba968adab44e9832a'], ['Carros', '7dd68333e81ab7cda0e910aadca86253']
+    ].map(function (c) { return { name: c[0], image: C + c[1], href: 'Categoria.dc.html', active: c[0] === cat.name }; });
+    var lap1 = C + '102bfab2d3971ba68bd12c24f36059e6', lap2 = C + '1d38e6d22bd117822ee2a382fc013555';
+    var products = few ? [
+      { name: 'Televisor LED 55 pulgadas 4K UHD', category: 'Electrodomésticos', price: 1899900, units: 32, image: C + 'a6edfead7305717797c4277a8a388033' },
+      { name: 'Licuadora de vaso de vidrio 1,5 L', category: 'Electrodomésticos', price: 179000, units: 285, image: C + '1568c43b6dd8a98002eeba8ee4dc64f7' },
+      { name: 'Nevera no frost 420 L con dispensador', category: 'Electrodomésticos', price: 3199900, units: 9, image: C + 'b35b46efa853edc86569d2031375449d' },
+      { name: 'Lavadora carga frontal 18 kg', category: 'Electrodomésticos', price: 2349900, units: 14, image: C + '78b09b8d9eb8b58add38681222e38d90' }
+    ] : [
+      { name: 'Portátil 15,6 pulgadas 8 GB de memoria', price: 2149000, units: 41, image: lap1 },
+      { name: 'Portátil 14 pulgadas 16 GB de memoria', price: 8499000, units: 7, image: lap2 },
+      { name: 'Portátil 15,6 pulgadas 16 GB, disco de 512 GB', price: 2899000, units: 23, image: lap1 },
+      { name: 'Portátil ultradelgado 13 pulgadas', price: 5399000, units: 12, image: lap2 },
+      { name: 'Portátil 14 pulgadas para estudiantes', price: 1699000, units: 58, image: lap1 },
+      { name: 'Portátil 16 pulgadas para diseño', price: 9999000, units: 3, image: lap2 },
+      { name: 'Portátil 15,6 pulgadas con teclado numérico', price: 2399000, units: 19, image: lap1 },
+      { name: 'Portátil 14 pulgadas 8 GB, color plata', price: 1999000, units: 0, image: lap1 },
+      { name: 'Portátil 13 pulgadas con pantalla táctil', price: 4699000, units: 6, image: lap2 },
+      { name: 'Portátil 15 pulgadas 32 GB de memoria', price: 11999000, units: 2, image: lap2 }
+    ].map(function (p) { return Object.assign({ category: 'Portátiles' }, p); });
+    return {
+      cat: cat,
+      crumbs: [{ label: 'Inicio', href: 'Main.dc.html' }, { label: cat.name }],
+      countLabel: st === 'cargando' ? 'Contando productos…' : cat.count + ' productos',
+      showingLabel: few ? 'Mostrando los 4 productos' : 'Mostrando 10 de 232 productos',
+      loading: st === 'cargando', notLoading: st !== 'cargando',
+      few: few, many: !few,
+      categories: cats, products: products,
+      two: 2, cartTotal: 2078900, eight: 8, ten: 10, smallIcon: 16, bigIcon: 26
+    };
+  }
+}
+</script>
+</body>
+</html>

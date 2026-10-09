@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Tablero de componentes</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/comproya/tokens.css">
+<link rel="stylesheet" href="ds/comproya/components/bundle.css">
+<link rel="stylesheet" href="screens.css">
+<script src="ds/comproya/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1440px; box-sizing: border-box; padding: 56px 64px 72px; background: var(--surface-muted); font-family: var(--font-sans); color: var(--ink); display: flex; flex-direction: column; gap: 40px;">
+  <header style="display: flex; align-items: center; justify-content: space-between; gap: 24px;">
+    <div>
+      <img src="/_blob/cb12035d6620475dd0d805671b129f77" alt="ComproYa" style="height: 40px; width: auto; display: block;">
+      <h1 style="margin: 16px 0 0; font-size: 36px; line-height: 42px; font-weight: 800; letter-spacing: -0.02em;">Componentes</h1>
+      <p style="margin: 6px 0 0; color: var(--ink-soft); font-size: 16px;">Todos vienen del sistema de diseño ComproYa en Línea. Los tooltips se muestran abiertos para revisarlos; en la tienda aparecen al pasar el mouse o al enfocar con teclado.</p>
+    </div>
+  </header>
+
+  <section style="display: flex; flex-direction: column; gap: 16px;">
+    <h2 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Botones con ícono y tooltip</h2>
+    <div class="panel" style="display: flex; flex-direction: column; gap: 28px; padding-top: 64px;">
+      <div class="row" style="gap: 16px; align-items: flex-start;">
+        <x-import component-from-global-scope="ComproYa.Button" variant="primary" icon="cart-plus" tooltip="Agregar Licuadora de vaso de vidrio 1,5 L al carrito" tooltip-open="{{yes}}">Agregar al carrito</x-import>
+        <x-import component-from-global-scope="ComproYa.Button" variant="primary" size="lg" icon-right="arrow-right">Continuar al pago</x-import>
+        <x-import component-from-global-scope="ComproYa.Button" variant="primary" size="lg" icon="lock">Pagar con tarjeta</x-import>
+        <x-import component-from-global-scope="ComproYa.Button" variant="primary" loading="{{yes}}">Agregando…</x-import>
+        <x-import component-from-global-scope="ComproYa.Button" variant="secondary" icon="arrow-left">Volver al carrito</x-import>
+        <x-import component-from-global-scope="ComproYa.Button" variant="ghost">Seguir comprando</x-import>
+        <x-import component-from-global-scope="ComproYa.Button" variant="ghost-danger">Cancelar pedido</x-import>
+      </div>
+      <div class="row" style="gap: 24px; align-items: flex-start; padding-top: 40px;">
+        <x-import component-from-global-scope="ComproYa.IconButton" icon="chevron-left" label="Ver categorías anteriores" tooltip-open="{{yes}}"></x-import>
+        <x-import component-from-global-scope="ComproYa.IconButton" icon="chevron-right" label="Ver más categorías"></x-import>
+        <x-import component-from-global-scope="ComproYa.IconButton" icon="pause" label="Pausar el carrusel" tooltip-open="{{yes}}"></x-import>
+        <x-import component-from-global-scope="ComproYa.IconButton" icon="x" label="Cerrar el aviso"></x-import>
+        <x-import component-from-global-scope="ComproYa.IconButton" icon="cart-plus" label="Agregar Lámpara de mesa al carrito" tooltip-open="{{yes}}"></x-import>
+        <div style="width: 320px;"><x-import component-from-global-scope="ComproYa.Button" variant="primary" full="{{yes}}" disabled="{{yes}}" icon="cart-plus" disabled-reason="Producto agotado: por ahora no hay unidades.">Agotado</x-import></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 16px;">
+    <h2 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Tarjeta de producto</h2>
+    <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; align-items: start; padding-top: 48px;">
+      <x-import component-from-global-scope="ComproYa.ProductCard" name="Licuadora de vaso de vidrio 1,5 L" category="Electrodomésticos" price="{{p1}}" units="{{u1}}" image="/_blob/1568c43b6dd8a98002eeba8ee4dc64f7" tooltip-open="{{yes}}"></x-import>
+      <x-import component-from-global-scope="ComproYa.ProductCard" name="Televisor LED 55 pulgadas 4K UHD" category="Electrodomésticos" price="{{p2}}" units="{{u2}}" image="/_blob/a6edfead7305717797c4277a8a388033" state="added" added-quantity="{{two}}"></x-import>
+      <x-import component-from-global-scope="ComproYa.ProductCard" name="Portátil 15,6 pulgadas 8 GB de memoria" category="Portátiles" price="{{p3}}" units="{{u3}}" image="/_blob/102bfab2d3971ba68bd12c24f36059e6" state="adding"></x-import>
+      <x-import component-from-global-scope="ComproYa.ProductCard" name="Bicicleta estática con monitor" category="Artículos deportivos" price="{{p4}}" units="{{zero}}" image="/_blob/a000164c208dbf8be368b8c3695afb3d"></x-import>
+      <x-import component-from-global-scope="ComproYa.ProductCard" name="Producto nuevo sin foto" category="Electrodomésticos" price="{{p5}}" units="{{u5}}"></x-import>
+    </div>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 16px;">
+    <h2 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Tarjeta de categoría y carrusel</h2>
+    <div class="panel" style="display: flex; flex-direction: column; gap: 24px;">
+      <div class="row" style="gap: 8px;">
+        <x-import component-from-global-scope="ComproYa.CategoryCard" name="Electrodomésticos" image="/_blob/3859783f6c7563a05252bbfa28937207" count="{{four}}"></x-import>
+        <x-import component-from-global-scope="ComproYa.CategoryCard" name="Portátiles" image="/_blob/23cc76ae47e500f63e29f454b8436cfe" active="{{yes}}"></x-import>
+        <x-import component-from-global-scope="ComproYa.CategoryCard" name="Utensilios de cocina" image="/_blob/dae893eaa1ccff8dc4523dbebd60ea51"></x-import>
+        <x-import component-from-global-scope="ComproYa.CategoryCard" name="Categoría sin foto"></x-import>
+        <p class="small muted" style="max-width: 360px;">Foto redonda de 96 px (72 px en celular). Al pasar el mouse o en la categoría actual, el anillo pasa a naranja y la tarjeta sube 2 px en 200 ms.</p>
+      </div>
+      <div style="padding-top: 40px; border-top: 1px solid var(--line);">
+        <x-import component-from-global-scope="ComproYa.CategoryCarousel" categories="{{categories}}" tip-open="next" paused="{{yes}}"></x-import>
+      </div>
+      <p class="small muted">Una sola fila infinita: avanza sola, se detiene al pasar el mouse o al enfocar, tiene «Pausar el carrusel», flechas con tooltip y se desliza con el dedo. Con «reducir movimiento» no se mueve sola.</p>
+    </div>
+  </section>
+
+  <section style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px;">
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <h2 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Selector de cantidad y fila del carrito</h2>
+      <div class="panel" style="display: flex; flex-direction: column; gap: 24px; padding-top: 56px;">
+        <div class="row" style="gap: 32px; align-items: flex-start;">
+          <x-import component-from-global-scope="ComproYa.QuantityStepper" default-value="{{two}}" max="{{ten}}" hint="Máximo 10 unidades por pedido" tip-open="plus"></x-import>
+          <x-import component-from-global-scope="ComproYa.QuantityStepper" default-value="{{one}}" max="{{ten}}" tip-open="minus"></x-import>
+          <x-import component-from-global-scope="ComproYa.QuantityStepper" default-value="{{ten}}" max="{{ten}}" tip-open="plus"></x-import>
+        </div>
+        <x-import component-from-global-scope="ComproYa.LineItem" name="Televisor LED 55 pulgadas 4K UHD" image="/_blob/a6edfead7305717797c4277a8a388033" unit-price="{{p2}}" quantity="{{one}}" max="{{ten}}" tip-open="remove"></x-import>
+        <div style="height: 24px;"></div>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <h2 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Indicador de pasos</h2>
+      <div class="panel" style="display: flex; flex-direction: column; gap: 20px;">
+        <x-import component-from-global-scope="ComproYa.CheckoutSteps" current="{{one}}" back="{{backShop}}"></x-import>
+        <x-import component-from-global-scope="ComproYa.CheckoutSteps" current="{{two}}" back="{{backCart}}"></x-import>
+        <x-import component-from-global-scope="ComproYa.CheckoutSteps" current="{{three}}" back="{{backData}}"></x-import>
+        <x-import component-from-global-scope="ComproYa.CheckoutSteps" current="{{four}}"></x-import>
+        <x-import component-from-global-scope="ComproYa.Breadcrumbs" items="{{crumbs}}"></x-import>
+      </div>
+    </div>
+  </section>
+
+  <section style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px;">
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <h2 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Avisos y confirmaciones</h2>
+      <div class="panel" style="display: flex; flex-direction: column; gap: 12px;">
+        <x-import component-from-global-scope="ComproYa.AddedToCart" quantity="{{two}}"></x-import>
+        <x-import component-from-global-scope="ComproYa.Notice" tone="danger" title="No pudimos cargar los productos.">
+          <p>Revisa tu conexión e inténtalo de nuevo.</p>
+          <div class="cy-notice-actions"><x-import component-from-global-scope="ComproYa.Button" variant="secondary" size="sm" icon="refresh">Reintentar</x-import></div>
+        </x-import>
+        <x-import component-from-global-scope="ComproYa.Notice" tone="progress" title="Estamos confirmando tu pago…" progress="{{yes}}"><p>Suele tardar unos segundos. No cierres esta página.</p></x-import>
+        <x-import component-from-global-scope="ComproYa.Notice" tone="warn" icon="clock" title="Reservamos tus unidades mientras pagas."><p>Si no completas el pago, las liberamos para otros clientes.</p></x-import>
+        <x-import component-from-global-scope="ComproYa.Notice" tone="test" icon="card" title="Modo de prueba"><p>Usa la tarjeta 4242 4242 4242 4242, cualquier fecha futura y cualquier código de seguridad.</p></x-import>
+        <x-import component-from-global-scope="ComproYa.Notice" tone="info" icon="lock"><p>Escribirás tu tarjeta en la página segura de la pasarela de pagos. ComproYa nunca la ve.</p></x-import>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <h2 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Campos con ayuda y error</h2>
+      <div class="panel" style="display: flex; flex-direction: column; gap: 4px; padding-top: 72px;">
+        <x-import component-from-global-scope="ComproYa.Field" label="Nombre completo" default-value="Duvan Serrano" valid="{{yes}}"></x-import>
+        <x-import component-from-global-scope="ComproYa.Field" label="Teléfono" icon="phone" default-value="310 55" error="Faltan dígitos: escribe los 10 números de tu celular, sin espacios." hint="Celular de 10 dígitos para coordinar la entrega."></x-import>
+        <x-import component-from-global-scope="ComproYa.Field" label="Dirección" icon="map-pin" placeholder="Calle 45 # 13-20, apto 301" hint="Calle o carrera, número y apartamento si aplica."></x-import>
+        <x-import component-from-global-scope="ComproYa.CouponField" value="LEALTAD10" status="applied" applied-text="Cupón LEALTAD10 aplicado: 10 % de descuento ($ 225.790)." tip-open="{{yes}}"></x-import>
+        <div style="height: 12px;"></div>
+        <x-import component-from-global-scope="ComproYa.CouponField" value="GRATIS50" status="invalid"></x-import>
+      </div>
+    </div>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 16px;">
+    <h2 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Insignias de estado y ayudas</h2>
+    <div class="panel" style="display: flex; flex-direction: column; gap: 20px; padding-top: 72px;">
+      <div class="row" style="gap: 10px;">
+        <x-import component-from-global-scope="ComproYa.OrderStatus" status="creado"></x-import>
+        <x-import component-from-global-scope="ComproYa.OrderStatus" status="pagado"></x-import>
+        <x-import component-from-global-scope="ComproYa.OrderStatus" status="en-alistamiento"></x-import>
+        <x-import component-from-global-scope="ComproYa.OrderStatus" status="entregado"></x-import>
+        <x-import component-from-global-scope="ComproYa.OrderStatus" status="cancelado"></x-import>
+        <x-import component-from-global-scope="ComproYa.OrderStatus" status="pago-fallido"></x-import>
+        <x-import component-from-global-scope="ComproYa.Badge" tone="ok" icon="check">Disponible</x-import>
+        <x-import component-from-global-scope="ComproYa.Badge" tone="danger" icon="x">Agotado</x-import>
+        <x-import component-from-global-scope="ComproYa.Badge" tone="brand">Producto complementario</x-import>
+      </div>
+      <div class="row" style="gap: 48px;">
+        <p><x-import component-from-global-scope="ComproYa.InfoTip" term="unidades disponibles" tip="Las que puedes comprar ahora; ya descuentan las reservadas por otros pedidos." open="{{yes}}">Hay 285 unidades disponibles</x-import></p>
+        <p><x-import component-from-global-scope="ComproYa.InfoTip" term="un cupón de lealtad" tip="Código de descuento del programa de lealtad de ComproYa. Se usa una vez por pedido." open="{{yes}}">Cupón de lealtad</x-import></p>
+        <p><x-import component-from-global-scope="ComproYa.InfoTip" term="la pasarela de pagos" tip="Página segura de Stripe donde escribes tu tarjeta. ComproYa nunca la ve." open="{{yes}}">Pasarela de pagos</x-import></p>
+      </div>
+    </div>
+  </section>
+
+  <section style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px;">
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <h2 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Estados vacíos</h2>
+      <div class="panel">
+        <x-import component-from-global-scope="ComproYa.EmptyState" icon="cart" title="Tu carrito está vacío" text="Explora el catálogo y agrega lo que te guste.">
+          <x-import component-from-global-scope="ComproYa.Button" variant="primary" icon="grid">Ver productos</x-import>
+        </x-import>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <h2 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 700;">Esqueletos de carga</h2>
+      <div class="panel" style="display: flex; flex-direction: column; gap: 16px;">
+        <x-import component-from-global-scope="ComproYa.Skeleton" variant="category" count="{{four}}"></x-import>
+        <x-import component-from-global-scope="ComproYa.Skeleton" variant="product-card" count="{{two}}"></x-import>
+      </div>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var C = '/_blob/';
+    var cats = [['Electrodomésticos', '3859783f6c7563a05252bbfa28937207'], ['Portátiles', '23cc76ae47e500f63e29f454b8436cfe'], ['Celulares', 'baabbd45d5207b513559bd0ac119cd53'], ['Tabletas', '2259965e4a090f65f5de00a1be94aaf7'], ['Utensilios de cocina', 'dae893eaa1ccff8dc4523dbebd60ea51'], ['Muebles', '809dd6ed549d6e051487a5a9110796d8'], ['Decoración del hogar', '2f2d3804a45153622fe1ec9d1e9c225e'], ['Artículos deportivos', '5411f917888c8c99c4890198669a46b2'], ['Calzado de hombre', '1961688e26e52388b0913b6b1a47f828'], ['Alimentos y bebidas', 'd913e325c4c4b8fec6ef560655714791']]
+      .map(function (c) { return { name: c[0], image: C + c[1], href: '#' }; });
+    return {
+      yes: true, zero: 0, one: 1, two: 2, three: 3, four: 4, ten: 10,
+      p1: 179000, p2: 1899900, p3: 2149000, p4: 1150000, p5: 249000, u1: 285, u2: 32, u3: 41, u5: 20,
+      categories: cats,
+      backShop: { label: 'Seguir comprando', href: '#' }, backCart: { label: 'Volver al carrito', href: '#' }, backData: { label: 'Volver a tus datos', href: '#' },
+      crumbs: [{ label: 'Inicio', href: '#' }, { label: 'Electrodomésticos', href: '#' }, { label: 'Licuadora de vaso de vidrio 1,5 L' }]
+    };
+  }
+}
+</script>
+</body>
+</html>

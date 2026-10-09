@@ -1,0 +1,1 @@
+Fotos de ejemplo tomadas de `frontend/public/productos` y `frontend/public/categorias` para las vistas previas. Las de producto son 1:1 o casi y se muestran contenidas sobre blanco; las de categoría se recortan en círculo.

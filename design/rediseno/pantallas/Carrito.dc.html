@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Carrito</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/comproya/tokens.css">
+<link rel="stylesheet" href="ds/comproya/components/bundle.css">
+<link rel="stylesheet" href="screens.css">
+<script src="ds/comproya/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="pg" style="font-family: var(--font-sans); color: var(--ink);">
+  <x-import component-from-global-scope="ComproYa.ShopHeader" logo-src="/_blob/cb12035d6620475dd0d805671b129f77" active="carrito" cart-count="{{cartCount}}" cart-total="{{cartTotal}}"></x-import>
+
+  <main class="wrap" style="padding-top: 24px;">
+    <x-import component-from-global-scope="ComproYa.CheckoutSteps" current="{{one}}" back="{{back}}"></x-import>
+
+    <div class="between" style="margin: 24px 0 16px;">
+      <div>
+        <h1 class="h-title">Tu carrito</h1>
+        <p class="muted" style="margin-top: 4px;">{{subtitle}}</p>
+      </div>
+    </div>
+
+    <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+      <div class="panel">
+        <x-import component-from-global-scope="ComproYa.EmptyState" icon="cart" title="Tu carrito está vacío" text="Explora el catálogo y agrega lo que te guste. Aquí lo guardamos mientras decides.">
+          <x-import component-from-global-scope="ComproYa.Button" variant="primary" icon="grid" href="Main.dc.html">Ver productos</x-import>
+        </x-import>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isError}}" hint-placeholder-val="{{ false }}">
+      <x-import component-from-global-scope="ComproYa.Notice" tone="danger" title="No pudimos cargar tu carrito.">
+        <p>Revisa tu conexión e inténtalo de nuevo. Lo que agregaste sigue guardado.</p>
+        <div class="cy-notice-actions">
+          <x-import component-from-global-scope="ComproYa.Button" variant="secondary" size="sm" icon="refresh">Reintentar</x-import>
+          <x-import component-from-global-scope="ComproYa.Button" variant="ghost" size="sm" href="Main.dc.html">Seguir comprando</x-import>
+        </div>
+      </x-import>
+    </sc-if>
+
+    <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}">
+      <div class="checkout">
+        <div class="panel">
+          <x-import component-from-global-scope="ComproYa.Skeleton" variant="line-item" count="{{two}}" label="Cargando tu carrito…"></x-import>
+        </div>
+        <div class="panel stack-sm">
+          <x-import component-from-global-scope="ComproYa.Spinner" label="Calculando el resumen…"></x-import>
+          <div class="cy-skel" style="height: 14px; width: 70%;"></div>
+          <div class="cy-skel" style="height: 14px; width: 50%;"></div>
+          <div class="cy-skel" style="height: 48px; margin-top: 12px;"></div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{full}}" hint-placeholder-val="{{ true }}">
+      <div class="checkout">
+        <div class="stack">
+          <x-import component-from-global-scope="ComproYa.Notice" tone="info" icon="user" title="Estás comprando como invitado.">
+            <p>Inicia sesión para guardar el carrito en tu cuenta. No pierdes lo que agregaste.</p>
+            <div class="cy-notice-actions">
+              <x-import component-from-global-scope="ComproYa.Button" variant="secondary" size="sm" href="Acceso.dc.html" icon="user">Iniciar sesión</x-import>
+            </div>
+          </x-import>
+          <section class="panel" aria-label="Productos en tu carrito" style="padding-top: 4px; padding-bottom: 4px;">
+            <sc-for list="{{items}}" as="it" hint-placeholder-count="2">
+              <x-import component-from-global-scope="ComproYa.LineItem" name="{{it.name}}" image="{{it.image}}" unit-price="{{it.price}}" quantity="{{it.qty}}" max="{{ten}}" line-total="{{it.total}}"></x-import>
+            </sc-for>
+          </section>
+
+          <section aria-labelledby="compl" style="padding-top: 8px;">
+            <div class="between" style="margin-bottom: 10px;">
+              <h2 id="compl" style="font-size: 15px; line-height: 20px; font-weight: 700;">Productos complementarios</h2>
+              <p class="small muted">Hasta 4 sugerencias para tu compra</p>
+            </div>
+            <div class="compl">
+              <sc-for list="{{complements}}" as="c" hint-placeholder-count="4">
+                <div class="compl-item">
+                  <x-import component-from-global-scope="ComproYa.ProductImage" src="{{c.image}}" alt="{{c.name}}" size="mini"></x-import>
+                  <div style="flex: 1; min-width: 0;">
+                    <p>{{c.name}}</p>
+                    <strong>{{c.price}}</strong>
+                  </div>
+                  <x-import component-from-global-scope="ComproYa.IconButton" icon="cart-plus" label="{{c.tip}}" align="end"></x-import>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+        </div>
+
+        <div class="sticky">
+          <x-import component-from-global-scope="ComproYa.OrderSummary" items-count="{{three}}" subtotal="{{subtotal}}" total="{{subtotal}}">
+            <x-import component-from-global-scope="ComproYa.Button" variant="primary" size="lg" full="{{yes}}" icon-right="arrow-right" href="Datos.dc.html">Continuar con tus datos de envío</x-import>
+            <x-import component-from-global-scope="ComproYa.Button" variant="ghost" full="{{yes}}" href="Main.dc.html">Seguir comprando</x-import>
+          </x-import>
+          <p class="small muted" style="display: flex; gap: 8px; align-items: flex-start; padding: 0 4px;"><x-import component-from-global-scope="ComproYa.Icon" name="ticket" size="{{icon18}}"></x-import>¿Tienes un cupón de lealtad? Lo aplicas en el siguiente paso.</p>
+        </div>
+      </div>
+    </sc-if>
+  </main>
+
+  <x-import component-from-global-scope="ComproYa.AcademicFooter" logo-src="/_blob/62890316f6f271cb48ed2a63a9067e57"></x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"estado":{"editor":"enum","options":["lleno","vacio","cargando","error"],"default":"lleno"},"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var st = this.props.estado || 'lleno';
+    var C = '/_blob/';
+    var items = [
+      { name: 'Televisor LED 55 pulgadas 4K UHD', image: C + 'a6edfead7305717797c4277a8a388033', price: 1899900, qty: 1, total: 1899900 },
+      { name: 'Licuadora de vaso de vidrio 1,5 L', image: C + '1568c43b6dd8a98002eeba8ee4dc64f7', price: 179000, qty: 2, total: 358000 }
+    ];
+    var complements = [
+      { name: 'Audífonos de diadema inalámbricos', price: '$ 1.899.000', image: C + '59a1c74967c29b1632c4d91366512765' },
+      { name: 'Lámpara de mesa con pantalla de tela', price: '$ 129.000', image: C + '257347f278d38864e08836f856ddc555' },
+      { name: 'Licuadora de alta potencia 2 L', price: '$ 459.000', image: C + '635c6263b76e7c006e8aa9d220e9fb57' },
+      { name: 'Sofá de tres puestos tapizado', price: '$ 2.890.000', image: C + '5f547c0f4bd52af70ce9d8291de821bd' }
+    ].map(function (c) { return Object.assign({ tip: 'Agregar ' + c.name + ' al carrito' }, c); });
+    var empty = st === 'vacio';
+    return {
+      back: { label: 'Seguir comprando', href: 'Main.dc.html' },
+      subtitle: empty ? 'Aún no has agregado productos.' : st === 'lleno' ? '3 productos · Lo guardamos aunque cierres la página.' : '',
+      empty: empty, isError: st === 'error', loading: st === 'cargando', full: st === 'lleno',
+      cartCount: empty ? 0 : 3, cartTotal: empty ? 0 : 2257900,
+      items: items, complements: complements,
+      subtotal: 2257900, one: 1, two: 2, three: 3, ten: 10, yes: true, icon18: 18
+    };
+  }
+}
+</script>
+</body>
+</html>

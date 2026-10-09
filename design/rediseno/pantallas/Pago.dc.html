@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pago</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/comproya/tokens.css">
+<link rel="stylesheet" href="ds/comproya/components/bundle.css">
+<link rel="stylesheet" href="screens.css">
+<script src="ds/comproya/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="pg" style="font-family: var(--font-sans); color: var(--ink);">
+  <x-import component-from-global-scope="ComproYa.ShopHeader" logo-src="/_blob/cb12035d6620475dd0d805671b129f77" variant="compact" active="carrito" cart-count="{{three}}" cart-total="{{subtotal}}" customer-name="Duvan"></x-import>
+
+  <main class="wrap" style="padding-top: 24px;">
+    <x-import component-from-global-scope="ComproYa.CheckoutSteps" current="{{three}}" back="{{back}}"></x-import>
+
+    <div style="margin: 24px 0 16px;">
+      <h1 class="h-title">Pagar pedido #10482</h1>
+      <p class="muted" style="margin-top: 4px;">Total a pagar: <strong style="color: var(--ink);">$ 2.032.110</strong></p>
+    </div>
+
+    <div class="checkout">
+      <div class="stack">
+        <sc-if value="{{failed}}" hint-placeholder-val="{{ false }}">
+          <x-import component-from-global-scope="ComproYa.Notice" tone="danger" title="No se completó tu pago.">
+            <p>Volviste de la pasarela sin terminar el pago. No se hizo ningún cobro y tus unidades siguen reservadas. Pulsa «Intentar el pago de nuevo» o revisa el pedido más tarde en Mis pedidos.</p>
+            <div class="cy-notice-actions">
+              <x-import component-from-global-scope="ComproYa.Button" variant="secondary" size="sm" href="Pedidos.dc.html" icon="receipt">Ver mis pedidos</x-import>
+            </div>
+          </x-import>
+        </sc-if>
+
+        <sc-if value="{{redirecting}}" hint-placeholder-val="{{ false }}">
+          <x-import component-from-global-scope="ComproYa.Notice" tone="progress" title="Abriendo la pasarela segura…" progress="{{yes}}">
+            <p>En unos segundos verás la página de pago. No cierres esta ventana.</p>
+          </x-import>
+        </sc-if>
+
+        <section class="panel" aria-labelledby="como">
+          <div class="pay-hero">
+            <span class="pay-ic"><x-import component-from-global-scope="ComproYa.Icon" name="card" size="{{icon26}}"></x-import></span>
+            <div class="stack-sm" style="flex: 1;">
+              <h2 id="como" style="font-size: 18px; line-height: 24px; font-weight: 700;">Pago con tarjeta</h2>
+              <p>Te llevamos a la página segura de la <x-import component-from-global-scope="ComproYa.InfoTip" term="la pasarela de pagos" tip="Página segura de Stripe donde escribes tu tarjeta. ComproYa nunca la ve.">pasarela de pagos</x-import> para que escribas tu tarjeta. <strong>ComproYa nunca ve ni guarda los datos de tu tarjeta.</strong></p>
+            </div>
+          </div>
+          <ol class="pay-steps" style="margin-top: 20px;">
+            <li><span>Pulsa <strong>«Pagar con tarjeta»</strong>.</span></li>
+            <li><span>Escribe tu tarjeta en la página segura de la pasarela.</span></li>
+            <li><span>Vuelves aquí y ves <strong>«Pedido confirmado»</strong> con tu número de pedido.</span></li>
+          </ol>
+        </section>
+
+        <x-import component-from-global-scope="ComproYa.Notice" tone="test" icon="card" title="Modo de prueba">
+          <p>Usa la tarjeta <strong style="letter-spacing: .04em;">4242 4242 4242 4242</strong>, cualquier fecha futura y cualquier código de seguridad. No se hace ningún cobro real.</p>
+        </x-import>
+
+        <x-import component-from-global-scope="ComproYa.ShippingSummary" name="Duvan Serrano" address="Calle 45 # 13-20, apto 301" city="Bogotá" notes="Portería, timbre 3" phone="310 555 0198" edit-href="Datos.dc.html"></x-import>
+      </div>
+
+      <div class="sticky">
+        <x-import component-from-global-scope="ComproYa.OrderSummary" items="{{items}}" items-count="{{three}}" subtotal="{{subtotal}}" discount="{{discount}}" discount-label="Descuento por cupón LEALTAD10" total="{{total}}" total-label="Total a pagar" note="Tus unidades están reservadas mientras pagas." secure="{{yes}}">
+          <x-import component-from-global-scope="ComproYa.Button" variant="primary" size="lg" full="{{yes}}" icon="lock" loading="{{redirecting}}" tooltip="Abre la página segura de la pasarela de pagos">{{payLabel}}</x-import>
+        </x-import>
+      </div>
+    </div>
+  </main>
+
+  <x-import component-from-global-scope="ComproYa.AcademicFooter" logo-src="/_blob/62890316f6f271cb48ed2a63a9067e57"></x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"estado":{"editor":"enum","options":["normal","redirigiendo","no-completado"],"default":"normal"},"$preview":{"width":1440,"height":1400}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var st = this.props.estado || 'normal';
+    var C = '/_blob/';
+    return {
+      back: { label: 'Volver a tus datos', href: 'Datos.dc.html' },
+      failed: st === 'no-completado', redirecting: st === 'redirigiendo',
+      payLabel: st === 'redirigiendo' ? 'Abriendo la pasarela…' : st === 'no-completado' ? 'Intentar el pago de nuevo' : 'Pagar con tarjeta',
+      items: [
+        { name: 'Televisor LED 55 pulgadas 4K UHD', image: C + 'a6edfead7305717797c4277a8a388033', quantity: 1, lineTotal: 1899900 },
+        { name: 'Licuadora de vaso de vidrio 1,5 L', image: C + '1568c43b6dd8a98002eeba8ee4dc64f7', quantity: 2, lineTotal: 358000 }
+      ],
+      subtotal: 2257900, discount: 225790, total: 2032110,
+      three: 3, yes: true, icon26: 26
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,12 +1,8 @@
 # AcademicFooter
 
-Pie de página con el aviso académico obligatorio y los enlaces de ayuda.
-
-## Qué aporta quien lo usa
-
-`pickupHelpHref` opcional: destino de "Cómo funciona el retiro".
+Pie azul marino con el logo en blanco, enlaces de ayuda y el aviso académico obligatorio.
 
 ## Reglas
 
-- El aviso "Proyecto académico — Ingeniería de Software II, Universidad Central. Sin fines comerciales. Las imágenes de producto pertenecen a sus respectivos titulares." es literal: no se edita.
-- En todas las pantallas, al final.
+- El aviso académico es literal.
+- Enlaces en `navy-100` sobre `navy-700` (9,5:1); foco en blanco.

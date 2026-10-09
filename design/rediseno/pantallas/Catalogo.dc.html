@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Catálogo y búsqueda</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/comproya/tokens.css">
+<link rel="stylesheet" href="ds/comproya/components/bundle.css">
+<link rel="stylesheet" href="screens.css">
+<script src="ds/comproya/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="pg" style="font-family: var(--font-sans); color: var(--ink);">
+  <x-import component-from-global-scope="ComproYa.ShopHeader" logo-src="/_blob/cb12035d6620475dd0d805671b129f77" active="catalogo" cart-count="{{cartCount}}" cart-total="{{cartTotal}}" query="{{query}}"></x-import>
+
+  <main>
+    <sc-if value="{{showHero}}" hint-placeholder-val="{{ true }}">
+      <section class="wrap sec" aria-labelledby="titular">
+        <div class="hero">
+          <div class="hero-copy">
+            <x-import component-from-global-scope="ComproYa.Badge" tone="brand" icon="truck">Envío a la dirección que escribas</x-import>
+            <h1 id="titular" class="h-display" style="max-width: 520px;">Compra fácil y <span class="accent">recíbelo en casa</span></h1>
+            <p class="hero-sub">Electrodomésticos, tecnología y todo para tu hogar. Pagas con tarjeta en la pasarela segura y te lo enviamos.</p>
+            <ol class="steps3" aria-label="Cómo comprar en tres pasos">
+              <li>
+                <span class="step-ic"><x-import component-from-global-scope="ComproYa.Icon" name="cart-plus" size="{{iconSize}}"></x-import><span class="step-n" aria-hidden="true">1</span></span>
+                <span><strong>Elige</strong><span class="small">Busca o explora por categoría</span></span>
+              </li>
+              <li>
+                <span class="step-ic"><x-import component-from-global-scope="ComproYa.Icon" name="card" size="{{iconSize}}"></x-import><span class="step-n" aria-hidden="true">2</span></span>
+                <span><strong>Paga en línea</strong><span class="small">Con tarjeta, en la pasarela segura</span></span>
+              </li>
+              <li>
+                <span class="step-ic"><x-import component-from-global-scope="ComproYa.Icon" name="truck" size="{{iconSize}}"></x-import><span class="step-n" aria-hidden="true">3</span></span>
+                <span><strong>Recíbelo en casa</strong><span class="small">En la dirección que escribas</span></span>
+              </li>
+            </ol>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="hero-block hero-block-orange"></div>
+            <div class="hero-block hero-block-navy"></div>
+            <div class="hero-photo hero-photo-main"><img src="/_blob/a6edfead7305717797c4277a8a388033" alt=""></div>
+            <div class="hero-photo hero-photo-sm"><img src="/_blob/1568c43b6dd8a98002eeba8ee4dc64f7" alt=""></div>
+            <div class="hero-chip"><x-import component-from-global-scope="ComproYa.Icon" name="lock" size="{{smallIcon}}"></x-import>Pago seguro con tarjeta</div>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{isSearch}}" hint-placeholder-val="{{ false }}">
+      <section class="wrap sec">
+        <x-import component-from-global-scope="ComproYa.Breadcrumbs" items="{{searchCrumbs}}"></x-import>
+        <h1 class="h-title" style="margin-top: 8px;">Resultados para «{{query}}»</h1>
+        <p class="muted" style="margin-top: 4px;">0 productos</p>
+        <div class="panel" style="margin-top: 16px;">
+          <x-import component-from-global-scope="ComproYa.EmptyState" icon="search" title="No encontramos productos para «{{query}}»" text="Revisa la ortografía o prueba con una palabra más general, por ejemplo «licuadora» o «televisor».">
+            <x-import component-from-global-scope="ComproYa.Button" variant="primary" icon="grid" href="Main.dc.html">Ver todos los productos</x-import>
+          </x-import>
+        </div>
+      </section>
+    </sc-if>
+
+    <section class="wrap sec" aria-label="Categorías">
+      <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}">
+        <h2 class="h-sec" style="margin-bottom: 12px;">Explora por categoría</h2>
+        <x-import component-from-global-scope="ComproYa.Skeleton" variant="category" count="{{eight}}" label="Cargando categorías…"></x-import>
+      </sc-if>
+      <sc-if value="{{notLoading}}" hint-placeholder-val="{{ true }}">
+        <x-import component-from-global-scope="ComproYa.CategoryCarousel" categories="{{categories}}" title="Explora por categoría"></x-import>
+      </sc-if>
+    </section>
+
+    <sc-if value="{{showProducts}}" hint-placeholder-val="{{ true }}">
+      <section class="wrap sec" aria-labelledby="productos">
+        <div class="between" style="margin-bottom: 16px;">
+          <div>
+            <h2 id="productos" class="h-sec">Productos</h2>
+            <p class="muted small">{{totalLabel}}</p>
+          </div>
+          <p class="small muted" style="display: flex; align-items: center; gap: 6px;"><x-import component-from-global-scope="ComproYa.Icon" name="info" size="{{smallIcon}}"></x-import>Precios en pesos colombianos.</p>
+        </div>
+
+        <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}">
+          <x-import component-from-global-scope="ComproYa.Skeleton" variant="product-card" count="{{ten}}" label="Cargando productos…"></x-import>
+        </sc-if>
+
+        <sc-if value="{{isError}}" hint-placeholder-val="{{ false }}">
+          <x-import component-from-global-scope="ComproYa.Notice" tone="danger" title="No pudimos cargar los productos.">
+            <p>Revisa tu conexión a internet e inténtalo de nuevo. Tu carrito sigue guardado.</p>
+            <div class="cy-notice-actions">
+              <x-import component-from-global-scope="ComproYa.Button" variant="secondary" size="sm" icon="refresh">Reintentar</x-import>
+              <x-import component-from-global-scope="ComproYa.Button" variant="ghost" size="sm" href="Carrito.dc.html">Ver mi carrito</x-import>
+            </div>
+          </x-import>
+        </sc-if>
+
+        <sc-if value="{{showGrid}}" hint-placeholder-val="{{ true }}">
+          <div class="grid-products">
+            <sc-for list="{{products}}" as="p" hint-placeholder-count="10">
+              <x-import component-from-global-scope="ComproYa.ProductCard" name="{{p.name}}" category="{{p.category}}" price="{{p.price}}" units="{{p.units}}" image="{{p.image}}" state="{{p.state}}" added-quantity="{{p.added}}" href="Producto.dc.html"></x-import>
+            </sc-for>
+          </div>
+          <div class="more">
+            <x-import component-from-global-scope="ComproYa.Button" variant="secondary" icon-right="chevron-down">Ver más productos</x-import>
+            <p class="small muted">Estás viendo 10 de 2.115 productos</p>
+          </div>
+        </sc-if>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{showExtras}}" hint-placeholder-val="{{ true }}">
+      <section class="wrap sec-lg" aria-label="Por qué comprar en ComproYa">
+        <div class="grid-benefits">
+          <div class="benefit"><span class="benefit-ic"><x-import component-from-global-scope="ComproYa.Icon" name="lock" size="{{iconSize}}"></x-import></span><span><strong>Pago con tarjeta seguro</strong><span class="small muted">Escribes tu tarjeta en la pasarela; ComproYa nunca la ve.</span></span></div>
+          <div class="benefit"><span class="benefit-ic"><x-import component-from-global-scope="ComproYa.Icon" name="truck" size="{{iconSize}}"></x-import></span><span><strong>Envío a tu dirección</strong><span class="small muted">Lo recibes donde nos digas al hacer el pedido.</span></span></div>
+          <div class="benefit"><span class="benefit-ic"><x-import component-from-global-scope="ComproYa.Icon" name="clock" size="{{iconSize}}"></x-import></span><span><strong>Unidades reservadas</strong><span class="small muted">Las apartamos para ti mientras pagas.</span></span></div>
+          <div class="benefit"><span class="benefit-ic"><x-import component-from-global-scope="ComproYa.Icon" name="receipt" size="{{iconSize}}"></x-import></span><span><strong>Sigue tu pedido</strong><span class="small muted">Su estado y lo que sigue, en Mis pedidos.</span></span></div>
+        </div>
+        <div class="loyalty" style="margin-top: 16px;">
+          <span class="loyalty-ic"><x-import component-from-global-scope="ComproYa.Icon" name="ticket" size="{{bigIcon}}"></x-import></span>
+          <div style="flex: 1; min-width: 220px;">
+            <strong style="font-size: 16px;">¿Tienes un cupón de lealtad?</strong>
+            <p class="small">Escríbelo en el paso «Datos y envío» antes de pagar. Cada cupón se usa una sola vez por pedido.</p>
+          </div>
+          <x-import component-from-global-scope="ComproYa.Button" variant="navy" size="sm" href="Datos.dc.html" icon-right="arrow-right">Cómo usar mi cupón</x-import>
+        </div>
+      </section>
+    </sc-if>
+  </main>
+
+  <x-import component-from-global-scope="ComproYa.AcademicFooter" logo-src="/_blob/62890316f6f271cb48ed2a63a9067e57"></x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"estado":{"editor":"enum","options":["exito","cargando","sin-resultados","error","agregado"],"default":"exito"},"$preview":{"width":1440,"height":2500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var st = this.props.estado || 'exito';
+    var C = '/_blob/';
+    var cats = [
+      ['Electrodomésticos', '3859783f6c7563a05252bbfa28937207'], ['Portátiles', '23cc76ae47e500f63e29f454b8436cfe'], ['Celulares', 'baabbd45d5207b513559bd0ac119cd53'],
+      ['Tabletas', '2259965e4a090f65f5de00a1be94aaf7'], ['Utensilios de cocina', 'dae893eaa1ccff8dc4523dbebd60ea51'], ['Muebles', '809dd6ed549d6e051487a5a9110796d8'],
+      ['Decoración del hogar', '2f2d3804a45153622fe1ec9d1e9c225e'], ['Artículos deportivos', '5411f917888c8c99c4890198669a46b2'], ['Calzado de hombre', '1961688e26e52388b0913b6b1a47f828'],
+      ['Ropa de hombre', '681a6e92941c9439a3a368d7fa2be1c4'], ['Alimentos y bebidas', 'd913e325c4c4b8fec6ef560655714791'], ['Cuidado de la piel', '5fe352ba1e89bd6b03305ebf21e5eb2e'],
+      ['Belleza', '456abf2696bb2630fb551d39d1edf853'], ['Fragancias', '895843e400e44d43c9c014021c567bfc'], ['Relojes de hombre', 'b172dfa806b6cc0666e9c371e0fde57d'],
+      ['Relojes de mujer', '72d99c3fe4cdb7eb420a52999af14533'], ['Accesorios para celular', '5ff25083c24e6b09c854a688e56eb269'], ['Gafas de sol', '861055785a166cb60010de569a6dfb12'],
+      ['Moda casual de mujer', '8f643a4c9c6b26159e4663137e0abc78'], ['Vestidos y trajes de mujer', '799c2a8cd71c20adc1d184c48456501b'], ['Bolsos de mujer', '9150013334e0611ac774001cbf4678de'],
+      ['Joyería de mujer', '698db437cfbc7d47d6f0c75f752054ac'], ['Calzado de mujer', '33b09da1cca8189b68728b75b5c3d2b2'], ['Motos', 'bb69d8bf7a428efba968adab44e9832a'], ['Carros', '7dd68333e81ab7cda0e910aadca86253']
+    ].map(function (c) { return { name: c[0], image: C + c[1], href: 'Categoria.dc.html' }; });
+    var products = [
+      { name: 'Televisor LED 55 pulgadas 4K UHD', category: 'Electrodomésticos', price: 1899900, units: 32, image: C + 'a6edfead7305717797c4277a8a388033' },
+      { name: 'Licuadora de vaso de vidrio 1,5 L', category: 'Electrodomésticos', price: 179000, units: 285, image: C + '1568c43b6dd8a98002eeba8ee4dc64f7' },
+      { name: 'Nevera no frost 420 L con dispensador', category: 'Electrodomésticos', price: 3199900, units: 9, image: C + 'b35b46efa853edc86569d2031375449d' },
+      { name: 'Lavadora carga frontal 18 kg', category: 'Electrodomésticos', price: 2349900, units: 14, image: C + '78b09b8d9eb8b58add38681222e38d90' },
+      { name: 'Portátil 15,6 pulgadas 8 GB de memoria', category: 'Portátiles', price: 2149000, units: 41, image: C + '102bfab2d3971ba68bd12c24f36059e6' },
+      { name: 'Celular 6,1 pulgadas 128 GB', category: 'Celulares', price: 3899000, units: 15, image: C + '8226ad06cecb7cc95da3eb7433653a47' },
+      { name: 'Silla de oficina ergonómica con brazos', category: 'Muebles', price: 389000, units: 54, image: C + '4717a28885f77e18a6827bdd420c0432' },
+      { name: 'Audífonos de diadema inalámbricos', category: 'Accesorios para celular', price: 1899000, units: 11, image: C + '59a1c74967c29b1632c4d91366512765' },
+      { name: 'Tenis para correr livianos', category: 'Calzado de hombre', price: 279000, units: 63, image: C + 'e8fc6aabebe3233ef01300e2c510cc08' },
+      { name: 'Bicicleta estática con monitor', category: 'Artículos deportivos', price: 1150000, units: 0, image: C + 'a000164c208dbf8be368b8c3695afb3d' }
+    ].map(function (p, i) { return Object.assign({ state: (st === 'agregado' && i === 1) ? 'added' : 'idle', added: 1 }, p); });
+    var search = st === 'sin-resultados';
+    return {
+      estado: st,
+      showHero: !search,
+      isSearch: search,
+      query: search ? 'aspiradora robot' : '',
+      searchCrumbs: [{ label: 'Inicio', href: 'Main.dc.html' }, { label: 'Búsqueda' }],
+      loading: st === 'cargando',
+      notLoading: st !== 'cargando',
+      isError: st === 'error',
+      showProducts: !search,
+      showGrid: st === 'exito' || st === 'agregado',
+      showExtras: st !== 'cargando',
+      totalLabel: st === 'cargando' ? 'Buscando productos…' : '2.115 productos',
+      cartCount: st === 'agregado' ? 3 : 2,
+      cartTotal: st === 'agregado' ? 2257900 : 2078900,
+      categories: cats,
+      products: products,
+      eight: 8, ten: 10, iconSize: 22, smallIcon: 16, bigIcon: 26
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Tablero de íconos</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/comproya/tokens.css">
+<link rel="stylesheet" href="ds/comproya/components/bundle.css">
+<link rel="stylesheet" href="screens.css">
+<script src="ds/comproya/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 1440px; box-sizing: border-box; padding: 56px 64px 64px; background: var(--surface-muted); font-family: var(--font-sans); color: var(--ink); display: flex; flex-direction: column; gap: 32px;">
+  <div>
+    <h1 style="margin: 0; font-size: 36px; line-height: 42px; font-weight: 800; letter-spacing: -0.02em;">Íconos y marca</h1>
+    <p style="margin: 6px 0 0; color: var(--ink-soft); font-size: 16px; max-width: 900px;">Un solo estilo: línea de 24 px, trazo 1,7, puntas redondeadas, color del texto. Cada ícono va con su palabra visible; los controles de solo ícono llevan el tooltip indicado.</p>
+  </div>
+
+  <section style="display: grid; grid-template-columns: 200px minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: stretch;">
+    <div class="panel" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
+      <img src="/_blob/d2d1006ad4f53d1f07182ae0cf3a7e14" alt="Ícono de app de ComproYa" style="width: 96px; height: 96px;">
+      <span class="small muted">App y favicon</span>
+    </div>
+    <div class="panel" style="display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 12px;">
+      <img src="/_blob/cb12035d6620475dd0d805671b129f77" alt="ComproYa" style="height: 56px; width: auto;">
+      <span class="small muted">Horizontal sobre fondo claro · cabecera, 40 px de alto (32 px en celular)</span>
+    </div>
+    <div class="panel" style="display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 12px; background: var(--navy-700); border-color: var(--navy-700);">
+      <img src="/_blob/62890316f6f271cb48ed2a63a9067e57" alt="ComproYa" style="height: 56px; width: auto;">
+      <span class="small" style="color: var(--navy-100);">En blanco sobre azul marino · pie de página</span>
+    </div>
+  </section>
+
+  <section style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px;">
+    <sc-for list="{{icons}}" as="i" hint-placeholder-count="36">
+      <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center;">
+        <span style="width: 52px; height: 52px; border-radius: 999px; background: var(--navy-100); color: var(--navy-700); display: flex; align-items: center; justify-content: center;">
+          <x-import component-from-global-scope="ComproYa.Icon" name="{{i.name}}" size="{{size}}"></x-import>
+        </span>
+        <strong style="font-size: 13px; line-height: 18px;">{{i.label}}</strong>
+        <code style="font-size: 12px; color: var(--ink-soft); font-family: ui-monospace, monospace;">{{i.name}}</code>
+        <span style="font-size: 12px; line-height: 16px; color: var(--navy-700); background: var(--navy-100); border-radius: 6px; padding: 3px 8px;">Tooltip: {{i.tip}}</span>
+      </div>
+    </sc-for>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var list = [
+      ['cart-plus', 'Agregar al carrito', 'Agregar {producto} al carrito'], ['cart', 'Carrito', 'Ver tu carrito: 3 productos'], ['trash', 'Quitar', 'Quitar {producto} del carrito'],
+      ['minus', 'Disminuir', 'Disminuir cantidad'], ['plus', 'Aumentar', 'Aumentar cantidad'], ['truck', 'Envío', 'Envío a la dirección que escribas'],
+      ['package', 'Pedido', 'Productos de tu pedido'], ['card', 'Pago con tarjeta', 'Abre la pasarela de pagos'], ['lock', 'Pago seguro', 'ComproYa nunca ve tu tarjeta'],
+      ['ticket', 'Cupón de lealtad', 'Se usa una vez por pedido'], ['clock', 'Reserva y espera', 'Reservamos tus unidades mientras pagas'], ['receipt', 'Mis pedidos', 'Ver el estado de tus pedidos'],
+      ['map-pin', 'Dirección', 'Dirección de envío'], ['phone', 'Teléfono', 'Para coordinar la entrega'], ['user', 'Mi cuenta', 'Iniciar sesión'],
+      ['grid', 'Catálogo', 'Ver todas las categorías'], ['search', 'Buscar', 'Buscar productos'], ['home', 'Inicio', 'Volver al inicio'],
+      ['info', 'Información', 'Más información'], ['help', '¿Qué es?', '¿Qué es {término}?'], ['alert', 'Error', '(acompaña al mensaje de error)'],
+      ['warn', 'Advertencia', '(acompaña al aviso)'], ['check-circle', 'Éxito', '(acompaña a la confirmación)'], ['check', 'Correcto', 'Campo correcto'],
+      ['chevron-left', 'Anterior', 'Ver categorías anteriores'], ['chevron-right', 'Siguiente', 'Ver más categorías'], ['chevron-down', 'Ver más', 'Ver más productos'],
+      ['arrow-left', 'Volver', 'Volver al paso anterior'], ['arrow-right', 'Continuar', 'Ir al siguiente paso'], ['refresh', 'Reintentar', 'Volver a intentarlo'],
+      ['pause', 'Pausar', 'Pausar el carrusel'], ['play', 'Reanudar', 'Reanudar el carrusel'], ['x', 'Cerrar', 'Cerrar el aviso'],
+      ['shield', 'Compra protegida', 'Pago en la pasarela segura'], ['logout', 'Cerrar sesión', 'Cerrar sesión en este dispositivo'], ['smile', 'Gracias', '(confirmación del pedido)']
+    ].map(function (r) { return { name: r[0], label: r[1], tip: r[2] }; });
+    return { icons: list, size: 26 };
+  }
+}
+</script>
+</body>
+</html>

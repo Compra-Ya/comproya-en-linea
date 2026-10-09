@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Datos y envío</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/comproya/tokens.css">
+<link rel="stylesheet" href="ds/comproya/components/bundle.css">
+<link rel="stylesheet" href="screens.css">
+<script src="ds/comproya/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="pg" style="font-family: var(--font-sans); color: var(--ink);">
+  <x-import component-from-global-scope="ComproYa.ShopHeader" logo-src="/_blob/cb12035d6620475dd0d805671b129f77" variant="compact" active="carrito" cart-count="{{three}}" cart-total="{{subtotal}}" customer-name="{{customer}}"></x-import>
+
+  <main class="wrap" style="padding-top: 24px;">
+    <x-import component-from-global-scope="ComproYa.CheckoutSteps" current="{{two}}" back="{{back}}"></x-import>
+
+    <div style="margin: 24px 0 16px;">
+      <h1 class="h-title">Datos y envío</h1>
+      <p class="muted" style="margin-top: 4px;">Dinos quién recibe el pedido y a dónde te lo enviamos.</p>
+    </div>
+
+    <div class="checkout">
+      <div class="stack">
+        <sc-if value="{{noSession}}" hint-placeholder-val="{{ false }}">
+          <div class="panel" style="border-color: var(--navy-700);">
+            <div class="pay-hero">
+              <span class="pay-ic"><x-import component-from-global-scope="ComproYa.Icon" name="user" size="{{icon26}}"></x-import></span>
+              <div class="stack-sm" style="flex: 1;">
+                <h2 style="font-size: 18px; line-height: 24px; font-weight: 700;">Inicia sesión para continuar</h2>
+                <p class="muted">Necesitamos tu cuenta para guardar el pedido y que puedas seguirlo en Mis pedidos. Tu carrito se conserva y vuelves a este paso.</p>
+                <div class="row" style="margin-top: 8px;">
+                  <x-import component-from-global-scope="ComproYa.Button" variant="primary" href="Acceso.dc.html" icon="user">Iniciar sesión</x-import>
+                  <x-import component-from-global-scope="ComproYa.Button" variant="secondary" href="Acceso-registro-1440.dc.html">Crear cuenta</x-import>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{hasErrors}}" hint-placeholder-val="{{ false }}">
+          <x-import component-from-global-scope="ComproYa.Notice" tone="danger" title="Faltan 3 datos para continuar.">
+            <p>Los marcamos abajo con lo que hay que corregir. Lo que ya escribiste se conserva.</p>
+          </x-import>
+        </sc-if>
+
+        <sc-if value="{{withSession}}" hint-placeholder-val="{{ true }}">
+          <section class="panel" aria-labelledby="quien">
+            <h2 id="quien" class="panel-title"><x-import component-from-global-scope="ComproYa.Icon" name="user" size="{{icon20}}"></x-import>¿Quién recibe el pedido?</h2>
+            <div class="grid-2">
+              <x-import component-from-global-scope="ComproYa.Field" label="Nombre completo" default-value="Duvan Serrano" auto-complete="name" valid="{{yes}}"></x-import>
+              <x-import component-from-global-scope="ComproYa.Field" label="Teléfono" icon="phone" input-mode="tel" auto-complete="tel" default-value="{{f.phone}}" error="{{f.phoneError}}" hint="Celular de 10 dígitos para coordinar la entrega." valid="{{f.ok}}"></x-import>
+            </div>
+          </section>
+
+          <section class="panel" aria-labelledby="donde">
+            <h2 id="donde" class="panel-title"><x-import component-from-global-scope="ComproYa.Icon" name="map-pin" size="{{icon20}}"></x-import>Dirección de envío</h2>
+            <x-import component-from-global-scope="ComproYa.Field" label="Dirección" icon="map-pin" auto-complete="street-address" default-value="{{f.address}}" error="{{f.addressError}}" hint="Calle o carrera, número y apartamento si aplica. Ej.: Calle 45 # 13-20, apto 301" valid="{{f.ok}}"></x-import>
+            <div class="grid-2">
+              <x-import component-from-global-scope="ComproYa.Field" label="Ciudad" auto-complete="address-level2" default-value="{{f.city}}" error="{{f.cityError}}" hint="Ej.: Bogotá, Medellín, Cali" valid="{{f.ok}}"></x-import>
+              <x-import component-from-global-scope="ComproYa.Field" as="textarea" label="Indicaciones para la entrega" optional="{{yes}}" rows="{{two}}" placeholder="Ej.: portería, timbre 3, casa de reja blanca" default-value="{{f.notes}}"></x-import>
+            </div>
+          </section>
+
+          <section class="panel" aria-label="Cupón de lealtad">
+            <x-import component-from-global-scope="ComproYa.CouponField" value="{{coupon.value}}" status="{{coupon.status}}" applied-text="Cupón LEALTAD10 aplicado: 10 % de descuento ($ 225.790)."></x-import>
+          </section>
+        </sc-if>
+      </div>
+
+      <div class="sticky">
+        <x-import component-from-global-scope="ComproYa.OrderSummary" items="{{items}}" items-count="{{three}}" subtotal="{{subtotal}}" discount="{{discount}}" discount-label="Descuento por cupón LEALTAD10" total="{{total}}" note="Al continuar, reservamos tus unidades mientras pagas." secure="{{yes}}">
+          <x-import component-from-global-scope="ComproYa.Button" variant="primary" size="lg" full="{{yes}}" icon-right="arrow-right" href="Pago.dc.html" disabled="{{noSession}}" disabled-reason="Inicia sesión para continuar al pago.">Continuar al pago</x-import>
+        </x-import>
+      </div>
+    </div>
+  </main>
+
+  <x-import component-from-global-scope="ComproYa.AcademicFooter" logo-src="/_blob/62890316f6f271cb48ed2a63a9067e57"></x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"estado":{"editor":"enum","options":["normal","errores","cupon-valido","cupon-invalido","sin-sesion"],"default":"normal"},"$preview":{"width":1440,"height":1700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var st = this.props.estado || 'normal';
+    var C = '/_blob/';
+    var err = st === 'errores';
+    var f = err
+      ? { phone: '310 55', phoneError: 'Faltan dígitos: escribe los 10 números de tu celular, sin espacios.', address: 'Calle 45', addressError: 'Falta el número: escribe la dirección completa, por ejemplo «Calle 45 # 13-20».', city: '', cityError: 'Escribe la ciudad donde recibes el pedido.', notes: '', ok: false }
+      : { phone: '3105550198', address: 'Calle 45 # 13-20, apto 301', city: 'Bogotá', notes: 'Portería, timbre 3', ok: st !== 'sin-sesion' };
+    var valid = st === 'cupon-valido';
+    var coupon = valid ? { value: 'LEALTAD10', status: 'applied' } : st === 'cupon-invalido' ? { value: 'GRATIS50', status: 'invalid' } : { value: '', status: 'idle' };
+    return {
+      back: { label: 'Volver al carrito', href: 'Carrito.dc.html' },
+      customer: st === 'sin-sesion' ? undefined : 'Duvan',
+      noSession: st === 'sin-sesion', withSession: st !== 'sin-sesion', hasErrors: err,
+      f: f, coupon: coupon,
+      items: [
+        { name: 'Televisor LED 55 pulgadas 4K UHD', image: C + 'a6edfead7305717797c4277a8a388033', quantity: 1, lineTotal: 1899900 },
+        { name: 'Licuadora de vaso de vidrio 1,5 L', image: C + '1568c43b6dd8a98002eeba8ee4dc64f7', quantity: 2, lineTotal: 358000 }
+      ],
+      subtotal: 2257900, discount: valid ? 225790 : 0, total: valid ? 2032110 : 2257900,
+      two: 2, three: 3, yes: true, icon20: 20, icon26: 26
+    };
+  }
+}
+</script>
+</body>
+</html>

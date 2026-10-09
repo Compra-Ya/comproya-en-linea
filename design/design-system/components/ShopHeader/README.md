@@ -1,19 +1,17 @@
 # ShopHeader
 
-La misma cabecera de tienda en **todas** las pantallas, incluidas confirmar pedido, pago y comprobante (A-02, UT-06).
+La misma cabecera en todas las pantallas: logo, buscador siempre visible, cuenta y carrito, y la navegación Catálogo · Carrito · Mis pedidos · Mi cuenta.
 
 ## Variantes
 
-- completa: barra superior `navy-700`, sello y nombre, buscador siempre visible, cuenta, carrito con cantidad y subtotal, y la navegación Catálogo · Carrito · Mis pedidos · Mi cuenta.
-- `variant="compact"`: para confirmar pedido, pago y comprobante. Quita la barra superior y el buscador; conserva sello, cuenta, carrito y la misma navegación.
+- completa: barra azul marino con las dos promesas (envío a la dirección que escribas, pago en la pasarela segura), logo, buscador, cuenta y carrito con cantidad y subtotal.
+- `compact`: del paso 2 en adelante. Sin barra superior ni buscador; muestra "Compra segura" y conserva cuenta, carrito y la navegación (UT-06).
 
 ## Qué aporta quien lo usa
 
-`active` (`catalogo`, `carrito`, `pedidos`, `cuenta`), `cartCount`, `cartTotal` (el subtotal que devuelve el servidor), `customerName` (sin él, "Iniciar sesión"), `branchesWithPickup` (número real; si no se conoce, no se pasa y no se muestra), `onSearch`, `query`.
+`logoSrc` (el logo horizontal del grupo Logos), `active`, `cartCount`, `cartTotal` (subtotal del servidor), `customerName`, `query`, `onSearch`.
 
 ## Reglas
 
-- Ninguna cifra escrita a mano: "8 sucursales" sale de los datos o no aparece (A-12).
-- El carrito no es una categoría: va como enlace de navegación con ícono y texto.
-- Sin selector "Todas" en el buscador mientras no filtre.
-- A 390 px el buscador pasa a su propia fila a todo el ancho, el botón de carrito se oculta y la navegación se vuelve una barra de cuatro columnas con ícono y texto, donde "Carrito (n)" sigue visible.
+- Cada ícono de la navegación lleva su palabra; el carrito muestra la cantidad en un círculo naranja y su tooltip la dice completa.
+- A 390 px el buscador ocupa su propia fila y la navegación es una barra de 4 columnas con ícono sobre texto.

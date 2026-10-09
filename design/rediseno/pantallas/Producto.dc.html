@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Detalle de producto</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/comproya/tokens.css">
+<link rel="stylesheet" href="ds/comproya/components/bundle.css">
+<link rel="stylesheet" href="screens.css">
+<script src="ds/comproya/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="pg" style="font-family: var(--font-sans); color: var(--ink);">
+  <x-import component-from-global-scope="ComproYa.ShopHeader" logo-src="/_blob/cb12035d6620475dd0d805671b129f77" active="catalogo" cart-count="{{cartCount}}" cart-total="{{cartTotal}}"></x-import>
+
+  <main>
+    <div class="wrap" style="padding-top: 16px;">
+      <x-import component-from-global-scope="ComproYa.Breadcrumbs" items="{{crumbs}}"></x-import>
+    </div>
+
+    <sc-if value="{{notFound}}" hint-placeholder-val="{{ false }}">
+      <section class="wrap sec">
+        <div class="panel">
+          <x-import component-from-global-scope="ComproYa.EmptyState" icon="package" title="Este producto ya no está disponible en la tienda en línea" text="Puede que se haya agotado de forma definitiva o que ya no se venda. Te mostramos otros productos de la misma categoría.">
+            <x-import component-from-global-scope="ComproYa.Button" variant="primary" href="Categoria.dc.html" icon="grid">Ver Electrodomésticos</x-import>
+            <x-import component-from-global-scope="ComproYa.Button" variant="secondary" href="Main.dc.html" icon="arrow-left">Volver al catálogo</x-import>
+          </x-import>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{loading}}" hint-placeholder-val="{{ false }}">
+      <section class="wrap" style="padding-top: 12px;">
+        <div class="pdp">
+          <div class="pdp-media"><div class="cy-skel" style="aspect-ratio: 1 / 1; border-radius: 14px;"></div></div>
+          <div class="pdp-buy">
+            <x-import component-from-global-scope="ComproYa.Spinner" label="Cargando el producto…"></x-import>
+            <div class="cy-skel" style="height: 16px; width: 30%;"></div>
+            <div class="cy-skel" style="height: 34px; width: 85%;"></div>
+            <div class="cy-skel" style="height: 40px; width: 40%;"></div>
+            <div class="cy-skel" style="height: 180px; border-radius: 14px;"></div>
+            <div class="cy-skel" style="height: 120px; border-radius: 14px;"></div>
+          </div>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{showProduct}}" hint-placeholder-val="{{ true }}">
+      <section class="wrap" style="padding-top: 12px;" aria-labelledby="p-name">
+        <div class="pdp">
+          <div class="pdp-media">
+            <x-import component-from-global-scope="ComproYa.ProductImage" src="/_blob/1568c43b6dd8a98002eeba8ee4dc64f7" alt="Licuadora de vaso de vidrio 1,5 L" category="Electrodomésticos"></x-import>
+          </div>
+
+          <div class="pdp-buy">
+            <a href="Categoria.dc.html" class="cy-link" style="align-self: flex-start; font-size: 14px;">Electrodomésticos</a>
+            <h1 id="p-name" class="h-title" style="font-size: 32px; line-height: 38px;">Licuadora de vaso de vidrio 1,5 L</h1>
+            <p class="pdp-price">$ 179.000</p>
+
+            <sc-if value="{{inStock}}" hint-placeholder-val="{{ true }}">
+              <p class="stock">
+                <x-import component-from-global-scope="ComproYa.Icon" name="check-circle" size="{{icon18}}"></x-import>
+                <x-import component-from-global-scope="ComproYa.InfoTip" term="unidades disponibles" tip="Las que puedes comprar ahora; ya descuentan las reservadas por otros pedidos.">Hay 285 unidades disponibles</x-import>
+              </p>
+            </sc-if>
+            <sc-if value="{{soldOut}}" hint-placeholder-val="{{ false }}">
+              <p class="stock stock-out"><x-import component-from-global-scope="ComproYa.Icon" name="x" size="{{icon18}}"></x-import>Producto agotado: por ahora no hay unidades</p>
+            </sc-if>
+
+            <div class="pdp-box">
+              <sc-if value="{{inStock}}" hint-placeholder-val="{{ true }}">
+                <div>
+                  <p class="cy-label" style="margin-bottom: 6px;">Cantidad</p>
+                  <x-import component-from-global-scope="ComproYa.QuantityStepper" default-value="{{qty}}" max="{{ten}}" hint="Máximo 10 unidades por pedido" label="Cantidad de licuadora"></x-import>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{canAdd}}" hint-placeholder-val="{{ true }}">
+                <x-import component-from-global-scope="ComproYa.Button" variant="primary" size="lg" full="{{yes}}" icon="cart-plus" tooltip="Agregar Licuadora de vaso de vidrio 1,5 L al carrito">Agregar al carrito</x-import>
+              </sc-if>
+              <sc-if value="{{added}}" hint-placeholder-val="{{ false }}">
+                <x-import component-from-global-scope="ComproYa.AddedToCart" quantity="{{qty}}" cart-href="Carrito.dc.html" continue-href="Main.dc.html"></x-import>
+              </sc-if>
+              <sc-if value="{{soldOut}}" hint-placeholder-val="{{ false }}">
+                <x-import component-from-global-scope="ComproYa.Button" variant="primary" size="lg" full="{{yes}}" icon="cart-plus" disabled="{{yes}}" disabled-reason="Producto agotado: por ahora no hay unidades. Mira otros productos de Electrodomésticos.">Agotado</x-import>
+                <x-import component-from-global-scope="ComproYa.Button" variant="secondary" href="Categoria.dc.html" icon="grid">Ver otros electrodomésticos</x-import>
+              </sc-if>
+            </div>
+
+            <ul class="guarantees" aria-label="Cómo compras">
+              <li><span class="g-ic"><x-import component-from-global-scope="ComproYa.Icon" name="lock" size="{{icon18}}"></x-import></span>
+                <span><strong>Pago con tarjeta seguro.</strong> <x-import component-from-global-scope="ComproYa.InfoTip" term="la pasarela de pagos" tip="Página segura de Stripe donde escribes tu tarjeta. ComproYa nunca la ve.">Escribes tu tarjeta en la pasarela de pagos</x-import></span></li>
+              <li><span class="g-ic"><x-import component-from-global-scope="ComproYa.Icon" name="truck" size="{{icon18}}"></x-import></span>
+                <span><strong>Envío a domicilio.</strong> Te lo enviamos a la dirección que escribas al hacer el pedido.</span></li>
+              <li><span class="g-ic"><x-import component-from-global-scope="ComproYa.Icon" name="clock" size="{{icon18}}"></x-import></span>
+                <span><strong>Unidades reservadas.</strong> Las apartamos para ti mientras pagas.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="wrap sec-lg" aria-labelledby="compl">
+        <div class="between" style="margin-bottom: 12px;">
+          <h2 id="compl" style="font-size: 16px; line-height: 22px; font-weight: 700;">Productos complementarios</h2>
+          <p class="small muted">Van bien con este producto</p>
+        </div>
+        <div class="compl">
+          <sc-for list="{{complements}}" as="c" hint-placeholder-count="4">
+            <div class="compl-item">
+              <x-import component-from-global-scope="ComproYa.ProductImage" src="{{c.image}}" alt="{{c.name}}" size="mini"></x-import>
+              <div style="flex: 1; min-width: 0;">
+                <p>{{c.name}}</p>
+                <strong>{{c.price}}</strong>
+              </div>
+              <x-import component-from-global-scope="ComproYa.IconButton" icon="cart-plus" label="{{c.tip}}" align="end"></x-import>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+  </main>
+
+  <x-import component-from-global-scope="ComproYa.AcademicFooter" logo-src="/_blob/62890316f6f271cb48ed2a63a9067e57"></x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"estado":{"editor":"enum","options":["disponible","agregado","agotado","cargando","no-disponible"],"default":"disponible"},"$preview":{"width":1440,"height":1550}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var st = this.props.estado || 'disponible';
+    var C = '/_blob/';
+    var complements = [
+      { name: 'Licuadora de alta potencia 2 L', price: '$ 459.000', image: C + '635c6263b76e7c006e8aa9d220e9fb57' },
+      { name: 'Nevera no frost 420 L', price: '$ 3.199.900', image: C + 'b35b46efa853edc86569d2031375449d' },
+      { name: 'Lámpara de mesa con pantalla de tela', price: '$ 129.000', image: C + '257347f278d38864e08836f856ddc555' },
+      { name: 'Lavadora carga frontal 18 kg', price: '$ 2.349.900', image: C + '78b09b8d9eb8b58add38681222e38d90' }
+    ].map(function (c) { return Object.assign({ tip: 'Agregar ' + c.name + ' al carrito' }, c); });
+    var notFound = st === 'no-disponible';
+    return {
+      crumbs: notFound ? [{ label: 'Inicio', href: 'Main.dc.html' }, { label: 'Producto no disponible' }]
+        : [{ label: 'Inicio', href: 'Main.dc.html' }, { label: 'Electrodomésticos', href: 'Categoria.dc.html' }, { label: 'Licuadora de vaso de vidrio 1,5 L' }],
+      notFound: notFound,
+      loading: st === 'cargando',
+      showProduct: st === 'disponible' || st === 'agregado' || st === 'agotado',
+      inStock: st !== 'agotado',
+      soldOut: st === 'agotado',
+      canAdd: st === 'disponible',
+      added: st === 'agregado',
+      qty: st === 'agregado' ? 2 : 1,
+      cartCount: st === 'agregado' ? 4 : 2,
+      cartTotal: st === 'agregado' ? 2436900 : 2078900,
+      complements: complements,
+      ten: 10, yes: true, icon18: 18
+    };
+  }
+}
+</script>
+</body>
+</html>

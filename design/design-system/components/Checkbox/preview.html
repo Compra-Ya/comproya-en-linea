@@ -1,27 +1,28 @@
-<!-- @dsCard group="Formularios" height=90 -->
+<!-- @dsCard group="Formularios" height=80 -->
 <!doctype html>
 <html lang="es">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Checkbox</title>
 <style>
-  body { padding: 16px; }
+  body { padding: 16px 24px; }
   .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .pad-top { padding-top: 48px; }
   .stack { display: flex; flex-direction: column; gap: 16px; }
-  .narrow { max-width: 420px; }
-  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0 24px; }
-  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 16px; }
-  .muted { color: var(--ink-soft); font-size: 13px; margin: 4px 0 0; }
-  .icons { display: flex; flex-wrap: wrap; gap: 8px; }
-  .ic { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; width: 78px; font-size: 12px; color: var(--ink-soft); }
-  .ic svg { color: var(--ink); }
+  .narrow { max-width: 440px; }
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0 24px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; align-items: start; }
+  .icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(116px, 1fr)); gap: 8px; }
+  .ic { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); font-size: 12px; line-height: 16px; color: var(--ink-soft); text-align: center; }
+  .ic svg { color: var(--navy-700); }
+  .ic strong { color: var(--ink); font-weight: 600; }
 </style>
 </head>
 <body>
 <div id="root"></div>
 <script>
   var C = window.ComproYa, h = React.createElement;
-  var SAMPLE_IMG = "data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23ffffff'/%3E%3Crect x='30' y='52' width='140' height='84' rx='4' fill='%23171717'/%3E%3Crect x='36' y='58' width='128' height='72' fill='%23163d6d'/%3E%3Crect x='92' y='136' width='16' height='14' fill='%236b6b6b'/%3E%3Crect x='70' y='150' width='60' height='6' rx='3' fill='%236b6b6b'/%3E%3C/svg%3E";
-  var D = h(C.Checkbox, { label: 'Acepto el tratamiento de mis datos personales y podré administrar mi consentimiento después de registrarme.' });
-  ReactDOM.createRoot(document.getElementById('root')).render(typeof D === 'function' ? h(D) : D);
+  var B = {"logo": "/_blob/da5b0d893d09857101160c5969844768", "logoWhite": "/_blob/cb1e03dd522eb552247433ebbf30c487", "logoApp": "/_blob/8c67dd80198e3beb78c24ab77265c1ff", "logoSym": "/_blob/46efb68bc4bb1b39c1d2ce3324a6888d", "tv": "/_blob/c80496b5d5a1b775a623ea05fb5aff27", "licuadora": "/_blob/39f9798af98b768d3972fb395df2866d", "lavadora": "/_blob/9798b8c8337059eb89d8071a9537dff3", "macbook": "/_blob/ca80c18cd7cb9ad4034c0a3d14ba86c9", "silla": "/_blob/4e1678b07788e80b01137941513b176f", "iphone": "/_blob/c7e642ea3b030d06e6b56e484b6711e2", "cElectro": "/_blob/7b29d380fc70f7195906af5ffd6f5162", "cMuebles": "/_blob/753587cfb882c4f3bf6e19c456af1a95", "cDeco": "/_blob/c4738168b174de6fa918e6b8eea8e6cc", "cCocina": "/_blob/3f2652b15ec0f3dcea9bb3eac15032b5", "cPortatiles": "/_blob/b814fb591b816ed35f9619dc2aee1042", "cCalzado": "/_blob/d7587098005a69aafc9ac2080a90562e", "cCelulares": "/_blob/169f4252bbfb58521aa4645d4b4067d0", "cDeporte": "/_blob/b2eb6ec9e5507f26d8f97fde7fe743bd"};
+  var D = h(C.Checkbox, { label: 'Acepto el tratamiento de mis datos personales.' });
+  ReactDOM.createRoot(document.getElementById('root')).render(D);
 </script>
 </body>
 </html>

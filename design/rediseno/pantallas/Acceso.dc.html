@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Iniciar sesión y crear cuenta</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/comproya/tokens.css">
+<link rel="stylesheet" href="ds/comproya/components/bundle.css">
+<link rel="stylesheet" href="screens.css">
+<script src="ds/comproya/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="pg" style="font-family: var(--font-sans); color: var(--ink);">
+  <x-import component-from-global-scope="ComproYa.ShopHeader" logo-src="/_blob/cb12035d6620475dd0d805671b129f77" active="cuenta" cart-count="{{three}}" cart-total="{{cartTotal}}"></x-import>
+
+  <main class="wrap" style="padding-top: 32px;">
+    <div class="auth">
+      <div class="auth-side">
+        <img src="/_blob/62890316f6f271cb48ed2a63a9067e57" alt="ComproYa" style="height: 40px; width: auto; align-self: flex-start;">
+        <h2 style="font-size: 26px; line-height: 32px; font-weight: 800; color: #ffffff;">Tu cuenta hace tu compra más fácil</h2>
+        <p>Inicias sesión una vez y sigues donde ibas.</p>
+        <ul>
+          <li><span class="a-ic"><x-import component-from-global-scope="ComproYa.Icon" name="cart" size="{{icon20}}"></x-import></span>Tu carrito te espera en cualquier dispositivo</li>
+          <li><span class="a-ic"><x-import component-from-global-scope="ComproYa.Icon" name="receipt" size="{{icon20}}"></x-import></span>Sigues el estado de cada pedido</li>
+          <li><span class="a-ic"><x-import component-from-global-scope="ComproYa.Icon" name="ticket" size="{{icon20}}"></x-import></span>Usas tus cupones de lealtad</li>
+        </ul>
+      </div>
+
+      <div class="auth-form">
+        <sc-if value="{{login}}" hint-placeholder-val="{{ true }}">
+          <h1 class="h-title">Ingresar a ComproYa</h1>
+          <p class="muted" style="margin-bottom: 8px;">Al entrar vuelves a <strong style="color: var(--ink);">Datos y envío</strong>, con tu carrito intacto.</p>
+          <sc-if value="{{loginErr}}" hint-placeholder-val="{{ false }}">
+            <x-import component-from-global-scope="ComproYa.Notice" tone="danger" title="El correo o la contraseña no coinciden." style="margin-bottom: 12px;">
+              <p>Revisa los datos e inténtalo de nuevo. Tu correo sigue escrito; solo vuelve a escribir la contraseña.</p>
+            </x-import>
+          </sc-if>
+          <x-import component-from-global-scope="ComproYa.Field" label="Correo electrónico" type="email" icon="user" auto-complete="email" default-value="duvan@correo.com" hint="El mismo con el que creaste tu cuenta."></x-import>
+          <x-import component-from-global-scope="ComproYa.Field" label="Contraseña" type="password" icon="lock" auto-complete="current-password" default-value="{{pwd}}" error="{{pwdError}}"></x-import>
+          <x-import component-from-global-scope="ComproYa.Button" variant="primary" size="lg" full="{{yes}}" icon-right="arrow-right" href="Datos.dc.html">Iniciar sesión</x-import>
+          <p class="divider" style="margin: 12px 0;">¿No tienes cuenta?</p>
+          <x-import component-from-global-scope="ComproYa.Button" variant="secondary" size="lg" full="{{yes}}" href="Acceso-registro-1440.dc.html">Crear cuenta</x-import>
+        </sc-if>
+
+        <sc-if value="{{register}}" hint-placeholder-val="{{ false }}">
+          <h1 class="h-title">Crear cuenta</h1>
+          <p class="muted" style="margin-bottom: 8px;">Toma un minuto. Al terminar vuelves a donde estabas.</p>
+          <sc-if value="{{regErr}}" hint-placeholder-val="{{ false }}">
+            <x-import component-from-global-scope="ComproYa.Notice" tone="danger" title="Revisa 3 datos para crear tu cuenta." style="margin-bottom: 12px;">
+              <p>Los marcamos abajo. Lo que escribiste se conserva.</p>
+            </x-import>
+          </sc-if>
+          <x-import component-from-global-scope="ComproYa.Field" label="Nombre completo" auto-complete="name" default-value="{{r.name}}" valid="{{r.ok}}"></x-import>
+          <x-import component-from-global-scope="ComproYa.Field" label="Documento de identidad" input-mode="numeric" default-value="{{r.doc}}" error="{{r.docError}}" hint="Solo números, sin puntos ni espacios."></x-import>
+          <x-import component-from-global-scope="ComproYa.Field" label="Correo electrónico" type="email" auto-complete="email" default-value="{{r.email}}" valid="{{r.ok}}"></x-import>
+          <x-import component-from-global-scope="ComproYa.Field" label="Contraseña" type="password" auto-complete="new-password" default-value="{{r.pwd}}" error="{{r.pwdError}}" hint="Mínimo 8 caracteres, con al menos un número."></x-import>
+          <x-import component-from-global-scope="ComproYa.Checkbox" label="Acepto el tratamiento de mis datos personales. Podré administrar mi consentimiento después de registrarme." error="{{r.checkError}}" style="margin: 4px 0 16px;"></x-import>
+          <x-import component-from-global-scope="ComproYa.Button" variant="primary" size="lg" full="{{yes}}" icon-right="arrow-right">Crear cuenta</x-import>
+          <p class="small muted" style="text-align: center; margin-top: 12px;">¿Ya tienes cuenta? <a class="cy-link" href="Acceso.dc.html">Iniciar sesión</a></p>
+        </sc-if>
+      </div>
+    </div>
+  </main>
+
+  <x-import component-from-global-scope="ComproYa.AcademicFooter" logo-src="/_blob/62890316f6f271cb48ed2a63a9067e57"></x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"estado":{"editor":"enum","options":["ingresar","ingresar-errores","registro","registro-errores"],"default":"ingresar"},"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var st = this.props.estado || 'ingresar';
+    var reg = st.indexOf('registro') === 0;
+    var regErr = st === 'registro-errores';
+    var r = regErr
+      ? { name: 'Duvan Serrano', doc: '1012345678', docError: 'Ya hay una cuenta con ese documento. Si es tuya, inicia sesión.', email: 'duvan@correo.com', pwd: 'clave1', pwdError: 'Te faltan 2 caracteres: usa mínimo 8, con al menos un número.', checkError: 'Acepta el tratamiento de datos para crear tu cuenta.', ok: true }
+      : { name: '', doc: '', email: '', pwd: '', ok: false };
+    return {
+      login: !reg, register: reg,
+      loginErr: st === 'ingresar-errores', regErr: regErr,
+      pwd: '', pwdError: st === 'ingresar-errores' ? 'Vuelve a escribir tu contraseña.' : undefined,
+      r: r,
+      three: 3, cartTotal: 2257900, yes: true, icon20: 20
+    };
+  }
+}
+</script>
+</body>
+</html>

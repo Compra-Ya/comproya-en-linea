@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Pedido confirmado</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ds/comproya/tokens.css">
+<link rel="stylesheet" href="ds/comproya/components/bundle.css">
+<link rel="stylesheet" href="screens.css">
+<script src="ds/comproya/components/bundle.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div class="pg" style="font-family: var(--font-sans); color: var(--ink);">
+  <x-import component-from-global-scope="ComproYa.ShopHeader" logo-src="/_blob/cb12035d6620475dd0d805671b129f77" variant="compact" active="pedidos" cart-count="{{zero}}" cart-total="{{zero}}" customer-name="Duvan"></x-import>
+
+  <main class="wrap" style="padding-top: 24px;">
+    <x-import component-from-global-scope="ComproYa.CheckoutSteps" current="{{four}}"></x-import>
+
+    <sc-if value="{{confirming}}" hint-placeholder-val="{{ false }}">
+      <div class="stack" style="margin-top: 24px; max-width: 760px;">
+        <h1 class="h-title">Pedido #10482</h1>
+        <x-import component-from-global-scope="ComproYa.Notice" tone="progress" title="Estamos confirmando tu pago…" progress="{{yes}}">
+          <p>La pasarela nos está avisando que pagaste. Suele tardar unos segundos; esta página se actualiza sola. No cierres esta ventana ni vuelvas a pagar.</p>
+        </x-import>
+        <div class="panel">
+          <x-import component-from-global-scope="ComproYa.Skeleton" variant="line-item" count="{{two}}" label="Cargando el detalle del pedido…"></x-import>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{late}}" hint-placeholder-val="{{ false }}">
+      <div class="stack" style="margin-top: 24px; max-width: 760px;">
+        <h1 class="h-title">Pedido #10482</h1>
+        <x-import component-from-global-scope="ComproYa.Notice" tone="warn" icon="clock" title="Todavía no recibimos la confirmación de tu pago.">
+          <p>Si ya pagaste, no vuelvas a pagar: a veces la pasarela tarda unos minutos en avisarnos. Revisa de nuevo en un momento o mira el estado del pedido en Mis pedidos.</p>
+          <div class="cy-notice-actions">
+            <x-import component-from-global-scope="ComproYa.Button" variant="secondary" size="sm" icon="refresh">Revisar de nuevo</x-import>
+            <x-import component-from-global-scope="ComproYa.Button" variant="ghost" size="sm" href="Pedidos.dc.html">Ver mis pedidos</x-import>
+          </div>
+        </x-import>
+        <p class="small muted" style="display: flex; gap: 8px; align-items: flex-start;"><x-import component-from-global-scope="ComproYa.Icon" name="info" size="{{icon16}}"></x-import>Si el pago no se completó, en Mis pedidos verás «Pago fallido» con la opción de pagar otra vez. No se hace ningún cobro dos veces.</p>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{done}}" hint-placeholder-val="{{ true }}">
+      <section class="confirm-hero" style="margin-top: 24px;" aria-labelledby="ok-title">
+        <span class="confetti" style="left: 12%; top: 22%; background: var(--orange-500); transform: rotate(18deg);"></span>
+        <span class="confetti" style="left: 20%; top: 64%; background: var(--navy-700); transform: rotate(-12deg); border-radius: 50%;"></span>
+        <span class="confetti" style="left: 30%; top: 14%; background: var(--ok); transform: rotate(40deg);"></span>
+        <span class="confetti" style="right: 14%; top: 26%; background: var(--navy-700); transform: rotate(-30deg);"></span>
+        <span class="confetti" style="right: 22%; top: 70%; background: var(--orange-500); border-radius: 50%;"></span>
+        <span class="confetti" style="right: 30%; top: 12%; background: var(--orange-600); transform: rotate(12deg);"></span>
+        <span class="confirm-badge"><x-import component-from-global-scope="ComproYa.Icon" name="check-circle" size="{{icon44}}"></x-import></span>
+        <h1 id="ok-title" class="h-title" style="font-size: 32px; line-height: 38px;">¡Pedido confirmado!</h1>
+        <p class="muted" style="font-size: 16px; line-height: 24px; max-width: 520px;">Gracias, Duvan. Recibimos tu pago y empezamos a preparar tu pedido para enviarlo.</p>
+        <span class="order-no"><x-import component-from-global-scope="ComproYa.Icon" name="receipt" size="{{icon20}}"></x-import>Pedido #10482</span>
+        <div class="row" style="justify-content: center; margin-top: 8px;">
+          <x-import component-from-global-scope="ComproYa.Button" variant="primary" size="lg" href="Pedidos.dc.html" icon="receipt">Ver mis pedidos</x-import>
+          <x-import component-from-global-scope="ComproYa.Button" variant="secondary" size="lg" href="Main.dc.html" icon="grid">Seguir comprando</x-import>
+        </div>
+      </section>
+
+      <div class="checkout sec">
+        <div class="stack">
+          <section class="panel" aria-labelledby="prod" style="padding-bottom: 4px;">
+            <h2 id="prod" class="panel-title"><x-import component-from-global-scope="ComproYa.Icon" name="package" size="{{icon20}}"></x-import>Productos de tu pedido</h2>
+            <sc-for list="{{items}}" as="it" hint-placeholder-count="2">
+              <x-import component-from-global-scope="ComproYa.LineItem" name="{{it.name}}" image="{{it.image}}" unit-price="{{it.price}}" quantity="{{it.qty}}" line-total="{{it.total}}" read-only="{{yes}}"></x-import>
+            </sc-for>
+          </section>
+          <section class="panel" aria-labelledby="sigue">
+            <h2 id="sigue" class="panel-title"><x-import component-from-global-scope="ComproYa.Icon" name="truck" size="{{icon20}}"></x-import>¿Qué sigue?</h2>
+            <ol class="pay-steps">
+              <li><span><strong>Alistamos tu pedido.</strong> Mientras no empiece el alistamiento, puedes cancelarlo desde Mis pedidos.</span></li>
+              <li><span><strong>Te lo enviamos</strong> a la dirección que escribiste.</span></li>
+              <li><span><strong>Sigues su estado</strong> en Mis pedidos, en palabras: Pagado, En alistamiento, Entregado.</span></li>
+            </ol>
+          </section>
+        </div>
+        <div class="sticky">
+          <x-import component-from-global-scope="ComproYa.OrderSummary" title="Total pagado" items-count="{{three}}" subtotal="{{subtotal}}" discount="{{discount}}" discount-label="Descuento por cupón LEALTAD10" total="{{total}}" total-label="Total pagado"></x-import>
+          <x-import component-from-global-scope="ComproYa.ShippingSummary" title="Enviaremos tu pedido a" name="Duvan Serrano" address="Calle 45 # 13-20, apto 301" city="Bogotá" notes="Portería, timbre 3" phone="310 555 0198"></x-import>
+        </div>
+      </div>
+    </sc-if>
+  </main>
+
+  <x-import component-from-global-scope="ComproYa.AcademicFooter" logo-src="/_blob/62890316f6f271cb48ed2a63a9067e57"></x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"estado":{"editor":"enum","options":["confirmado","confirmando","tarda"],"default":"confirmado"},"$preview":{"width":1440,"height":1550}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var st = this.props.estado || 'confirmado';
+    var C = '/_blob/';
+    return {
+      done: st === 'confirmado', confirming: st === 'confirmando', late: st === 'tarda',
+      items: [
+        { name: 'Televisor LED 55 pulgadas 4K UHD', image: C + 'a6edfead7305717797c4277a8a388033', price: 1899900, qty: 1, total: 1899900 },
+        { name: 'Licuadora de vaso de vidrio 1,5 L', image: C + '1568c43b6dd8a98002eeba8ee4dc64f7', price: 179000, qty: 2, total: 358000 }
+      ],
+      subtotal: 2257900, discount: 225790, total: 2032110,
+      zero: 0, two: 2, three: 3, four: 4, yes: true, icon16: 16, icon20: 20, icon44: 44
+    };
+  }
+}
+</script>
+</body>
+</html>

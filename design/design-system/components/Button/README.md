@@ -1,22 +1,24 @@
 # Button
 
-Botón único para todas las acciones del flujo: reemplaza `btn-primary`, `btn-primary-lg`, `btn-navy`, `btn-outline-red` y `btn-login` (A-17).
+Botón único para todas las acciones: texto con verbo, ícono de apoyo opcional y tooltip cuando hace falta precisar sobre qué actúa.
 
 ## Variantes
 
-- `primary`: la acción principal de la pantalla, **una sola por pantalla** ("Confirmar pedido", "Pagar con tarjeta", "Agregar al carrito" en cada tarjeta). Fondo `orange-600`, texto blanco 5,26:1.
-- `secondary`: salidas y alternativas ("Volver al carrito", "Iniciar sesión", "Aplicar" del cupón). Borde `line-strong`.
-- `ghost`: enlaces con forma de botón en avisos ("Ver mis pedidos", "Reintentar" dentro de un `Notice`).
-- `danger`: solo "Cancelar pedido".
+- `primary`: la acción principal de la pantalla, **una sola por pantalla** (en el catálogo, una por tarjeta). Fondo `orange-600`, texto blanco 5,26:1.
+- `secondary`: alternativas y salidas ("Volver al carrito", "Ver carrito", "Iniciar sesión").
+- `ghost`: acción ligera ("Seguir comprando", "Revisar de nuevo").
+- `ghost-danger`: solo "Cancelar pedido".
+- `navy`: acciones sobre el pie o bandas azul marino.
 
-`size="lg"` (46 px) solo para la acción que avanza un paso del flujo. `full` ocupa todo el ancho: úsalo en tarjetas de producto y en el resumen a 390 px.
+Tamaños: `md` (44 px, objetivo táctil mínimo), `lg` (48 px) para la acción que avanza un paso, `sm` dentro de avisos. `full` ocupa el ancho de la tarjeta o del resumen.
 
 ## Qué aporta quien lo usa
 
-`children` (el texto, verbo + objeto, del vocabulario del brief), `onClick` o `href` (con `href` se pinta un `<a>`), `icon` opcional (nombre de `Icon`, siempre acompañado de texto), `loading` mientras el servidor responde (el botón se deshabilita y anuncia `aria-busy`).
+`children` (verbo + objeto), `onClick` o `href`, `icon` / `iconRight` (nombre de `Icon`, siempre con texto), `loading`, `tooltip` (una línea que precisa la acción: "Agregar {producto} al carrito"), `disabled` **con** `disabledReason`.
 
 ## Reglas
 
-- Un botón deshabilitado no se explica solo: si una acción no está disponible, muestra el motivo al lado (ver `BranchAvailability`) o no pintes el botón.
-- No uses `orange-500` para botones: con texto blanco da 3,14:1.
-- El texto del botón que avanza es el nombre del paso siguiente: "Confirmar pedido" lleva a la pantalla "Confirmar pedido".
+- Un botón deshabilitado siempre dice por qué, debajo del botón ("Producto agotado: por ahora no hay unidades.").
+- `loading` cambia el texto a gerundio ("Agregando…") y anuncia `aria-busy`; nunca deja el botón sin texto.
+- Transición de color de 150 ms; al presionar baja 1 px.
+- Nunca `orange-500` con texto blanco (3,14:1).

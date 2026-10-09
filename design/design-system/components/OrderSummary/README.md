@@ -1,12 +1,12 @@
 # OrderSummary
 
-Resumen de valores del pedido con la acción principal del paso.
+Resumen del pedido con la acción principal del paso.
 
 ## Qué aporta quien lo usa
 
-`subtotal`, `discount` y `discountLabel` (solo si hay cupón aplicado), `total`, `itemsCount`, `title` ("Resumen del pedido" por defecto; "Total pagado" en el comprobante con `totalLabel`), y como `children` el `Button` primary del paso.
+`itemsCount`, `subtotal`, `discount` + `discountLabel` (si hay cupón), `shippingLabel` (texto del costo de envío si el servidor lo devuelve), `total`, `items` (miniaturas en Datos y envío, Pago y Pedido confirmado), `note` (reserva de unidades), `secure` (línea de la pasarela segura), `children` (el `Button` primary del paso), `title`, `totalLabel` ("Total pagado").
 
 ## Reglas
 
-- Muestra los valores que devuelve el servidor, sin recalcular (regla del brief).
-- En escritorio va a la derecha de la lista; por debajo de `bp-md` va debajo, con el botón a todo el ancho.
+- Muestra los valores que devuelve el servidor, sin recalcular.
+- A la derecha en escritorio (fijo al desplazar); debajo en celular.
