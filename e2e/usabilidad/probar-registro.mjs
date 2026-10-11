@@ -1,86 +1,68 @@
-// Prueba las fórmulas de la hoja de cálculo de los cinco participantes: carga docs/usabilidad/Registro_Medicion_CU2_ComproYa.xlsx,
-// escribe datos de ejemplo distintos por persona (uno que cumple todo, otros que fallan casos concretos y uno con datos
-// parciales), evalúa todas las fórmulas con HyperFormula (un motor distinto de Excel) y compara con el cálculo esperado, hecho
-// aparte en JavaScript a partir de la definición de cada caso. No modifica el archivo.
-// Requiere `npm install --no-save hyperformula`.
-//
-//   cd e2e && node usabilidad/probar-registro.mjs
+// Prueba las fórmulas del Excel de registro: escribe datos de ejemplo de cinco personas en «Registro» (una cumple todo, otras
+// fallan casos concretos y una tiene datos parciales), evalúa las fórmulas con HyperFormula (otro motor distinto de Excel) y
+// compara con el cálculo esperado, hecho aparte en JavaScript. No modifica el archivo.
+// Requiere `npm install --no-save hyperformula`.   cd e2e && node usabilidad/probar-registro.mjs
 import ExcelJS from "exceljs";
 import { HyperFormula } from "hyperformula";
+import { readFileSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { CASOS, PARTICIPANTES, TAREAS } from "./sesion.mjs";
 
 const AQUI = path.dirname(fileURLToPath(import.meta.url));
+const LB = JSON.parse(readFileSync(path.join(AQUI, "linea-base.json"), "utf8"));
 const wb = new ExcelJS.Workbook();
 await wb.xlsx.readFile(path.resolve(AQUI, "../../docs/usabilidad/Registro_Medicion_CU2_ComproYa.xlsx"));
-const PART = ["P01", "P02", "P03", "P04", "P05"];
-const fila = (id) => 4 + Number(id.slice(1));
-const ids = (a, b) => Array.from({ length: Number(b.slice(1)) - Number(a.slice(1)) + 1 }, (_, i) => "T" + String(Number(a.slice(1)) + i).padStart(2, "0"));
+const re = wb.getWorksheet("Registro");
+const NT = TAREAS.length;
+const fila = (pi, n) => 5 + pi * (NT + 1) + TAREAS.findIndex((t) => t.n === n);
+const BAS = new Set(["T2", "T3", "T4"]);
+const obj = (t) => { const x = Math.ceil((LB.tareas[t.ref].referenciaExpertoS * 3) / 5) * 5; return BAS.has(t.n) ? Math.min(x, 180) : x; };
+const tarea = (n) => TAREAS.find((t) => t.n === n);
 
-// ---------------- datos de ejemplo: datos[participante][tarea] = { I, M, O, P, Q, S, T, U, V }
-const datos = Object.fromEntries(PART.map((p) => [p, {}]));
-const put = (p, id, v) => (datos[p][id] = { ...(datos[p][id] ?? {}), ...v });
-const si = (p, lista) => lista.forEach((id) => put(p, id, { U: "Sí" }));
-const obj = (id) => Math.ceil((wb.getWorksheet("P01").getCell(`G${fila(id)}`).value * 3) / 5) * 5;
-const buenos = (p) => {
-  si(p, [...ids("T01", "T03"), ...ids("T10", "T12"), ...ids("T16", "T18")]);
-  for (const id of ids("T07", "T09")) put(p, id, { I: 100, M: 20, O: 0, P: 0, Q: 0, S: 0, T: 0, U: "Sí", V: 6 });
-  for (const id of ids("T13", "T15")) put(p, id, { I: 10, M: 4, U: "Sí" });
-  for (const id of ids("T19", "T21")) put(p, id, { I: 20, M: 3, U: "Sí" });
-  for (const id of ids("T22", "T24")) put(p, id, { I: 60, M: 15, S: 0, U: "Sí" });
-  for (const id of ids("T25", "T27")) put(p, id, { I: 20, M: 5, O: 0, P: 0, Q: 0, S: 0, U: "Sí" });
+// ---- datos de ejemplo: d[pi][n] = { E, F, G, H, I, J }
+const d = PARTICIPANTES.map(() => ({}));
+const bueno = (pi) => {
+  for (const t of TAREAS) {
+    if (t.tipo === "hacer") d[pi][t.n] = { E: Math.floor(obj(t) / 2), F: LB.tareas[t.ref].clics + 1, G: 0, H: 0, I: "Sí", J: 6 };
+    else d[pi][t.n] = { I: "Sí", ...(t.seq ? { J: 5 } : {}) };
+  }
 };
-for (const p of ["P01", "P02", "P03", "P04"]) buenos(p);
-// P02: falla casos 1 (T03 No), 3 (T07 pasa el tiempo objetivo) y 9 (3 errores en T09)
-put("P02", "T03", { U: "No" });
-put("P02", "T07", { I: obj("T07") + 30 });
-put("P02", "T09", { O: 1, P: 1, Q: 1 });
-// P03: falla casos 5 (consulta externa en T07), 7 (un estado mal descrito) y 10 (2 ayudas en T08)
-put("P03", "T07", { T: 1 });
-put("P03", "T18", { U: "No" });
-put("P03", "T08", { S: 2 });
-// P04: falla casos 8 (T20 supera 180 s), 11 (T23 no acertó) y 12 (3 errores en T27)
-put("P04", "T20", { I: 200 });
-put("P04", "T23", { U: "No" });
-put("P04", "T27", { O: 2, P: 1, Q: 0 });
-// P05: solo respondió T01 a T03
-si("P05", ids("T01", "T03"));
-// SUS: respuestas por participante
-const susResp = { P01: Array(10).fill(0).map((_, i) => (i % 2 === 0 ? 5 : 1)), P02: Array(10).fill(4), P03: Array(10).fill(3), P04: Array(10).fill(0).map((_, i) => (i % 2 === 0 ? 4 : 2)), P05: [] };
+[0, 1, 2, 3].forEach(bueno);
+d[1]["T1"].I = "No";                    // P02: no entendió la primera pantalla (caso 1)
+d[1]["T6"].E = obj(tarea("T6")) + 20;     // P02: pasó el tiempo objetivo en la compra 1 (caso 3, caso 12 no)
+d[1]["T8"].G = 3;                        // P02: 3 errores en la compra 3 (caso 9)
+d[2]["T7"].H = 2;                        // P03: 2 ayudas en la compra 2 (casos 5 y 10)
+d[2]["T8a"].I = "No";                    // P03: no entendió un estado (caso 7)
+d[3]["T3"].E = 200;                      // P04: 200 s en la tarea 3 (caso 8)
+d[3]["T10"].I = "No";                    // P04: no logró quitar el descuento (caso 12)
+for (const n of ["T1", "T5", "T6a"]) d[4][n] = { I: "Sí" }; // P05: solo respondió las tres primeras preguntas
+d[4]["T1"].J = 4; d[4]["T5"].J = 3;
 
-for (const p of PART) {
-  const h = wb.getWorksheet(p);
-  for (const [id, v] of Object.entries(datos[p])) for (const [col, val] of Object.entries(v)) h.getCell(`${col}${fila(id)}`).value = val;
-}
-const su = wb.getWorksheet("SUS");
-PART.forEach((p, k) => susResp[p].forEach((v, i) => (su.getCell(5 + i, 3 + k).value = v)));
+for (const [pi, tareas] of d.entries()) for (const [n, v] of Object.entries(tareas)) for (const [col, val] of Object.entries(v)) re.getCell(`${col}${fila(pi, n)}`).value = val;
+re.getCell(`K${fila(0, "T1")}`).value = "Es una tienda para comprar en línea";
 
-// ---------------- cálculo esperado (a partir de las definiciones)
-const media = (a) => a.reduce((x, y) => x + y, 0) / a.length;
-const ee = (a) => Math.sqrt(a.reduce((x, y) => x + (y - media(a)) ** 2, 0) / (a.length - 1)) / Math.sqrt(a.length);
-const d = (p, id, k) => datos[p][id]?.[k];
-const todos = (p, lista, k) => lista.every((id) => d(p, id, k) !== undefined);
-const errTotal = (p, id) => (["O", "P", "Q"].some((k) => d(p, id, k) !== undefined) ? ["O", "P", "Q"].reduce((a, k) => a + (d(p, id, k) ?? 0), 0) : undefined);
-function esperado(p, n) {
-  const sums = (lista) => (todos(p, lista, "U") ? lista.filter((id) => d(p, id, "U") === "Sí").length / 3 : null);
-  const res = (v, ok) => ({ v, ok: v === null ? null : ok });
-  switch (n) {
-    case 1: { const v = sums(ids("T01", "T03")); return res(v, v >= 0.8); }
-    case 2: return { v: "—", ok: "—" }; // caso 2 no aplicado: la hoja muestra «—»
-    case 3: { const L = ids("T07", "T09"); const v = sums(L); if (v === null || !todos(p, L, "I")) return res(null); return res(v, v === 1 && L.every((id) => d(p, id, "I") <= obj(id))); }
-    case 4: { const v = sums(ids("T10", "T12")); return res(v, v >= 0.8); }
-    case 5: { const L = ids("T07", "T09"); if (!todos(p, L, "T")) return res(null); const v = L.filter((id) => d(p, id, "T") === 0).length / 3; return res(v, v === 1 && L.every((id) => d(p, id, "T") === 0)); }
-    case 6: { const v = sums(ids("T13", "T15")); return res(v, v === 1); }
-    case 7: { const v = sums(ids("T16", "T18")); return res(v, v >= 0.8); }
-    case 8: { const L = ids("T19", "T21"); if (!todos(p, L, "I")) return res(null); const v = L.filter((id) => d(p, id, "I") <= 180 && d(p, id, "I") <= obj(id)).length / 3; return res(v, v === 1); }
-    case 9: { const L = ids("T07", "T09"); if (L.some((id) => errTotal(p, id) === undefined)) return res(null); const v = L.filter((id) => errTotal(p, id) < 3).length / 3; return res(v, v === 1); }
-    case 10: { const L = ids("T07", "T09"); if (!todos(p, L, "S")) return res(null); const v = L.filter((id) => d(p, id, "S") <= 1).length / 3; return res(v, v === 1); }
-    case 11: { const v = sums(ids("T22", "T24")); return res(v, v === 1); }
-    case 12: { const L = ids("T25", "T27"); if (!todos(p, L, "I") || L.some((id) => errTotal(p, id) === undefined) || !todos(p, L, "S")) return res(null); const v = L.filter((id) => d(p, id, "I") <= obj(id) && errTotal(p, id) < 3 && d(p, id, "S") <= 1).length / 3; return res(v, v === 1); }
+// ---- cálculo esperado
+const lista = (n) => CASOS.find((c) => c.n === n).tareas;
+const todos = (pi, ts, col) => ts.every((n) => d[pi][n]?.[col] !== undefined);
+const cuenta = (pi, ts, f) => ts.filter((n) => f(d[pi][n])).length;
+function esperado(pi, caso) {
+  const ts = lista(caso);
+  const v = (x) => ({ v: x, ok: null });
+  switch (caso) {
+    case 1: case 7: { if (!todos(pi, ts, "I")) return v(null); const x = cuenta(pi, ts, (r) => r.I === "Sí") / 3; return { v: x, ok: x >= 0.8 }; }
+    case 3: { if (!todos(pi, ts, "I") || !todos(pi, ts, "H") || !todos(pi, ts, "E")) return v(null); const x = cuenta(pi, ts, (r) => r.I === "Sí" && r.H === 0) / 3; return { v: x, ok: x === 1 && ts.every((n) => d[pi][n].E <= obj(tarea(n))) }; }
+    case 5: { if (!todos(pi, ts, "H")) return v(null); const x = cuenta(pi, ts, (r) => r.H === 0) / 3; return { v: x, ok: x === 1 }; }
+    case 8: { if (!todos(pi, ts, "E")) return v(null); const x = ts.filter((n) => d[pi][n].E <= obj(tarea(n))).length / 3; return { v: x, ok: x === 1 }; }
+    case 9: { if (!todos(pi, ts, "G")) return v(null); const x = cuenta(pi, ts, (r) => r.G < 3) / 3; return { v: x, ok: x === 1 }; }
+    case 10: { if (!todos(pi, ts, "H")) return v(null); const x = cuenta(pi, ts, (r) => r.H <= 1) / 3; return { v: x, ok: x === 1 }; }
+    case 12: { if (!(todos(pi, ts, "E") && todos(pi, ts, "G") && todos(pi, ts, "H") && todos(pi, ts, "I"))) return v(null); const x = ts.filter((n) => d[pi][n].I === "Sí" && d[pi][n].E <= obj(tarea(n)) && d[pi][n].G < 3 && d[pi][n].H <= 1).length / 3; return { v: x, ok: x === 1 }; }
   }
 }
+const media = (a) => a.reduce((x, y) => x + y, 0) / a.length;
+const ee = (a) => Math.sqrt(a.reduce((x, y) => x + (y - media(a)) ** 2, 0) / (a.length - 1)) / Math.sqrt(a.length);
 
-// ---------------- hoja → HyperFormula
+// ---- hojas → HyperFormula
 const hojas = {};
 wb.eachSheet((h) => {
   const filas = [];
@@ -98,93 +80,78 @@ wb.eachSheet((h) => {
   hojas[h.name] = filas.map((f) => f ?? []);
 });
 const hf = HyperFormula.buildFromSheets(hojas, { licenseKey: "gpl-v3", useArrayArithmetic: true });
-const valor = (hoja, celda) => hf.getCellValue(hf.simpleCellAddressFromString(celda, hf.getSheetId(hoja)));
-const letra = (n) => String.fromCharCode(64 + n);
+const val = (hoja, celda) => hf.getCellValue(hf.simpleCellAddressFromString(celda, hf.getSheetId(hoja)));
+const L = (n) => { let s = ""; while (n > 0) { const r = (n - 1) % 26; s = String.fromCharCode(65 + r) + s; n = Math.floor((n - 1) / 26); } return s; };
 
-let comprobadas = 0, fallas = 0;
-const verificar = (nombre, real, esp, tol = 1e-6) => {
-  comprobadas++;
+let n = 0, fallas = 0;
+const ver = (nombre, real, esp, tol = 1e-6) => {
+  n++;
   const nulo = esp === null || esp === undefined;
   const bien = nulo ? real === "" || real === null : typeof esp === "number" ? typeof real === "number" && Math.abs(real - esp) < tol : real === esp;
   if (!bien) { fallas++; console.log(`FALLA ${nombre}: esperado ${JSON.stringify(esp)}, obtenido ${JSON.stringify(real)}`); }
 };
+const NP = PARTICIPANTES.length;
 
-// Metricas: por persona y del grupo
-for (let n = 1; n <= 12; n++) {
-  const r = 4 + n;
-  const vals = [], cum = [];
-  PART.forEach((p, k) => {
-    const e = esperado(p, n);
-    verificar(`Metricas caso ${n} ${p} valor`, valor("Metricas", `${letra(5 + 2 * k)}${r}`), e.v);
-    verificar(`Metricas caso ${n} ${p} cumple`, valor("Metricas", `${letra(6 + 2 * k)}${r}`), e.ok === null ? null : e.ok === "—" ? "—" : e.ok ? "Sí" : "No");
-    if (typeof e.v === "number") { vals.push(e.v); cum.push(e.ok); }
-  });
-  verificar(`Metricas caso ${n} n`, valor("Metricas", `O${r}`), vals.length);
-  verificar(`Metricas caso ${n} cumplen`, valor("Metricas", `P${r}`), cum.filter(Boolean).length);
-  verificar(`Metricas caso ${n} %`, valor("Metricas", `Q${r}`), vals.length ? cum.filter(Boolean).length / vals.length : null);
-  verificar(`Metricas caso ${n} media`, valor("Metricas", `R${r}`), vals.length ? media(vals) : null);
-  verificar(`Metricas caso ${n} EE`, valor("Metricas", `S${r}`), vals.length >= 2 ? ee(vals) : null);
-  verificar(`Metricas caso ${n} grupo`, valor("Metricas", `T${r}`), vals.length ? (cum.filter(Boolean).length / vals.length >= 0.8 ? "Sí" : "No") : null);
-}
-
-// Grupo: estadísticas por tarea (T07, T20, T27) y comparación con el equipo
-for (const id of ["T07", "T09", "T20", "T27"]) {
-  const r = fila(id);
-  const t = PART.map((p) => d(p, id, "I")).filter((x) => x !== undefined);
-  const refv = wb.getWorksheet("P01").getCell(`G${r}`).value;
-  verificar(`Grupo ${id} media`, valor("Grupo", `L${r}`), media(t));
-  verificar(`Grupo ${id} EE`, valor("Grupo", `M${r}`), ee(t));
-  verificar(`Grupo ${id} n`, valor("Grupo", `N${r}`), t.length);
-  verificar(`Grupo ${id} razón`, valor("Grupo", `O${r}`), media(t) / refv);
-  const clics = PART.map((p) => d(p, id, "M")).filter((x) => x !== undefined);
-  verificar(`Grupo ${id} clics medios`, valor("Grupo", `Q${r}`), media(clics));
-  const ideal = wb.getWorksheet("P01").getCell(`F${r}`).value;
-  verificar(`Grupo ${id} eficiencia`, valor("Grupo", `R${r}`), ideal / media(clics));
-  const cumplen = PART.filter((p) => d(p, id, "I") !== undefined && d(p, id, "I") <= obj(id)).length;
-  verificar(`Grupo ${id} cumplen el tiempo`, valor("Grupo", `U${r}`), `${cumplen} de ${t.length}`);
-}
-{
-  const r = fila("T07");
-  const sis = PART.filter((p) => d(p, "T07", "U") === "Sí").length;
-  const con = PART.filter((p) => d(p, "T07", "U") !== undefined).length;
-  verificar("Grupo T07 completaron", valor("Grupo", `V${r}`), `${sis} de ${con}`);
-  verificar("Grupo T07 SEQ medio", valor("Grupo", `W${r}`), 6);
-}
-
-// SUS por persona y del grupo
-const sus = (resp) => (resp.length === 10 ? resp.reduce((a, v, i) => a + (i % 2 === 0 ? v - 1 : 5 - v), 0) * 2.5 : null);
-const susVals = [];
-PART.forEach((p, k) => {
-  const e = sus(susResp[p]);
-  verificar(`SUS ${p}`, valor("SUS", `${letra(8 + k)}16`), e);
-  if (e !== null) susVals.push(e);
+// Resultados: por persona y del grupo
+CASOS.forEach((c, i) => {
+  const r = 5 + i;
+  const vs = [], cs = [];
+  for (let p = 0; p < NP; p++) {
+    const e = esperado(p, c.n);
+    ver(`caso ${c.n} P0${p + 1} valor`, val("Resultados", `${L(4 + p)}${r}`), e.v);
+    ver(`caso ${c.n} P0${p + 1} cumple`, val("Resultados", `${L(4 + NP + p)}${r}`), e.v === null ? null : e.ok ? "Sí" : "No");
+    if (e.v !== null) { vs.push(e.v); cs.push(e.ok); }
+  }
+  const g = 4 + 2 * NP;
+  ver(`caso ${c.n} n`, val("Resultados", `${L(g)}${r}`), vs.length);
+  ver(`caso ${c.n} cumplen`, val("Resultados", `${L(g + 1)}${r}`), cs.filter(Boolean).length);
+  ver(`caso ${c.n} %`, val("Resultados", `${L(g + 2)}${r}`), vs.length ? cs.filter(Boolean).length / vs.length : null);
+  ver(`caso ${c.n} media`, val("Resultados", `${L(g + 3)}${r}`), vs.length ? media(vs) : null);
+  ver(`caso ${c.n} EE`, val("Resultados", `${L(g + 4)}${r}`), vs.length >= 2 ? ee(vs) : null);
+  ver(`caso ${c.n} grupo`, val("Resultados", `${L(g + 5)}${r}`), vs.length ? (cs.filter(Boolean).length / vs.length >= 0.8 ? "Sí" : "No") : null);
 });
-verificar("SUS media", valor("SUS", "M16"), media(susVals));
-verificar("SUS error estándar", valor("SUS", "N16"), ee(susVals));
 
-
-// Resumen del grupo
-const resumenFila = (etq) => {
-  const dim = hf.getSheetDimensions(hf.getSheetId("Grupo"));
-  for (let r = 0; r < dim.height; r++) if (hf.getCellValue({ sheet: hf.getSheetId("Grupo"), row: r, col: 0 }) === etq) return hf.getCellValue({ sheet: hf.getSheetId("Grupo"), row: r, col: 3 });
-  return "no encontrada";
-};
-const gruposOk = []; for (let n = 1; n <= 12; n++) { const v = []; const c = []; PART.forEach((p) => { const e = esperado(p, n); if (typeof e.v === "number") { v.push(e.v); c.push(e.ok); } }); if (v.length) gruposOk.push(c.filter(Boolean).length / v.length >= 0.8); }
-verificar("Resumen: participantes con datos", resumenFila("Participantes con datos registrados"), 5);
-verificar("Resumen: casos que cumple el grupo", resumenFila("Casos que cumple el grupo"), gruposOk.filter(Boolean).length);
-verificar("Resumen: casos evaluados", resumenFila("Casos evaluados"), gruposOk.length);
-verificar("Resumen: porcentaje", resumenFila("Porcentaje de casos que cumple el grupo"), gruposOk.filter(Boolean).length / gruposOk.length);
-verificar("Resumen: SUS medio", resumenFila("Puntaje SUS medio (0 a 100)"), media(susVals));
-
-// resumen legible de lo que calculó la hoja con los datos de ejemplo
-console.log("caso | personas con dato | cumplen | % | media | error estándar | ¿cumple el grupo?");
-for (let n = 1; n <= 12; n++) {
-  const r = 4 + n;
-  const f = (c) => valor("Metricas", `${c}${r}`);
-  const num = (x) => (typeof x === "number" ? x.toFixed(2) : x === "" ? "—" : String(x));
-  console.log(`${String(n).padStart(2)} | ${f("O")} | ${f("P")} | ${num(f("Q"))} | ${num(f("R"))} | ${num(f("S"))} | ${f("T") || "—"}`);
+// Registro: fórmulas por fila (objetivo, en tiempo, razón, eficiencia)
+for (const [pi, n_] of [[1, "T6"], [3, "T3"], [0, "T7"]]) {
+  const t = tarea(n_), r = fila(pi, n_), x = d[pi][n_];
+  const ref = LB.tareas[t.ref];
+  ver(`registro ${n_} objetivo`, val("Registro", `M${r}`), obj(t));
+  ver(`registro ${n_} en tiempo`, val("Registro", `N${r}`), x.E <= obj(t) ? "Sí" : "No");
+  ver(`registro ${n_} razón`, val("Registro", `O${r}`), x.E / ref.referenciaExpertoS);
+  ver(`registro ${n_} eficiencia`, val("Registro", `Q${r}`), ref.clics / x.F);
 }
-// ninguna celda con error de fórmula
+ver("registro: nombre de P01", val("Registro", `B${fila(0, "T1")}`), "Ingrid Katerin Monroy Murcia");
+
+// Tiempos por tarea (tarea 6 y 3)
+const principales = TAREAS.filter((t) => t.seq);
+for (const n_ of ["T6", "T3"]) {
+  const row = 5 + principales.findIndex((t) => t.n === n_);
+  const t = tarea(n_);
+  const ts = d.map((p) => p[n_]?.E).filter((x) => x !== undefined);
+  const cl = d.map((p) => p[n_]?.F).filter((x) => x !== undefined);
+  const se = d.map((p) => p[n_]?.J).filter((x) => x !== undefined);
+  const m = L(5 + NP);
+  ver(`tiempos ${n_} media`, val("Tiempos", `${m}${row}`), media(ts));
+  ver(`tiempos ${n_} EE`, val("Tiempos", `${L(6 + NP)}${row}`), ee(ts));
+  ver(`tiempos ${n_} razón`, val("Tiempos", `${L(7 + NP)}${row}`), media(ts) / LB.tareas[t.ref].referenciaExpertoS);
+  ver(`tiempos ${n_} clics medios`, val("Tiempos", `${L(9 + NP)}${row}`), media(cl));
+  ver(`tiempos ${n_} dificultad media`, val("Tiempos", `${L(13 + NP)}${row}`), media(se));
+}
+
+// Resumen
+const fin = 5 + CASOS.length + 1;
+const gruposOk = CASOS.map((c) => { const vs = [], cs = []; for (let p = 0; p < NP; p++) { const e = esperado(p, c.n); if (e.v !== null) { vs.push(e.v); cs.push(e.ok); } } return vs.length ? cs.filter(Boolean).length / vs.length >= 0.8 : null; }).filter((x) => x !== null);
+ver("resumen: casos que cumple el grupo", val("Resultados", `D${fin}`), gruposOk.filter(Boolean).length);
+ver("resumen: casos evaluados", val("Resultados", `D${fin + 1}`), gruposOk.length);
+
+// resumen legible
+console.log("caso | personas | cumplen | % | media | EE | grupo");
+CASOS.forEach((c, i) => {
+  const r = 5 + i, g = 4 + 2 * NP;
+  const f = (k) => { const x = val("Resultados", `${L(g + k)}${r}`); return typeof x === "number" ? x.toFixed(2) : x === "" ? "—" : x; };
+  console.log(`${String(c.n).padStart(2)} | ${f(0)} | ${f(1)} | ${f(2)} | ${f(3)} | ${f(4)} | ${f(5)}`);
+});
+
 let conError = 0;
 for (const nombre of hf.getSheetNames()) {
   const dim = hf.getSheetDimensions(hf.getSheetId(nombre));
@@ -193,5 +160,5 @@ for (const nombre of hf.getSheetNames()) {
     if (v && typeof v === "object" && "type" in v) { conError++; if (conError <= 8) console.log(`ERROR en ${nombre} fila ${r + 1} col ${c + 1}: ${v.type} ${v.message ?? ""}`); }
   }
 }
-console.log(`Comprobaciones: ${comprobadas}; fallas: ${fallas}; celdas con error de fórmula: ${conError}`);
+console.log(`Comprobaciones: ${n}; fallas: ${fallas}; celdas con error de fórmula: ${conError}`);
 process.exit(fallas || conError ? 1 : 0);
