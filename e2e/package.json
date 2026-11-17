@@ -6,7 +6,8 @@
     "test": "playwright test",
     "usabilidad:medir": "node usabilidad/medir-linea-base.mjs",
     "usabilidad:documentos": "node usabilidad/generar-participante.mjs && node usabilidad/generar-excel.mjs",
-    "usabilidad:probar": "node usabilidad/probar-registro.mjs"
+    "usabilidad:probar": "node usabilidad/probar-registro.mjs",
+    "usabilidad:grabar": "node usabilidad/grabar-sesion.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.47.0",

@@ -1,0 +1,104 @@
+{
+  "codigo": "EQ-GUION",
+  "modo": "guionado",
+  "fecha": "2026-11-17T22:46:54.600Z",
+  "duracionTotalS": 18.8,
+  "aviso": "Corrida guionada automatizada (línea base del equipo). No es una persona.",
+  "web": "http://localhost:3100",
+  "navegador": "Chromium 1366x800",
+  "tareas": [
+    {
+      "id": "T2",
+      "nombre": "Buscar y agregar una licuadora",
+      "duracionS": 3.4,
+      "clics": 2,
+      "teclas": 1,
+      "completada": true,
+      "dificultad": null
+    },
+    {
+      "id": "T3",
+      "nombre": "Agregar un televisor mirando las categorías",
+      "duracionS": 5.3,
+      "clics": 2,
+      "teclas": 0,
+      "completada": true,
+      "dificultad": null
+    },
+    {
+      "id": "T4",
+      "nombre": "Agregar 2 refrigeradores",
+      "duracionS": 6.8,
+      "clics": 4,
+      "teclas": 1,
+      "completada": true,
+      "dificultad": null
+    }
+  ],
+  "clics": [
+    {
+      "tarea": "T2",
+      "t": 0.06,
+      "x": 0,
+      "y": 0,
+      "ruta": "/",
+      "objetivo": "Buscar"
+    },
+    {
+      "tarea": "T2",
+      "t": 2.23,
+      "x": 183,
+      "y": 1006,
+      "ruta": "/",
+      "objetivo": "Agregar al carrito"
+    },
+    {
+      "tarea": "T3",
+      "t": 2.54,
+      "x": 125,
+      "y": 718,
+      "ruta": "/",
+      "objetivo": "IMG"
+    },
+    {
+      "tarea": "T3",
+      "t": 4.13,
+      "x": 183,
+      "y": 1203,
+      "ruta": "/categoria/26",
+      "objetivo": "Agregar al carrito"
+    },
+    {
+      "tarea": "T4",
+      "t": 1.02,
+      "x": 0,
+      "y": 0,
+      "ruta": "/",
+      "objetivo": "Buscar"
+    },
+    {
+      "tarea": "T4",
+      "t": 2.39,
+      "x": 183,
+      "y": 782,
+      "ruta": "/",
+      "objetivo": "IMG"
+    },
+    {
+      "tarea": "T4",
+      "t": 4.02,
+      "x": 827,
+      "y": 510,
+      "ruta": "/producto/2403",
+      "objetivo": "path"
+    },
+    {
+      "tarea": "T4",
+      "t": 5.63,
+      "x": 1001,
+      "y": 597,
+      "ruta": "/producto/2403",
+      "objetivo": "Agregar al carrito"
+    }
+  ]
+}

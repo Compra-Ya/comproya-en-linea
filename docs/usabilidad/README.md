@@ -21,3 +21,23 @@ npm run usabilidad:medir        # vuelve a medir los tiempos y clics del equipo 
 ```
 
 Los tiempos y clics del equipo se midieron ejecutando cada tarea en el portal real (modelo de nivel de pulsación de Card, Moran y Newell, 1980, más la espera medida del sistema); el tiempo objetivo es ese tiempo por 3 (factor editable en la hoja «Tareas»).
+
+## Grabador de sesión (mapa de calor, clics y video)
+
+`e2e/usabilidad/grabar-sesion.mjs` abre el portal con un panel dentro de la página: la persona lee cada tarea, pulsa «Empezar tarea»,
+la hace con su mouse y avisa cuando termina («Terminé» o «No pude»); después califica la dificultad de 1 a 7. El grabador cuenta los clics y
+el tiempo de cada tarea, dibuja el mapa de calor de los clics sobre la pantalla (se ve en el video), guarda una captura por tarea y escribe
+un archivo de resultados.
+
+```bash
+cd e2e
+# Sesión con una PERSONA REAL (exige --consentimiento: la persona sabe que se graban pantalla, clics y tiempos)
+node usabilidad/grabar-sesion.mjs --codigo=P01 --modo=participante --consentimiento --web=http://localhost:3000
+# Corrida automática del equipo (línea base): el panel dice «CORRIDA GUIONADA AUTOMATIZADA · no es una persona»
+node usabilidad/grabar-sesion.mjs --codigo=EQ-GUION --modo=guionado --web=http://localhost:3000
+```
+
+Resultados en `docs/usabilidad/sesiones`: `<codigo>-<fecha>.json` (efectividad, tiempo, clics, teclas y dificultad por tarea),
+`<codigo>-<fecha>/mapa-calor-<tarea>.png`, `resumen.md` y `video.webm`. El video **no se sube al repositorio** (`.gitignore`): es de una persona.
+Al regenerar `docs/entrega-2/Segundo_Entregable_ComproYa.docx` (`python docs/_generadores/build_entrega2.py`), la sección 7.4 se llena sola con
+las sesiones de participantes grabadas. Usa solo el código del participante (P01 a P05), nunca su nombre.
