@@ -34,7 +34,7 @@ Condiciones de las capturas que conviene saber:
 
 - Hay 9 sucursales en la base local. Para mostrar ambos estados se sincronizaron dos (retiro disponible) y las demás conservan la sincronización vieja de la siembra, por eso aparecen con "Sin sincronizar hace 30000 min" o más. Es un dato de prueba, no un comportamiento normal.
 - La pantalla de Stripe Checkout es de un tercero y no se capturó: el canal nunca ve datos de tarjeta.
-- Las pantallas internas (`/interno/*`) están fuera del alcance de este rediseño.
+- Las pantallas internas (`/admin/*`) están fuera del alcance de este rediseño.
 
 ## Reglas para quien diseñe
 

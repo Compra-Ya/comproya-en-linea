@@ -16,7 +16,7 @@ Capturas a **1440 px** y **390 px** de ancho, página completa. Generadas con `e
 | Registro (paso previo) | `/registro` | `frontend/src/app/registro/page.tsx` | Paso previo |
 | Inicio de sesión (paso previo) | `/ingresar` | `frontend/src/app/ingresar/page.tsx` | Paso previo |
 | Consentimiento (destino del registro) | `/privacidad` | `frontend/src/app/privacidad/page.tsx` | Paso previo |
-| Publicar producto, detalle interno de pedido | `/interno/publicar`, `/interno/pedidos/[id]` | `frontend/src/app/interno/**` | Fuera del alcance del rediseño |
+| Publicar producto, detalle interno de pedido | `/admin/publicar`, `/admin/pedidos/[id]` | `frontend/src/app/admin/**` | Fuera del alcance del rediseño |
 
 Componentes compartidos: `frontend/src/components/ShopHeader.tsx`, `frontend/src/components/ProductImage.tsx`; estilos: `frontend/src/app/globals.css`; textos de cabecera y pie: `frontend/src/app/layout.tsx`.
 
