@@ -172,7 +172,7 @@ def construir(plantilla: Path, ev: Path, destino: Path) -> None:
     # ---- 9. Scrum
     t = pl.find_table(doc, "Elemento Scrum", "Aplicación de calidad")
     pl.fill_table(t, [
-        ["Product Backlog", "17 historias con criterios de aceptación, atributos de calidad y dependencias", "Jira: 5 épicas, 17 historias y 102 subtareas; PGR-001, Anexo 6"],
+        ["Product Backlog", "17 historias con criterios de aceptación, atributos de calidad y dependencias", "Jira: 5 épicas, 17 historias y 66 subtareas (6 por historia en 11 historias; HU-107 a HU-112 no tienen); PGR-001, Anexo 6"],
         ["Sprint Planning", "Se compromete trabajo según la capacidad de 60 h por sprint (sprint 2: 56 h; sprint 3: 43 h)", "Sprint Goal y Sprint Backlog en Jira"],
         ["Daily Scrum", "Se revisa el progreso y los bloqueos que afecten la calidad", "Estado de las subtareas en Jira"],
         ["Sprint Review", "El Product Owner inspecciona el incremento con los criterios TEST-nnn", "Incremento y decisiones del Product Owner"],

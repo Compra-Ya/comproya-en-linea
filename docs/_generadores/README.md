@@ -5,7 +5,7 @@ de las secciones. Cada documento se puede regenerar cuando cambie un dato (Jira,
 
 | Documento | Script | Plantilla del docente (carpeta del curso) |
 |---|---|---|
-| `docs/cronograma/` Plan de gestión del cronograma, Excel con ruta crítica y red del proyecto | `build_cronograma.py` | `1.4 PLANTILLA PLAN GESTION CRONOGRAMA.docx` |
+| `docs/cronograma/` Plan de gestión del cronograma, archivo de MS Project (XML) con ruta crítica, red y Gantt | `build_cronograma.py` (usa `cronograma_modelo.py` y `cronograma_msproject.py`) | `1.4 PLANTILLA PLAN GESTION CRONOGRAMA.docx` |
 | `docs/calidad/` Plan de gestión de la calidad | `build_calidad.py` | `1. PLANTILLA DE GESTION DE CALIDAD DEL SOFTWARE.docx` |
 | `docs/ejecucion/` Gestión de la ejecución con los KPI | `recolectar_soporte_kpi.py` y `build_ejecucion.py` | `EJECUCION PROYECTO.docx` |
 | `docs/entrega-2/` Segundo entregable (sprint 2) | `render_mermaid.mjs` y `build_entrega2.py` | formato de `Resultados_Pruebas_ComproYa.docx` |
@@ -31,6 +31,6 @@ MERMAID_JS=... node render_mermaid.mjs && python build_entrega2.py ../../Resulta
 
 - **Pruebas y cobertura:** `cd backend && npx jest --runInBand --coverage` → `docs/entrega-2/evidencia/jest-completo.json` y `cobertura-resumen.json`.
 - **Pantallas y comprobaciones de sistema:** `e2e/capturas/verificar-sprint2.mjs` y `verificar-interno.mjs` (capturas en `design/`).
-- **Cronograma:** `cronograma_modelo.py` (CPM sobre las historias de Jira; las horas del sprint 1 se reconstruyen porque no se registraron).
+- **Cronograma:** `cronograma_modelo.py` (CPM sobre las 36 subtareas de Jira con horas de los sprints 2 y 3; el sprint 1 es una ventana del sprint porque sus horas no se registraron y no se inventan). Es la única entrega de cronograma: el Word y el XML de MS Project salen del mismo modelo.
 - **Usabilidad:** `e2e/usabilidad/grabar-sesion.mjs` → `docs/usabilidad/sesiones` (la sección 7.4 del segundo entregable se llena sola con las sesiones de participantes).
 - **Diagramas UML:** fuentes de texto en `diagramas/*.mmd`.
