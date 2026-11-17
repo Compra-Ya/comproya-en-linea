@@ -13,3 +13,9 @@ backend/scripts/.cache/
 # Volcados de la base local: no se suben (el repositorio es público); ver docs/entorno-local-compartido.md
 /comproya_catalogo*.sql
 /compartir/
+
+# Python (generadores de documentos) y grabaciones de sesiones de usabilidad con personas
+__pycache__/
+*.pyc
+docs/usabilidad/sesiones/**/*.webm
+docs/usabilidad/sesiones/**/*.mp4

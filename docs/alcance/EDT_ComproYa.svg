@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="740" height="647" viewBox="0 0 740 647" font-family="Arial, Helvetica, sans-serif">
+<title>EDT de ComproYa en Línea</title>
+<desc>Estructura de desglose del trabajo en vertical: el proyecto, cinco entregables y, debajo de cada uno, sus casos de uso y paquetes de trabajo con su sprint.</desc>
+<rect width="740" height="647" fill="#ffffff"/>
+<text x="14" y="30" font-size="15" font-weight="700" fill="#163d6d">EDT — ComproYa en Línea (alcance reducido)</text>
+<path d="M370.0,108.0 V124.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M82.0,124.0 H658.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M82.0,124.0 V138.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M226.0,124.0 V138.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M370.0,124.0 V138.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M514.0,124.0 V138.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M658.0,124.0 V138.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M20.0,190.0 V421.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M20.0,232.0 H26.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M20.0,295.0 H26.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M20.0,358.0 H26.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M20.0,421.0 H26.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M164.0,190.0 V358.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M164.0,232.0 H170.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M164.0,295.0 H170.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M164.0,358.0 H170.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M308.0,190.0 V547.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M308.0,232.0 H314.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M308.0,295.0 H314.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M308.0,358.0 H314.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M308.0,421.0 H314.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M308.0,484.0 H314.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M308.0,547.0 H314.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M452.0,190.0 V295.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M452.0,232.0 H458.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M452.0,295.0 H458.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M596.0,190.0 V421.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M596.0,232.0 H602.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M596.0,295.0 H602.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M596.0,358.0 H602.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<path d="M596.0,421.0 H602.0" fill="none" stroke="#8a8a8a" stroke-width="1.2"/>
+<rect x="275.0" y="50.0" width="190" height="58" rx="7" fill="#163d6d" stroke="#163d6d" stroke-width="1.4"/>
+<text x="370.0" y="61.0" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle">1.0</text>
+<text x="370.0" y="75.5" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle">ComproYa en Línea</text>
+<text x="370.0" y="90.0" font-size="12" font-weight="400" fill="#ffffff" text-anchor="middle">Canal de venta</text>
+<text x="370.0" y="104.5" font-size="12" font-weight="400" fill="#ffffff" text-anchor="middle">digital B2C</text>
+<rect x="14.0" y="138.0" width="136" height="52" rx="7" fill="#b9480d" stroke="#b9480d" stroke-width="1.4"/>
+<text x="82.0" y="153.5" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">1.1</text>
+<text x="82.0" y="167.5" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">Catálogo</text>
+<text x="82.0" y="181.5" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">digital</text>
+<rect x="26.0" y="204.0" width="124" height="56" rx="7" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.4"/>
+<text x="88.0" y="215.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">1.1.1 · CU-01</text>
+<text x="88.0" y="228.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">Publicación de</text>
+<text x="88.0" y="241.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">producto</text>
+<text x="88.0" y="254.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">S1</text>
+<rect x="26.0" y="267.0" width="124" height="56" rx="7" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.4"/>
+<text x="88.0" y="278.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">1.1.2 · CU-02</text>
+<text x="88.0" y="291.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">Búsqueda de</text>
+<text x="88.0" y="304.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">productos</text>
+<text x="88.0" y="317.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">S1</text>
+<rect x="26.0" y="330.0" width="124" height="56" rx="7" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.4"/>
+<text x="88.0" y="341.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">1.1.3 · CU-03</text>
+<text x="88.0" y="354.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">Consulta de</text>
+<text x="88.0" y="367.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">disponibilidad</text>
+<text x="88.0" y="380.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">S1</text>
+<rect x="26.0" y="393.0" width="124" height="56" rx="7" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.4" stroke-dasharray="4 3"/>
+<text x="88.0" y="404.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">1.1.4*</text>
+<text x="88.0" y="417.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">Existencias del ERP</text>
+<text x="88.0" y="430.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">(simulado)</text>
+<text x="88.0" y="443.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">S1</text>
+<rect x="158.0" y="138.0" width="136" height="52" rx="7" fill="#b9480d" stroke="#b9480d" stroke-width="1.4"/>
+<text x="226.0" y="153.5" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">1.2</text>
+<text x="226.0" y="167.5" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">Cuenta</text>
+<text x="226.0" y="181.5" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">digital</text>
+<rect x="170.0" y="204.0" width="124" height="56" rx="7" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.4"/>
+<text x="232.0" y="222.0" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">1.2.1 · CU-04</text>
+<text x="232.0" y="235.0" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">Registro de cuenta</text>
+<text x="232.0" y="248.0" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">S2</text>
+<rect x="170.0" y="267.0" width="124" height="56" rx="7" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.4"/>
+<text x="232.0" y="278.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">1.2.2 · CU-05</text>
+<text x="232.0" y="291.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">Administración del</text>
+<text x="232.0" y="304.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">consentimiento</text>
+<text x="232.0" y="317.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">S2</text>
+<rect x="170.0" y="330.0" width="124" height="56" rx="7" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.4" stroke-dasharray="4 3"/>
+<text x="232.0" y="341.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">1.2.3*</text>
+<text x="232.0" y="354.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">Ingreso de la</text>
+<text x="232.0" y="367.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">cuenta interna</text>
+<text x="232.0" y="380.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">S6</text>
+<rect x="302.0" y="138.0" width="136" height="52" rx="7" fill="#b9480d" stroke="#b9480d" stroke-width="1.4"/>
+<text x="370.0" y="153.5" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">1.3</text>
+<text x="370.0" y="167.5" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">Carrito y</text>
+<text x="370.0" y="181.5" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">pedido</text>
+<rect x="314.0" y="204.0" width="124" height="56" rx="7" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.4"/>
+<text x="376.0" y="215.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">1.3.1 · CU-07</text>
+<text x="376.0" y="228.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">Administración</text>
+<text x="376.0" y="241.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">del carrito</text>
+<text x="376.0" y="254.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">S3</text>
+<rect x="314.0" y="267.0" width="124" height="56" rx="7" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.4"/>
+<text x="376.0" y="278.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">1.3.2 · CU-09</text>
+<text x="376.0" y="291.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">Confirmación</text>
+<text x="376.0" y="304.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">del pedido</text>
+<text x="376.0" y="317.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">S4</text>
+<rect x="314.0" y="330.0" width="124" height="56" rx="7" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.4"/>
+<text x="376.0" y="341.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">1.3.3 · CU-10</text>
+<text x="376.0" y="354.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">Aplicación de cupón</text>
+<text x="376.0" y="367.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">de lealtad</text>
+<text x="376.0" y="380.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">S4</text>
+<rect x="314.0" y="393.0" width="124" height="56" rx="7" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.4" stroke-dasharray="4 3"/>
+<text x="376.0" y="404.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">1.3.4*</text>
+<text x="376.0" y="417.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">Reserva y liberación</text>
+<text x="376.0" y="430.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">en el ERP (simulado)</text>
+<text x="376.0" y="443.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">S4</text>
+<rect x="314.0" y="456.0" width="124" height="56" rx="7" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.4" stroke-dasharray="4 3"/>
+<text x="376.0" y="467.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">1.3.5* · CU-11</text>
+<text x="376.0" y="480.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">Consulta de pedidos</text>
+<text x="376.0" y="493.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">y ventas</text>
+<text x="376.0" y="506.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">S6</text>
+<rect x="314.0" y="519.0" width="124" height="56" rx="7" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.4"/>
+<text x="376.0" y="530.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">1.3.6 · CU-13</text>
+<text x="376.0" y="543.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">Cancelación</text>
+<text x="376.0" y="556.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">del pedido</text>
+<text x="376.0" y="569.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">S6</text>
+<rect x="446.0" y="138.0" width="136" height="52" rx="7" fill="#b9480d" stroke="#b9480d" stroke-width="1.4"/>
+<text x="514.0" y="160.5" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">1.4</text>
+<text x="514.0" y="174.5" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">Pago</text>
+<rect x="458.0" y="204.0" width="124" height="56" rx="7" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.4"/>
+<text x="520.0" y="222.0" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">1.4.1 · CU-15</text>
+<text x="520.0" y="235.0" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">Pago con tarjeta</text>
+<text x="520.0" y="248.0" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">S5</text>
+<rect x="458.0" y="267.0" width="124" height="56" rx="7" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.4"/>
+<text x="520.0" y="278.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">1.4.2 · CU-17</text>
+<text x="520.0" y="291.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">Emisión del</text>
+<text x="520.0" y="304.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">comprobante</text>
+<text x="520.0" y="317.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">S5</text>
+<rect x="590.0" y="138.0" width="136" height="52" rx="7" fill="#b9480d" stroke="#b9480d" stroke-width="1.4"/>
+<text x="658.0" y="153.5" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">1.5</text>
+<text x="658.0" y="167.5" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">Gerencia del</text>
+<text x="658.0" y="181.5" font-size="11.5" font-weight="700" fill="#ffffff" text-anchor="middle">proyecto</text>
+<rect x="602.0" y="204.0" width="124" height="56" rx="7" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.4"/>
+<text x="664.0" y="215.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">1.5.1</text>
+<text x="664.0" y="228.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">Acta de</text>
+<text x="664.0" y="241.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">constitución</text>
+<text x="664.0" y="254.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">transversal</text>
+<rect x="602.0" y="267.0" width="124" height="56" rx="7" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.4"/>
+<text x="664.0" y="278.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">1.5.2</text>
+<text x="664.0" y="291.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">Plan de trabajo</text>
+<text x="664.0" y="304.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">y backlog</text>
+<text x="664.0" y="317.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">transversal</text>
+<rect x="602.0" y="330.0" width="124" height="56" rx="7" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.4"/>
+<text x="664.0" y="341.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">1.5.3</text>
+<text x="664.0" y="354.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">Seguimiento y</text>
+<text x="664.0" y="367.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">control de sprints</text>
+<text x="664.0" y="380.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">transversal</text>
+<rect x="602.0" y="393.0" width="124" height="56" rx="7" fill="#ffffff" stroke="#8a8a8a" stroke-width="1.4"/>
+<text x="664.0" y="404.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">1.5.4</text>
+<text x="664.0" y="417.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">Cierre del</text>
+<text x="664.0" y="430.5" font-size="10.5" font-weight="400" fill="#171717" text-anchor="middle">proyecto</text>
+<text x="664.0" y="443.5" font-size="10.5" font-weight="700" fill="#171717" text-anchor="middle">transversal</text>
+<text x="14" y="599" font-size="9.5" fill="#555555">Estructura vertical: proyecto → 5 entregables → casos de uso y paquetes de trabajo (canon, sección 8).</text>
+<text x="14" y="614" font-size="9.5" fill="#555555">S1 a S6 es el sprint de dos semanas de cada hoja. * Borde punteado: nuevo o ampliado frente a la EDT del canon.</text>
+<text x="14" y="629" font-size="9.5" fill="#555555">Fuera del alcance, y por eso ausentes: CU-06, CU-08, CU-12, CU-14 y CU-16.</text>
+</svg>
