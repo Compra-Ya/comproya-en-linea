@@ -1,0 +1,58 @@
+{
+  "generado": "2026-11-17",
+  "arquitectura": {
+    "regla": "un módulo de negocio solo importa de otro su *.module o su *.service (docs/arquitectura.md, sección 3)",
+    "modulos_evaluados": [
+      "pedido",
+      "cuenta",
+      "auth",
+      "auditoria"
+    ],
+    "archivos_evaluados": 42,
+    "violaciones": [],
+    "archivos_conformes": 42
+  },
+  "configuracion": {
+    "identificados": 27,
+    "controlados": 27,
+    "sin_controlar": []
+  },
+  "npm_audit_produccion": {
+    "backend": {
+      "info": 0,
+      "low": 0,
+      "moderate": 6,
+      "high": 5,
+      "critical": 1,
+      "total": 12
+    },
+    "frontend": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 2,
+      "critical": 1,
+      "total": 3
+    }
+  },
+  "lineas_ejecutables_backend": 1055,
+  "jira_sprint2": {
+    "fuente": "Jira SCRUM, consultas del 17-nov-2026 (antes y después de cerrar las subtareas con la evidencia del segundo entregable)",
+    "comprometidas_h": 56,
+    "antes": {
+      "historias_finalizadas": 0,
+      "subtareas_finalizadas": 8,
+      "subtareas_total": 24,
+      "horas_finalizadas": 11,
+      "ultimo_cambio_de_estado": "2026-11-10T16:16:48-05:00"
+    },
+    "despues": {
+      "historias_finalizadas": 4,
+      "subtareas_finalizadas": 24,
+      "subtareas_total": 24,
+      "horas_finalizadas": 56,
+      "cierre_del_sprint": "2026-11-17T22:36:13Z"
+    },
+    "fin_planificado": "2026-11-13"
+  }
+}
