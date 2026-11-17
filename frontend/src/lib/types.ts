@@ -168,3 +168,36 @@ export interface Comprobante extends DatosEnvio {
   codigoCupon: string | null;
   total: number;
 }
+
+// --- Cuenta interna y consulta de ventas (REQ-016, REQ-017) ---------------------------------------------------------
+export interface SesionInterna {
+  staff: { id: number; name: string; email: string; role: string };
+  accessToken: string;
+}
+
+export type EstadoDeVenta = "PAID" | "PREPARING" | "READY_FOR_PICKUP" | "DELIVERED";
+
+export interface Venta {
+  id: number;
+  fecha: string;
+  estado: EstadoDeVenta;
+  cliente: { id: number; nombre: string };
+  productos: Array<{ nombre: string; cantidad: number }>;
+  unidades: number;
+  subtotal: number;
+  descuento: number;
+  total: number;
+  codigoCupon: string | null;
+  porcentajeCupon: number | null;
+  envio: { nombre: string | null; telefono: string | null; direccion: string; ciudad: string | null; notas: string | null } | null;
+}
+
+export interface ListaDeVentas {
+  items: Venta[];
+  /** Cantidad de ventas que cumplen el filtro (todas las páginas). */
+  total: number;
+  page: number;
+  pageSize: number;
+  /** Suma de los totales de todas las ventas del filtro, calculada por el servidor. */
+  totalVendido: number;
+}

@@ -1,6 +1,6 @@
 # Frontend — ComproYa en Línea
 
-Next.js 14 (App Router, TypeScript estricto). Las pantallas del Cliente digital y las de los roles internos (`/interno/publicar`, `/interno/pedidos/[id]`) viven en este mismo proyecto, separadas por ruta — no son dos aplicaciones distintas (`../docs/arquitectura.md` sección 4).
+Next.js 14 (App Router, TypeScript estricto). Las pantallas del Cliente digital y las de los roles internos (`/admin/publicar`, `/admin/pedidos/[id]`) viven en este mismo proyecto, separadas por ruta — no son dos aplicaciones distintas (`../docs/arquitectura.md` sección 4).
 
 La interfaz del Cliente digital sigue el diseño aprobado en `design/rediseno/` y el sistema de diseño de `design/design-system/`. El flujo es la venta digital con envío (`../docs/modo-venta-digital.md`): catálogo → producto → carrito → datos y envío → pago con tarjeta → pedido confirmado → mis pedidos.
 
@@ -18,8 +18,10 @@ La interfaz del Cliente digital sigue el diseño aprobado en `design/rediseno/` 
 | `/pedidos` | Mis pedidos | con pedidos, vacío, sin sesión, cargando | — |
 | `/ingresar`, `/registro` | Ingresar / Crear cuenta | ingresar, con error, crear cuenta, con errores | CU-04, CU-05 |
 | `/privacidad` | — (sin rediseño) | — | CU-05 |
-| `/interno/publicar`, `/interno/pedidos/[id]` | — (sin rediseño) | — | CU-01 y transiciones internas |
+| `/admin/ingresar`, `/admin/publicar`, `/admin/ventas`, `/admin/pedidos/[id]` | — (sin rediseño) | — | CU-01, consulta de ventas (REQ-016) y transiciones internas |
 | `/dev/componentes` | Galería de los 29 componentes | — | solo para revisión visual |
+
+**El panel del Coordinador de Canal Digital no tiene botón en la tienda:** se entra solo escribiendo la dirección `/admin` (lleva a `/admin/ingresar` si no hay sesión interna). Usa una sesión aparte de la del Cliente digital (`comproya_staff_token` en `localStorage`, `interno: true` en `src/lib/api.ts`) y el marco `src/components/PanelInterno.tsx`. `e2e/capturas/verificar-interno.mjs` lo recorre en un navegador y comprueba que ninguna pantalla de la tienda enlace a `/admin`.
 
 `/cuenta` redirige a `/privacidad` (`next.config.js`). El sitio no se indexa: `robots` en el layout y `X-Robots-Tag` en `next.config.js`.
 
@@ -36,7 +38,7 @@ npm run build && npm run lint  # ambos deben terminar sin errores
 
 La fuente de verdad es `design/design-system/` (tokens, componentes, reglas). El frontend la consume así:
 
-- `src/app/globals.css`: el bloque `:root` es una copia literal de `design/design-system/tokens.css`, más alias de los nombres anteriores (`--orange`, `--navy`…), y los estilos de `/privacidad` e `/interno`. No se editan los tokens aquí: se cambian en el sistema de diseño y se vuelven a copiar. `npm run tokens:comprobar` falla si dejan de coincidir.
+- `src/app/globals.css`: el bloque `:root` es una copia literal de `design/design-system/tokens.css`, más alias de los nombres anteriores (`--orange`, `--navy`…), y los estilos de `/privacidad` e `/admin`. No se editan los tokens aquí: se cambian en el sistema de diseño y se vuelven a copiar. `npm run tokens:comprobar` falla si dejan de coincidir.
 - `src/components/ui/`: los 29 componentes en TSX, con las props de `design/design-system/components/index.d.ts` (`ui/tipos.ts` es copia generada). `bundle.js` es solo referencia de comportamiento y no se importa. Se importan siempre desde `@/components/ui`.
 - Archivos generados por `npm run ui:sincronizar` (y verificados por `npm run ui:comprobar`): `src/components/ui/ui.css` (de `bundle.css`), `src/components/ui/tipos.ts` y `src/app/pantallas.css` (de `design/rediseno/pantallas/screens.css`). No se editan a mano.
 - Extensiones al sistema de diseño, todas en `globals.css` o en el componente, nunca en los archivos generados: el `Tooltip` se desplaza para no salirse de la ventana (390 px), y el área de toque de 44 px del logo, el «?», las migas y «Buscar» se amplía con un pseudo-elemento invisible.
