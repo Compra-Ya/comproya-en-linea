@@ -1,5 +1,8 @@
 import { Body, Controller, ForbiddenException, Get, Param, ParseIntPipe, Post, UseGuards } from "@nestjs/common";
+import { StaffRole } from "@prisma/client";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
+import { AccesoInterno, StaffActual } from "../auth/acceso-interno";
+import { StaffAutenticado } from "../auth/jwt-staff.strategy";
 import { CurrentCustomer } from "../auth/current-customer.decorator";
 import { AuditoriaService } from "../auditoria/auditoria.service";
 import { PedidoService } from "./pedido.service";
@@ -44,9 +47,10 @@ export class PedidoController {
   // cancela su propio pedido, por eso además de autenticarse se verifica
   // pertenencia (mismo patrón que PagoService.pedidoDelCliente, usado por
   // GET /pagos/:orderId/comprobante). Los otros tres endpoints de esta
-  // sección son operación de sucursal (Gerente de Tienda), no del cliente
-  // dueño: exigen solo autenticación hasta que exista el rol real de CU-11 a
-  // CU-14 — no se simula un sistema de roles que todavía no existe.
+  // sección son operación de sucursal, no del cliente dueño: exigen la
+  // sesión de la cuenta interna (antes bastaba cualquier cliente con sesión).
+  // El despacho en sucursal está fuera del alcance (docs/alcance), así que esto
+  // solo cierra el acceso; no agrega funciones.
   @UseGuards(JwtAuthGuard)
   @Post(":id/cancelar")
   async cancelar(@CurrentCustomer() customer: { customerId: number }, @Param("id", ParseIntPipe) id: number) {
@@ -59,31 +63,31 @@ export class PedidoController {
     return cancelado;
   }
 
-  @UseGuards(JwtAuthGuard)
+  @AccesoInterno(StaffRole.CHANNEL_COORDINATOR)
   @Post(":id/iniciar-alistamiento")
-  async iniciarAlistamiento(@CurrentCustomer() customer: { customerId: number }, @Param("id", ParseIntPipe) id: number) {
+  async iniciarAlistamiento(@StaffActual() staff: StaffAutenticado, @Param("id", ParseIntPipe) id: number) {
     const resultado = await this.pedido.iniciarAlistamiento(id);
-    await this.auditoria.registrar({ action: "pedido.iniciarAlistamiento", customerId: customer.customerId, orderId: id });
+    await this.auditoria.registrar({ action: "pedido.iniciarAlistamiento", actor: `coordinador:${staff.staffId}`, orderId: id });
     return resultado;
   }
 
-  @UseGuards(JwtAuthGuard)
+  @AccesoInterno(StaffRole.CHANNEL_COORDINATOR)
   @Post(":id/listo-para-retiro")
-  async marcarListoParaRetiro(@CurrentCustomer() customer: { customerId: number }, @Param("id", ParseIntPipe) id: number) {
+  async marcarListoParaRetiro(@StaffActual() staff: StaffAutenticado, @Param("id", ParseIntPipe) id: number) {
     const resultado = await this.pedido.marcarListoParaRetiro(id);
-    await this.auditoria.registrar({ action: "pedido.marcarListoParaRetiro", customerId: customer.customerId, orderId: id });
+    await this.auditoria.registrar({ action: "pedido.marcarListoParaRetiro", actor: `coordinador:${staff.staffId}`, orderId: id });
     return resultado;
   }
 
-  @UseGuards(JwtAuthGuard)
+  @AccesoInterno(StaffRole.CHANNEL_COORDINATOR)
   @Post(":id/retirar")
   async retirar(
-    @CurrentCustomer() customer: { customerId: number },
+    @StaffActual() staff: StaffAutenticado,
     @Param("id", ParseIntPipe) id: number,
     @Body() dto: RetirarPedidoDto,
   ) {
     const resultado = await this.pedido.retirarConCodigo(id, dto.pickupCode);
-    await this.auditoria.registrar({ action: "pedido.retirar", customerId: customer.customerId, orderId: id });
+    await this.auditoria.registrar({ action: "pedido.retirar", actor: `coordinador:${staff.staffId}`, orderId: id });
     return resultado;
   }
 }

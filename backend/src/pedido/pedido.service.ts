@@ -170,15 +170,14 @@ export class PedidoService {
     return { codigo: cupon.code, porcentaje, subtotal: carrito.subtotal, ...aplicarCupon(carrito.subtotal, porcentaje) };
   }
 
-  // RN-09: un pedido solo puede cancelarse mientras no haya iniciado su
-  // alistamiento en sucursal. Alcance mínimo de "operación" (sprint 6, ver
-  // Resultados_Pruebas_ComproYa.md): estos cuatro métodos solo mueven la
-  // máquina de estados de Pedido — no hay pantallas ni rol de Gerente de
-  // Tienda completos, eso sigue siendo CU-11 a CU-14.
+  // RN-07: un pedido solo puede cancelarse mientras no se haya pagado (CU-10); al
+  // cancelarlo se liberan sus unidades reservadas. Los otros tres métodos de
+  // esta sección (alistamiento y retiro) son el alcance mínimo de "operación"
+  // (ver Resultados_Pruebas_ComproYa.md): solo mueven la máquina de estados.
   async cancelar(orderId: number) {
     const order = await this.obtener(orderId);
-    if (order.status !== OrderStatus.CREATED && order.status !== OrderStatus.PAID) {
-      throw new BadRequestException("El pedido ya inició alistamiento y no admite cancelación (RN-09)");
+    if (order.status !== OrderStatus.CREATED && order.status !== OrderStatus.PAYMENT_FAILED) {
+      throw new BadRequestException("El pedido ya se pagó o ya está cancelado y no admite cancelación (RN-07)");
     }
     await this.marcarEstado(orderId, OrderStatus.CANCELLED);
     await this.liberarReservasDelPedido(orderId);

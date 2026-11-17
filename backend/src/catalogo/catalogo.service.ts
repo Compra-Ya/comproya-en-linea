@@ -5,8 +5,12 @@ import { PublicarProductoDto } from "./dto/publicar-producto.dto";
 import { MAX_UNIDADES_POR_PRODUCTO } from "../comun/limites";
 
 // Módulo catalogo: sub-problemas SP-01 (gobierno del catálogo) y SP-02
-// (disponibilidad) — docs/arquitectura.md sección 3. Sprint 1, sin
-// autenticación (decisión D-01 del canon).
+// (disponibilidad) — docs/arquitectura.md sección 3. La publicación la hace la cuenta interna
+// (CatalogoController); la consulta es pública.
+
+// La tienda tiene una sola sucursal (alcance reducido, docs/alcance). Si la base aún no tiene ninguna, la primera
+// publicación con existencias la crea.
+const SUCURSAL_UNICA = { name: "ComproYa", city: "Bogotá" };
 @Injectable()
 export class CatalogoService {
   constructor(
@@ -35,7 +39,7 @@ export class CatalogoService {
       create: { name: dto.categoryName },
     });
 
-    return this.prisma.product.upsert({
+    const producto = await this.prisma.product.upsert({
       where: { homologatedCode: dto.homologatedCode },
       update: {
         name: dto.name,
@@ -55,6 +59,21 @@ export class CatalogoService {
         published: true,
       },
     });
+
+    // Sin existencias el producto se publica pero no se puede comprar (RN-03 da 0 unidades). Con ellas, se guardan en la
+    // sucursal única, que es de donde salen las unidades que se reservan al confirmar un pedido (RN-05).
+    if (dto.existencias !== undefined) {
+      const sucursal =
+        (await this.prisma.branch.findFirst({ orderBy: { id: "asc" } })) ?? (await this.prisma.branch.create({ data: SUCURSAL_UNICA }));
+      await this.prisma.availability.upsert({
+        where: { productId_branchId: { productId: producto.id, branchId: sucursal.id } },
+        update: { erpUnits: dto.existencias, syncedAt: new Date() },
+        create: { productId: producto.id, branchId: sucursal.id, erpUnits: dto.existencias, syncedAt: new Date() },
+      });
+    }
+
+    const unidades = await this.erp.unidadesDisponiblesPorProductos([producto.id]);
+    return { ...producto, unidadesDisponibles: unidades.get(producto.id) ?? 0 };
   }
 
   // CU-02 Búsqueda de productos. Umbral del canon: P95 ≤ 1,5 s desde 3

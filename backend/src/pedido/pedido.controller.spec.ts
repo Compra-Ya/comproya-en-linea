@@ -2,7 +2,7 @@ import { Test } from "@nestjs/testing";
 import { INestApplication } from "@nestjs/common";
 import request from "supertest";
 import { JwtService } from "@nestjs/jwt";
-import { OrderStatus } from "@prisma/client";
+import { OrderStatus, StaffRole } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 import { PrismaModule } from "../prisma/prisma.module";
 import { resetDb } from "../test-utils/reset-db";
@@ -42,7 +42,7 @@ describe("PedidoController (autenticación, pertenencia y auditoría)", () => {
     await prisma.$disconnect();
   });
 
-  async function crearPedidoPagado(documento: string) {
+  async function crearPedidoPagado(documento: string, pagar = true) {
     const category = await prisma.category.create({ data: { name: `Cat-${documento}` } });
     const product = await prisma.product.create({
       data: { homologatedCode: `HC-${documento}`, name: "P", categoryId: category.id, cost: 10, digitalPrice: 20 },
@@ -56,9 +56,17 @@ describe("PedidoController (autenticación, pertenencia y auditoría)", () => {
     });
     await carrito.agregarItem(customer.id, null, { productId: product.id, quantity: 1 });
     const order = await pedido.confirmar(customer.id, { branchId: branch.id });
-    await pedido.marcarEstado(order.id, OrderStatus.PAID);
+    if (pagar) await pedido.marcarEstado(order.id, OrderStatus.PAID);
     const token = jwt.sign({ sub: customer.id, email: customer.email });
     return { customer, order, token };
+  }
+
+  // Cuenta interna (REQ-017): las transiciones de alistamiento y retiro las opera el Coordinador de Canal Digital, no un cliente.
+  async function crearSesionInterna() {
+    const staff = await prisma.staffUser.create({
+      data: { email: "coordinador@prueba.local", name: "Coordinador", passwordHash: "x", role: StaffRole.CHANNEL_COORDINATOR },
+    });
+    return { staff, token: jwt.sign({ sub: staff.id, email: staff.email, tipo: "staff", rol: staff.role }) };
   }
 
   it("Corrección CU-2 #4: GET /pedidos/:id con token de otro cliente -> 403", async () => {
@@ -95,8 +103,8 @@ describe("PedidoController (autenticación, pertenencia y auditoría)", () => {
     expect(sinCambio?.status).toBe(OrderStatus.PAID);
   });
 
-  it("POST /pedidos/:id/cancelar con el token del dueño -> 201, cancela y queda auditado", async () => {
-    const { order, token, customer } = await crearPedidoPagado("CC-AUTH-04");
+  it("POST /pedidos/:id/cancelar con el token del dueño y el pedido sin pagar -> 201, cancela y queda auditado (RN-07)", async () => {
+    const { order, token, customer } = await crearPedidoPagado("CC-AUTH-04", false);
     await request(app.getHttpServer())
       .post(`/pedidos/${order.id}/cancelar`)
       .set("Authorization", `Bearer ${token}`)
@@ -107,24 +115,48 @@ describe("PedidoController (autenticación, pertenencia y auditoría)", () => {
     expect(auditoria?.customerId).toBe(customer.id);
   });
 
+  it("POST /pedidos/:id/cancelar con el token del dueño y el pedido ya pagado -> 400, no cambia y no se audita (RN-07, TEST-013)", async () => {
+    const { order, token } = await crearPedidoPagado("CC-AUTH-04B");
+    await request(app.getHttpServer())
+      .post(`/pedidos/${order.id}/cancelar`)
+      .set("Authorization", `Bearer ${token}`)
+      .expect(400);
+    const actualizado = await prisma.order.findUnique({ where: { id: order.id } });
+    expect(actualizado?.status).toBe(OrderStatus.PAID);
+    const auditoria = await prisma.auditLog.findFirst({ where: { orderId: order.id, action: "pedido.cancelar" } });
+    expect(auditoria).toBeNull();
+  });
+
   it("POST /pedidos/:id/iniciar-alistamiento sin token -> 401", async () => {
     const { order } = await crearPedidoPagado("CC-AUTH-05");
     await request(app.getHttpServer()).post(`/pedidos/${order.id}/iniciar-alistamiento`).expect(401);
   });
 
-  it("POST /pedidos/:id/iniciar-alistamiento con cualquier cliente autenticado -> 201 (operación de sucursal, sin verificación de pertenencia) y queda auditado", async () => {
+  it("POST /pedidos/:id/iniciar-alistamiento con la sesión de un cliente -> 401: la operación ya no está abierta a cualquier cliente", async () => {
     const { order } = await crearPedidoPagado("CC-AUTH-06");
-    const { token: tokenOtroCliente, customer: otroCliente } = await crearPedidoPagado("CC-AUTH-07");
+    const { token: tokenOtroCliente } = await crearPedidoPagado("CC-AUTH-07");
     await request(app.getHttpServer())
       .post(`/pedidos/${order.id}/iniciar-alistamiento`)
       .set("Authorization", `Bearer ${tokenOtroCliente}`)
+      .expect(401);
+    const actualizado = await prisma.order.findUnique({ where: { id: order.id } });
+    expect(actualizado?.status).toBe(OrderStatus.PAID);
+  });
+
+  it("POST /pedidos/:id/iniciar-alistamiento con la sesión interna -> 201 y queda auditado con el actor interno", async () => {
+    const { order } = await crearPedidoPagado("CC-AUTH-06B");
+    const { staff, token } = await crearSesionInterna();
+    await request(app.getHttpServer())
+      .post(`/pedidos/${order.id}/iniciar-alistamiento`)
+      .set("Authorization", `Bearer ${token}`)
       .expect(201);
     const actualizado = await prisma.order.findUnique({ where: { id: order.id } });
     expect(actualizado?.status).toBe(OrderStatus.PREPARING);
     const auditoria = await prisma.auditLog.findFirst({
       where: { orderId: order.id, action: "pedido.iniciarAlistamiento" },
     });
-    expect(auditoria?.customerId).toBe(otroCliente.id);
+    expect(auditoria?.actor).toBe(`coordinador:${staff.id}`);
+    expect(auditoria?.customerId).toBeNull();
   });
 
   it("POST /pedidos/:id/listo-para-retiro sin token -> 401", async () => {
@@ -132,8 +164,9 @@ describe("PedidoController (autenticación, pertenencia y auditoría)", () => {
     await request(app.getHttpServer()).post(`/pedidos/${order.id}/listo-para-retiro`).expect(401);
   });
 
-  it("POST /pedidos/:id/listo-para-retiro con cliente autenticado -> 201 y queda auditado", async () => {
-    const { order, token, customer } = await crearPedidoPagado("CC-AUTH-09");
+  it("POST /pedidos/:id/listo-para-retiro con la sesión interna -> 201 y queda auditado", async () => {
+    const { order } = await crearPedidoPagado("CC-AUTH-09");
+    const { staff, token } = await crearSesionInterna();
     await pedido.iniciarAlistamiento(order.id);
     await request(app.getHttpServer())
       .post(`/pedidos/${order.id}/listo-para-retiro`)
@@ -144,7 +177,7 @@ describe("PedidoController (autenticación, pertenencia y auditoría)", () => {
     const auditoria = await prisma.auditLog.findFirst({
       where: { orderId: order.id, action: "pedido.marcarListoParaRetiro" },
     });
-    expect(auditoria?.customerId).toBe(customer.id);
+    expect(auditoria?.actor).toBe(`coordinador:${staff.id}`);
   });
 
   it("POST /pedidos/:id/retirar sin token -> 401", async () => {
@@ -155,8 +188,9 @@ describe("PedidoController (autenticación, pertenencia y auditoría)", () => {
       .expect(401);
   });
 
-  it("POST /pedidos/:id/retirar con cliente autenticado -> 201 y queda auditado", async () => {
-    const { order, token, customer } = await crearPedidoPagado("CC-AUTH-11");
+  it("POST /pedidos/:id/retirar con la sesión interna -> 201 y queda auditado", async () => {
+    const { order } = await crearPedidoPagado("CC-AUTH-11");
+    const { staff, token } = await crearSesionInterna();
     await pedido.iniciarAlistamiento(order.id);
     await pedido.marcarListoParaRetiro(order.id);
     await request(app.getHttpServer())
@@ -167,7 +201,7 @@ describe("PedidoController (autenticación, pertenencia y auditoría)", () => {
     const actualizado = await prisma.order.findUnique({ where: { id: order.id } });
     expect(actualizado?.status).toBe(OrderStatus.DELIVERED);
     const auditoria = await prisma.auditLog.findFirst({ where: { orderId: order.id, action: "pedido.retirar" } });
-    expect(auditoria?.customerId).toBe(customer.id);
+    expect(auditoria?.actor).toBe(`coordinador:${staff.id}`);
   });
 
   it("POST /pedidos/confirmar con cliente autenticado queda auditado", async () => {

@@ -128,11 +128,7 @@ describe("PagoService (RN-06, CU-15, CU-16, CU-17)", () => {
     const { order, customer } = await crearPedidoConfirmado();
     await expect(pago.obtenerComprobante(customer.id, order.id)).rejects.toThrow(/no está disponible/);
 
-    await pago.crearSesionTarjeta(customer.id, order.id);
-    await pago.manejarEventoStripe({
-      type: "checkout.session.completed",
-      data: { object: { metadata: { orderId: String(order.id) }, payment_intent: "pi_test_falso", id: "cs_test_falso" } },
-    } as any);
+    // RN-07: un pedido sin pagar sí se cancela, y entonces tampoco hay comprobante.
     await pedido.cancelar(order.id);
     await expect(pago.obtenerComprobante(customer.id, order.id)).rejects.toThrow(/no está disponible/);
   });

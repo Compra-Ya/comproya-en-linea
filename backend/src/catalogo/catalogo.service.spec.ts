@@ -42,6 +42,61 @@ describe("CatalogoService (RN-01, RN-02, RN-03, RN-04)", () => {
     expect(producto.published).toBe(true);
   });
 
+  it("CU-01: con existencias, el producto queda comprable en la sucursal única: unidades = existencias - umbral (RN-03)", async () => {
+    const producto = await catalogo.publicarProducto({
+      homologatedCode: "ABC-000010",
+      name: "Producto con existencias",
+      categoryName: "Categoría",
+      cost: 10,
+      digitalPrice: 20,
+      existencias: 20,
+    });
+    expect(producto.unidadesDisponibles).toBe(15); // 20 - umbral de seguridad 5 - 0 reservas
+    expect(await prisma.branch.count()).toBe(1);
+    const detalle = await catalogo.obtenerProducto(producto.id);
+    expect(detalle.unidadesDisponibles).toBe(15);
+
+    // Volver a publicar con otras existencias las reemplaza en la misma fila, sin crear otra sucursal ni otra fila.
+    const republicado = await catalogo.publicarProducto({
+      homologatedCode: "ABC-000010",
+      name: "Producto con existencias",
+      categoryName: "Categoría",
+      cost: 10,
+      digitalPrice: 20,
+      existencias: 8,
+    });
+    expect(republicado.unidadesDisponibles).toBe(3);
+    expect(await prisma.availability.count()).toBe(1);
+    expect(await prisma.branch.count()).toBe(1);
+  });
+
+  it("CU-01: sin existencias el producto se publica pero no se puede comprar (0 unidades) y no crea sucursal", async () => {
+    const producto = await catalogo.publicarProducto({
+      homologatedCode: "ABC-000011",
+      name: "Producto sin existencias",
+      categoryName: "Categoría",
+      cost: 10,
+      digitalPrice: 20,
+    });
+    expect(producto.unidadesDisponibles).toBe(0);
+    expect(await prisma.branch.count()).toBe(0);
+  });
+
+  it("CU-01: usa la sucursal que ya existe en vez de crear otra", async () => {
+    const sucursal = await prisma.branch.create({ data: { name: "ComproYa", city: "Bogotá" } });
+    const producto = await catalogo.publicarProducto({
+      homologatedCode: "ABC-000012",
+      name: "Producto en la sucursal existente",
+      categoryName: "Categoría",
+      cost: 10,
+      digitalPrice: 20,
+      existencias: 12,
+    });
+    const fila = await prisma.availability.findFirstOrThrow({ where: { productId: producto.id } });
+    expect(fila.branchId).toBe(sucursal.id);
+    expect(await prisma.branch.count()).toBe(1);
+  });
+
   it("RN-02: rechaza un precio digital inferior al costo sin aprobación de gerencia comercial", async () => {
     await expect(
       catalogo.publicarProducto({

@@ -2,6 +2,8 @@ import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { OptionalJwtAuthGuard } from "../auth/optional-jwt-auth.guard";
 import { CurrentCustomer } from "../auth/current-customer.decorator";
+import { AccesoInterno, StaffActual } from "../auth/acceso-interno";
+import { StaffAutenticado } from "../auth/jwt-staff.strategy";
 import { CuentaService } from "./cuenta.service";
 import { RegistrarClienteDto } from "./dto/registrar-cliente.dto";
 import { LoginDto } from "./dto/login.dto";
@@ -20,6 +22,18 @@ export class CuentaController {
   @Post("login")
   login(@Body() dto: LoginDto) {
     return this.cuenta.login(dto);
+  }
+
+  // Cuenta interna (Coordinador de Canal Digital): sesión separada de la del Cliente digital.
+  @Post("interno/login")
+  loginInterno(@Body() dto: LoginDto) {
+    return this.cuenta.loginInterno(dto);
+  }
+
+  @AccesoInterno()
+  @Get("interno/yo")
+  perfilInterno(@StaffActual() staff: StaffAutenticado) {
+    return this.cuenta.perfilInterno(staff.staffId);
   }
 
   @UseGuards(JwtAuthGuard)

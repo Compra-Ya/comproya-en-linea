@@ -59,8 +59,8 @@ function testCatalog(): string[] {
   if (missingBrand === catalog.length) throw new Error("Ningún producto trae marca");
 
   const branchCount = BRANCHES.length;
-  if (branchCount !== 8) throw new Error(`Se esperaban 8 sucursales (canon, sección 10); hay ${branchCount}`);
-  console.log(`Sucursales: ${branchCount} (coincide con la cifra oficial del canon)`);
+  if (branchCount !== 1) throw new Error(`Se esperaba 1 sucursal (alcance reducido, docs/alcance); hay ${branchCount}`);
+  console.log(`Sucursales: ${branchCount} (sucursal única del alcance reducido)`);
 
   let stale = 0;
   const samples = 5000;

@@ -17,6 +17,8 @@
     "seed:cart": "ts-node prisma/seed-cart.ts",
     "seed:order": "ts-node prisma/seed-order.ts",
     "seed:payment": "ts-node prisma/seed-payment.ts",
+    "seed:staff": "ts-node prisma/seed-staff.ts",
+    "sucursal-unica": "ts-node prisma/consolidar-sucursal-unica.ts",
     "seed:all": "ts-node prisma/seed-all.ts",
     "test:generation": "ts-node scripts/test-generation.ts",
     "test": "jest --runInBand",

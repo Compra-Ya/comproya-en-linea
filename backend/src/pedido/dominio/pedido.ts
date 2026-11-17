@@ -21,10 +21,12 @@ export class Pedido {
     return this.lineas.reduce((acc, linea) => acc + linea.subtotal(), 0);
   }
 
-  // RN-09: un pedido solo puede cancelarse mientras no haya iniciado su
-  // alistamiento en sucursal.
+  // RN-07 (docs/alcance): un pedido solo puede cancelarse mientras no se haya
+  // pagado. Antes esta clase aplicaba la regla del canon 1.0 (RN-09: hasta el
+  // alistamiento), que permitía cancelar un pedido pagado y no tiene reembolso
+  // definido en este alcance.
   puedeCancelarse(): boolean {
-    return this.status === OrderStatus.CREATED || this.status === OrderStatus.PAID;
+    return this.status === OrderStatus.CREATED || this.status === OrderStatus.PAYMENT_FAILED;
   }
 
   // RN-08: el código de retiro vence a los 5 días calendario.

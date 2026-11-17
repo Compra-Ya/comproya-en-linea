@@ -1,18 +1,28 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Query } from "@nestjs/common";
+import { StaffRole } from "@prisma/client";
+import { AccesoInterno, StaffActual } from "../auth/acceso-interno";
+import { StaffAutenticado } from "../auth/jwt-staff.strategy";
+import { AuditoriaService } from "../auditoria/auditoria.service";
 import { CatalogoService } from "./catalogo.service";
 import { PublicarProductoDto } from "./dto/publicar-producto.dto";
 
-// Sprint 1 — sin autenticación (decisión D-01 del canon). El control de que
-// solo el Coordinador de Canal Digital publique productos queda para cuando
-// el módulo cuenta (sprint 2) agregue roles internos; por ahora el endpoint
-// existe para que CU-01 sea ejercitable.
+// La consulta del catálogo es pública (Cliente digital, invitado incluido). Las operaciones internas (publicar un
+// producto, sincronizar) exigen la sesión de la cuenta interna del Coordinador de Canal Digital (REQ-017); el sprint 1
+// las dejó sin autenticación por la decisión D-01 del canon, que ya no aplica.
 @Controller("catalogo")
 export class CatalogoController {
-  constructor(private readonly catalogo: CatalogoService) {}
+  constructor(
+    private readonly catalogo: CatalogoService,
+    private readonly auditoria: AuditoriaService,
+  ) {}
 
+  // CU-01: crea y publica un producto. Queda auditado quién lo hizo.
+  @AccesoInterno(StaffRole.CHANNEL_COORDINATOR)
   @Post("productos")
-  publicarProducto(@Body() dto: PublicarProductoDto) {
-    return this.catalogo.publicarProducto(dto);
+  async publicarProducto(@StaffActual() staff: StaffAutenticado, @Body() dto: PublicarProductoDto) {
+    const producto = await this.catalogo.publicarProducto(dto);
+    await this.auditoria.registrar({ action: `producto.publicar:${producto.homologatedCode}`, actor: `coordinador:${staff.staffId}` });
+    return producto;
   }
 
   @Get("productos")
@@ -42,6 +52,7 @@ export class CatalogoController {
 
   // Endpoint interno: en producción lo dispara Cloud Scheduler cada ≤ 5 min
   // (docs/arquitectura.md sección 8) imitando el proceso por lotes del ERP.
+  @AccesoInterno(StaffRole.CHANNEL_COORDINATOR)
   @Post("sucursales/:id/sincronizar")
   sincronizar(@Param("id", ParseIntPipe) id: number) {
     return this.catalogo.sincronizarSucursal(id);

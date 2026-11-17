@@ -24,5 +24,6 @@ export async function resetDb(prisma: PrismaClient) {
     prisma.product.deleteMany(),
     prisma.category.deleteMany(),
     prisma.branch.deleteMany(),
+    prisma.staffUser.deleteMany(),
   ]);
 }

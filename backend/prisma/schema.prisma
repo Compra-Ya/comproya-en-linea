@@ -125,6 +125,26 @@ model Customer {
   @@map("customers")
 }
 
+// Cuenta interna del canal (alcance reducido, docs/alcance): quien administra el catálogo y consulta las
+// ventas inicia sesión aquí, separada de la cuenta del Cliente digital. Hoy hay un solo rol, el
+// Coordinador de Canal Digital (canon, sección 4); el enum deja lugar a otros sin cambiar el esquema de la cuenta.
+enum StaffRole {
+  CHANNEL_COORDINATOR
+}
+
+model StaffUser {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  name         String
+  passwordHash String    @map("password_hash")
+  role         StaffRole @default(CHANNEL_COORDINATOR)
+  // Una cuenta desactivada no inicia sesión ni conserva el acceso con un token ya emitido.
+  active       Boolean   @default(true)
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  @@map("staff_users")
+}
+
 // Máquina de estados de Consentimiento (Plan_Pruebas_ComproYa.docx, sección
 // 9.2, PE-01 a PE-05): Pendiente -> Activo/Revocado -> Suprimido (terminal).
 // No es un identificador textual del canon: es una interpretación técnica

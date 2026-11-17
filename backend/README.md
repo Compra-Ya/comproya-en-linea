@@ -18,17 +18,28 @@ Modelos, campos y scripts van en **inglés** (buenas prácticas de base de datos
 
 Infraestructura transversal (no un sub-problema propio del canon): `src/auth` (JWT propio, `docs/arquitectura.md` sección 7), `src/prisma` (cliente único de Prisma).
 
+## Alcance reducido y cuenta interna
+
+El alcance vigente es el de `docs/alcance/` (una sola sucursal con existencias unificadas, con el ERP reducido a una interfaz simulada, 12 de los 17 casos de uso del canon). Lo que cambió en el servidor:
+
+- **Cuenta interna del Coordinador de Canal Digital** (`StaffUser`, rol `CHANNEL_COORDINATOR`): `POST /api/cuenta/interno/login` y `GET /api/cuenta/interno/yo`. Su token lleva `tipo: "staff"`, dura 12 horas y no sirve como sesión de cliente (ni al revés). Se crea con `npm run seed:staff` (variables `STAFF_SEED_*` en `.env`; los valores de ejemplo, solo para desarrollo local, están en `.env.example`).
+- **Rutas internas** protegidas con `@AccesoInterno(StaffRole.CHANNEL_COORDINATOR)` (`src/auth/acceso-interno.ts`): `POST /catalogo/productos`, `POST /catalogo/sucursales/:id/sincronizar`, `POST /pedidos/:id/iniciar-alistamiento`, `listo-para-retiro`, `retirar`, y `GET /api/ventas`. Sin la sesión interna responden 401.
+- **Consulta de ventas** (`GET /api/ventas?desde=&hasta=&estado=&page=`): pedidos pagados y vigentes, con el total vendido del filtro. Las fechas son días de Colombia (UTC−5).
+- **Publicar un producto** acepta `existencias`: son las que reportaría el ERP simulado (`AdaptadorErpSimulado`, tras la interfaz `PuertoErp`); se guardan en la sucursal única y de ahí salen las unidades disponibles (RN-03). Sin existencias el producto se publica, pero no se puede comprar. El negocio tiene POS y ERP; el canal solo habla con el ERP, y en este proyecto esa conexión es ficticia.
+- **Una sola sucursal:** la siembra crea una (`ComproYa`). Para dejar una base ya sembrada con varias: `npm run sucursal-unica -- --dry-run` (muestra los conteos y deshace) y luego `npm run sucursal-unica`. Haz un respaldo antes; no lo corras contra la base desplegada sin confirmar.
+
 ## Cómo correr en local
 
 ```bash
 npm install
-cp .env.example .env             # completar DATABASE_URL, JWT_SECRET, Stripe (ver abajo)
+cp .env.example .env             # completar DATABASE_URL, JWT_SECRET, Stripe y STAFF_SEED_* (ver abajo)
 
 # Postgres local (si no tienes Cloud SQL a mano):
 cd .. && docker compose up -d && cd backend
 
 npm run prisma:migrate           # crea las tablas (ya migradas si vienes del historial de este repo)
 npm run seed:all                 # catálogo + cuentas + carritos + pedidos + pagos de ejemplo
+npm run seed:staff               # cuenta interna del Coordinador (entra por /admin en el frontend)
 
 npm run start:dev                # http://localhost:3001/api
 ```
@@ -84,6 +95,7 @@ npm run seed:cart           # carritos, ítems, productos complementarios
 npm run seed:order          # pedidos, reservas, historial, cupones de lealtad
 npm run seed:payment        # pagos
 npm run seed:all            # corre los cinco anteriores en orden
+npm run seed:staff          # cuenta interna del Coordinador de Canal Digital (no la incluye seed:all)
 ```
 
 Invariantes que cada script valida (no solo el camino feliz): códigos homologados y códigos de retiro únicos, RN-02 (costo < precio digital), RN-04 (~1/6 de la disponibilidad con sincronización vencida), 8-12% de clientes sin identificador de lealtad (discrepancia real del canon, sección 10), al menos un pedido en riesgo (C-13, para P-14) y al menos uno cancelable (RN-09, para P-13).

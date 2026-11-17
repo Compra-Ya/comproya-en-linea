@@ -19,7 +19,7 @@ const EXTRA_ORDER_COUNT = Number(process.env.EXTRA_ORDER_COUNT ?? 20);
 const DRY_RUN = process.argv.includes("--dry-run") || process.env.DRY_RUN === "1";
 
 const SIMULATED_CUSTOMERS = Array.from({ length: 30 }, (_, i) => String(1000000000 + i));
-const SIMULATED_BRANCHES = ["ComproYa Bogotá Centro", "ComproYa Medellín"];
+const SIMULATED_BRANCHES = ["ComproYa"];
 const SIMULATED_PRODUCTS = Array.from({ length: 20 }, (_, i) => `CATA-${String(i + 1).padStart(6, "0")}`);
 
 function validateInvariants(orders: OrderSeed[]) {

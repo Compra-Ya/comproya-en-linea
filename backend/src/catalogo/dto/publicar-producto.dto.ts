@@ -1,4 +1,5 @@
-import { IsBoolean, IsIn, IsNumber, IsOptional, IsString, Matches, Min } from "class-validator";
+import { Type } from "class-transformer";
+import { IsBoolean, IsInt, IsNumber, IsOptional, IsString, Matches, Max, Min } from "class-validator";
 
 // CU-01 Publicación de producto en el catálogo. Actor: Coordinador de Canal
 // Digital (canon, sección 4). `aprobacionGerencialComercial` simula la
@@ -33,4 +34,13 @@ export class PublicarProductoDto {
   @IsOptional()
   @IsBoolean()
   aprobacionGerencialComercial?: boolean;
+
+  // Existencias iniciales: las que reportaría el ERP simulado (alcance reducido: una sola sucursal, ERP simulado). Si se indican, quedan como las existencias
+  // del producto; si no, no se toca lo que ya haya. Las unidades que se pueden vender salen de RN-03.
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt({ message: "Las existencias deben ser un número entero" })
+  @Min(0, { message: "Las existencias no pueden ser negativas" })
+  @Max(100000, { message: "Las existencias no pueden pasar de 100.000 unidades" })
+  existencias?: number;
 }

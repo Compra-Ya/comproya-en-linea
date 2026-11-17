@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { AuditoriaModule } from "../auditoria/auditoria.module";
 import { CatalogoController } from "./catalogo.controller";
 import { CatalogoService } from "./catalogo.service";
 import { AdaptadorErpSimulado } from "./puertos/adaptador-erp-simulado";
@@ -9,6 +10,7 @@ import { ReservaUnidades } from "./dominio/reserva-unidades";
 // sprint 1. Otros módulos (pedido) consumen `AdaptadorErpSimulado` a través
 // de este módulo, nunca importan `Availability`/`Product` directamente.
 @Module({
+  imports: [AuditoriaModule],
   controllers: [CatalogoController],
   providers: [CatalogoService, AdaptadorErpSimulado, VerificadorDeDisponibilidad, ReservaUnidades],
   exports: [CatalogoService, VerificadorDeDisponibilidad, ReservaUnidades],

@@ -1,21 +1,12 @@
 import type { AvailabilitySeed, BranchSeed } from "./types";
 
 /**
- * Sucursales ficticias de la cadena de retail ComproYa. Fijas (no aleatorias)
- * para que la siembra sea reproducible. Son exactamente 8, la cifra oficial
- * de sucursales con ERP centralizado en el piloto (canon, sección 10) — no
- * agregar ni quitar sin actualizar esa cifra en el canon primero.
+ * La sucursal única de ComproYa (alcance reducido, docs/alcance, CHG-001): la tienda tiene un solo punto de venta y
+ * una sola cifra de existencias por producto. El canon (sección 10) hablaba de 8 sucursales con ERP centralizado;
+ * ese alcance se redujo y el esquema conserva Branch/Availability, pero la siembra crea una sola fila.
+ * Para dejar una base ya sembrada con 8 sucursales en este estado: npm run sucursal-unica.
  */
-export const BRANCHES: BranchSeed[] = [
-  { name: "ComproYa Bogotá Centro", city: "Bogotá" },
-  { name: "ComproYa Bogotá Norte", city: "Bogotá" },
-  { name: "ComproYa Medellín", city: "Medellín" },
-  { name: "ComproYa Cali", city: "Cali" },
-  { name: "ComproYa Barranquilla", city: "Barranquilla" },
-  { name: "ComproYa Bucaramanga", city: "Bucaramanga" },
-  { name: "ComproYa Cartagena", city: "Cartagena" },
-  { name: "ComproYa Pereira", city: "Pereira" },
-];
+export const BRANCHES: BranchSeed[] = [{ name: "ComproYa", city: "Bogotá" }];
 
 /**
  * Genera una fila de disponibilidad por sucursal. RN-04: aproximadamente

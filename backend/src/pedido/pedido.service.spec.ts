@@ -97,7 +97,7 @@ describe("PedidoService (RN-05, RN-07, RN-08, RN-09)", () => {
     ).rejects.toThrow();
   });
 
-  it("PE-07: Creado + cancelar() antes de iniciar alistamiento (RN-09) -> Cancelado, reserva liberada", async () => {
+  it("PE-07: Creado + cancelar() mientras no se haya pagado (RN-07) -> Cancelado, reserva liberada", async () => {
     const { product, branch, customer } = await crearProductoConDisponibilidad(20);
     await carrito.agregarItem(customer.id, null, { productId: product.id, quantity: 2 });
     const order = await pedido.confirmar(customer.id, { branchId: branch.id });
@@ -126,7 +126,21 @@ describe("PedidoService (RN-05, RN-07, RN-08, RN-09)", () => {
     expect(sinCambio.status).toBe(OrderStatus.PREPARING);
   });
 
-  it("RN-09: un pedido en alistamiento ya no puede cancelarse", async () => {
+  it("RN-07: un pedido ya pagado no puede cancelarse y conserva sus unidades reservadas", async () => {
+    const { product, branch, customer } = await crearProductoConDisponibilidad(20);
+    await carrito.agregarItem(customer.id, null, { productId: product.id, quantity: 1 });
+    const order = await pedido.confirmar(customer.id, { branchId: branch.id });
+    await pedido.marcarEstado(order.id, OrderStatus.PAID);
+
+    const pagado = await pedido.obtener(order.id);
+    expect(Pedido.desde(pagado).puedeCancelarse()).toBe(false);
+    await expect(pedido.cancelar(order.id)).rejects.toThrow(/RN-07/);
+    expect((await pedido.obtener(order.id)).status).toBe(OrderStatus.PAID);
+    const disponibilidad = await prisma.availability.findFirst({ where: { productId: product.id } });
+    expect(disponibilidad?.reservedUnits).toBe(1);
+  });
+
+  it("RN-07: un pedido en alistamiento tampoco puede cancelarse", async () => {
     const { product, branch, customer } = await crearProductoConDisponibilidad(20);
     await carrito.agregarItem(customer.id, null, { productId: product.id, quantity: 1 });
     const order = await pedido.confirmar(customer.id, { branchId: branch.id });
@@ -135,7 +149,7 @@ describe("PedidoService (RN-05, RN-07, RN-08, RN-09)", () => {
 
     const enAlistamiento = await pedido.obtener(order.id);
     expect(Pedido.desde(enAlistamiento).puedeCancelarse()).toBe(false);
-    await expect(pedido.cancelar(order.id)).rejects.toThrow(/RN-09/);
+    await expect(pedido.cancelar(order.id)).rejects.toThrow(/RN-07/);
   });
 
   it("PE-09: En alistamiento + retiro en tienda -> Listo para retiro", async () => {

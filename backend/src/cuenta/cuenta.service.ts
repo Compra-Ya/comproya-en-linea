@@ -1,7 +1,7 @@
 import { BadRequestException, ConflictException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { ConsentStatus } from "@prisma/client";
 import { JwtService } from "@nestjs/jwt";
-import { Customer } from "@prisma/client";
+import { Customer, StaffUser } from "@prisma/client";
 import * as bcrypt from "bcryptjs";
 import { PrismaService } from "../prisma/prisma.service";
 import { AdaptadorLealtadSimulado } from "./puertos/adaptador-lealtad-simulado";
@@ -9,6 +9,11 @@ import { RegistrarClienteDto } from "./dto/registrar-cliente.dto";
 import { LoginDto } from "./dto/login.dto";
 import { DecidirConsentimientoDto } from "./dto/decidir-consentimiento.dto";
 import { RegistrarEventoDto } from "./dto/registrar-evento.dto";
+
+// Hash de una contraseña que nadie conoce: se compara cuando el correo no existe para que responder "credenciales
+// inválidas" tarde lo mismo exista o no la cuenta interna.
+const HASH_SIN_CUENTA = bcrypt.hashSync("sin-cuenta-interna", 10);
+const VIGENCIA_SESION_INTERNA = "12h";
 
 // Módulo cuenta: sub-problemas SP-07 (identidad del comprador digital) y
 // SP-08 (consentimiento y registro del comportamiento) — sprint 2.
@@ -62,6 +67,32 @@ export class CuentaService {
       customer: this.sinCredenciales(customer),
       accessToken: this.emitirToken(customer.id, customer.email),
     };
+  }
+
+  // Inicio de sesión de la cuenta interna (Coordinador de Canal Digital), separado del de los clientes (REQ-017):
+  // la sesión dura 12 horas y su token lleva tipo "staff", que las rutas del Cliente digital rechazan.
+  async loginInterno(dto: LoginDto) {
+    const staff = await this.prisma.staffUser.findUnique({ where: { email: dto.email.trim().toLowerCase() } });
+    const coincide = await bcrypt.compare(dto.password, staff?.passwordHash ?? HASH_SIN_CUENTA);
+    if (!staff || !staff.active || !coincide) {
+      throw new UnauthorizedException("Credenciales inválidas");
+    }
+    return {
+      staff: this.perfilInternoPublico(staff),
+      accessToken: this.jwt.sign(
+        { sub: staff.id, email: staff.email, tipo: "staff", rol: staff.role },
+        { expiresIn: VIGENCIA_SESION_INTERNA },
+      ),
+    };
+  }
+
+  async perfilInterno(staffId: number) {
+    const staff = await this.prisma.staffUser.findUniqueOrThrow({ where: { id: staffId } });
+    return this.perfilInternoPublico(staff);
+  }
+
+  private perfilInternoPublico(staff: StaffUser) {
+    return { id: staff.id, name: staff.name, email: staff.email, role: staff.role };
   }
 
   // CU-05 Administración del consentimiento — activar/revocar en ≤ 2
