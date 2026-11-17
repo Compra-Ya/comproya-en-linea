@@ -1,0 +1,19 @@
+stateDiagram-v2
+  [*] --> Creado : confirmar pedido (CU-07, reserva unidades)
+  Creado --> Pagado : pago confirmado por la pasarela (CU-11)
+  Creado --> PagoFallido : pago rechazado o sesion vencida
+  Creado --> Cancelado : el cliente cancela (CU-10, RN-07)
+  PagoFallido --> Cancelado : el cliente cancela (RN-07)
+  Pagado --> EnAlistamiento : operacion de sucursal (fuera del alcance)
+  EnAlistamiento --> ListoParaRetiro
+  ListoParaRetiro --> Entregado
+  Cancelado --> [*]
+  Entregado --> [*]
+  note right of Pagado
+    Pagado ya no admite cancelacion (RN-07).
+    Cuenta como venta en la lista de ventas.
+  end note
+  note right of Cancelado
+    Libera las unidades reservadas.
+    No cuenta como venta.
+  end note

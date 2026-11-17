@@ -1,0 +1,9 @@
+flowchart TB
+  K(["Coordinador de Canal Digital"])
+  I["PantallaIngresoInterno"]
+  GI["GestorDeIngresoInterno"]
+  CI["CuentaInterna"]
+  K -->|"1: escribirCorreoYClave()"| I
+  I -->|"2: ingresar(correo, clave)"| GI
+  GI -->|"3: buscarActiva(correo)"| CI
+  GI -->|"4: sesionInterna(12 h)"| I

@@ -1,0 +1,88 @@
+classDiagram
+  direction LR
+  class PantallaMisPedidos {
+    <<frontera>>
+    ruta /pedidos
+    +mostrarPedidos()
+    +confirmarCancelacion()
+  }
+  class PantallaIngresoInterno {
+    <<frontera>>
+    ruta /admin/ingresar
+    +pedirCredenciales()
+  }
+  class PantallaListaDeVentas {
+    <<frontera>>
+    ruta /admin/ventas
+    +filtrarPorFechaYEstado()
+    +mostrarTotalVendido()
+  }
+  class GestorDeConsultaDePedidos {
+    <<control>>
+    +listarPedidosDelCliente()
+  }
+  class GestorDeCancelacion {
+    <<control>>
+    +cancelarPedido()
+  }
+  class GestorDeVentas {
+    <<control>>
+    +consultarVentas()
+  }
+  class GestorDeIngresoInterno {
+    <<control>>
+    +ingresar()
+    +verificarRol()
+  }
+  class Cliente {
+    <<entidad>>
+    documento
+    nombre
+    correo
+  }
+  class Pedido {
+    <<entidad>>
+    estado
+    fechaCreacion
+    datosDeEnvio
+  }
+  class LineaPedido {
+    <<entidad>>
+    cantidad
+    precioUnitario
+  }
+  class ReservaUnidades {
+    <<entidad>>
+    cantidad
+    liberadaEn
+  }
+  class Pago {
+    <<entidad>>
+    estado
+    tokenPasarela
+  }
+  class CuentaInterna {
+    <<entidad>>
+    correo
+    rol
+    activa
+  }
+  class RegistroDeAuditoria {
+    <<entidad>>
+    accion
+    fecha
+  }
+  PantallaMisPedidos --> GestorDeConsultaDePedidos
+  PantallaMisPedidos --> GestorDeCancelacion
+  PantallaListaDeVentas --> GestorDeVentas
+  PantallaIngresoInterno --> GestorDeIngresoInterno
+  GestorDeConsultaDePedidos ..> Pedido
+  GestorDeCancelacion ..> Pedido
+  GestorDeCancelacion ..> ReservaUnidades
+  GestorDeCancelacion ..> RegistroDeAuditoria
+  GestorDeVentas ..> Pedido
+  GestorDeIngresoInterno ..> CuentaInterna
+  Cliente "1" --> "0..*" Pedido : realiza
+  Pedido "1" *-- "1..*" LineaPedido
+  Pedido "1" --> "0..*" ReservaUnidades : reserva
+  Pedido "1" --> "0..1" Pago

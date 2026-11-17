@@ -1,0 +1,33 @@
+sequenceDiagram
+  autonumber
+  actor C as Cliente digital
+  participant UI as PantallaMisPedidos
+  participant PC as PedidoController
+  participant G as JwtAuthGuard
+  participant PS as PedidoService
+  participant DB as PostgreSQL
+  participant AU as AuditoriaService
+  C->>UI: Pulsa Cancelar pedido y confirma
+  UI->>PC: POST /pedidos/:id/cancelar (JWT)
+  PC->>G: validar sesion del cliente
+  G-->>PC: customerId
+  PC->>PS: obtener(id)
+  PS->>DB: SELECT pedido con lineas
+  DB-->>PS: pedido
+  alt el pedido no es del cliente
+    PC-->>UI: 403 Este pedido no pertenece al cliente
+  else el pedido es del cliente
+    PC->>PS: cancelar(id)
+    alt estado Creado o Pago fallido (RN-07)
+      PS->>DB: UPDATE estado = Cancelado + historial
+      PS->>DB: liberar reservas (reservedUnits menos cantidad)
+      PS-->>PC: pedido Cancelado
+      PC->>AU: registrar(pedido.cancelar)
+      PC-->>UI: 201 pedido Cancelado
+      UI-->>C: Pedido cancelado
+    else estado Pagado o ya Cancelado
+      PS-->>PC: BadRequest (RN-07)
+      PC-->>UI: 400 no admite cancelacion
+      UI-->>C: No pudimos cancelar el pedido
+    end
+  end

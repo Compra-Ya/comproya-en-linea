@@ -1,0 +1,103 @@
+{
+  "generado": "2026-11-17T22:19:35.557Z",
+  "total": 16,
+  "ok": 16,
+  "filas": [
+    {
+      "id": "PS-01-pre",
+      "nombre": "se crearon 3 pedidos y se reservaron 6 unidades por la interfaz con el ERP",
+      "ok": true,
+      "detalle": "reservadas: 6"
+    },
+    {
+      "id": "PS-01a",
+      "nombre": "Mis pedidos muestra los 2 pedidos del cliente con su estado",
+      "ok": true,
+      "detalle": ""
+    },
+    {
+      "id": "PS-01b",
+      "nombre": "Mis pedidos no muestra el pedido de otro cliente",
+      "ok": true,
+      "detalle": ""
+    },
+    {
+      "id": "PS-01c",
+      "nombre": "solo el pedido sin pagar ofrece «Cancelar pedido» (1 botón de 2 pedidos)",
+      "ok": true,
+      "detalle": "botones: 1"
+    },
+    {
+      "id": "PS-01d",
+      "nombre": "el pedido pagado explica que ya no se puede cancelar desde la pantalla",
+      "ok": true,
+      "detalle": ""
+    },
+    {
+      "id": "PS-01e",
+      "nombre": "sin sesión la API de pedidos responde 401",
+      "ok": true,
+      "detalle": "HTTP 401"
+    },
+    {
+      "id": "PS-01f",
+      "nombre": "con la sesión de otro cliente la API rechaza el pedido ajeno",
+      "ok": true,
+      "detalle": "HTTP 403"
+    },
+    {
+      "id": "PS-02a",
+      "nombre": "cancelar un pedido sin pagar lo deja Cancelado",
+      "ok": true,
+      "detalle": "CANCELLED"
+    },
+    {
+      "id": "PS-02b",
+      "nombre": "al cancelar se liberan sus 2 unidades reservadas (quedan 4 reservadas)",
+      "ok": true,
+      "detalle": "reservadas: 4"
+    },
+    {
+      "id": "PS-02c",
+      "nombre": "la cancelación queda en la auditoría",
+      "ok": true,
+      "detalle": ""
+    },
+    {
+      "id": "PS-02d",
+      "nombre": "la API rechaza cancelar un pedido pagado (400) y no lo cambia",
+      "ok": true,
+      "detalle": "HTTP 400, estado PAID"
+    },
+    {
+      "id": "PS-02e",
+      "nombre": "la API rechaza cancelar un pedido ajeno (403) y no lo cambia",
+      "ok": true,
+      "detalle": "HTTP 403, estado CREATED"
+    },
+    {
+      "id": "PS-02f",
+      "nombre": "cancelar dos veces el mismo pedido se rechaza (400)",
+      "ok": true,
+      "detalle": "HTTP 400"
+    },
+    {
+      "id": "PS-03a",
+      "nombre": "la lista de ventas incluye el pedido pagado",
+      "ok": true,
+      "detalle": "ventas: 56"
+    },
+    {
+      "id": "PS-03b",
+      "nombre": "un pedido Cancelado no cuenta como venta por defecto",
+      "ok": true,
+      "detalle": "pedido 122 fuera de la lista"
+    },
+    {
+      "id": "PS-04",
+      "nombre": "sin errores de página en el recorrido",
+      "ok": true,
+      "detalle": ""
+    }
+  ]
+}

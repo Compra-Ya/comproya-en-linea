@@ -1,0 +1,86 @@
+erDiagram
+  direction LR
+  customers ||--o{ orders : realiza
+  orders ||--|{ order_items : contiene
+  products ||--o{ order_items : se_vende_en
+  orders ||--o{ units_reservations : reserva
+  availability ||--o{ units_reservations : descuenta
+  products ||--o{ availability : tiene
+  orders ||--o{ order_status_history : registra
+  orders ||--o| payments : se_paga_con
+  orders ||--o| coupon_redemptions : aplica
+  orders ||--o{ audit_log : audita
+  customers ||--o{ audit_log : origina
+  customers {
+    int id PK
+    string document UK
+    string name
+    string email UK
+    string password_hash
+    datetime created_at
+  }
+  staff_users {
+    int id PK
+    string email UK
+    string name
+    string password_hash
+    enum role
+    boolean active
+  }
+  orders {
+    int id PK
+    int customer_id FK
+    int branch_id FK
+    enum status
+    enum delivery_mode
+    string shipping_address
+    datetime created_at
+  }
+  order_items {
+    int id PK
+    int order_id FK
+    int product_id FK
+    int quantity
+    decimal unit_price
+  }
+  units_reservations {
+    int id PK
+    int order_id FK
+    int availability_id FK
+    int quantity
+    datetime released_at
+  }
+  order_status_history {
+    int id PK
+    int order_id FK
+    enum status
+    datetime occurred_at
+  }
+  payments {
+    int id PK
+    int order_id FK
+    enum status
+    string gateway_token
+    datetime confirmed_at
+  }
+  audit_log {
+    int id PK
+    string action
+    int customer_id FK
+    int order_id FK
+    datetime occurred_at
+  }
+  availability {
+    int id PK
+    int product_id FK
+    int erp_units
+    int safety_threshold
+    int reserved_units
+  }
+  products {
+    int id PK
+    string homologated_code UK
+    string name
+    decimal digital_price
+    boolean published
+  }

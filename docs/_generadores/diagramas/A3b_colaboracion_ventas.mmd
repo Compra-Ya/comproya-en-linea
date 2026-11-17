@@ -1,0 +1,11 @@
+flowchart TB
+  K(["Coordinador de Canal Digital"])
+  V["PantallaListaDeVentas"]
+  GV["GestorDeVentas"]
+  GI["GestorDeIngresoInterno"]
+  PE["Pedido"]
+  K -->|"1: filtrarVentas(fecha, estado)"| V
+  V -->|"2: consultarVentas(filtros)"| GV
+  GV -->|"3: verificarRol(coordinador)"| GI
+  GV -->|"4: pedidosPagadosYVigentes(filtros)"| PE
+  GV -->|"5: paginaYTotalVendido"| V

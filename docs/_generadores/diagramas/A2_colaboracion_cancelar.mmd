@@ -1,0 +1,15 @@
+flowchart LR
+  C(["Cliente digital"])
+  P["PantallaMisPedidos"]
+  G["GestorDeCancelacion"]
+  D["Pedido"]
+  R["ReservaUnidades"]
+  A["RegistroDeAuditoria"]
+  C -->|"1: pulsarCancelarPedido()"| P
+  P -->|"2: cancelarPedido(idPedido)"| G
+  G -->|"3: obtener(idPedido)"| D
+  G -->|"4: puedeCancelarse()"| D
+  G -->|"5: marcarCancelado()"| D
+  G -->|"6: liberarReservas(idPedido)"| R
+  G -->|"7: registrar(pedido.cancelar)"| A
+  G -->|"8: pedidoCancelado"| P

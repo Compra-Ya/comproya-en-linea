@@ -1,0 +1,245 @@
+"""Casos de prueba del segundo entregable (sprint 2), en el formato del docente.
+
+Cada caso apunta a la prueba automatizada que lo ejecuta (archivo y títulos exactos) o al recorrido en navegador.
+Las respuestas del sistema salen de las pruebas ejecutadas el 2026-11-17 (ver evidencia en docs/entrega-2/evidencia).
+Fila de tabla: (campo, valor, tipo de escenario, respuesta esperada, respuesta del sistema)
+"""
+from __future__ import annotations
+
+NICOLAS = "Nicolás Santiago Cancimance Pabón"
+DUVAN = "Duván Camilo Serrano Rojas"
+
+D1 = (
+    "D-01 (corregido). Al contrastar el código con la regla RN-07 de la Declaración de alcance se encontró que "
+    "PedidoService.cancelar y Pedido.puedeCancelarse() aplicaban la regla del canon 1.0 (RN-09) y aceptaban cancelar un pedido "
+    "Pagado por la API, aunque la pantalla no ofrecía el botón. Se corrigió el 17-nov-2026 y este caso se ejecutó después de la "
+    "corrección (versión de ejecución 2)."
+)
+
+CASOS = [
+    # ------------------------------------------------------------------ RUTA
+    dict(
+        id="S2-PR-01", tipo="ruta", cu="HU-114 · CU-09 (lista de ventas)", modulo="1.3 Carrito y pedido",
+        desc="Verificar que el filtro de fechas de la lista de ventas toma días completos de Colombia (UTC−5) y rechaza fechas "
+             "inexistentes o invertidas.",
+        pre="Función rangoDeFechas(desde, hasta) del dominio de ventas; sin base de datos.",
+        pasos=["1. Invocar rangoDeFechas('2026-10-12', '2026-10-12') y comparar los extremos.",
+               "2. Invocar rangoDeFechas con un solo extremo.",
+               "3. Invocar rangoDeFechas('2026-10-13', '2026-10-12') (inicial posterior a la final).",
+               "4. Invocar rangoDeFechas('2026-02-31', undefined) (día que no existe)."],
+        filas=[("desde / hasta", "2026-10-12 / 2026-10-12", "Correcto", "De 00:00 a 23:59:59.999 hora de Colombia", "Rango del día completo (UTC−5)"),
+               ("desde", "solo un extremo", "Correcto", "Acepta un solo extremo", "Devuelve el rango abierto"),
+               ("desde / hasta", "2026-10-13 / 2026-10-12", "Incorrecto", "BadRequest: fecha inicial posterior a la final", "BadRequestException"),
+               ("desde", "2026-02-31", "Incorrecto (frontera)", "BadRequest: Date no debe correrlo a marzo", "BadRequestException")],
+        post="Ninguna: la función no modifica datos.", defectos="Ninguno.",
+        obs="backend/src/pedido/dominio/ventas.spec.ts (4 pruebas). Evidencia: Anexo A.", probador=DUVAN),
+    dict(
+        id="S2-PR-02", tipo="ruta", cu="HU-114 · CU-09 (lista de ventas)", modulo="1.3 Carrito y pedido",
+        desc="Verificar que solo los estados posteriores al pago cuentan como venta y que ningún pedido cancelable cuenta como venta.",
+        pre="Constante ESTADOS_DE_VENTA y los 7 estados del pedido; sin base de datos.",
+        pasos=["1. Comparar ESTADOS_DE_VENTA con la lista esperada.",
+               "2. Comprobar que Creado, Pago fallido y Cancelado no están en la lista.",
+               "3. Recorrer los 7 estados y comprobar que ninguno que puede cancelarse cuenta como venta."],
+        filas=[("ESTADOS_DE_VENTA", "Pagado, En alistamiento, Listo para retiro, Entregado", "Correcto", "Lista exacta de 4 estados", "Coincide"),
+               ("estado", "Creado, Pago fallido, Cancelado", "Incorrecto", "No están en ESTADOS_DE_VENTA", "No están"),
+               ("estado cancelable", "Creado, Pago fallido", "Frontera", "No son venta", "No son venta")],
+        post="Ninguna.", defectos="Ninguno.",
+        obs="backend/src/pedido/dominio/pedido.spec.ts, bloque «ESTADOS_DE_VENTA» (3 pruebas). Prueba agregada en este sprint.",
+        probador=DUVAN),
+    dict(
+        id="S2-PR-03", tipo="ruta", cu="HU-115 · CU-10 (cancelación del pedido)", modulo="1.3 Carrito y pedido",
+        desc="Verificar la regla RN-07 en la clase de dominio Pedido: solo se puede cancelar mientras no se haya pagado.",
+        pre="Instancia de Pedido en cada uno de los 7 estados; sin base de datos.",
+        pasos=["1. Crear un Pedido en Creado y en Pago fallido e invocar puedeCancelarse().",
+               "2. Crear un Pedido en Pagado, En alistamiento, Listo para retiro, Entregado y Cancelado e invocar puedeCancelarse().",
+               "3. Comprobar que los 7 valores del enum OrderStatus quedaron decididos."],
+        filas=[("status", "CREATED", "Correcto", "true", "true"),
+               ("status", "PAYMENT_FAILED", "Correcto", "true", "true"),
+               ("status", "PAID", "Incorrecto (RN-07)", "false", "false"),
+               ("status", "PREPARING, READY_FOR_PICKUP, DELIVERED", "Incorrecto", "false", "false"),
+               ("status", "CANCELLED", "Incorrecto", "false", "false")],
+        post="Ninguna.", defectos=D1,
+        obs="backend/src/pedido/dominio/pedido.spec.ts, bloque «Pedido.puedeCancelarse» (8 pruebas). Prueba agregada en este sprint.",
+        probador=DUVAN),
+    dict(
+        id="S2-PR-04", tipo="ruta", cu="HU-116 · paquete 1.2.3 (ingreso de la cuenta interna)", modulo="1.2 Cuenta digital",
+        desc="Verificar el guarda de rol de las rutas internas: deja pasar el rol admitido, rechaza con 403 otro rol y exige solo "
+             "la sesión interna si la ruta no pide un rol.",
+        pre="RolInternoGuard con un contexto de ejecución simulado y una cuenta interna con rol Coordinador.",
+        pasos=["1. Invocar canActivate con la ruta que admite Coordinador y un usuario Coordinador.",
+               "2. Invocar canActivate con una ruta que admite otro rol.",
+               "3. Invocar canActivate en una ruta que no pide un rol concreto."],
+        filas=[("rol de la ruta", "Coordinador", "Correcto", "Deja pasar", "true"),
+               ("rol de la ruta", "otro rol", "Incorrecto", "ForbiddenException (403)", "403"),
+               ("rol de la ruta", "sin rol", "Correcto", "Basta la sesión interna", "true")],
+        post="Ninguna.", defectos="Ninguno.",
+        obs="backend/src/auth/acceso-interno.spec.ts, últimas 3 pruebas del archivo. Evidencia: Anexo A.", probador=NICOLAS),
+    dict(
+        id="S2-PR-05", tipo="ruta", cu="HU-113 · CU-09 (mis pedidos)", modulo="1.3 Carrito y pedido",
+        desc="Verificar el cálculo de totales que muestra «Mis pedidos» y la lista de ventas: subtotal, descuento del código y total.",
+        pre="Funciones calcularTotales y aplicarCupon; sin base de datos.",
+        pasos=["1. Calcular totales sin código de descuento.",
+               "2. Calcular totales con un código de porcentaje conocido.",
+               "3. Comprobar que subtotal = descuento + total y el caso de carrito vacío."],
+        filas=[("cupón", "sin código", "Correcto", "total = subtotal, sin descuento", "Coincide"),
+               ("cupón", "con porcentaje", "Correcto", "descuenta el porcentaje y devuelve código y porcentaje", "Coincide"),
+               ("subtotal", "descuento + total", "Frontera", "Nunca se desfasa un centavo", "Coincide"),
+               ("líneas", "ninguna", "Frontera", "Todo en cero", "0")],
+        post="Ninguna.", defectos="Ninguno.",
+        obs="backend/src/pedido/dominio/totales.spec.ts (6 pruebas). Evidencia: Anexo A.", probador=NICOLAS),
+    # ------------------------------------------------------------ INTEGRACIÓN
+    dict(
+        id="S2-PI-01", tipo="integración", cu="HU-115 · CU-10 (cancelación del pedido)", modulo="1.3 Carrito y pedido",
+        desc="Verificar que cancelar un pedido sin pagar lo deja Cancelado y libera sus unidades reservadas (PedidoService + "
+             "PostgreSQL + reserva en el ERP simulado).",
+        pre="Base de pruebas vacía; un producto con 20 existencias, umbral 5; un cliente con 2 unidades en el carrito y su pedido confirmado.",
+        pasos=["1. Confirmar el pedido (reserva 2 unidades).", "2. Comprobar que Pedido.puedeCancelarse() es verdadero.",
+               "3. Invocar PedidoService.cancelar(id)."],
+        filas=[("estado inicial", "Creado", "Correcto", "puedeCancelarse() = true", "true"),
+               ("estado final", "—", "Correcto", "Cancelado", "CANCELLED"),
+               ("reservedUnits", "—", "Correcto", "0 (reserva liberada)", "0")],
+        post="El pedido queda Cancelado y las unidades reservadas vuelven a estar disponibles.", defectos=D1,
+        obs="backend/src/pedido/pedido.service.spec.ts, prueba «PE-07: Creado + cancelar() mientras no se haya pagado (RN-07)».",
+        probador=NICOLAS, version="2"),
+    dict(
+        id="S2-PI-02", tipo="integración", cu="HU-115 · CU-10 (cancelación del pedido)", modulo="1.3 Carrito y pedido",
+        desc="Verificar que un pedido ya pagado, o en alistamiento, no se puede cancelar y conserva sus unidades reservadas.",
+        pre="Base de pruebas vacía; un pedido confirmado y llevado a Pagado (y luego a En alistamiento).",
+        pasos=["1. Marcar el pedido como Pagado e invocar cancelar(id).", "2. Comprobar el estado y las unidades reservadas.",
+               "3. Llevarlo a En alistamiento e invocar cancelar(id) de nuevo."],
+        filas=[("estado", "Pagado", "Incorrecto (RN-07)", "BadRequest que cita RN-07", "BadRequestException (RN-07)"),
+               ("estado después", "—", "Correcto", "Sigue Pagado", "PAID"),
+               ("reservedUnits", "—", "Correcto", "1 (se conserva)", "1"),
+               ("estado", "En alistamiento", "Incorrecto", "BadRequest que cita RN-07", "BadRequestException (RN-07)")],
+        post="Ni el estado ni las reservas cambian.", defectos=D1,
+        obs="backend/src/pedido/pedido.service.spec.ts, pruebas «RN-07: un pedido ya pagado no puede cancelarse…» y «RN-07: un pedido en alistamiento tampoco…».",
+        probador=NICOLAS, version="2"),
+    dict(
+        id="S2-PI-03", tipo="integración", cu="HU-114 · CU-09 (lista de ventas)", modulo="1.3 Carrito y pedido",
+        desc="Verificar que VentasService y su controlador cuentan solo pedidos pagados y vigentes, exigen la sesión interna y "
+             "filtran por fecha y estado.",
+        pre="Base de pruebas con pedidos en estados Creado, Pagado, Cancelado y Pago fallido, y la cuenta interna del Coordinador.",
+        pasos=["1. GET /ventas sin sesión y con la sesión de un cliente.", "2. GET /ventas con la sesión interna.",
+               "3. Filtrar por fecha (venta de las 11:30 p. m. del 12) y por estado; probar un estado que no es de venta.",
+               "4. Enviar fechas inventadas o invertidas."],
+        filas=[("sesión", "ninguna / de un cliente", "Incorrecto", "401, no devuelve datos", "401"),
+               ("estados", "Creado, Cancelado, Pago fallido", "Incorrecto", "No aparecen en la lista", "No aparecen"),
+               ("fecha", "venta de las 11:30 p. m. del 12", "Frontera", "Sigue siendo del 12 (Colombia)", "Del día 12"),
+               ("estado", "uno que no es de venta", "Incorrecto", "Se rechaza", "400"),
+               ("fechas", "inventadas o invertidas", "Incorrecto", "Se rechazan con un mensaje", "400 con mensaje")],
+        post="Consulta: no cambia ningún dato.", defectos="Ninguno.",
+        obs="backend/src/pedido/ventas.spec.ts, pruebas 1, 2, 4, 5 y 6 del archivo.", probador=DUVAN),
+    dict(
+        id="S2-PI-04", tipo="integración", cu="HU-114 · CU-09 (lista de ventas)", modulo="1.3 Carrito y pedido",
+        desc="Verificar el total vendido con descuento, la paginación de a 20 y los datos de envío que ve el Coordinador.",
+        pre="Base de pruebas con más de 20 pedidos pagados, uno con código de descuento y uno con dirección de envío.",
+        pasos=["1. Consultar ventas y comparar el total vendido con la suma de los totales reales.",
+               "2. Consultar la página 1 y la 2.", "3. Abrir el detalle de un pedido con envío y uno de retiro."],
+        filas=[("total vendido", "todo el filtro, con descuento", "Correcto", "Suma de los totales reales", "Coincide"),
+               ("página", "1 y 2", "Correcto", "20 por página, la más reciente primero", "20 por página"),
+               ("envío", "pedido con dirección", "Correcto", "Productos, cliente y dirección", "Presentes"),
+               ("envío", "pedido de retiro", "Frontera", "Sin dirección", "Sin dirección")],
+        post="Consulta: no cambia ningún dato.", defectos="Ninguno.",
+        obs="backend/src/pedido/ventas.spec.ts, pruebas 3, 7 y 8 del archivo.", probador=DUVAN),
+    dict(
+        id="S2-PI-05", tipo="integración", cu="HU-115 · CU-10 (cancelación del pedido)", modulo="1.3 Carrito y pedido",
+        desc="Verificar el controlador POST /pedidos/:id/cancelar: autenticación, pertenencia, regla RN-07 y auditoría.",
+        pre="Aplicación Nest de pruebas con PedidoModule; un cliente dueño, otro cliente y pedidos Creado y Pagado.",
+        pasos=["1. POST sin token.", "2. POST con el token de otro cliente.", "3. POST del dueño sobre un pedido sin pagar.",
+               "4. POST del dueño sobre un pedido ya pagado."],
+        filas=[("token", "ninguno", "Incorrecto", "401", "401"),
+               ("token", "otro cliente", "Incorrecto", "403 y el pedido no cambia", "403, sin cambio"),
+               ("pedido", "Creado, del dueño", "Correcto", "201, Cancelado y auditado", "201, CANCELLED, auditoría pedido.cancelar"),
+               ("pedido", "Pagado, del dueño", "Incorrecto (RN-07)", "400, no cambia y no se audita", "400, PAID, sin auditoría")],
+        post="Solo el caso 3 deja el pedido Cancelado y una fila de auditoría.", defectos=D1,
+        obs="backend/src/pedido/pedido.controller.spec.ts, 4 pruebas de «cancelar».", probador=NICOLAS, version="2"),
+    dict(
+        id="S2-PI-06", tipo="integración", cu="HU-113 · CU-09 (mis pedidos)", modulo="1.3 Carrito y pedido",
+        desc="Verificar que un cliente solo consulta su propio pedido por la API.",
+        pre="Aplicación Nest de pruebas; un pedido de un cliente y el token de otro.",
+        pasos=["1. GET /pedidos/:id con el token de otro cliente.", "2. GET /pedidos/:id con el token del dueño."],
+        filas=[("token", "otro cliente", "Incorrecto", "403", "403"),
+               ("token", "dueño", "Correcto", "200 con el pedido", "200")],
+        post="Ninguna.", defectos="Ninguno.",
+        obs="backend/src/pedido/pedido.controller.spec.ts, 2 pruebas «Corrección CU-2 #4».", probador=DUVAN),
+    dict(
+        id="S2-PI-07", tipo="integración", cu="HU-116 · paquete 1.2.3 (ingreso de la cuenta interna)", modulo="1.2 Cuenta digital",
+        desc="Verificar el ingreso de la cuenta interna: sesión con token y perfil sin contraseña, mismo error ante clave o correo "
+             "equivocados, cuenta desactivada, y que la sesión interna y la de un cliente no se mezclan.",
+        pre="Base de pruebas con una cuenta interna activa, una desactivada y un cliente cuyo id coincide con el de la cuenta interna.",
+        pasos=["1. Ingresar con credenciales correctas.", "2. Ingresar con clave equivocada y con un correo inexistente.",
+               "3. Desactivar la cuenta e intentar entrar y usar el token ya emitido.",
+               "4. Usar la sesión interna en GET /pedidos y un token de cliente en las rutas internas."],
+        filas=[("credenciales", "correctas", "Correcto", "Token y perfil sin contraseña", "Token y perfil"),
+               ("credenciales", "clave equivocada / correo inexistente", "Incorrecto", "El mismo 401 «Credenciales inválidas»", "401 idéntico"),
+               ("cuenta", "desactivada", "Incorrecto", "No inicia sesión; su token deja de servir", "401"),
+               ("sesión interna", "en GET /pedidos", "Incorrecto", "401: no sirve como sesión de cliente", "401"),
+               ("token de cliente", "mismo id que una cuenta interna", "Incorrecto", "No abre rutas internas", "401")],
+        post="Ninguna cuenta ni pedido cambia.", defectos="Ninguno.",
+        obs="backend/src/auth/acceso-interno.spec.ts, pruebas 1, 2, 3, 7 y 8 del archivo.", probador=DUVAN),
+    # ------------------------------------------------------------------ SISTEMA
+    dict(
+        id="S2-PS-01", tipo="sistema", cu="HU-113 · CU-09 (mis pedidos)", modulo="1.3 Carrito y pedido",
+        desc="Verificar en el navegador que «Mis pedidos» muestra solo los pedidos del cliente, con su estado, y ofrece «Cancelar "
+             "pedido» solo en el pedido sin pagar.",
+        pre="Backend, frontend y PostgreSQL locales; dos clientes y tres pedidos creados por la API (2 del cliente: uno Creado y uno Pagado; "
+            "1 del otro cliente).",
+        pasos=["1. Abrir /pedidos con la sesión del cliente.", "2. Leer la lista y contar los botones «Cancelar pedido».",
+               "3. Llamar GET /pedidos sin sesión y GET /pedidos/:id de otro cliente."],
+        filas=[("pedidos propios", "Creado y Pagado", "Correcto", "Aparecen los 2", "Aparecen"),
+               ("pedido ajeno", "del otro cliente", "Incorrecto", "No aparece", "No aparece"),
+               ("botón Cancelar", "2 pedidos", "Correcto", "1 solo, en el pedido sin pagar", "1 botón"),
+               ("pedido Pagado", "—", "Correcto", "Explica que ya no se puede cancelar desde aquí", "Mensaje presente"),
+               ("API sin sesión / pedido ajeno", "—", "Incorrecto", "401 / 403", "401 / 403")],
+        post="Ningún pedido cambia.", defectos="Ninguno.",
+        obs="e2e/capturas/verificar-sprint2.mjs, comprobaciones PS-01-pre a PS-01f. Captura: Figura 10. Evidencia: Anexo A.",
+        probador=NICOLAS),
+    dict(
+        id="S2-PS-02", tipo="sistema", cu="HU-115 · CU-10 (cancelación del pedido)", modulo="1.3 Carrito y pedido",
+        desc="Verificar de extremo a extremo la cancelación: confirmar en pantalla, estado Cancelado, unidades liberadas, auditoría y "
+             "defensa de la API contra pedidos pagados, ajenos o ya cancelados.",
+        pre="Los pedidos del caso S2-PS-01 (6 unidades reservadas).",
+        pasos=["1. Pulsar «Cancelar pedido» en el pedido sin pagar y confirmar «Sí, cancelar pedido».",
+               "2. Leer el resultado en pantalla, el estado en la base y las unidades reservadas.",
+               "3. POST /pedidos/:id/cancelar sobre el pedido Pagado, sobre el ajeno y otra vez sobre el cancelado."],
+        filas=[("estado", "Creado → cancelar", "Correcto", "Cancelado", "CANCELLED"),
+               ("unidades reservadas", "6 antes de cancelar", "Correcto", "Quedan 4 (se liberan 2)", "4"),
+               ("auditoría", "pedido.cancelar", "Correcto", "Queda registrada", "Registrada"),
+               ("pedido Pagado", "API", "Incorrecto (RN-07)", "400 y sigue Pagado", "400, PAID"),
+               ("pedido ajeno", "API", "Incorrecto", "403 y no cambia", "403, CREATED"),
+               ("pedido ya cancelado", "API", "Incorrecto", "400", "400"),
+               ("lista de ventas", "pedido Pagado y pedido Cancelado", "Correcto", "El Pagado cuenta como venta; el Cancelado no", "Coincide")],
+        post="Quedan 4 unidades reservadas y un pedido Cancelado; después se borran los datos de verificación y se devuelven las existencias.",
+        defectos=D1,
+        obs="e2e/capturas/verificar-sprint2.mjs, comprobaciones PS-02a a PS-02f y PS-03. Capturas: Figuras 11 y 12.",
+        probador=NICOLAS, version="2"),
+    dict(
+        id="S2-PS-03", tipo="sistema", cu="HU-116 y HU-114 · CU-09", modulo="1.2 Cuenta digital y 1.3 Carrito y pedido",
+        desc="Verificar el recorrido del Coordinador de Canal Digital: acceso por /admin sin enlaces en la tienda, ingreso, lista de "
+             "ventas con filtros y total, y cierre de sesión.",
+        pre="Cuenta interna sembrada (npm run seed:staff); catálogo y pedidos de la base local.",
+        pasos=["1. Abrir /admin/publicar sin sesión; probar una clave equivocada; entrar con la sesión de un cliente.",
+               "2. Ingresar con la cuenta interna y abrir la lista de ventas.", "3. Filtrar por estado y por un rango sin ventas; abrir «Ver envío».",
+               "4. Pulsar «Salir» y repetir el acceso."],
+        filas=[("sin sesión", "/admin/publicar", "Incorrecto", "Lleva a /admin/ingresar", "Lleva al ingreso"),
+               ("enlaces a /admin", "6 pantallas de la tienda", "Correcto", "Ninguno", "0 enlaces"),
+               ("clave", "equivocada", "Incorrecto", "Error y no entra", "Mensaje de error"),
+               ("sesión de un cliente", "/admin/ventas", "Incorrecto", "Sigue pidiendo el ingreso interno", "Ingreso interno"),
+               ("lista de ventas", "sin filtros", "Correcto", "Total vendido y cantidad; 20 filas máximo", "55 ventas, 20 filas"),
+               ("filtro", "«Entregado»", "Correcto", "Baja la cantidad", "55 → 1"),
+               ("filtro", "rango sin ventas", "Frontera", "«No hay ventas con esos filtros»", "Mensaje presente"),
+               ("«Salir»", "—", "Correcto", "Vuelve a pedir el ingreso", "Pide el ingreso")],
+        post="Se borra el producto y los clientes de verificación.", defectos="Ninguno.",
+        obs="e2e/capturas/verificar-interno.mjs: 40 de 40 comprobaciones a 1440 y 390 px (design/verificacion-interno/resultado.md). Capturas: Figuras 13 a 17.",
+        probador=DUVAN),
+    dict(
+        id="S2-PS-04", tipo="sistema", cu="HU-113 a HU-116 (pantallas del sprint 2)", modulo="Interfaz del Cliente digital y del Coordinador",
+        desc="Verificar accesibilidad (WCAG 2.1 A y AA con axe-core) y adaptación a celular de las pantallas de ingreso interno, publicar y ventas.",
+        pre="Las mismas pantallas del caso S2-PS-03 a 1440 px y a 390 px de ancho.",
+        pasos=["1. Ejecutar axe-core sobre cada pantalla.", "2. Medir el desborde horizontal de la página."],
+        filas=[("axe-core", "ingreso, publicar y ventas a 1440 px", "Correcto", "0 violaciones", "0"),
+               ("axe-core", "ingreso, publicar y ventas a 390 px", "Correcto", "0 violaciones", "0"),
+               ("desborde horizontal", "1440 y 390 px", "Correcto", "Sin desborde", "Sin desborde")],
+        post="Ninguna.", defectos="Ninguno.",
+        obs="e2e/capturas/verificar-interno.mjs (mismas 40 comprobaciones). Evidencia: Anexo A.", probador=DUVAN),
+]

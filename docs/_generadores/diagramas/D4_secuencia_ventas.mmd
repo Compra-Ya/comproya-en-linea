@@ -1,0 +1,33 @@
+sequenceDiagram
+  autonumber
+  actor K as Coordinador de Canal Digital
+  participant UI as PantallaIngresoInterno
+  participant CC as CuentaController
+  participant CS as CuentaService
+  participant VP as PantallaListaDeVentas
+  participant VC as VentasController
+  participant GR as JwtStaffAuthGuard y RolInternoGuard
+  participant VS as VentasService
+  participant DB as PostgreSQL
+  K->>UI: Escribe correo y clave en /admin/ingresar
+  UI->>CC: POST /cuenta/interno/login
+  CC->>CS: loginInterno(correo, clave)
+  CS->>DB: buscar cuenta interna activa
+  alt credenciales validas
+    CS-->>UI: token de sesion interna (12 h)
+    UI-->>K: panel del Coordinador
+    K->>VP: Filtra por fecha y estado
+    VP->>VC: GET /ventas con token interno
+    VC->>GR: validar sesion y rol
+    alt sesion interna valida con rol Coordinador
+      GR-->>VC: StaffAutenticado
+      VC->>VS: consultar(filtros)
+      VS->>DB: pedidos pagados y vigentes (20 por pagina)
+      DB-->>VS: filas y total vendido
+      VS-->>VP: pagina y totalVendido
+    else sin sesion o con sesion de un cliente
+      GR-->>VP: 401 o 403 (no cambia nada)
+    end
+  else credenciales incorrectas
+    CS-->>UI: 401 correo o clave no coinciden
+  end

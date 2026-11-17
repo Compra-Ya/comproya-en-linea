@@ -1,0 +1,22 @@
+flowchart TB
+  subgraph CL["Dispositivo del usuario"]
+    NAV["Navegador web\n(computador o celular)"]
+  end
+  subgraph AP["Entorno de ejecucion (verificado en local; destino: Cloud Run en GCP)"]
+    FE["Frontend Next.js\nApp Router, TypeScript\npuerto 3100 en local"]
+    subgraph BE["Backend NestJS (monolito modular), puerto 3101 en local"]
+      M1["modulos: catalogo, cuenta,\ncarrito, pedido, pago, auditoria"]
+      ERP["AdaptadorErpSimulado\n(PuertoErp)"]
+    end
+  end
+  subgraph BD["Servidor de base de datos"]
+    PG[("PostgreSQL 16\nPrisma, 10 migraciones\npuerto 5433 en local\n(destino: Cloud SQL)")]
+  end
+  subgraph EXT["Sistema externo"]
+    ST["Stripe Checkout\nmodo de prueba"]
+  end
+  NAV -->|"HTTPS: paginas /pedidos, /admin/ingresar, /admin/ventas"| FE
+  FE -->|"HTTPS JSON /api\nJWT del cliente o de la cuenta interna"| M1
+  M1 -->|"SQL (Prisma)"| PG
+  M1 --- ERP
+  M1 -->|"HTTPS: sesion de pago y notificacion"| ST

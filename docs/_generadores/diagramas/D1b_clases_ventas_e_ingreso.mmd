@@ -1,0 +1,50 @@
+classDiagram
+  direction TB
+  class VentasController {
+    <<controlador HTTP>>
+    -ventas VentasService
+    +consultar(filtros ConsultarVentasDto) PaginaDeVentas
+  }
+  class VentasService {
+    <<servicio de aplicacion>>
+    +consultar(filtros ConsultarVentasDto) PaginaDeVentas
+  }
+  class ReglasDeVentas {
+    <<dominio>>
+    +ESTADOS_DE_VENTA List~OrderStatus~
+    +rangoDeFechas(desde, hasta) Rango
+  }
+  class CuentaController {
+    <<controlador HTTP>>
+    -cuenta CuentaService
+    +loginInterno(dto LoginDto) SesionInterna
+    +yoInterno(staff StaffAutenticado) PerfilInterno
+  }
+  class CuentaService {
+    <<servicio de aplicacion>>
+    +loginInterno(dto LoginDto) SesionInterna
+    +perfilInterno(staffId int) PerfilInterno
+  }
+  class JwtStaffAuthGuard {
+    <<guarda>>
+  }
+  class JwtStaffStrategy {
+    <<Passport>>
+    +validate(payload JwtStaffPayload) StaffAutenticado
+  }
+  class RolInternoGuard {
+    <<guarda>>
+    +canActivate(context) bool
+  }
+  class PrismaService {
+    <<acceso a datos>>
+  }
+  VentasController --> VentasService
+  VentasController ..> JwtStaffAuthGuard : AccesoInterno
+  VentasController ..> RolInternoGuard : AccesoInterno
+  VentasService ..> ReglasDeVentas
+  VentasService --> PrismaService
+  CuentaController --> CuentaService
+  CuentaService --> PrismaService
+  JwtStaffAuthGuard ..> JwtStaffStrategy
+  JwtStaffStrategy --> PrismaService

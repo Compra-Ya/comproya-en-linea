@@ -1,0 +1,1134 @@
+{
+ "numTotalTestSuites": 31,
+ "numPassedTestSuites": 31,
+ "numFailedTestSuites": 0,
+ "numTotalTests": 187,
+ "numPassedTests": 187,
+ "numFailedTests": 0,
+ "numPendingTests": 0,
+ "generado": "2026-11-17",
+ "comando": "cd backend && npx jest --runInBand --coverage",
+ "archivos": [
+  {
+   "archivo": "src/pedido/pedido.controller.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "Corrección CU-2 #4: GET /pedidos/:id con token de otro cliente -> 403",
+     "estado": "passed",
+     "ms": 240
+    },
+    {
+     "titulo": "Corrección CU-2 #4: GET /pedidos/:id con el token del dueño -> 200 y devuelve el pedido",
+     "estado": "passed",
+     "ms": 92
+    },
+    {
+     "titulo": "POST /pedidos/:id/cancelar sin token -> 401",
+     "estado": "passed",
+     "ms": 81
+    },
+    {
+     "titulo": "POST /pedidos/:id/cancelar con token de otro cliente -> 403, el pedido no cambia",
+     "estado": "passed",
+     "ms": 155
+    },
+    {
+     "titulo": "POST /pedidos/:id/cancelar con el token del dueño y el pedido sin pagar -> 201, cancela y queda auditado (RN-07)",
+     "estado": "passed",
+     "ms": 125
+    },
+    {
+     "titulo": "POST /pedidos/:id/cancelar con el token del dueño y el pedido ya pagado -> 400, no cambia y no se audita (RN-07, TEST-013)",
+     "estado": "passed",
+     "ms": 96
+    },
+    {
+     "titulo": "POST /pedidos/:id/iniciar-alistamiento sin token -> 401",
+     "estado": "passed",
+     "ms": 88
+    },
+    {
+     "titulo": "POST /pedidos/:id/iniciar-alistamiento con la sesión de un cliente -> 401: la operación ya no está abierta a cualquier cliente",
+     "estado": "passed",
+     "ms": 156
+    },
+    {
+     "titulo": "POST /pedidos/:id/iniciar-alistamiento con la sesión interna -> 201 y queda auditado con el actor interno",
+     "estado": "passed",
+     "ms": 145
+    },
+    {
+     "titulo": "POST /pedidos/:id/listo-para-retiro sin token -> 401",
+     "estado": "passed",
+     "ms": 108
+    },
+    {
+     "titulo": "POST /pedidos/:id/listo-para-retiro con la sesión interna -> 201 y queda auditado",
+     "estado": "passed",
+     "ms": 148
+    },
+    {
+     "titulo": "POST /pedidos/:id/retirar sin token -> 401",
+     "estado": "passed",
+     "ms": 103
+    },
+    {
+     "titulo": "POST /pedidos/:id/retirar con la sesión interna -> 201 y queda auditado",
+     "estado": "passed",
+     "ms": 152
+    },
+    {
+     "titulo": "POST /pedidos/confirmar con cliente autenticado queda auditado",
+     "estado": "passed",
+     "ms": 87
+    }
+   ]
+  },
+  {
+   "archivo": "src/pago/pago.controller.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "POST /pagos/tarjeta/:orderId sin token -> 401",
+     "estado": "passed",
+     "ms": 130
+    },
+    {
+     "titulo": "POST /pagos/tarjeta/:orderId con token del dueño -> 201 y queda auditado",
+     "estado": "passed",
+     "ms": 164
+    },
+    {
+     "titulo": "POST /pagos/debito/:orderId sin token -> 401",
+     "estado": "passed",
+     "ms": 76
+    },
+    {
+     "titulo": "POST /pagos/debito/:orderId con token del dueño -> 201 y queda auditado",
+     "estado": "passed",
+     "ms": 215
+    },
+    {
+     "titulo": "POST /pagos/debito/:orderId/notificacion sin el encabezado X-Debito-Secreto -> 401, el pago no cambia",
+     "estado": "passed",
+     "ms": 221
+    },
+    {
+     "titulo": "POST /pagos/debito/:orderId/notificacion con secreto incorrecto -> 401, el pago no cambia",
+     "estado": "passed",
+     "ms": 211
+    },
+    {
+     "titulo": "POST /pagos/debito/:orderId/notificacion con el secreto correcto -> 201, confirma el pago y queda auditado sin identidad de cliente",
+     "estado": "passed",
+     "ms": 277
+    }
+   ]
+  },
+  {
+   "archivo": "src/pedido/dominio/pedido.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "CREATED se puede cancelar",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "PAYMENT_FAILED se puede cancelar",
+     "estado": "passed",
+     "ms": 1
+    },
+    {
+     "titulo": "PAID no se puede cancelar",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "PREPARING no se puede cancelar",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "READY_FOR_PICKUP no se puede cancelar",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "DELIVERED no se puede cancelar",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "CANCELLED no se puede cancelar",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "cubre los 7 estados del pedido: ninguno queda sin decidir",
+     "estado": "passed",
+     "ms": 1
+    },
+    {
+     "titulo": "incluye Pagado y los estados posteriores al pago",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "excluye Creado, Pago fallido y Cancelado",
+     "estado": "passed",
+     "ms": 1
+    },
+    {
+     "titulo": "un pedido que puede cancelarse nunca cuenta como venta",
+     "estado": "passed",
+     "ms": 0
+    }
+   ]
+  },
+  {
+   "archivo": "src/pago/pago.service.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "RN-06: crear la sesión de tarjeta solo guarda el token de Stripe, nunca un número de tarjeta",
+     "estado": "passed",
+     "ms": 305
+    },
+    {
+     "titulo": "PE-06 / CU-15/CU-17: el webhook checkout.session.completed confirma el pago (Creado -> Pagado) y habilita el comprobante",
+     "estado": "passed",
+     "ms": 246
+    },
+    {
+     "titulo": "Corrección CU-2 #7 (segunda ronda): el comprobante sigue disponible en todo el ciclo de vida posterior al pago, y deja de estarlo si el pedido se cancela",
+     "estado": "passed",
+     "ms": 268
+    },
+    {
+     "titulo": "Corrección CU-2 #7 (segunda ronda): el comprobante NO está disponible en Creado (sin pagar) ni en Cancelado",
+     "estado": "passed",
+     "ms": 101
+    },
+    {
+     "titulo": "Corrección CU-2 #1: el comprobante muestra el total con el descuento del cupón ya aplicado, no el subtotal sin descontar",
+     "estado": "passed",
+     "ms": 238
+    },
+    {
+     "titulo": "Corrección CU-2 #3a: la transición que dispara el webhook de Stripe queda auditada con un actor de sistema",
+     "estado": "passed",
+     "ms": 212
+    },
+    {
+     "titulo": "Corrección CU-2 #3b: la liberación automática por vencimiento (cron) queda auditada con un actor de sistema",
+     "estado": "passed",
+     "ms": 178
+    },
+    {
+     "titulo": "CU-15 (E-2): checkout.session.expired marca el pago fallido y libera la reserva dentro de 15 minutos",
+     "estado": "passed",
+     "ms": 163
+    },
+    {
+     "titulo": "PE-08: autorización de pago rechazada (payment_intent.payment_failed) -> Pedido en Pago fallido",
+     "estado": "passed",
+     "ms": 166
+    },
+    {
+     "titulo": "CU-16: la notificación de débito bancario exitosa confirma el pago",
+     "estado": "passed",
+     "ms": 250
+    },
+    {
+     "titulo": "CU-16: sin confirmación (notificación negativa), el pedido se cancela y libera la reserva",
+     "estado": "passed",
+     "ms": 212
+    },
+    {
+     "titulo": "Job de red de seguridad: un pago con tarjeta pendiente hace más de 15 minutos se libera aunque no llegue el webhook",
+     "estado": "passed",
+     "ms": 169
+    }
+   ]
+  },
+  {
+   "archivo": "src/auth/acceso-interno.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "el inicio de sesión correcto devuelve un token y el perfil, sin la contraseña",
+     "estado": "passed",
+     "ms": 56
+    },
+    {
+     "titulo": "contraseña equivocada y correo inexistente responden lo mismo: 401 «Credenciales inválidas»",
+     "estado": "passed",
+     "ms": 101
+    },
+    {
+     "titulo": "una cuenta desactivada no inicia sesión, y su token ya emitido deja de servir",
+     "estado": "passed",
+     "ms": 75
+    },
+    {
+     "titulo": "POST /catalogo/productos: sin sesión -> 401 y con la sesión de un cliente -> 401; no se crea nada",
+     "estado": "passed",
+     "ms": 33
+    },
+    {
+     "titulo": "POST /catalogo/productos con la sesión interna -> 201, crea el producto y deja auditado quién lo publicó",
+     "estado": "passed",
+     "ms": 51
+    },
+    {
+     "titulo": "RN-01 sigue valiendo con la sesión interna: un código no homologado responde 400",
+     "estado": "passed",
+     "ms": 29
+    },
+    {
+     "titulo": "la sesión interna no sirve como sesión de cliente: GET /pedidos -> 401",
+     "estado": "passed",
+     "ms": 27
+    },
+    {
+     "titulo": "un token de cliente cuyo id coincide con el de una cuenta interna tampoco abre las rutas internas",
+     "estado": "passed",
+     "ms": 21
+    },
+    {
+     "titulo": "operación de pedidos y sincronización: sin sesión interna -> 401",
+     "estado": "passed",
+     "ms": 44
+    },
+    {
+     "titulo": "deja pasar el rol que la ruta admite",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "rechaza con 403 un rol que la ruta no admite",
+     "estado": "passed",
+     "ms": 10
+    },
+    {
+     "titulo": "si la ruta no pide un rol concreto, basta con la sesión interna",
+     "estado": "passed",
+     "ms": 0
+    }
+   ]
+  },
+  {
+   "archivo": "src/cuenta/dominio/gestor-de-consentimiento.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "PR-02 / PE-... : documento nuevo, cliente rechaza la política — Consentimiento queda inactivo y RN-10 anonimiza",
+     "estado": "passed",
+     "ms": 139
+    },
+    {
+     "titulo": "PR-03 / PI-03: documento nuevo, acepta política y trae identificador de lealtad válido",
+     "estado": "passed",
+     "ms": 101
+    },
+    {
+     "titulo": "PR-04: documento nuevo, acepta política sin identificador de lealtad",
+     "estado": "passed",
+     "ms": 97
+    },
+    {
+     "titulo": "PE-01: Pendiente + otorgar() -> Activo",
+     "estado": "passed",
+     "ms": 97
+    },
+    {
+     "titulo": "PE-02: Activo + revocar() -> Revocado",
+     "estado": "passed",
+     "ms": 104
+    },
+    {
+     "titulo": "PE-03: Revocado + ejecutar supresión dentro de 72h (RN-11) -> Suprimido",
+     "estado": "passed",
+     "ms": 115
+    },
+    {
+     "titulo": "PE-04: Activo + solicitud directa de supresión dentro de 72h (RN-11) -> Suprimido",
+     "estado": "passed",
+     "ms": 109
+    },
+    {
+     "titulo": "PE-05: Suprimido + otorgar() (transición no declarada) -> el sistema rechaza, sin cambio de estado",
+     "estado": "passed",
+     "ms": 118
+    }
+   ]
+  },
+  {
+   "archivo": "src/pedido/pedido.service.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "RN-05: confirmar el pedido reserva las unidades en el ERP antes de que exista la posibilidad de cobrar",
+     "estado": "passed",
+     "ms": 118
+    },
+    {
+     "titulo": "RN-05: si no hay unidades suficientes, no se crea el pedido ni se cobra reserva alguna",
+     "estado": "passed",
+     "ms": 64
+    },
+    {
+     "titulo": "RN-08: el código de retiro es único y vence a los 5 días calendario",
+     "estado": "passed",
+     "ms": 92
+    },
+    {
+     "titulo": "RN-07: un cupón de lealtad no puede redimirse dos veces sobre el mismo pedido",
+     "estado": "passed",
+     "ms": 82
+    },
+    {
+     "titulo": "PE-07: Creado + cancelar() mientras no se haya pagado (RN-07) -> Cancelado, reserva liberada",
+     "estado": "passed",
+     "ms": 93
+    },
+    {
+     "titulo": "PE-11: Pagado + iniciarAlistamiento() -> En alistamiento; no admite iniciarse dos veces",
+     "estado": "passed",
+     "ms": 87
+    },
+    {
+     "titulo": "RN-07: un pedido ya pagado no puede cancelarse y conserva sus unidades reservadas",
+     "estado": "passed",
+     "ms": 80
+    },
+    {
+     "titulo": "RN-07: un pedido en alistamiento tampoco puede cancelarse",
+     "estado": "passed",
+     "ms": 86
+    },
+    {
+     "titulo": "PE-09: En alistamiento + retiro en tienda -> Listo para retiro",
+     "estado": "passed",
+     "ms": 92
+    },
+    {
+     "titulo": "PE-10: Listo para retiro + retiro con código dentro de 5 días (RN-08) -> Entregado",
+     "estado": "passed",
+     "ms": 116
+    },
+    {
+     "titulo": "PE-10 (caso de frontera): código presentado después de 5 días -> se rechaza el retiro, no se completa la entrega",
+     "estado": "passed",
+     "ms": 113
+    },
+    {
+     "titulo": "PI-04: confirmar() calcula el total y solicita las reservas correspondientes (Carrito y ReservaUnidades simulados)",
+     "estado": "passed",
+     "ms": 116
+    }
+   ]
+  },
+  {
+   "archivo": "src/pedido/ventas.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "sin sesión -> 401; con la sesión de un cliente -> 401",
+     "estado": "passed",
+     "ms": 73
+    },
+    {
+     "titulo": "solo cuenta pedidos pagados y vigentes: no aparecen los creados, los cancelados ni los de pago fallido",
+     "estado": "passed",
+     "ms": 92
+    },
+    {
+     "titulo": "el total vendido suma los totales reales de todo el filtro, con el descuento del código incluido",
+     "estado": "passed",
+     "ms": 72
+    },
+    {
+     "titulo": "filtra por fecha en días de Colombia: una venta de las 11:30 p. m. del 12 sigue siendo del 12",
+     "estado": "passed",
+     "ms": 66
+    },
+    {
+     "titulo": "filtra por estado, y rechaza un estado que no es de venta",
+     "estado": "passed",
+     "ms": 61
+    },
+    {
+     "titulo": "rechaza fechas inventadas o invertidas con un mensaje",
+     "estado": "passed",
+     "ms": 53
+    },
+    {
+     "titulo": "pagina de a 20, la más reciente primero, y el total vendido cubre todas las páginas",
+     "estado": "passed",
+     "ms": 210
+    },
+    {
+     "titulo": "muestra productos, cliente y datos de envío para despachar; sin dirección si el pedido es de retiro",
+     "estado": "passed",
+     "ms": 58
+    }
+   ]
+  },
+  {
+   "archivo": "src/pedido/pedido.envio.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "guarda los datos de envío y no exige sucursal de retiro",
+     "estado": "passed",
+     "ms": 115
+    },
+    {
+     "titulo": "RN-04 no aplica al despacho: una sucursal sin sincronizar puede despachar",
+     "estado": "passed",
+     "ms": 89
+    },
+    {
+     "titulo": "despacha la sucursal con más unidades disponibles que alcance para todo el pedido",
+     "estado": "passed",
+     "ms": 75
+    },
+    {
+     "titulo": "RN-03: si ninguna sucursal tiene las unidades pedidas, no crea el pedido y dice cuántas hay",
+     "estado": "passed",
+     "ms": 62
+    },
+    {
+     "titulo": "el retiro sigue funcionando como antes y exige sucursal",
+     "estado": "passed",
+     "ms": 73
+    },
+    {
+     "titulo": "sin datos de envío responde 400 en español",
+     "estado": "passed",
+     "ms": 57
+    },
+    {
+     "titulo": "con un teléfono inválido responde 400 con el mensaje del campo",
+     "estado": "passed",
+     "ms": 53
+    },
+    {
+     "titulo": "con datos completos responde 201 y devuelve el pedido con su dirección",
+     "estado": "passed",
+     "ms": 77
+    }
+   ]
+  },
+  {
+   "archivo": "src/pago/dominio/orquestador-de-pago.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "PR-07: reserva exitosa, autorización rechazada -> Pago.estado fallido, reserva liberada, sin comprobante",
+     "estado": "passed",
+     "ms": 219
+    },
+    {
+     "titulo": "PR-08 / PI-05: reserva exitosa, autorización aprobada -> Comprobante con código de retiro y Pago vinculado 1:1 con Token",
+     "estado": "passed",
+     "ms": 268
+    }
+   ]
+  },
+  {
+   "archivo": "src/cuenta/cuenta.service.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "E-1: rechaza el registro cuando el documento ya existe",
+     "estado": "passed",
+     "ms": 138
+    },
+    {
+     "titulo": "rechaza el registro cuando el correo ya existe, con un mensaje claro (no un error interno)",
+     "estado": "passed",
+     "ms": 94
+    },
+    {
+     "titulo": "RN-10: sin consentimiento activo, el evento se registra sin identificador de cliente",
+     "estado": "passed",
+     "ms": 104
+    },
+    {
+     "titulo": "RN-10: con consentimiento activo, el evento se registra con el identificador del cliente",
+     "estado": "passed",
+     "ms": 98
+    },
+    {
+     "titulo": "RN-11: una solicitud de supresión se ejecuta y anonimiza el comportamiento ya registrado",
+     "estado": "passed",
+     "ms": 122
+    }
+   ]
+  },
+  {
+   "archivo": "src/pedido/pedido.cupones.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "POST /cupones/validar devuelve porcentaje, descuento y total reales sobre el carrito, sin redimir",
+     "estado": "passed",
+     "ms": 103
+    },
+    {
+     "titulo": "un cupón inexistente o inactivo responde 400 con un mensaje claro",
+     "estado": "passed",
+     "ms": 72
+    },
+    {
+     "titulo": "exige sesión y un código escrito",
+     "estado": "passed",
+     "ms": 70
+    },
+    {
+     "titulo": "al confirmar, el pedido trae subtotal, descuento y total del servidor (el mismo que se cobra)",
+     "estado": "passed",
+     "ms": 99
+    },
+    {
+     "titulo": "el listado de pedidos incluye totales y los productos con su foto",
+     "estado": "passed",
+     "ms": 92
+    }
+   ]
+  },
+  {
+   "archivo": "src/pago/dominio/pago-con-debito-bancario.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "PR-09: reserva exitosa, débito bancario sin confirmación pasados 30 minutos -> fallido, pedido cancelado, reserva liberada",
+     "estado": "passed",
+     "ms": 269
+    },
+    {
+     "titulo": "esperarConfirmacion() dentro del plazo, sin confirmar todavía, devuelve falso pero no cancela el pedido",
+     "estado": "passed",
+     "ms": 193
+    }
+   ]
+  },
+  {
+   "archivo": "src/carrito/carrito.controller.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "PATCH /carrito/:cartId/items/:productId con el X-Cart-Token de otro invitado -> 403, la cantidad no cambia",
+     "estado": "passed",
+     "ms": 104
+    },
+    {
+     "titulo": "PATCH /carrito/:cartId/items/:productId con el X-Cart-Token del dueño -> 200, actualiza la cantidad",
+     "estado": "passed",
+     "ms": 52
+    },
+    {
+     "titulo": "DELETE /carrito/:cartId/items/:productId con el token de otro cliente autenticado -> 403, el item no se borra",
+     "estado": "passed",
+     "ms": 58
+    },
+    {
+     "titulo": "DELETE /carrito/:cartId/items/:productId con el token del dueño -> 200, elimina el item",
+     "estado": "passed",
+     "ms": 54
+    }
+   ]
+  },
+  {
+   "archivo": "src/catalogo/catalogo.service.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "RN-01: rechaza publicar un producto cuyo código no está homologado en el maestro",
+     "estado": "passed",
+     "ms": 58
+    },
+    {
+     "titulo": "RN-01: publica un producto con código homologado válido",
+     "estado": "passed",
+     "ms": 25
+    },
+    {
+     "titulo": "CU-01: con existencias, el producto queda comprable en la sucursal única: unidades = existencias - umbral (RN-03)",
+     "estado": "passed",
+     "ms": 64
+    },
+    {
+     "titulo": "CU-01: sin existencias el producto se publica pero no se puede comprar (0 unidades) y no crea sucursal",
+     "estado": "passed",
+     "ms": 27
+    },
+    {
+     "titulo": "CU-01: usa la sucursal que ya existe en vez de crear otra",
+     "estado": "passed",
+     "ms": 35
+    },
+    {
+     "titulo": "RN-02: rechaza un precio digital inferior al costo sin aprobación de gerencia comercial",
+     "estado": "passed",
+     "ms": 13
+    },
+    {
+     "titulo": "RN-02: permite un precio digital inferior al costo con aprobación explícita",
+     "estado": "passed",
+     "ms": 20
+    },
+    {
+     "titulo": "RN-03: las unidades disponibles restan el umbral de seguridad y las reservas vigentes",
+     "estado": "passed",
+     "ms": 31
+    },
+    {
+     "titulo": "RN-04: una sucursal con más de 15 minutos sin sincronizar no ofrece retiro",
+     "estado": "passed",
+     "ms": 31
+    },
+    {
+     "titulo": "RN-04: al reservar, una sucursal desincronizada hace más de 15 minutos se rechaza aunque haya unidades",
+     "estado": "passed",
+     "ms": 33
+    }
+   ]
+  },
+  {
+   "archivo": "src/cuenta/dominio/gestor-de-registro.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "PR-01: documento duplicado — validarDuplicado() es verdadero, no se crea Cuenta y se lanza E-1",
+     "estado": "passed",
+     "ms": 173
+    },
+    {
+     "titulo": "PI-02: registrarCliente() crea Cliente y Cuenta relacionados 1:1",
+     "estado": "passed",
+     "ms": 101
+    }
+   ]
+  },
+  {
+   "archivo": "src/catalogo/catalogo.unidades.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "la lista trae las unidades de la sucursal que más tiene y el máximo por pedido",
+     "estado": "passed",
+     "ms": 114
+    },
+    {
+     "titulo": "la búsqueda y el detalle del producto también las traen",
+     "estado": "passed",
+     "ms": 75
+    },
+    {
+     "titulo": "las unidades reservadas por otros pedidos ya están descontadas",
+     "estado": "passed",
+     "ms": 77
+    }
+   ]
+  },
+  {
+   "archivo": "src/carrito/carrito.limites.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "devuelve total por línea, subtotal y unidades calculados por el servidor",
+     "estado": "passed",
+     "ms": 81
+    },
+    {
+     "titulo": "no deja pasar de 10 unidades de un producto, sumando lo que ya hay en el carrito",
+     "estado": "passed",
+     "ms": 64
+    },
+    {
+     "titulo": "actualizar la cantidad por encima de 10 también se rechaza",
+     "estado": "passed",
+     "ms": 45
+    },
+    {
+     "titulo": "al fusionar el carrito de invitado nadie queda por encima del tope",
+     "estado": "passed",
+     "ms": 72
+    }
+   ]
+  },
+  {
+   "archivo": "prisma/lib/product-images.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "usa el sustantivo final del nombre sintético",
+     "estado": "passed",
+     "ms": 1
+    },
+    {
+     "titulo": "asigna grupo a Car y Pants",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "asigna grupo a la comida y a Soap",
+     "estado": "passed",
+     "ms": 1
+    },
+    {
+     "titulo": "devuelve null para sustantivos desconocidos",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "prioriza curados, luego DummyJSON por título, luego el grupo por id",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "sin foto fiable devuelve null (el frontend muestra el placeholder)",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "es idempotente: la segunda corrida no actualiza nada y deja sin tocar al producto sin foto",
+     "estado": "passed",
+     "ms": 70
+    },
+    {
+     "titulo": "dryRun no escribe",
+     "estado": "passed",
+     "ms": 25
+    },
+    {
+     "titulo": "cada producto con imagen produce una fila de trazabilidad en el CSV",
+     "estado": "passed",
+     "ms": 34
+    },
+    {
+     "titulo": "publica los que tienen foto, despublica los que no y es idempotente",
+     "estado": "passed",
+     "ms": 77
+    },
+    {
+     "titulo": "dryRun informa el resultado sin escribir",
+     "estado": "passed",
+     "ms": 32
+    },
+    {
+     "titulo": "cada imagen del manifiesto existe en frontend/public y tiene origen completo",
+     "estado": "passed",
+     "ms": 64
+    }
+   ]
+  },
+  {
+   "archivo": "src/catalogo/dominio/verificador-de-disponibilidad.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "PR-05: sucursal sin sincronizar hace más de 15 minutos -> validarSincronizacion() falso, sin afectar otras sucursales",
+     "estado": "passed",
+     "ms": 81
+    }
+   ]
+  },
+  {
+   "archivo": "src/pago/dominio/cifrado-token.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "descifrarToken(cifrarToken(x)) recupera exactamente el valor original",
+     "estado": "passed",
+     "ms": 102
+    },
+    {
+     "titulo": "cifrar el mismo texto dos veces produce resultados distintos (IV aleatorio por llamada)",
+     "estado": "passed",
+     "ms": 198
+    },
+    {
+     "titulo": "el valor cifrado nunca contiene el texto original en claro",
+     "estado": "passed",
+     "ms": 49
+    }
+   ]
+  },
+  {
+   "archivo": "src/carrito/dominio/gestor-de-carrito.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "obtenerCarrito() crea un carrito vacío de invitado si no existe",
+     "estado": "passed",
+     "ms": 67
+    },
+    {
+     "titulo": "agregarItem() agrega la línea y total()/subtotal() calculan correctamente",
+     "estado": "passed",
+     "ms": 38
+    },
+    {
+     "titulo": "actualizarItem() con cantidad 0 quita la línea del carrito",
+     "estado": "passed",
+     "ms": 43
+    },
+    {
+     "titulo": "quitarItem() elimina la línea indicada",
+     "estado": "passed",
+     "ms": 42
+    }
+   ]
+  },
+  {
+   "archivo": "prisma/lib/complementarios.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "deja hasta 4 sugerencias por producto, sin sí mismo y solo con productos publicados",
+     "estado": "passed",
+     "ms": 71
+    },
+    {
+     "titulo": "completa con otras categorías cuando la propia es chica",
+     "estado": "passed",
+     "ms": 38
+    },
+    {
+     "titulo": "es idempotente y respeta lo que ya estaba curado",
+     "estado": "passed",
+     "ms": 43
+    },
+    {
+     "titulo": "dryRun no escribe",
+     "estado": "passed",
+     "ms": 26
+    }
+   ]
+  },
+  {
+   "archivo": "prisma/lib/generate-catalog.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "buildFromDummy() produce digitalPrice y cost con máximo 2 decimales",
+     "estado": "passed",
+     "ms": 1
+    },
+    {
+     "titulo": "Corrección CU-2 #5: generateSynthetic() ya no fuerza precios enteros — produce digitalPrice y cost con máximo 2 decimales, igual que buildFromDummy()",
+     "estado": "passed",
+     "ms": 8
+    }
+   ]
+  },
+  {
+   "archivo": "prisma/lib/precios-cop.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "convierte con la tasa fija y redondea a la centena",
+     "estado": "passed",
+     "ms": 1
+    },
+    {
+     "titulo": "es determinístico y cae dentro del rango y del paso de su tipo",
+     "estado": "passed",
+     "ms": 17
+    },
+    {
+     "titulo": "hay rango de precio para todos los tipos con categoría asignada",
+     "estado": "passed",
+     "ms": 1
+    },
+    {
+     "titulo": "RN-02: el costo nunca supera el precio y ronda entre el 55 % y el 80 %",
+     "estado": "passed",
+     "ms": 45
+    },
+    {
+     "titulo": "devuelve null para un tipo desconocido",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "convierte a COP, no toca curados ni de prueba y es idempotente",
+     "estado": "passed",
+     "ms": 73
+    },
+    {
+     "titulo": "dryRun no escribe",
+     "estado": "passed",
+     "ms": 31
+    }
+   ]
+  },
+  {
+   "archivo": "src/catalogo/dominio/reserva-unidades.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "PR-06: cantidad solicitada mayor a las unidades disponibles (RN-03) -> reservar() devuelve falso, sin bloquear el cobro",
+     "estado": "passed",
+     "ms": 63
+    },
+    {
+     "titulo": "reservar() devuelve el id de disponibilidad cuando sí hay unidades suficientes",
+     "estado": "passed",
+     "ms": 35
+    }
+   ]
+  },
+  {
+   "archivo": "prisma/lib/traducir-nombres.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "traduce los sintéticos con concordancia de género",
+     "estado": "passed",
+     "ms": 1
+    },
+    {
+     "titulo": "concuerda el número en los sustantivos plurales",
+     "estado": "passed",
+     "ms": 1
+    },
+    {
+     "titulo": "traduce los títulos de DummyJSON y conserva marcas y modelos",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "es idempotente: un nombre ya en español no cambia",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "deja igual lo que no reconoce",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "los nombres traducidos siguen asignándose al mismo grupo de foto",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "traduce por nombre distinto y la segunda corrida no cambia nada",
+     "estado": "passed",
+     "ms": 63
+    },
+    {
+     "titulo": "dryRun no escribe",
+     "estado": "passed",
+     "ms": 23
+    }
+   ]
+  },
+  {
+   "archivo": "prisma/lib/categorizar-sinteticos.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "usa el tipo del producto, en inglés o ya traducido",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "devuelve null si no reconoce el tipo",
+     "estado": "passed",
+     "ms": 1
+    },
+    {
+     "titulo": "reasigna solo sintéticos no curados y es idempotente",
+     "estado": "passed",
+     "ms": 70
+    },
+    {
+     "titulo": "dryRun no escribe",
+     "estado": "passed",
+     "ms": 28
+    }
+   ]
+  },
+  {
+   "archivo": "src/pedido/dominio/ventas.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "toma el día completo en hora de Colombia: de las 00:00 a las 23:59:59.999 (UTC−5)",
+     "estado": "passed",
+     "ms": 1
+    },
+    {
+     "titulo": "acepta un solo extremo",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "rechaza una fecha inicial posterior a la final",
+     "estado": "passed",
+     "ms": 5
+    },
+    {
+     "titulo": "rechaza días que no existen, aunque Date los corra al mes siguiente",
+     "estado": "passed",
+     "ms": 1
+    }
+   ]
+  },
+  {
+   "archivo": "src/cuenta/dominio/cuenta.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "PI-01: activar() cambia el estado correctamente sin depender de otras clases",
+     "estado": "passed",
+     "ms": 1
+    }
+   ]
+  },
+  {
+   "archivo": "src/pedido/dominio/totales.spec.ts",
+   "estado": "passed",
+   "pruebas": [
+    {
+     "titulo": "sin cupón: total = subtotal y sin descuento",
+     "estado": "passed",
+     "ms": 1
+    },
+    {
+     "titulo": "RN-07: con cupón descuenta el porcentaje y devuelve código y porcentaje",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "subtotal = descuento + total (nunca se desfasa un centavo)",
+     "estado": "passed",
+     "ms": 1
+    },
+    {
+     "titulo": "aplicarCupon usa la misma fórmula que el cobro en la pasarela",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "agrega total por línea, subtotal, unidades y el máximo por producto",
+     "estado": "passed",
+     "ms": 0
+    },
+    {
+     "titulo": "un carrito vacío da cero",
+     "estado": "passed",
+     "ms": 0
+    }
+   ]
+  }
+ ]
+}

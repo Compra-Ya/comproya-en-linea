@@ -1,0 +1,45 @@
+classDiagram
+  direction TB
+  class PedidoController {
+    <<controlador HTTP>>
+    -pedido PedidoService
+    -auditoria AuditoriaService
+    +listar(customer) List~Pedido~
+    +obtener(customer, id) Pedido
+    +cancelar(customer, id) Pedido
+  }
+  class PedidoService {
+    <<servicio de aplicacion>>
+    +listarPorCliente(customerId int) List~Pedido~
+    +obtener(orderId int) Pedido
+    +cancelar(orderId int) Pedido
+    +marcarEstado(orderId int, status OrderStatus) void
+    +liberarReservasDelPedido(orderId int) void
+  }
+  class Pedido {
+    <<dominio>>
+    +id int
+    +status OrderStatus
+    +lineas List~LineaPedido~
+    +total() number
+    +puedeCancelarse() bool
+  }
+  class LineaPedido {
+    <<dominio>>
+    +cantidad int
+    +precioUnitario number
+    +subtotal() number
+  }
+  class AuditoriaService {
+    <<servicio de aplicacion>>
+    +registrar(accion, customerId, orderId, actor) void
+  }
+  class PrismaService {
+    <<acceso a datos>>
+  }
+  PedidoController --> PedidoService
+  PedidoController --> AuditoriaService
+  PedidoService ..> Pedido
+  Pedido "1" *-- "1..*" LineaPedido
+  PedidoService --> PrismaService
+  AuditoriaService --> PrismaService

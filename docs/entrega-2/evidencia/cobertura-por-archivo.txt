@@ -1,0 +1,45 @@
+PASS src/pedido/pedido.controller.spec.ts (7.06 s)
+PASS src/pago/pago.controller.spec.ts
+PASS src/pedido/dominio/pedido.spec.ts
+PASS src/pago/pago.service.spec.ts
+PASS src/auth/acceso-interno.spec.ts
+PASS src/cuenta/dominio/gestor-de-consentimiento.spec.ts
+PASS src/pedido/pedido.service.spec.ts
+PASS src/pedido/ventas.spec.ts
+PASS src/pedido/pedido.envio.spec.ts
+PASS src/pago/dominio/orquestador-de-pago.spec.ts
+PASS src/cuenta/cuenta.service.spec.ts
+PASS src/pedido/pedido.cupones.spec.ts
+PASS src/pago/dominio/pago-con-debito-bancario.spec.ts
+PASS src/carrito/carrito.controller.spec.ts
+PASS src/catalogo/catalogo.service.spec.ts
+PASS src/cuenta/dominio/gestor-de-registro.spec.ts
+PASS src/catalogo/catalogo.unidades.spec.ts
+PASS src/carrito/carrito.limites.spec.ts
+PASS prisma/lib/product-images.spec.ts
+PASS src/catalogo/dominio/verificador-de-disponibilidad.spec.ts
+PASS src/pago/dominio/cifrado-token.spec.ts
+PASS src/carrito/dominio/gestor-de-carrito.spec.ts
+PASS prisma/lib/complementarios.spec.ts
+PASS prisma/lib/generate-catalog.spec.ts
+PASS prisma/lib/precios-cop.spec.ts
+PASS src/catalogo/dominio/reserva-unidades.spec.ts
+PASS prisma/lib/traducir-nombres.spec.ts
+PASS prisma/lib/categorizar-sinteticos.spec.ts
+PASS src/pedido/dominio/ventas.spec.ts
+PASS src/cuenta/dominio/cuenta.spec.ts
+PASS src/pedido/dominio/totales.spec.ts
+
+=============================== Coverage summary ===============================
+Statements   : 88.23% ( 1035/1173 )
+Branches     : 65.61% ( 187/285 )
+Functions    : 82.07% ( 206/251 )
+Lines        : 88.81% ( 937/1055 )
+================================================================================
+
+Test Suites: 31 passed, 31 total
+Tests:       187 passed, 187 total
+Snapshots:   0 total
+Time:        28.141 s, estimated 31 s
+Ran all test suites.
+Test results written to: ..\..\..\..\..\DUVANS~1\AppData\Local\Temp\claude\3e3cc085550fd709\73844a4d-352f-43a9-9d0c-223b6b7fd654\scratchpad\evid\jest.json
