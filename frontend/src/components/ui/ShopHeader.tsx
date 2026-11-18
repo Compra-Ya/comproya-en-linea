@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Button } from "./Button";
 import { Enlace } from "./Enlace";
 import { Icon } from "./Icon";
@@ -17,6 +18,77 @@ const NAVEGACION: Array<{ id: NonNullable<ShopHeaderProps["active"]>; etiqueta: 
   { id: "cuenta", etiqueta: "Mi cuenta", href: "/cuenta", icono: "user" },
 ];
 
+// Menú "Categorías" de la barra de navegación: botón que abre un panel con las categorías (patrón de
+// divulgación, no de menú de aplicación: son enlaces). Se cierra con Escape (y devuelve el foco al botón),
+// al hacer clic fuera, al salir con el teclado del panel o al elegir una categoría.
+function MenuCategorias({ categorias }: { categorias: NonNullable<ShopHeaderProps["categories"]> }) {
+  const [abierto, setAbierto] = useState(false);
+  const raiz = useRef<HTMLDivElement>(null);
+  const boton = useRef<HTMLButtonElement>(null);
+  const hayActiva = categorias.some((c) => c.active);
+
+  useEffect(() => {
+    if (!abierto) return;
+    const fuera = (e: MouseEvent | TouchEvent) => {
+      if (raiz.current && !raiz.current.contains(e.target as Node)) setAbierto(false);
+    };
+    document.addEventListener("mousedown", fuera);
+    document.addEventListener("touchstart", fuera);
+    return () => {
+      document.removeEventListener("mousedown", fuera);
+      document.removeEventListener("touchstart", fuera);
+    };
+  }, [abierto]);
+
+  return (
+    <div
+      ref={raiz}
+      className="cy-catmenu-wrap"
+      onKeyDown={(e) => {
+        if (e.key === "Escape" && abierto) {
+          setAbierto(false);
+          boton.current?.focus();
+        }
+      }}
+      onBlur={(e) => {
+        if (abierto && !e.currentTarget.contains(e.relatedTarget as Node | null)) setAbierto(false);
+      }}
+    >
+      <button
+        ref={boton}
+        type="button"
+        className={cx("cy-nav-link", "cy-nav-btn", (abierto || hayActiva) && "cy-nav-active")}
+        aria-expanded={abierto}
+        aria-controls="cy-catmenu"
+        onClick={() => setAbierto((v) => !v)}
+      >
+        <span className="cy-nav-icon">
+          <Icon name="grid" size={18} />
+        </span>
+        <span>Categorías</span>
+        <Icon name="chevron-down" size={16} className={cx("cy-nav-chev", abierto && "cy-nav-chev-open")} />
+      </button>
+      <div id="cy-catmenu" className="cy-catmenu" hidden={!abierto}>
+        <p className="cy-catmenu-title">Compra por categoría</p>
+        <ul className="cy-catmenu-list">
+          {categorias.map((c) => (
+            <li key={c.href}>
+              <Enlace href={c.href} className={cx("cy-catmenu-link", c.active && "cy-catmenu-active")} aria-current={c.active ? "page" : undefined} onClick={() => setAbierto(false)}>
+                <span>{c.name}</span>
+                {c.count !== undefined ? <span className="cy-catmenu-count">{c.count.toLocaleString("es-CO")}</span> : null}
+              </Enlace>
+            </li>
+          ))}
+        </ul>
+        <Enlace href="/" className="cy-catmenu-all" onClick={() => setAbierto(false)}>
+          Ver todo el catálogo
+          <Icon name="arrow-right" size={16} />
+        </Enlace>
+      </div>
+    </div>
+  );
+}
+
 export function ShopHeader({
   logoSrc = "/marca/logo-horizontal.svg",
   variant = "full",
@@ -28,6 +100,7 @@ export function ShopHeader({
   onLogout,
   query,
   onSearch,
+  categories,
   className,
 }: ShopHeaderProps & { onLogout?: () => void }) {
   const compacta = variant === "compact";
@@ -127,22 +200,25 @@ export function ShopHeader({
       <nav className="cy-nav" aria-label="Secciones de la tienda">
         <div className="cy-nav-inner">
           {NAVEGACION.map((n) => {
-            const activo = active === n.id;
+            const activo = active === n.id && !categories?.some((c) => c.active);
             return (
-              <Enlace key={n.id} href={n.href} className={cx("cy-nav-link", activo && "cy-nav-active")} aria-current={activo ? "page" : undefined}>
-                <span className="cy-nav-icon">
-                  <Icon name={n.icono} size={18} />
-                  {n.id === "carrito" && cartCount > 0 ? (
-                    <span className="cy-count" aria-hidden="true">
-                      {cartCount}
-                    </span>
-                  ) : null}
-                </span>
-                <span>
-                  {n.etiqueta}
-                  {n.id === "carrito" && cartCount > 0 ? <span className="cy-sr">, {unidades(cartCount, "producto", "productos")}</span> : null}
-                </span>
-              </Enlace>
+              <Fragment key={n.id}>
+                <Enlace href={n.href} className={cx("cy-nav-link", activo && "cy-nav-active")} aria-current={activo ? "page" : undefined}>
+                  <span className="cy-nav-icon">
+                    <Icon name={n.icono} size={18} />
+                    {n.id === "carrito" && cartCount > 0 ? (
+                      <span className="cy-count" aria-hidden="true">
+                        {cartCount}
+                      </span>
+                    ) : null}
+                  </span>
+                  <span>
+                    {n.etiqueta}
+                    {n.id === "carrito" && cartCount > 0 ? <span className="cy-sr">, {unidades(cartCount, "producto", "productos")}</span> : null}
+                  </span>
+                </Enlace>
+                {n.id === "catalogo" && categories && categories.length > 0 ? <MenuCategorias categorias={categories} /> : null}
+              </Fragment>
             );
           })}
         </div>

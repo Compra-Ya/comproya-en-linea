@@ -34,6 +34,16 @@ jobs:
           docker push $IMAGE
           echo "IMAGE=$IMAGE" >> $GITHUB_ENV
 
+      # Cloud SQL no se abre a internet: el proxy de autenticación crea un túnel en 127.0.0.1:5432
+      # con la cuenta de servicio (rol roles/cloudsql.client). Por eso DATABASE_URL de este secreto
+      # apunta a 127.0.0.1:5432; la que usa Cloud Run (Secret Manager) apunta al socket de Cloud SQL.
+      - name: Abrir túnel a Cloud SQL
+        run: |
+          curl -fsSLo cloud-sql-proxy https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.14.1/cloud-sql-proxy.linux.amd64
+          chmod +x cloud-sql-proxy
+          ./cloud-sql-proxy --port 5432 ${{ secrets.CLOUD_SQL_CONNECTION_NAME }} &
+          sleep 8
+
       - name: Migrar la base de datos (Prisma)
         run: |
           cd backend
@@ -68,10 +78,17 @@ jobs:
       - name: Configurar Docker para Artifact Registry
         run: gcloud auth configure-docker $REGION-docker.pkg.dev --quiet
 
+      # La URL del backend se incrusta en el frontend al compilarlo (NEXT_PUBLIC_API_URL).
+      - name: Leer la URL del backend desplegado
+        run: |
+          BACKEND_URL=$(gcloud run services describe comproya-backend --region $REGION --format 'value(status.url)')
+          test -n "$BACKEND_URL"
+          echo "BACKEND_URL=$BACKEND_URL" >> $GITHUB_ENV
+
       - name: Build y push de la imagen
         run: |
           IMAGE=$REGION-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/$REPO/frontend:${{ github.sha }}
-          docker build -t $IMAGE ./frontend
+          docker build --build-arg NEXT_PUBLIC_API_URL=$BACKEND_URL/api -t $IMAGE ./frontend
           docker push $IMAGE
           echo "IMAGE=$IMAGE" >> $GITHUB_ENV
 

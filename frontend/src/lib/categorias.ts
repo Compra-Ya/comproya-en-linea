@@ -43,3 +43,13 @@ export function infoCategoria(nombre: string | undefined): InfoCategoria {
   if (!nombre) return { nombre: "", descripcion: "", imagen: null };
   return CATEGORIAS[nombre] ?? { nombre, descripcion: "", imagen: null };
 }
+
+/**
+ * Orden de las categorías en los menús: Electrodomésticos primero (es la línea del negocio) y luego las demás por
+ * cantidad de productos, de mayor a menor. Igual que el carrusel del catálogo.
+ */
+export function ordenarCategorias<T extends { name: string; productCount?: number }>(categorias: T[]): T[] {
+  return [...categorias].sort((a, b) =>
+    a.name === "Electrodomésticos" ? -1 : b.name === "Electrodomésticos" ? 1 : (b.productCount ?? 0) - (a.productCount ?? 0),
+  );
+}

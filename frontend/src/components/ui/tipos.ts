@@ -72,7 +72,7 @@ export interface QuantityStepperProps { value?: number; defaultValue?: number; o
 
 export interface CouponFieldProps { value: string; onChange?: (v: string) => void; onApply?: () => void; onRemove?: () => void; status?: 'idle' | 'checking' | 'applied' | 'invalid'; appliedText?: string; errorText?: string; tipOpen?: boolean; id?: string; className?: string }
 
-export interface ShopHeaderProps { logoSrc?: string; variant?: 'full' | 'compact'; active?: 'catalogo' | 'carrito' | 'pedidos' | 'cuenta'; cartCount?: number; cartTotal?: number; customerName?: string; logoutHref?: string; query?: string; onSearch?: (q: string) => void; className?: string }
+export interface ShopHeaderProps { logoSrc?: string; variant?: 'full' | 'compact'; active?: 'catalogo' | 'carrito' | 'pedidos' | 'cuenta'; cartCount?: number; cartTotal?: number; customerName?: string; logoutHref?: string; query?: string; onSearch?: (q: string) => void; categories?: { name: string; href: string; count?: number; active?: boolean }[]; className?: string }
 
 export interface CheckoutStepsProps { current: 1 | 2 | 3 | 4; back?: { label: string; href: string }; className?: string }
 

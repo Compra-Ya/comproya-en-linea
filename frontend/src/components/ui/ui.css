@@ -7,7 +7,7 @@ body { margin: 0; background: var(--surface-muted); color: var(--ink); font-fami
 .cy-icon { flex-shrink: 0; display: block; }
 .cy-link { color: var(--orange-600); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; background: none; border: 0; padding: 0; font: inherit; font-weight: 600; cursor: pointer; transition: color var(--cy-fast) var(--cy-ease); }
 .cy-link:hover { color: var(--orange-700); }
-:where(.cy-btn, .cy-iconbtn, .cy-link, .cy-input, .cy-nav-link, .cy-cart-btn, .cy-brand, .cy-back, .cy-pcard-link, .cy-search input, .cy-search button, .cy-check input, .cy-catcard, .cy-infotip-btn, .cy-li-remove, .cy-crumbs a, .cy-footer a):focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+:where(.cy-btn, .cy-iconbtn, .cy-link, .cy-input, .cy-nav-link, .cy-catmenu-link, .cy-catmenu-all, .cy-cart-btn, .cy-brand, .cy-back, .cy-pcard-link, .cy-search input, .cy-search button, .cy-check input, .cy-catcard, .cy-infotip-btn, .cy-li-remove, .cy-crumbs a, .cy-footer a):focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
 /* ---------- Tooltip ---------- */
 .cy-tip-wrap { position: relative; display: inline-flex; }
@@ -191,6 +191,21 @@ select.cy-input { appearance: auto; }
 .cy-nav-inner { max-width: var(--container); margin: 0 auto; display: flex; gap: var(--space-2); padding: 0 var(--space-4); }
 .cy-nav-link { display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--control-md); padding: 0 var(--space-3); color: var(--ink); font-weight: 600; font-size: 14px; text-decoration: none; border-bottom: 3px solid transparent; box-sizing: border-box; transition: color var(--cy-fast) var(--cy-ease), border-color var(--cy-fast) var(--cy-ease); }
 .cy-nav-link:hover { color: var(--orange-600); }
+.cy-nav { position: relative; }
+.cy-nav-btn { background: none; border: 0; border-bottom: 3px solid transparent; font-family: inherit; cursor: pointer; }
+.cy-nav-chev { margin-left: -2px; transition: transform var(--cy-fast) var(--cy-ease); }
+.cy-nav-chev-open { transform: rotate(180deg); }
+.cy-catmenu-wrap { display: contents; }
+.cy-catmenu[hidden] { display: none; }
+.cy-catmenu { position: absolute; left: 0; right: 0; top: 100%; z-index: 30; box-sizing: border-box; background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); box-shadow: 0 14px 28px rgba(16, 24, 40, .14); padding: var(--space-4) max(var(--space-4), calc((100% - var(--container)) / 2 + var(--space-4))) var(--space-3); }
+.cy-catmenu-title { margin: 0 0 var(--space-2); font-size: 13px; font-weight: 700; color: var(--ink-soft); }
+.cy-catmenu-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 2px var(--space-4); max-height: 60vh; overflow-y: auto; }
+.cy-catmenu-link { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); min-height: var(--control-md); padding: 0 var(--space-3); border-radius: var(--radius-sm); color: var(--ink); font-size: 14px; text-decoration: none; transition: background-color var(--cy-fast) var(--cy-ease), color var(--cy-fast) var(--cy-ease); }
+.cy-catmenu-link:hover { background: var(--navy-100); color: var(--navy-700); }
+.cy-catmenu-active { color: var(--orange-600); font-weight: 700; }
+.cy-catmenu-count { color: var(--ink-soft); font-size: 12px; font-variant-numeric: tabular-nums; }
+.cy-catmenu-all { display: inline-flex; align-items: center; gap: var(--space-2); margin-top: var(--space-2); min-height: var(--control-md); color: var(--orange-600); font-weight: 700; font-size: 14px; text-decoration: none; }
+.cy-catmenu-all:hover { text-decoration: underline; }
 .cy-nav-active { color: var(--orange-600); border-bottom-color: var(--orange-600); }
 @media (max-width: 720px) {
   .cy-utility-inner { padding: 6px var(--space-4); font-size: 12px; }
@@ -203,7 +218,11 @@ select.cy-input { appearance: auto; }
   .cy-account-hello { display: none; }
   .cy-cart-btn { display: none; }
   .cy-header-actions .cy-btn { min-height: 44px; padding: 0 var(--space-3); }
-  .cy-nav-inner { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; padding: 0; }
+  .cy-nav-inner { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 0; padding: 0; }
+  .cy-nav-chev { display: none; }
+  .cy-catmenu { padding: var(--space-3) var(--space-4); }
+  .cy-catmenu-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px var(--space-2); max-height: 55vh; }
+  .cy-catmenu-link { font-size: 13px; padding: 0 var(--space-2); }
   .cy-nav-link { flex-direction: column; justify-content: center; gap: 2px; min-height: 56px; padding: 6px 2px; font-size: 12px; line-height: 16px; text-align: center; }
 }
 
