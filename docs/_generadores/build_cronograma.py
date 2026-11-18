@@ -23,7 +23,9 @@ RAIZ = Path(__file__).resolve().parent.parent
 SALIDA = RAIZ / "cronograma"
 FECHA_DOC = "17/11/2026"
 PROYECTO = "Aplicación Web de Comercio Electrónico — Venta de Electrodomésticos y Productos de Retail"
-ESTADO = "☐ Borrador  ☒ En revisión  ☐ Aprobado"
+FECHA_APROBACION = "17/11/2026"
+ESTADO = ("☐ Borrador  ☐ En revisión  ☒ Aprobado — línea base aprobada el " + FECHA_APROBACION + " por la Dirección de ComproYa "
+          "(aprobación asumida para el ejercicio académico: el patrocinador es simulado y no hay acta firmada)")
 JIRA = "https://ucentral-team-ihdichmo.atlassian.net/jira/software/projects/SCRUM/boards/1"
 DRIVE = "https://drive.google.com/drive/folders/1OHncXswrctcvNnlASFYxE8_a__SENTlS"
 N, D = m.CORTO[m.NICOLAS], m.CORTO[m.DUVAN]
@@ -343,7 +345,7 @@ def construir_docx(plantilla: Path, destino: Path) -> None:
     t = pl.find_table(doc, "ID cambio")
     pl.fill_table(t, [
         ["CH-01", "Los 6 sprints de la Declaración de alcance (20-oct) se agrupan en 3 sprints de dos semanas (19-oct a 27-nov) con 60 h cada uno",
-         "Cronograma y backlog: 17 historias en 3 sprints; la EDT conserva 5 entregables", "Registrado; pendiente de ratificar en la Declaración de alcance",
+         "Cronograma y backlog: 17 historias en 3 sprints; la EDT conserva 5 entregables", f"Aprobado el {FECHA_APROBACION} con la línea base (aprobación asumida); la Declaración de alcance se actualiza después",
          "Dirección de ComproYa", "Plan de gestión de requisitos PGR-001 v1.0 (10/11/2026); este plan v1.0"],
         ["CH-02", "Los festivos del 02-nov y 16-nov caen en el primer día de los sprints 2 y 3", "Capacidad −3 h por integrante por festivo (−6 h por sprint): el sprint 2 (56 h) quedaría "
          "sobrecomprometido en 2 h", "Diferido hasta confirmar si el equipo trabaja esos días", "Product Owner", "Este plan v1.0 (17/11/2026)"],
@@ -363,13 +365,78 @@ def construir_docx(plantilla: Path, destino: Path) -> None:
     t = pl.find_table(doc, "Verificación", "Sí")
     obs = [("☒", "Lunes a viernes, 10 días hábiles por sprint, horas-persona."), ("☒", "Cada historia tiene criterio y prueba (sección 4)."), ("☒", "Sección 5 y Anexo B."),
            ("☒", "Sección 6: técnica y supuestos; sin rango calibrado."), ("☒", "Sección 7.1: 30 h por integrante y sprint."),
-           ("☐", "La línea base está en revisión; falta la aprobación de la Dirección de ComproYa."), ("☒", "Sección 9."), ("☒", "Sección 11."), ("☒", "Sección 12.")]
+           ("☒", f"Línea base aprobada el {FECHA_APROBACION} por la Dirección de ComproYa (supuesto del ejercicio: patrocinador simulado, sin acta firmada)."), ("☒", "Sección 9."), ("☒", "Sección 11."), ("☒", "Sección 12.")]
     for i, (marca, texto) in enumerate(obs, start=1):
         c = t.rows[i].cells
         pl.set_cell(c[1], marca)
         pl.set_cell(c[2], "☐" if marca == "☒" else "☒")
         pl.set_cell(c[3], "☐")
         pl.set_cell(c[4], texto)
+
+
+    # --- Anexo D. Evidencia de Jira
+    import json as _json
+    snap = _json.loads((SALIDA / "soporte" / "jira-2026-11-17.json").read_text(encoding="utf-8"))
+    inc = snap["incidencias"]
+    hist = [x for x in inc if x["tipo"] == "Historia"]
+    subs = [x for x in inc if x["tipo"] == "Subtask" and x["padre"]]
+    por_padre = {}
+    for x in subs:
+        por_padre.setdefault(x["padre"], []).append(x)
+    sprints_n = {}
+    for h in hist:
+        sprints_n.setdefault(h["sprint"], []).append(h)
+    titulo = pl.find_paragraph(doc, "Anexo A. Lista de verificación del plan")
+    tabla_a = pl.find_table(doc, "Verificación", "Sí")
+    pD = pl.paragraph_after_table(tabla_a, "Anexo D. Evidencia de Jira al 17/11/2026", titulo)
+    intro = pl.insert_paragraph_after(pD, (
+        f"Tablero del proyecto «Compra Ya» (clave SCRUM): {JIRA}. El tablero es privado: para verlo en vivo hay que invitar a la persona a la organización de Jira; "
+        "esta tabla es la exportación de la consulta project = SCRUM del 17/11/2026 (docs/cronograma/soporte/jira-2026-11-17.json). "
+        f"Contiene {snap['total']} incidencias: 5 épicas (los 5 entregables de la EDT), {len(hist)} historias y {len(subs)} subtareas con padre. "
+        "El campo clásico «Progreso» de Jira mide tiempo registrado, no estado, y las subtareas no llevan tiempo registrado: por eso ese campo muestra 0 aunque todas las "
+        "subtareas estén Finalizadas. El avance por estado es la columna «Subtareas finalizadas»."), copy_format_from=cuerpo)
+    # tabla de sprints (clon de la tabla de releases, 6 columnas)
+    t_rel = pl.find_table(doc, "Release")
+    import copy as _copy
+    nueva = _copy.deepcopy(t_rel._tbl)
+    intro._p.addnext(nueva)
+    t_sp = docx.table.Table(nueva, intro._parent)
+    pl.set_cell(t_sp.rows[0].cells[0], "Sprint")
+    pl.set_cell(t_sp.rows[0].cells[1], "Fechas planificadas")
+    pl.set_cell(t_sp.rows[0].cells[2], "Estado en Jira")
+    pl.set_cell(t_sp.rows[0].cells[3], "Historias finalizadas")
+    pl.set_cell(t_sp.rows[0].cells[4], "Subtareas finalizadas")
+    pl.set_cell(t_sp.rows[0].cells[5], "Cierre en Jira")
+    cierre = {"Sprint 1 · Flujo de compra": "10/11/2026", "Sprint 2 · Flujo gerencial": "17/11/2026", "Sprint 3 · Flujo de catálogo": "—"}
+    estados = {"closed": "Cerrado", "active": "Activo", "future": "Futuro"}
+    filas_sp = []
+    for n, sp in m.SPRINTS.items():
+        hs = sprints_n.get(sp["nombre"], [])
+        sub_sp = [x for h in hs for x in por_padre.get(h["clave"], [])]
+        est = estados.get(hs[0]["sprint_estado"], "—") if hs else "—"
+        filas_sp.append([sp["nombre"], f"{d_txt(sp['inicio'])} a {d_txt(sp['fin'])}", est,
+                         f"{sum(1 for h in hs if h['estado'] == 'Finalizado')} de {len(hs)}",
+                         f"{sum(1 for x in sub_sp if x['estado'] == 'Finalizado')} de {len(sub_sp)}", cierre[sp["nombre"]]])
+    pl.fill_table(t_sp, filas_sp)
+    pm = pl.paragraph_after_table(t_sp, "Historias de usuario (el sprint 2 está cerrado con sus 4 historias y 24 subtareas finalizadas; HU-101 y HU-117 son del sprint 3, en curso).", cuerpo)
+    # tabla de historias (clon de la tabla de actividades, 7 columnas)
+    t_act = pl.find_table(doc, "ID", "Actividad / entregable")
+    nueva2 = _copy.deepcopy(t_act._tbl)
+    pm._p.addnext(nueva2)
+    t_h = docx.table.Table(nueva2, pm._parent)
+    for j, enc in enumerate(["Clave de Jira", "Historia", "Sprint", "Responsable", "Estado", "Subtareas finalizadas", "Resuelta"]):
+        pl.set_cell(t_h.rows[0].cells[j], enc)
+    filas_h = []
+    for h in sorted(hist, key=lambda x: x["resumen"][:6]):
+        hs = por_padre.get(h["clave"], [])
+        filas_h.append([h["clave"], h["resumen"], (h["sprint"] or "—").split(" · ")[0], (h["responsable"] or "—").split()[0].capitalize(), h["estado"],
+                        f"{sum(1 for x in hs if x['estado'] == 'Finalizado')} de {len(hs)}" if hs else "sin subtareas",
+                        (h["resuelta"] or "—")[:10]])
+    pl.fill_table(t_h, filas_h)
+    for el in list(t_h._tbl.xpath(".//w:strike")):
+        el.getparent().remove(el)
+    pl.paragraph_after_table(t_h, "SCRUM-4 («Subtarea 2.1») es una subtarea suelta, sin padre ni sprint, que Jira creó por defecto; no pertenece al plan. "
+                                  "Las 12 subtareas pendientes son las de HU-101 y HU-117 (sprint 3).", cuerpo)
 
     destino.parent.mkdir(parents=True, exist_ok=True)
     doc.save(str(destino))

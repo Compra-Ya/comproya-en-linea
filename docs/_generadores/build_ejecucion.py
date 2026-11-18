@@ -60,9 +60,9 @@ def definir(d: dict) -> dict:
     comp_tot = j["numTotalTests"]
     SP = "docs/entrega-2/evidencia/"
     gob = [
-        ("Cumplimiento de decisiones de gobernanza", "(Decisiones implementadas / Decisiones aprobadas) × 100 = 0 / 0 → **No aplica**",
-         "docs/cronograma, sección 11.1 (CH-01 y CH-02 sin ratificar)", N, "Quincenal",
-         "La Dirección de ComproYa todavía no ha aprobado ninguna decisión registrada: CH-01 (3 sprints en lugar de 6) queda pendiente de ratificar y CH-02 (festivos) diferido; con 0 decisiones aprobadas el cociente no existe."),
+        ("Cumplimiento de decisiones de gobernanza", "(Decisiones implementadas / Decisiones aprobadas) × 100 = 1 / 1 = **100 %**",
+         "docs/cronograma, secciones 11.1 y Anexo A (CH-01 aprobado el 17/11/2026)", N, "Quincenal",
+         "La Dirección de ComproYa aprobó la línea base del cronograma el 17-nov-2026; esa aprobación es una suposición del ejercicio académico (patrocinador simulado, sin acta firmada). Con ella queda aprobada una decisión, CH-01 (3 sprints en lugar de 6), que ya está implementada en Jira (3 sprints, dos cerrados); CH-02 (festivos) sigue diferido y no cuenta."),
         ("Cumplimiento del alcance", f"(Entregables aceptados / Entregables planificados) × 100 = 4 / 4 = **100 %**",
          "Segundo entregable, Anexo B; " + SP + "jest-completo.json y sprint2-resultado.json", N, "Por sprint",
          "Entregable = historia del sprint 2 (HU-113 a HU-116). «Aceptado» se define como que las pruebas de aceptación de la historia (TEST-007, TEST-012 y TEST-013) pasan; la aceptación del Product Owner en la Sprint Review está pendiente y se cuenta en el KPI de aceptación del incremento."),
