@@ -24,8 +24,9 @@ SALIDA = RAIZ / "cronograma"
 FECHA_DOC = "17/11/2026"
 PROYECTO = "Aplicación Web de Comercio Electrónico — Venta de Electrodomésticos y Productos de Retail"
 FECHA_APROBACION = "17/11/2026"
-ESTADO = ("☐ Borrador  ☐ En revisión  ☒ Aprobado — línea base aprobada el " + FECHA_APROBACION + " por la Dirección de ComproYa "
-          "(aprobación asumida para el ejercicio académico: el patrocinador es simulado y no hay acta firmada)")
+ACTA = "AC-PGC-001"
+ESTADO = ("☐ Borrador  ☐ En revisión  ☒ Aprobado — línea base aprobada mediante el Acta " + ACTA + " (Anexo E), fechada el " + FECHA_APROBACION +
+          "; vigente desde la fecha de su última firma")
 JIRA = "https://ucentral-team-ihdichmo.atlassian.net/jira/software/projects/SCRUM/boards/1"
 DRIVE = "https://drive.google.com/drive/folders/1OHncXswrctcvNnlASFYxE8_a__SENTlS"
 N, D = m.CORTO[m.NICOLAS], m.CORTO[m.DUVAN]
@@ -345,7 +346,7 @@ def construir_docx(plantilla: Path, destino: Path) -> None:
     t = pl.find_table(doc, "ID cambio")
     pl.fill_table(t, [
         ["CH-01", "Los 6 sprints de la Declaración de alcance (20-oct) se agrupan en 3 sprints de dos semanas (19-oct a 27-nov) con 60 h cada uno",
-         "Cronograma y backlog: 17 historias en 3 sprints; la EDT conserva 5 entregables", f"Aprobado el {FECHA_APROBACION} con la línea base (aprobación asumida); la Declaración de alcance se actualiza después",
+         "Cronograma y backlog: 17 historias en 3 sprints; la EDT conserva 5 entregables", f"Aprobado en el Acta {ACTA} del {FECHA_APROBACION} (Anexo E), junto con la línea base; la Declaración de alcance se actualiza después",
          "Dirección de ComproYa", "Plan de gestión de requisitos PGR-001 v1.0 (10/11/2026); este plan v1.0"],
         ["CH-02", "Los festivos del 02-nov y 16-nov caen en el primer día de los sprints 2 y 3", "Capacidad −3 h por integrante por festivo (−6 h por sprint): el sprint 2 (56 h) quedaría "
          "sobrecomprometido en 2 h", "Diferido hasta confirmar si el equipo trabaja esos días", "Product Owner", "Este plan v1.0 (17/11/2026)"],
@@ -365,7 +366,7 @@ def construir_docx(plantilla: Path, destino: Path) -> None:
     t = pl.find_table(doc, "Verificación", "Sí")
     obs = [("☒", "Lunes a viernes, 10 días hábiles por sprint, horas-persona."), ("☒", "Cada historia tiene criterio y prueba (sección 4)."), ("☒", "Sección 5 y Anexo B."),
            ("☒", "Sección 6: técnica y supuestos; sin rango calibrado."), ("☒", "Sección 7.1: 30 h por integrante y sprint."),
-           ("☒", f"Línea base aprobada el {FECHA_APROBACION} por la Dirección de ComproYa (supuesto del ejercicio: patrocinador simulado, sin acta firmada)."), ("☒", "Sección 9."), ("☒", "Sección 11."), ("☒", "Sección 12.")]
+           ("☒", f"Línea base aprobada en el Acta {ACTA} del {FECHA_APROBACION} (Anexo E); vigente desde la fecha de su última firma."), ("☒", "Sección 9."), ("☒", "Sección 11."), ("☒", "Sección 12.")]
     for i, (marca, texto) in enumerate(obs, start=1):
         c = t.rows[i].cells
         pl.set_cell(c[1], marca)
@@ -435,8 +436,61 @@ def construir_docx(plantilla: Path, destino: Path) -> None:
     pl.fill_table(t_h, filas_h)
     for el in list(t_h._tbl.xpath(".//w:strike")):
         el.getparent().remove(el)
-    pl.paragraph_after_table(t_h, "SCRUM-4 («Subtarea 2.1») es una subtarea suelta, sin padre ni sprint, que Jira creó por defecto; no pertenece al plan. "
-                                  "Las 12 subtareas pendientes son las de HU-101 y HU-117 (sprint 3).", cuerpo)
+    pnota = pl.paragraph_after_table(t_h, "SCRUM-4 («Subtarea 2.1») es una subtarea suelta, sin padre ni sprint, que Jira creó por defecto; no pertenece al plan. "
+                                          "Las 12 subtareas pendientes son las de HU-101 y HU-117 (sprint 3).", cuerpo)
+
+    # --- Anexo E. Acta de aprobación de la línea base (fecha real: la del día en que se elabora; no es retroactiva)
+    n_act, n_crit = len(lista), sum(1 for a in lista if a.critica)
+    fin_proy = d_txt(m.SPRINTS[3]["fin"])
+    t_ident = pl.find_table(doc, "Identificación")
+    t_roles = pl.find_table(doc, "Rol", "Responsabilidades")
+    pE = pl.insert_paragraph_after(pnota, f"Anexo E. Acta de aprobación de la línea base del cronograma ({ACTA})", copy_format_from=titulo)
+    pe1 = pl.insert_paragraph_after(pE, (
+        "Esta acta deja constancia de la aprobación de la línea base del cronograma. Se elabora y se fecha el " + FECHA_APROBACION + ", que es el día en que se formaliza: "
+        "no sustituye ni simula una aprobación anterior."), copy_format_from=cuerpo)
+    nueva_i = _copy.deepcopy(t_ident._tbl)
+    pe1._p.addnext(nueva_i)
+    t_e1 = docx.table.Table(nueva_i, pe1._parent)
+    pl.set_cell(t_e1.rows[0].cells[0], "Dato")
+    pl.set_cell(t_e1.rows[0].cells[1], "Detalle")
+    pl.fill_table(t_e1, [
+        ["Acta", ACTA],
+        ["Proyecto", PROYECTO],
+        ["Documento que se aprueba", "Plan de gestión del cronograma PGC-001 v1.0 y archivo Cronograma_ComproYa.xml (MS Project)"],
+        ["Fecha del acta", FECHA_APROBACION],
+        ["Forma de aprobación", "Firma de esta acta por quienes figuran en la tabla de firmas"],
+        ["Vigencia", "Desde la fecha de la última firma; no tiene efecto retroactivo"],
+    ])
+    pe2 = pl.paragraph_after_table(t_e1, "**Decisiones**", cuerpo)
+    d1 = pl.insert_paragraph_after(pe2, (
+        f"1. Se aprueba la línea base del cronograma v1.0: 3 sprints de dos semanas (del 19/10/2026 al {fin_proy}), 17 historias, {n_act} actividades de las que "
+        f"{n_crit} están en la ruta crítica, capacidad de 60 horas-persona por sprint y cierre en la Sprint Review del {fin_proy}."), copy_format_from=cuerpo)
+    d2 = pl.insert_paragraph_after(d1, (
+        "2. Se aprueba el cambio CH-01: los 6 sprints de la Declaración de alcance se agrupan en 3 sprints. La Declaración de alcance se actualiza después "
+        "(NC-001 del plan de calidad)."), copy_format_from=cuerpo)
+    d3 = pl.insert_paragraph_after(d2, (
+        "3. El cambio CH-02 (festivos del 02/11 y del 16/11) queda diferido: no se aprueba ni se rechaza hasta confirmar si el equipo trabaja esos días."), copy_format_from=cuerpo)
+    d4 = pl.insert_paragraph_after(d3, (
+        "4. Todo cambio posterior a la línea base se tramita como solicitud de cambio, según la sección 11 de este plan."), copy_format_from=cuerpo)
+    d5 = pl.insert_paragraph_after(d4, "**Observación sobre la oportunidad de la aprobación**", copy_format_from=cuerpo)
+    d6 = pl.insert_paragraph_after(d5, (
+        f"El acta se firma el {FECHA_APROBACION}, con el sprint 1 y el sprint 2 ya ejecutados y cerrados en Jira (el 10/11 y el 17/11/2026). Hasta esa fecha el cronograma se "
+        "gestionó en Jira sin acta de aprobación. El acta formaliza la línea base desde su firma; no se fecha antes porque no se firmó antes. La aprobación tardía "
+        "queda como lección aprendida: en los proyectos siguientes la línea base se aprueba antes del primer sprint."), copy_format_from=cuerpo)
+    d7 = pl.insert_paragraph_after(d6, "**Firmas**", copy_format_from=cuerpo)
+    nueva_r = _copy.deepcopy(t_roles._tbl)
+    d7._p.addnext(nueva_r)
+    t_e2 = docx.table.Table(nueva_r, d7._parent)
+    for j, enc in enumerate(["Rol", "Nombre y cargo", "Firma y fecha de firma"]):
+        pl.set_cell(t_e2.rows[0].cells[j], enc)
+    pl.fill_table(t_e2, [
+        ["Patrocinador (Dirección de ComproYa)", "A completar por quien firme por la Dirección: ______________", "\n\n"],
+        ["Product Owner", "Nicolás Santiago Cancimance Pabón", "\n\n"],
+        ["Director del proyecto y Scrum Master", "Duván Camilo Serrano Rojas", "\n\n"],
+    ])
+    for el in list(t_e1._tbl.xpath(".//w:strike")) + list(t_e2._tbl.xpath(".//w:strike")):
+        el.getparent().remove(el)
+    pl.paragraph_after_table(t_e2, "La fecha de firma la escribe cada firmante el día en que firma.", cuerpo)
 
     destino.parent.mkdir(parents=True, exist_ok=True)
     doc.save(str(destino))
