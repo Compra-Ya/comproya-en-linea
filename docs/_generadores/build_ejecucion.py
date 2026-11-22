@@ -35,6 +35,12 @@ def num(x: float, d: int = 1) -> str:
     return f"{x:.{d}f}".replace(".", ",")
 
 
+def fecha_corta(iso: str) -> str:
+    meses = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"]
+    _, m, d = iso.split("-")
+    return f"{int(d)}-{meses[int(m) - 1]}"
+
+
 def cargar() -> dict:
     j = json.loads((EV / "jest-completo.json").read_text(encoding="utf-8"))
     cov = json.loads((EV / "cobertura-resumen.json").read_text(encoding="utf-8"))["total"]
@@ -58,6 +64,12 @@ def definir(d: dict) -> dict:
     altas = au["backend"]["high"] + au["frontend"]["high"]
     comp_ok = j["numPassedTests"]
     comp_tot = j["numTotalTests"]
+    ga = k["github_actions"]
+    n_ga, ok_ga = ga["ejecuciones_hasta_el_corte"], ga["exitosas"]
+    f_ga = [e["fecha"] for e in ga["ejecuciones"]]
+    rango_ga = f"{fecha_corta(min(f_ga))} al {fecha_corta(max(f_ga))}"
+    pasos_ga = {e["paso_que_fallo"] for e in ga["ejecuciones"]}
+    assert pasos_ga == {"Run google-github-actions/auth@v2"}, pasos_ga  # el texto de la justificación depende de esto
     SP = "docs/entrega-2/evidencia/"
     gob = [
         ("Cumplimiento de decisiones de gobernanza", "(Decisiones implementadas / Decisiones aprobadas) × 100 = 1 / 1 = **100 %**",
@@ -94,7 +106,7 @@ def definir(d: dict) -> dict:
         ("Índice de desempeño del cronograma (SPI)",
          f"EV / PV = {antes['horas_finalizadas']} / {comp} = **{num(antes['horas_finalizadas'] / comp, 2)}** el 13-nov (fin planificado) y {despues['horas_finalizadas']} / {comp} = **{num(despues['horas_finalizadas'] / comp, 2)}** el 17-nov",
          "docs/ejecucion/soporte/kpi-medidas.json (Jira antes y después del cierre)", D, "Semanal",
-         f"Alcance: sprint 2. PV son las {comp} horas de las 24 subtareas que debían estar terminadas el 13-nov; EV son las horas de las subtareas en estado Finalizado. Jira mostraba {antes['horas_finalizadas']} h finalizadas, sin cambios de estado desde el 10-nov; el 17-nov se cerraron las 16 subtareas restantes con la evidencia de este entregable, por lo que EV llegó a {despues['horas_finalizadas']} h. SPI = 1,00 con 4 días hábiles de retraso frente al plan."),
+         f"Alcance: sprint 2. PV son las {comp} horas de las 24 subtareas que debían estar terminadas el 13-nov; EV son las horas de las subtareas en estado Finalizado. Jira mostraba {antes['horas_finalizadas']} h finalizadas, sin cambios de estado desde el 10-nov; el 17-nov se cerraron las 16 subtareas restantes con la evidencia de este entregable, por lo que EV llegó a {despues['horas_finalizadas']} h. SPI = 1,00 con 4 días calendario de retraso frente al plan (2 días hábiles del calendario del plan de cronograma)."),
         ("Índice de desempeño del costo (CPI)", "EV / AC → **No aplica**", "Declaración de alcance (sin presupuesto monetario ni horas reales)", N, "Semanal", None),
     ]
     ing = [
@@ -137,8 +149,9 @@ def definir(d: dict) -> dict:
         ("Tiempo medio de resolución de incidencias", "Tiempo total de resolución / Incidencias resueltas → **No medible**",
          "docs/calidad, sección 8.1", D, "Por sprint",
          "DEF-001 se detectó y corrigió el 17-nov, pero no se registró la hora de detección, así que no hay tiempo de resolución; el registro de defectos incluirá fecha y hora desde el sprint 3."),
-        ("Tasa de despliegues exitosos", "(Despliegues exitosos / Despliegues realizados) × 100 → **No aplica**",
-         "docs/despliegue-gcp.md (despliegue en la nube pendiente)", D, "Por liberación", None),
+        ("Tasa de despliegues exitosos", f"(Despliegues exitosos / Despliegues realizados) × 100 = {ok_ga} / {n_ga} = **{pct(ok_ga, n_ga)}**",
+         "docs/ejecucion/soporte/kpi-medidas.json (GitHub Actions); docs/despliegue-gcp.md", D, "Por liberación",
+         f"Despliegue = ejecución del workflow «Desplegar a Cloud Run» (.github/workflows/deploy.yml), que se activa al subir a main. Hasta el corte hubo {n_ga} ejecuciones ({rango_ga}) y las {n_ga} fallaron en el paso de autenticación con Google Cloud, antes de construir la imagen, así que ninguna llegó a publicar. La causa es que el arranque del proyecto en Google Cloud (docs/despliegue-gcp.md) no se completó; mientras tanto el producto corre solo en el entorno local. Dato de la API pública de GitHub, consultado el 22-nov."),
         ("Disponibilidad del sistema", "(Tiempo disponible / Tiempo de servicio acordado) × 100 → **No aplica**",
          "—", D, "Mensual", None),
     ]
@@ -156,7 +169,7 @@ def definir(d: dict) -> dict:
          "Las 17 historias del backlog tienen criterios de aceptación medibles y su prueba TEST-nnn (PGR-001, sección 6.5)."),
         ("Cumplimiento del Sprint Backlog", f"(Elementos completados / Elementos comprometidos) × 100 = 0 / 4 = **0,0 %** el 13-nov y 4 / 4 = **100 %** el 17-nov",
          "docs/ejecucion/soporte/kpi-medidas.json (Jira)", D, "Por sprint",
-         "Al cierre planificado del sprint (13-nov) Jira tenía 0 de 4 historias finalizadas; el 17-nov, con la evidencia de este entregable, las 4 quedaron finalizadas. Se reportan los dos valores para no ocultar que el cierre llegó 4 días hábiles tarde."),
+         "Al cierre planificado del sprint (13-nov) Jira tenía 0 de 4 historias finalizadas; el 17-nov, con la evidencia de este entregable, las 4 quedaron finalizadas. Se reportan los dos valores para no ocultar que el cierre llegó 4 días calendario tarde (2 días hábiles del calendario del plan)."),
         ("Velocidad del equipo", f"Suma de puntos de historia completados por Sprint → **{comp} horas-persona** en el sprint 2; el sprint 1 no tiene horas registradas, así que no hay promedio",
          "PGR-001 (6.3) y Jira", D, "Por sprint",
          "El proyecto no usa puntos de historia (PGR-001); la velocidad se mide en horas-persona de las subtareas finalizadas. Las horas del sprint 1 no se registraron al cerrarlo y no se reconstruyen, por lo que todavía no existe un promedio de velocidad; el sprint 3 será el segundo dato."),
@@ -172,8 +185,9 @@ def definir(d: dict) -> dict:
         ("Acciones de mejora implementadas", "(Acciones implementadas / Acciones acordadas) × 100 = 0 / 5 = **0,0 %**",
          "docs/calidad, sección 12 (AC-01 a AC-05)", D, "Por sprint",
          "Las 5 acciones se registraron el 17-nov (AC-01 y AC-05 en curso, AC-02 a AC-04 abiertas); se acuerdan y cierran en la retrospectiva del sprint 3."),
-        ("Frecuencia de despliegue", "Número de despliegues por período = **0** (despliegue en la nube pendiente)",
-         "docs/despliegue-gcp.md", D, "Por liberación", None),
+        ("Frecuencia de despliegue", f"Número de despliegues por período = **0** exitosos ({n_ga} intentos del workflow entre el {rango_ga.replace(' al ', ' y el ')}, todos fallidos)",
+         "docs/ejecucion/soporte/kpi-medidas.json (GitHub Actions)", D, "Por liberación",
+         f"Se cuentan los despliegues que llegaron a Cloud Run; ninguno de los {n_ga} intentos lo logró (ver la tasa de despliegues exitosos), así que la frecuencia es cero y no hay entregas incrementales en un entorno compartido todavía."),
         ("Tiempo de ciclo (Cycle Time)", "Fecha de finalización − Fecha de inicio del trabajo → **No medible**",
          "—", D, "Por historia",
          "Las 17 historias y sus subtareas se crearon todas el 10-nov al importar el backlog a Jira, por lo que no existe una fecha real de inicio del trabajo."),
@@ -182,7 +196,7 @@ def definir(d: dict) -> dict:
          "El Sprint Goal del sprint 2 tiene 4 objetivos: ingreso del Coordinador por /admin, lista de ventas con filtros y total, consulta de pedidos del cliente y cancelación antes de pagar; los 4 se verificaron con sus pruebas."),
         ("Tasa de compilaciones exitosas", "(Compilaciones exitosas / Compilaciones ejecutadas) × 100 = 2 / 2 = **100 %**",
          "nest build y tsc --noEmit del 17-nov", D, "Diaria",
-         "Compilaciones locales: nest build del backend y tsc --noEmit del frontend, ambas con código de salida 0. No se midieron las ejecuciones de GitHub Actions porque no hay acceso a su historial desde esta sesión."),
+         f"Compilaciones locales: nest build del backend y tsc --noEmit del frontend, ambas con código de salida 0. Las {n_ga} ejecuciones de GitHub Actions hasta el corte no suman compilaciones: fallaron en la autenticación con Google Cloud, antes del paso que construye la imagen."),
         ("Tasa de cambios fallidos", "(Despliegues que generan fallos / Total de despliegues) × 100 → **No aplica**",
          "—", D, "Por liberación", None),
     ]
@@ -221,7 +235,7 @@ def construir(plantilla: Path, destino: Path) -> None:
     marco = pl.find_paragraph(doc, "-- Enfoque integrado")
     sub = pl.insert_paragraph_after(marco, PROYECTO, copy_format_from=cuerpo)
     sub2 = pl.insert_paragraph_after(sub, "Tiendas ComproYa · Ingeniería de Software II · Universidad Central", copy_format_from=cuerpo)
-    pl.insert_paragraph_after(sub2, "Documento PGE-001 · Versión 1.0 · 17/11/2026 · Integrantes: Nicolás Santiago Cancimance Pabón y Duván Camilo Serrano Rojas", copy_format_from=cuerpo)
+    pl.insert_paragraph_after(sub2, "Documento PGE-001 · Versión 1.1 · 22/11/2026 · Integrantes: Nicolás Santiago Cancimance Pabón y Duván Camilo Serrano Rojas", copy_format_from=cuerpo)
 
     # alcance de la medición, después de la definición de KPI
     kpi_def = pl.find_paragraph(doc, "Un KPI (Key Performance Indicator")
@@ -231,10 +245,10 @@ def construir(plantilla: Path, destino: Path) -> None:
         "gobernanza y gestión del proyecto, ingeniería de software y calidad técnica, y agilidad y entrega iterativa (Scrum). Las categorías ISO/IEC y CMMI se "
         "conservan como referencia teórica y no se calculan. Cada KPI indica su fórmula, su cálculo y su resultado; el soporte documental de cada uno está en el "
         "Anexo A. Un KPI sin datos se declara «No medible» (falta el registro) o «No aplica» (el proyecto no tiene ese elemento) y se justifica en un párrafo; "
-        "no se estima ningún valor."), copy_format_from=cuerpo)
+        "no se estima ningún valor. La versión 1.1 (22-nov) incorpora el historial de GitHub Actions, que no se había podido consultar en la versión 1.0, y agrega al segundo entregable el Anexo C con este mismo soporte."), copy_format_from=cuerpo)
     pl.insert_paragraph_after(a, (
         "**Fuentes de datos.** Jira (proyecto SCRUM, estado y horas por subtarea), el repositorio de GitHub, los resultados de jest y de las verificaciones en navegador "
-        "(docs/entrega-2/evidencia) y el Plan de gestión de requisitos PGR-001. Las mediciones propias se regeneran con docs/_generadores/recolectar_soporte_kpi.py."), copy_format_from=cuerpo)
+        "(docs/entrega-2/evidencia), el historial de GitHub Actions y el Plan de gestión de requisitos PGR-001. Las mediciones propias se regeneran con docs/_generadores/recolectar_soporte_kpi.py."), copy_format_from=cuerpo)
 
     # ---- tablas de KPI
     t_gob = pl.find_table(doc, "Proceso de gestión", "Actividades")

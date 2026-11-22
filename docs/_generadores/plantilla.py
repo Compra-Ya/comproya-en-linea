@@ -39,6 +39,14 @@ def _split_bold(text: str) -> list[tuple[str, bool]]:
 
 def set_paragraph_text(p: Paragraph, text: str) -> None:
     """Reemplaza el texto del párrafo conservando el formato de su primer run."""
+    # Algunas celdas de la plantilla envuelven su texto de ejemplo en un control de contenido (w:sdt): se desenvuelve
+    # para que su run cuente como el primero (conserva el formato) y el ejemplo no quede junto al texto nuevo.
+    for sdt in p._p.findall(qn("w:sdt")):
+        contenido = sdt.find(qn("w:sdtContent"))
+        if contenido is not None:
+            for hijo in list(contenido):
+                sdt.addprevious(hijo)
+        sdt.getparent().remove(sdt)
     runs = p.runs
     base = runs[0]._r if runs else None
     if base is None:

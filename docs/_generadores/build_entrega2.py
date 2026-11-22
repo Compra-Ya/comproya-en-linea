@@ -19,6 +19,7 @@ from docx.shared import Cm, Pt
 from docx.table import Table
 from docx.text.paragraph import Paragraph
 
+import build_ejecucion as ejecucion
 import entrega2_casos as casos
 import plantilla as pl
 
@@ -26,7 +27,8 @@ RAIZ = Path(__file__).resolve().parent.parent
 SALIDA = RAIZ / "entrega-2"
 IMG = SALIDA / "img"
 DISENO = RAIZ.parent / "design"
-FECHA = "17 de noviembre de 2026"
+FECHA = "17 de noviembre de 2026"  # fecha de ejecución de las pruebas
+FECHA_DOC = "22 de noviembre de 2026"  # fecha de esta versión del documento (portada)
 FECHA_ISO = "2026-11-17"
 
 
@@ -212,7 +214,7 @@ def construir(base: Path, ev: Path, destino: Path) -> None:
         2: "ComproYa en Línea — Canal de Venta Digital B2C",
         3: "Sprint 2 · Flujo gerencial: HU-113 a HU-116 (CU-09, CU-10 e ingreso de la cuenta interna) — análisis y diseño UML, "
            "implementación, pruebas de ruta, integración y sistema, y evaluación de usabilidad",
-        10: FECHA,
+        10: FECHA_DOC,
     }
     for i, t in textos.items():
         pl.set_paragraph_text(Paragraph(c.portada[i], c.doc._body), t)
@@ -244,8 +246,11 @@ def construir(base: Path, ev: Path, destino: Path) -> None:
          "venta con envío y regla RN-07.")
     c.p_("3. La evaluación de usabilidad (sección 7) presenta la línea base medida por el equipo y deja el espacio de los "
          "participantes que aplican la sesión; no se reportan resultados de participantes que no hayan realizado la sesión.")
-    c.p_("4. Las fechas del sprint 2 terminaron el 13 de noviembre; al cierre de este documento el sprint sigue abierto en Jira "
-         "porque se completó la documentación y las pruebas de este entregable después de esa fecha.")
+    c.p_("4. Las fechas del sprint 2 terminaron el 13 de noviembre. El sprint se cerró en Jira el 17 de noviembre, con las 4 historias y sus "
+         "24 subtareas en estado Finalizado, porque la documentación y las pruebas de este entregable se completaron después de esa fecha "
+         "(4 días calendario de desviación; 2 días hábiles del calendario del plan de cronograma).")
+    c.p_("5. Esta versión (22 de noviembre de 2026) agrega el Anexo C con el soporte documental de los KPI de la gestión de la ejecución y "
+         "corrige el estado del sprint 2 en Jira; las pruebas y las mediciones son las del 17 de noviembre.")
     c.salto_pagina()
 
     # ------------------------------------------------------------- 2. Casos de uso
@@ -500,6 +505,22 @@ def construir(base: Path, ev: Path, destino: Path) -> None:
         ["HU-115", "CU-10", "RN-07", "TEST-013", "S2-PR-03, PI-01, PI-02, PI-05, PS-02"],
         ["HU-116", "1.2.3", "REQ-017", "TEST-007", "S2-PR-04, PI-07, PS-03, PS-04"],
     ], [1000, 1200, 2100, 2200, 2850])
+
+    c.h1_("Anexo C. Soporte documental de los KPI de la gestión de la ejecución")
+    c.p_("Los KPI de gobernanza, ingeniería de software y agilidad del documento de gestión de la ejecución "
+         "(docs/ejecucion/Gestion_Ejecucion_ComproYa.docx) se calcularon con la documentación de este entregable, con corte al 17 de noviembre de 2026. "
+         "Cada fila indica el cálculo con su resultado y el soporte donde está el dato: las secciones y anexos de este documento, los archivos de "
+         "docs/entrega-2/evidencia, las mediciones propias de docs/ejecucion/soporte/kpi-medidas.json (arquitectura, configuración, npm audit, "
+         "Jira y GitHub Actions) o los demás planes del proyecto. Un KPI «No medible» o «No aplica» se justifica en el documento de ejecución y no "
+         "se estima.")
+    K = ejecucion.definir(ejecucion.cargar())
+    filas_kpi = []
+    for pref, clave in (("GOB", "gob"), ("ING", "ing"), ("AGI", "agi")):
+        for i, it in enumerate(K[clave], start=1):
+            filas_kpi.append([f"{pref}-{i:02d} {it[0]}", it[1].replace("**", ""), it[2], it[3]])
+    for i, (nombre, calculo, _nota) in enumerate(K["extra"], start=1):
+        filas_kpi.append([f"ING-X{i} {nombre}", calculo.replace("**", ""), "docs/entrega-2/evidencia y docs/calidad", ejecucion.D])
+    c.tabla(["Código y KPI", "Cálculo y resultado", "Soporte documental", "Responsable"], filas_kpi, [2000, 3500, 2750, 1100], tam=7.5)
 
     destino.parent.mkdir(parents=True, exist_ok=True)
     c.doc.save(str(destino))

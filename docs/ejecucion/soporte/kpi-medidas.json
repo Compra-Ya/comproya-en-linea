@@ -54,5 +54,78 @@
       "cierre_del_sprint": "2026-11-17T22:36:13Z"
     },
     "fin_planificado": "2026-11-13"
+  },
+  "github_actions": {
+    "fuente": "API pública de GitHub (repos/Compra-Ya/comproya-en-linea/actions/runs), consultada el 2026-11-22",
+    "corte": "2026-11-17T23:59:59Z",
+    "ejecuciones_hasta_el_corte": 8,
+    "exitosas": 0,
+    "fallidas": 8,
+    "ejecuciones": [
+      {
+        "numero": 1,
+        "flujo": "Desplegar a Cloud Run",
+        "fecha": "2026-09-04",
+        "commit": "4d17002",
+        "resultado": "failure",
+        "paso_que_fallo": "Run google-github-actions/auth@v2"
+      },
+      {
+        "numero": 2,
+        "flujo": "Desplegar a Cloud Run",
+        "fecha": "2026-09-04",
+        "commit": "9ab6c09",
+        "resultado": "failure",
+        "paso_que_fallo": "Run google-github-actions/auth@v2"
+      },
+      {
+        "numero": 3,
+        "flujo": "Desplegar a Cloud Run",
+        "fecha": "2026-09-22",
+        "commit": "bc48c6f",
+        "resultado": "failure",
+        "paso_que_fallo": "Run google-github-actions/auth@v2"
+      },
+      {
+        "numero": 4,
+        "flujo": "Desplegar a Cloud Run",
+        "fecha": "2026-09-22",
+        "commit": "6537b86",
+        "resultado": "failure",
+        "paso_que_fallo": "Run google-github-actions/auth@v2"
+      },
+      {
+        "numero": 5,
+        "flujo": "Desplegar a Cloud Run",
+        "fecha": "2026-09-29",
+        "commit": "0e6a589",
+        "resultado": "failure",
+        "paso_que_fallo": "Run google-github-actions/auth@v2"
+      },
+      {
+        "numero": 6,
+        "flujo": "Desplegar a Cloud Run",
+        "fecha": "2026-09-29",
+        "commit": "a506d0a",
+        "resultado": "failure",
+        "paso_que_fallo": "Run google-github-actions/auth@v2"
+      },
+      {
+        "numero": 7,
+        "flujo": "Desplegar a Cloud Run",
+        "fecha": "2026-09-29",
+        "commit": "ba001ac",
+        "resultado": "failure",
+        "paso_que_fallo": "Run google-github-actions/auth@v2"
+      },
+      {
+        "numero": 8,
+        "flujo": "Desplegar a Cloud Run",
+        "fecha": "2026-10-09",
+        "commit": "f4eed3d",
+        "resultado": "failure",
+        "paso_que_fallo": "Run google-github-actions/auth@v2"
+      }
+    ]
   }
 }

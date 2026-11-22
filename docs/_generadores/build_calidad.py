@@ -41,7 +41,7 @@ def construir(plantilla: Path, ev: Path, destino: Path) -> None:
     # ---- datos de control
     t = pl.find_table(doc, "Dato de control")
     pl.fill_pairs(t, [PROYECTO, "Tiendas ComproYa — área de Canal Digital", "Dirección de ComproYa (CEO, CFO y CTO)", D,
-                      f"{D} (QA)", "1.0 – 17/11/2026", "☐ Borrador  ☒ En revisión  ☐ Aprobado"])
+                      f"{D} (QA)", "1.1 – 22/11/2026", "☐ Borrador  ☒ En revisión  ☐ Aprobado"])
 
     t = pl.find_table(doc, "Rol", "Nombre")
     for i, (nombre, firma) in enumerate([("Dirección de ComproYa (CEO, CFO y CTO)", "☐ Pendiente"), (D, "☐ Pendiente"), (D, "☐ Pendiente"),
@@ -235,7 +235,7 @@ def construir(plantilla: Path, ev: Path, destino: Path) -> None:
         ["Requisitos de calidad críticos satisfechos", "Mantenibilidad cumple; seguridad no cumple por NC-003; TEST-016 y TEST-017 pendientes", "No", "Se completa al cierre del sprint 3"],
         ["Pruebas requeridas ejecutadas y resultados aceptables", f"{n_pasan} de {n_total} pruebas y {s2['ok']} de {s2['total']} comprobaciones de sistema del sprint 2", "Sí", "Para los sprints 1 y 2"],
         ["Defectos abiertos evaluados y aceptados formalmente si aplica", "DEF-001 y NC-004 cerrados; NC-001, NC-002 y NC-003 abiertas con acción", "Parcial", "Aprobación del Product Owner pendiente"],
-        ["Documentación, operación y soporte entregados", "Planes de requisitos, cronograma, calidad y ejecución; segundo entregable", "Parcial", "Despliegue en la nube pendiente"],
+        ["Documentación, operación y soporte entregados", "Planes de requisitos, cronograma, calidad y ejecución; segundo entregable", "Parcial", "Despliegue en la nube pendiente: las 8 ejecuciones del workflow de despliegue hasta el 17/11/2026 fallaron en la autenticación con Google Cloud (docs/ejecucion/soporte/kpi-medidas.json)"],
         ["Riesgos comunicados y aprobados", "Riesgos en el PGR-001; festivos del 02 y 16 de noviembre en el cronograma", "Parcial", "Aprobación de la Dirección pendiente"],
     ])
 

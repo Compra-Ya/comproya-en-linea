@@ -24,12 +24,14 @@ cd docs/_generadores
 python build_cronograma.py <plantilla cronograma.docx>
 python build_calidad.py <plantilla calidad.docx> ../entrega-2/evidencia
 python recolectar_soporte_kpi.py && python build_ejecucion.py <plantilla ejecucion.docx>
+python recolectar_soporte_kpi.py actions   # solo actualiza el historial de GitHub Actions (API pública) sin repetir npm audit
 MERMAID_JS=... node render_mermaid.mjs && python build_entrega2.py ../../Resultados_Pruebas_ComproYa.docx ../entrega-2/evidencia
 ```
 
 ## De dónde sale cada cifra
 
 - **Pruebas y cobertura:** `cd backend && npx jest --runInBand --coverage` → `docs/entrega-2/evidencia/jest-completo.json` y `cobertura-resumen.json`.
+- **GitHub Actions:** `recolectar_soporte_kpi.py actions` consulta la API pública de GitHub (el repositorio es público) y guarda en `kpi-medidas.json` las ejecuciones del workflow de despliegue hasta el corte del 17-nov.
 - **Pantallas y comprobaciones de sistema:** `e2e/capturas/verificar-sprint2.mjs` y `verificar-interno.mjs` (capturas en `design/`).
 - **Cronograma:** `cronograma_modelo.py` (CPM sobre las 36 subtareas de Jira con horas de los sprints 2 y 3; el sprint 1 es una ventana del sprint porque sus horas no se registraron y no se inventan). Es la única entrega de cronograma: el Word y el XML de MS Project salen del mismo modelo.
 - **Usabilidad:** `e2e/usabilidad/grabar-sesion.mjs` → `docs/usabilidad/sesiones` (la sección 7.4 del segundo entregable se llena sola con las sesiones de participantes).

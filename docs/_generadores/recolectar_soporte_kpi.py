@@ -7,17 +7,25 @@ Escribe docs/ejecucion/soporte/kpi-medidas.json con:
   * control de configuración (archivos del sprint 2 versionados en git),
   * vulnerabilidades de dependencias (npm audit, solo producción),
   * estado de Jira del sprint 2 antes y después del cierre con evidencia (consultas del 17-nov-2026),
-  * líneas ejecutables del backend (jest --coverage) para la densidad de defectos.
+  * líneas ejecutables del backend (jest --coverage) para la densidad de defectos,
+  * historial del workflow de despliegue en GitHub Actions hasta el corte (API pública de GitHub).
+
+  python recolectar_soporte_kpi.py actions   (solo agrega o actualiza el historial de GitHub Actions y deja intacto el resto del archivo)
 """
 from __future__ import annotations
 
 import json
 import re
 import subprocess
+import sys
+import urllib.request
+from datetime import date
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 SALIDA = REPO / "docs/ejecucion/soporte"
+REPO_GITHUB = "Compra-Ya/comproya-en-linea"
+CORTE = "2026-11-17T23:59:59Z"  # corte de la medición de los KPI del sprint 2
 
 MODULOS_NEGOCIO = {"catalogo", "cuenta", "carrito", "pedido", "pago"}
 MODULOS_SPRINT2 = ["pedido", "cuenta", "auth", "auditoria"]
@@ -86,7 +94,44 @@ def auditoria() -> dict:
     return out
 
 
+def api_github(ruta: str) -> dict:
+    # El repositorio es público: no hace falta ninguna credencial.
+    req = urllib.request.Request(f"https://api.github.com/{ruta}", headers={"Accept": "application/vnd.github+json", "User-Agent": "kpi-recolector"})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        return json.load(r)
+
+
+def github_actions() -> dict:
+    """Ejecuciones del workflow de despliegue hasta el corte y el paso donde falló cada una."""
+    corridas = api_github(f"repos/{REPO_GITHUB}/actions/runs?per_page=100")["workflow_runs"]
+    hasta = sorted((r for r in corridas if r["created_at"] <= CORTE), key=lambda r: r["run_number"])
+    detalle = []
+    for r in hasta:
+        paso = None
+        for job in api_github(f"repos/{REPO_GITHUB}/actions/runs/{r['id']}/jobs")["jobs"]:
+            for s in job["steps"]:
+                if s["conclusion"] == "failure" and paso is None:
+                    paso = s["name"]
+        detalle.append({"numero": r["run_number"], "flujo": r["name"], "fecha": r["created_at"][:10], "commit": r["head_sha"][:7],
+                        "resultado": r["conclusion"], "paso_que_fallo": paso})
+    return {
+        "fuente": f"API pública de GitHub (repos/{REPO_GITHUB}/actions/runs), consultada el {date.today().isoformat()}",
+        "corte": CORTE,
+        "ejecuciones_hasta_el_corte": len(detalle),
+        "exitosas": sum(1 for x in detalle if x["resultado"] == "success"),
+        "fallidas": sum(1 for x in detalle if x["resultado"] == "failure"),
+        "ejecuciones": detalle,
+    }
+
+
 def main() -> None:
+    if sys.argv[1:] == ["actions"]:
+        ruta = SALIDA / "kpi-medidas.json"
+        datos = json.loads(ruta.read_text(encoding="utf-8"))
+        datos["github_actions"] = github_actions()
+        ruta.write_text(json.dumps(datos, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(json.dumps(datos["github_actions"], ensure_ascii=False, indent=1))
+        return
     cob = json.loads((REPO / "docs/entrega-2/evidencia/cobertura-resumen.json").read_text(encoding="utf-8"))["total"]
     datos = {
         "generado": "2026-11-17",
@@ -94,6 +139,7 @@ def main() -> None:
         "configuracion": configuracion(),
         "npm_audit_produccion": auditoria(),
         "lineas_ejecutables_backend": cob["lines"]["total"],
+        "github_actions": github_actions(),
         "jira_sprint2": {
             "fuente": "Jira SCRUM, consultas del 17-nov-2026 (antes y después de cerrar las subtareas con la evidencia del segundo entregable)",
             "comprometidas_h": 56,
