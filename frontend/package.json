@@ -13,16 +13,20 @@
     "ui:comprobar": "node scripts/sincronizar-ui.mjs --comprobar"
   },
   "dependencies": {
-    "next": "14.2.35",
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "next": "^15.5.29",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
-    "@types/react": "^18.3.11",
-    "@types/react-dom": "^18.3.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "eslint": "^8.57.1",
-    "eslint-config-next": "^14.2.35",
+    "eslint-config-next": "^15.5.29",
     "typescript": "^5.6.2"
+  },
+  "overrides": {
+    "postcss": "^8.5.23",
+    "source-map-js": "^1.2.2"
   }
 }

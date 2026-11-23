@@ -1,55 +1,56 @@
 import { test, expect } from "@playwright/test";
 import path from "path";
+import { sufijoUnico } from "../fixtures/cliente-de-prueba";
 
 const API_URL = process.env.E2E_API_URL ?? "http://localhost:3001/api";
 const EVIDENCIA = path.resolve(__dirname, "../../evidencia/CU-04-01");
 
-// CU-04-01 — Camino de éxito (Plan_Pruebas_ComproYa.docx, sección 9.4): un
-// Cliente digital se registra (CU-04) y luego otorga su consentimiento sobre
-// la política de datos personales (CU-05) -> Cuenta activa, Consentimiento
-// = ACTIVO. Caja negra: solo interactúa con la UI real (P-4, P-5) y la API
-// pública, contra el backend y la base de datos reales — nada se simula.
-test("CU-04-01: registro de cuenta y activación del consentimiento quedan reflejados en la cuenta", async ({
-  page,
-  request,
-}) => {
-  const sufijo = Date.now().toString().slice(-8);
-  const documento = `E2EREG${sufijo}`;
-  const correo = `e2e-registro-${sufijo}@comproya-test.local`;
-  const nombre = `Cliente Registro E2E ${sufijo}`;
-
-  // Paso 1: registro (CU-04) con documento nuevo, sin cuenta previa.
+// CU-04-01 — Registro de cuenta y consentimiento (CU-04 y CU-05). Interfaz actual (venta digital con envío): el
+// formulario de /registro lleva la casilla de consentimiento y, al marcarla, la cuenta queda con el consentimiento
+// activo (RN-10) — no hace falta pasar por /privacidad. Caja negra: solo la interfaz real y la API pública, contra el
+// backend y la base de datos reales; nada se simula.
+async function llenarRegistro(page: import("@playwright/test").Page, sufijo: string) {
   await page.goto("/registro");
-  await page.getByPlaceholder("Nombre y apellido").fill(nombre);
-  await page.getByPlaceholder("Número de documento").fill(documento);
-  await page.getByPlaceholder("correo@ejemplo.com").fill(correo);
-  await page.getByPlaceholder("••••••••").fill("claveClave1");
+  await page.getByLabel("Nombre completo").fill(`Cliente Registro E2E ${sufijo}`);
+  await page.getByLabel("Documento de identidad").fill(`77${sufijo}`);
+  await page.getByLabel("Correo electrónico").fill(`e2e-registro-${sufijo}@comproya-test.local`);
+  await page.getByLabel("Contraseña").fill("claveClave1");
+}
+
+test("CU-04-01: registro de cuenta con la casilla de consentimiento deja el consentimiento activo", async ({ page, request }) => {
+  const sufijo = sufijoUnico();
+
+  // Paso 1: registro con documento nuevo y la casilla marcada (CU-05 dentro del registro).
+  await llenarRegistro(page, sufijo);
+  await page.getByRole("checkbox").check();
   await page.screenshot({ path: path.join(EVIDENCIA, "paso-1-registro.png"), fullPage: true });
-  await page.getByRole("button", { name: "Crear cuenta" }).click();
+  await page.locator("form").getByRole("button", { name: "Crear cuenta" }).click();
 
-  // Paso 2: el registro redirige a /privacidad (P-5) con el consentimiento
-  // todavía Pendiente (CuentaService.registrar() crea Consent.active=false).
-  await expect(page).toHaveURL(/\/privacidad/);
-  const interruptor = page.locator("button[aria-pressed]");
-  const insigniaActivo = page.locator("span.badge-ok", { hasText: "Consentimiento activo" });
-  await expect(interruptor).toHaveAttribute("aria-pressed", "false");
-  await expect(insigniaActivo).not.toBeVisible();
-  await page.screenshot({ path: path.join(EVIDENCIA, "paso-2-privacidad-pendiente.png"), fullPage: true });
-
-  // Paso 3: el cliente acepta la política de datos personales (CU-05) — un
-  // solo clic sobre el interruptor, sin identificador de lealtad (canon,
-  // sección 10: activar el consentimiento en <= 2 interacciones).
-  await interruptor.click();
-  await expect(insigniaActivo).toBeVisible();
-  await expect(interruptor).toHaveAttribute("aria-pressed", "true");
-  await page.screenshot({ path: path.join(EVIDENCIA, "paso-3-consentimiento-activo.png"), fullPage: true });
-
-  // Poscondiciones (caja negra desde la API pública, sin tocar la BD directo).
+  // Paso 2: la cuenta se crea, el cliente queda con sesión y sale del formulario.
+  await expect(page).not.toHaveURL(/\/registro/, { timeout: 30_000 });
   const token = await page.evaluate(() => localStorage.getItem("comproya_token"));
-  const consentimientoRes = await request.get(`${API_URL}/cuenta/consentimiento`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  expect(consentimientoRes.ok()).toBeTruthy();
-  const consentimiento = await consentimientoRes.json();
-  expect(consentimiento.active).toBe(true);
+  expect(token).toBeTruthy();
+
+  // Paso 3: en Privacidad y consentimiento el interruptor está activo y la insignia lo confirma.
+  await page.goto("/privacidad");
+  await expect(page.locator("button[aria-pressed]")).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("span.badge-ok", { hasText: "Consentimiento activo" })).toBeVisible();
+  await page.screenshot({ path: path.join(EVIDENCIA, "paso-2-consentimiento-activo.png"), fullPage: true });
+
+  // Poscondición (caja negra desde la API pública, sin tocar la base directo).
+  const respuesta = await request.get(`${API_URL}/cuenta/consentimiento`, { headers: { Authorization: `Bearer ${token}` } });
+  expect(respuesta.ok()).toBeTruthy();
+  expect((await respuesta.json()).active).toBe(true);
+});
+
+test("CU-04-01 (camino de fallo): sin marcar la casilla no se crea la cuenta y el formulario explica por qué", async ({ page }) => {
+  const sufijo = sufijoUnico();
+
+  await llenarRegistro(page, sufijo);
+  await page.locator("form").getByRole("button", { name: "Crear cuenta" }).click();
+
+  await expect(page.getByText("Acepta el tratamiento de datos para crear tu cuenta.")).toBeVisible();
+  await expect(page).toHaveURL(/\/registro/);
+  expect(await page.evaluate(() => localStorage.getItem("comproya_token"))).toBeNull();
+  await page.screenshot({ path: path.join(EVIDENCIA, "fallo-sin-consentimiento.png"), fullPage: true });
 });

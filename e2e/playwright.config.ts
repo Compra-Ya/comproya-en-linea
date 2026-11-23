@@ -8,6 +8,7 @@ export default defineConfig({
   testDir: "./tests",
   timeout: 90_000,
   retries: 0,
+  workers: 1, // las pruebas comparten el backend, la base y el webhook de Stripe: se corren en serie
   reporter: [["list"]],
   use: {
     baseURL: process.env.E2E_BASE_URL ?? "http://localhost:3000",

@@ -21,6 +21,7 @@ from docx.text.paragraph import Paragraph
 
 import build_ejecucion as ejecucion
 import entrega2_casos as casos
+import usabilidad_resumen as us
 import plantilla as pl
 
 RAIZ = Path(__file__).resolve().parent.parent
@@ -28,7 +29,7 @@ SALIDA = RAIZ / "entrega-2"
 IMG = SALIDA / "img"
 DISENO = RAIZ.parent / "design"
 FECHA = "17 de noviembre de 2026"  # fecha de ejecución de las pruebas
-FECHA_DOC = "22 de noviembre de 2026"  # fecha de esta versión del documento (portada)
+FECHA_DOC = "23 de noviembre de 2026"  # fecha de esta versión del documento (portada)
 FECHA_ISO = "2026-11-17"
 
 
@@ -249,8 +250,9 @@ def construir(base: Path, ev: Path, destino: Path) -> None:
     c.p_("4. Las fechas del sprint 2 terminaron el 13 de noviembre. El sprint se cerró en Jira el 17 de noviembre, con las 4 historias y sus "
          "24 subtareas en estado Finalizado, porque la documentación y las pruebas de este entregable se completaron después de esa fecha "
          "(4 días calendario de desviación; 2 días hábiles del calendario del plan de cronograma).")
-    c.p_("5. Esta versión (22 de noviembre de 2026) agrega el Anexo C con el soporte documental de los KPI de la gestión de la ejecución y "
-         "corrige el estado del sprint 2 en Jira; las pruebas y las mediciones son las del 17 de noviembre.")
+    c.p_("5. Esta versión (23 de noviembre de 2026) agrega el Anexo C con el soporte documental de los KPI de la gestión de la ejecución, "
+         "el Anexo D con el cierre de las no conformidades NC-001 a NC-003 y corrige el estado del sprint 2 en Jira; las pruebas y las "
+         "mediciones de las secciones 5 a 7 son las del 17 de noviembre.")
     c.salto_pagina()
 
     # ------------------------------------------------------------- 2. Casos de uso
@@ -460,13 +462,9 @@ def construir(base: Path, ev: Path, destino: Path) -> None:
             if png.exists():
                 c.figura(png, f"Mapa de calor de los clics de la tarea {t['id']} en la corrida guionada automatizada (rojo: más clics). El panel muestra el contador de clics y el tiempo.", 14.5)
     c.h2_("7.4 Resultados con participantes")
-    sesiones = sorted((RAIZ / "usabilidad/sesiones").glob("*.json")) if (RAIZ / "usabilidad/sesiones").exists() else []
-    reales = []
-    for f in sesiones:
-        s = json.loads(f.read_text(encoding="utf-8"))
-        if s.get("modo") == "participante":
-            reales.append(s)
-    if reales:
+    reales = us.sesiones_participantes()
+    res = us.resumen(reales, {t: lb[ref]["objetivoNovatoS"] for t, _, ref in tareas}, {t: lb[ref]["clics"] for t, _, ref in tareas})
+    if res:
         filas = []
         for s in reales:
             ok = sum(1 for t in s["tareas"] if t.get("completada"))
@@ -476,17 +474,35 @@ def construir(base: Path, ev: Path, destino: Path) -> None:
             seg = sum(t["duracionS"] for t in s["tareas"])
             filas.append([s["codigo"], s["fecha"][:10], f"{ok} de {n} ({100 * ok / n:.0f} %)", str(clics), f"{seg:.0f}",
                           f"{sum(dif) / len(dif):.1f}".replace(".", ",") if dif else "—"])
-        c.p_(f"Se aplicó la sesión a {len(reales)} participante(s). Cada fila sale del archivo de sesión grabado (docs/usabilidad/sesiones).")
+        c.p_(f"Se aplicó la sesión a {res['personas']} participante(s) ({', '.join(res['codigos'])}; {', '.join(res['fechas'])}). Cada fila sale del archivo de "
+             "sesión grabado (docs/usabilidad/sesiones); los participantes se identifican solo con su código.")
         c.tabla(["Participante", "Fecha", "Efectividad", "Clics", "Tiempo total (s)", "Satisfacción (1–7)"], filas, [1400, 1400, 2200, 1000, 1700, 1650])
+        c.p_("Resultados por tarea", negrita=True)
+        filas_t = []
+        for t in res["tareas"]:
+            filas_t.append([t["id"], f"{t['ok']} de {t['intentos']} ({us.coma(t['efectividad'], 0)} %)", us.coma(t["tiempo_medio"]), us.coma(t["tiempo_objetivo"], 0),
+                            us.coma(t["clics_medios"]), us.coma(t["clics_equipo"], 0), us.coma(t["seq_medio"])])
+        c.tabla(["Tarea", "Efectividad", "Tiempo medio (s)", "Tiempo objetivo (s)", "Clics medios", "Clics del equipo", "SEQ medio"], filas_t, [800, 2000, 1400, 1400, 1250, 1250, 1250], tam=8)
     else:
         c.p_("Estado: la sesión con participantes está pendiente. Las sesiones de los participantes P01 a P05 se registran con el grabador de "
              "sesión y sus archivos se guardan en docs/usabilidad/sesiones; al regenerar este documento (python docs/_generadores/build_entrega2.py) "
              "esta sección se llena sola con la efectividad, la eficiencia y la satisfacción medidas. Hasta entonces no se informa ningún "
              "resultado de participantes.")
     c.h2_("7.5 Conclusión")
-    c.p_("Con la línea base, la compra completa (T6) exige 22 clics y unos 106 segundos al equipo, así que el tiempo objetivo para una persona "
-         "nueva es de 320 segundos. La efectividad, la eficiencia y la satisfacción de los participantes se concluyen cuando se registren sus sesiones; "
-         "las metas son las de la tabla 7.1.")
+    if res:
+        cumplen_ef = sum(1 for t in res["tareas"] if t["cumple_efectividad"])
+        con_tiempo = [t for t in res["tareas"] if t["cumple_tiempo"] is not None]
+        cumplen_ti = sum(1 for t in con_tiempo if t["cumple_tiempo"])
+        c.p_(f"Con {res['personas']} de los 5 participantes previstos y {res['intentos']} tareas intentadas, la efectividad global fue {us.coma(res['efectividad'])} %; "
+             f"{cumplen_ef} de {len(res['tareas'])} tareas alcanzan la meta de efectividad (≥ 80 % por tarea). "
+             f"El tiempo medio de las tareas completadas está dentro del objetivo (≤ 3 × el del equipo) en {cumplen_ti} de {len(con_tiempo)} tareas. "
+             f"La satisfacción promedio (SEQ, {res['seq_n']} respuestas) fue {us.coma(res['seq_medio'], 2)} de 7, "
+             f"{'por encima' if res['cumple_seq'] else 'por debajo'} de la meta de 5,0. "
+             "Los hallazgos y los comentarios de cada sesión están en docs/usabilidad/sesiones y en el registro de medición.")
+    else:
+        c.p_("Con la línea base, la compra completa (T6) exige 22 clics y unos 106 segundos al equipo, así que el tiempo objetivo para una persona "
+             "nueva es de 320 segundos. La efectividad, la eficiencia y la satisfacción de los participantes se concluyen cuando se registren sus sesiones; "
+             "las metas son las de la tabla 7.1.")
     c.salto_pagina()
 
     # ------------------------------------------------------------- Anexos
@@ -521,6 +537,18 @@ def construir(base: Path, ev: Path, destino: Path) -> None:
     for i, (nombre, calculo, _nota) in enumerate(K["extra"], start=1):
         filas_kpi.append([f"ING-X{i} {nombre}", calculo.replace("**", ""), "docs/entrega-2/evidencia y docs/calidad", ejecucion.D])
     c.tabla(["Código y KPI", "Cálculo y resultado", "Soporte documental", "Responsable"], filas_kpi, [2000, 3500, 2750, 1100], tam=7.5)
+
+    c.h1_("Anexo D. Cierre de las no conformidades posterior al corte")
+    c.p_("Las no conformidades NC-001 a NC-003 del plan de gestión de la calidad (sección 8.1) se cerraron entre el 22 y el 23 de noviembre de 2026, "
+         "después del corte de este entregable. Las pruebas y las comprobaciones se repitieron sobre las versiones nuevas; el detalle de comandos y "
+         "resultados está en docs/entrega-2/evidencia/cierre-nc-2026-11-23.md.")
+    c.tabla(["No conformidad", "Cierre", "Evidencia"], [
+        ["NC-001 · Declaración de alcance con 6 sprints", "Declaración v1.1 (22/11/2026): 3 sprints, paquetes por sprint y cambio CHG-007.", "docs/alcance/Declaracion_Alcance_ComproYa.docx"],
+        ["NC-002 · Pruebas e2e del flujo con retiro", "4 pruebas e2e del flujo con envío pasan (23/11/2026): registro con consentimiento (éxito y fallo), pago aprobado y pago rechazado con Stripe en modo de prueba.", "e2e/tests y evidencia/CU-04-01, CU-09-01 y CU-09-02"],
+        ["NC-003 · Dependencias con vulnerabilidades", "npm audit de producción: frontend 0; backend 0 críticas y 0 altas (3 moderadas de @nestjs/core, que solo se corrigen con NestJS 12; riesgo residual por aceptar).", "docs/ejecucion/soporte/npm-audit-2026-11-22.json"],
+    ], [2600, 4400, 2350])
+    c.p_("Con las dependencias nuevas: 187 de 187 pruebas del backend (31 suites), 16 de 16 comprobaciones de sistema del sprint 2, 40 de 40 del panel "
+         "interno, compilación y análisis estático del backend y del frontend sin errores, y las dos imágenes de Docker construyen.")
 
     destino.parent.mkdir(parents=True, exist_ok=True)
     c.doc.save(str(destino))

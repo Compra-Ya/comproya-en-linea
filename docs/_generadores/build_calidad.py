@@ -11,6 +11,7 @@ from pathlib import Path
 import docx
 
 import plantilla as pl
+import usabilidad_resumen as us
 
 RAIZ = Path(__file__).resolve().parent.parent
 SALIDA = RAIZ / "calidad"
@@ -41,7 +42,7 @@ def construir(plantilla: Path, ev: Path, destino: Path) -> None:
     # ---- datos de control
     t = pl.find_table(doc, "Dato de control")
     pl.fill_pairs(t, [PROYECTO, "Tiendas ComproYa — área de Canal Digital", "Dirección de ComproYa (CEO, CFO y CTO)", D,
-                      f"{D} (QA)", "1.1 – 22/11/2026", "☐ Borrador  ☒ En revisión  ☐ Aprobado"])
+                      f"{D} (QA)", "1.2 – 23/11/2026", "☐ Borrador  ☒ En revisión  ☐ Aprobado"])
 
     t = pl.find_table(doc, "Rol", "Nombre")
     for i, (nombre, firma) in enumerate([("Dirección de ComproYa (CEO, CFO y CTO)", "☐ Pendiente"), (D, "☐ Pendiente"), (D, "☐ Pendiente"),
@@ -159,12 +160,12 @@ def construir(plantilla: Path, ev: Path, destino: Path) -> None:
     pl.fill_table(t, [
         ["DEF-001", "La API aceptaba cancelar un pedido Pagado (la pantalla no lo ofrecía). Severidad alta: rompía RN-07 y el total vendido", "Backend, módulo pedido (sprint 2)", "Alta", D, "Cerrado",
          "Causa: regla RN-09 del canon 1.0 sin actualizar al alcance reducido. Acción: regla RN-07 en PedidoService.cancelar y Pedido.puedeCancelarse", "Casos S2-PI-02, S2-PI-05 y S2-PS-02 (17/11/2026)"],
-        ["NC-001", "La Declaración de alcance describe 6 sprints; el plan vigente (PGR-001 y Jira) tiene 3", "Documentos de alcance", "Media", N, "Abierto",
-         "Reagrupación de sprints sin actualizar la Declaración (CH-01 del plan de cronograma)", "Pendiente: actualizar la Declaración a 3 sprints (CH-01 aprobado el 17/11/2026)"],
-        ["NC-002", "Las pruebas e2e cu-04-01, cu-09-01 y cu-09-02 verifican el flujo anterior (retiro con código) y están desfasadas", "e2e/tests", "Media", D, "Abierto",
-         "El flujo pasó a venta digital con envío; las pruebas no se reescribieron", "Pendiente: reescribirlas para el flujo con envío"],
-        ["NC-003", "npm audit (dependencias de producción) reporta 2 vulnerabilidades críticas: proxy-addr en el backend y next en el frontend; además 5 altas en el backend y 2 en el frontend", "backend y frontend", "Alta", N, "Abierto",
-         "Las versiones de las dependencias no se han actualizado desde el sprint 1; todas tienen arreglo disponible", "Pendiente: actualizar y volver a correr las 187 pruebas"],
+        ["NC-001", "La Declaración de alcance describe 6 sprints; el plan vigente (PGR-001 y Jira) tiene 3", "Documentos de alcance", "Media", N, "Cerrado",
+         "Reagrupación de sprints sin actualizar la Declaración (CH-01 del plan de cronograma)", "Declaración de alcance v1.1 (22/11/2026): 3 sprints, paquetes por sprint y cambio CHG-007"],
+        ["NC-002", "Las pruebas e2e cu-04-01, cu-09-01 y cu-09-02 verifican el flujo anterior (retiro con código) y están desfasadas", "e2e/tests", "Media", D, "Cerrado",
+         "El flujo pasó a venta digital con envío; las pruebas no se reescribieron", "4 pruebas e2e del flujo con envío pasan (23/11/2026): cu-04-01 (2), cu-09-01 y cu-09-02, con Stripe en modo de prueba"],
+        ["NC-003", "npm audit (dependencias de producción) reporta 2 vulnerabilidades críticas: proxy-addr en el backend y next en el frontend; además 5 altas en el backend y 2 en el frontend", "backend y frontend", "Alta", N, "Cerrado",
+         "Las versiones de las dependencias no se han actualizado desde el sprint 1; todas tienen arreglo disponible", "22/11/2026: frontend con Next 15.5.29 y React 19 (0 vulnerabilidades); backend con versiones fijadas de body-parser, multer, lodash, qs, file-type y uuid (0 críticas y 0 altas; quedan 3 moderadas de @nestjs/core que solo se corrigen con NestJS 12, riesgo residual por aceptar). 187 de 187 pruebas aprobadas"],
         ["NC-004", "El tablero de Jira no reflejaba el trabajo del sprint 2: el 13/11 solo 11 de 56 horas figuraban Finalizado, sin cambios de estado desde el 10/11", "Jira (proyecto SCRUM)", "Media", D, "Cerrado",
          "El estado de las subtareas no se actualizaba al terminar el trabajo", "Se cerraron las 24 subtareas del sprint 2 con la evidencia del segundo entregable (17/11/2026)"],
     ])
@@ -195,13 +196,22 @@ def construir(plantilla: Path, ev: Path, destino: Path) -> None:
     ])
 
     # ---- 10.1 registro de evaluación
+    sat = us.resumen(us.sesiones_participantes(), {}, {})
+    if sat:
+        efectividad_ok = sat["efectividad"] is not None and sat["efectividad"] >= us.META_EFECTIVIDAD
+        fila_calidad_en_uso = ["Sprint 3", "Usabilidad (calidad en uso)", f"Sesiones con {sat['personas']} participante(s) y grabador de sesión ({', '.join(sat['fechas'])})",
+                               f"Efectividad {us.coma(sat['efectividad'])} %; SEQ {us.coma(sat['seq_medio'], 2)} de 7", "Metas de 6.1: ≥ 80 % por tarea y SEQ ≥ 5,0",
+                               "Cumple" if (efectividad_ok and sat["cumple_seq"]) else "No cumple (ver segundo entregable, 7.4)", "Product Owner"]
+    else:
+        fila_calidad_en_uso = ["Sprint 2", "Usabilidad (calidad en uso)", "Línea base del equipo; sesión con participantes pendiente", "Sin datos de participantes", "Metas de 6.1", "Condicionado", "Product Owner"]
     t = pl.find_table(doc, "Versión / Sprint", "Característica evaluada")
     pl.fill_table(t, [
         ["Sprint 2 (17/11/2026)", "Adecuación funcional", f"{len([f for f in s2['filas']])} comprobaciones de sistema, 16 casos del segundo entregable y {n_total} pruebas", f"{s2['ok']} de {s2['total']} comprobaciones y {n_pasan} de {n_total} pruebas aprobadas", "100 %", "Cumple", "Product Owner"],
         ["Sprint 2", "Mantenibilidad (cobertura)", "jest --coverage sobre backend/src", f"{s_cov} de sentencias; ramas {pct(cov['branches']['pct'])}", "≥ 80 % de sentencias", "Cumple", "Duván (QA)"],
         ["Sprint 2", "Seguridad", "Pruebas de 401/403, sesión interna y cancelación; npm audit de producción", "DEF-001 encontrado y corregido; npm audit: 2 críticas y 7 altas en dependencias (NC-003)", "0 vulnerabilidades críticas abiertas", "No cumple", "Duván (QA)"],
         ["Sprint 2", "Usabilidad (accesibilidad)", "axe-core en 3 pantallas internas a 1440 y 390 px (40 comprobaciones)", "0 violaciones; sin desborde horizontal", "0 violaciones", "Cumple", "Product Owner"],
-        ["Sprint 2", "Usabilidad (calidad en uso)", "Línea base del equipo; sesión con participantes pendiente", "Sin datos de participantes", "Metas de 6.1", "Condicionado", "Product Owner"],
+        fila_calidad_en_uso,
+        ["Sprint 3 (22/11/2026)", "Seguridad", "npm audit de producción tras actualizar dependencias; 187 pruebas, 4 pruebas e2e y 56 comprobaciones de navegador (16 y 40) sobre las versiones nuevas", "0 vulnerabilidades críticas ni altas; 3 moderadas de @nestjs/core en el backend", "0 vulnerabilidades críticas abiertas", "Cumple", "Duván (QA)"],
         ["Sprint 3", "Eficiencia de desempeño", "TEST-016 (búsqueda y confirmación)", "Por medir (27/11/2026)", "P95 ≤ 1,5 s y ≤ 3 s", "Pendiente", "Product Owner"],
     ])
 
@@ -219,11 +229,11 @@ def construir(plantilla: Path, ev: Path, destino: Path) -> None:
          "Cada regla RN-nn de la Declaración tiene al menos una prueba que la cita, incluido el camino de fallo; se revisa en cada Sprint Review", D, "27/11/2026",
          "0 reglas cuyo código difiera de la Declaración al cierre del sprint 3", "En curso"],
         ["AC-02", "NC-001: la Declaración de alcance conserva 6 sprints", "Actualizar la Declaración a 3 sprints (CH-01 ya aprobado con la línea base del cronograma)", N, "24/11/2026",
-         "Declaración y PGR-001 con el mismo número de sprints", "Abierta"],
+         "Declaración y PGR-001 con el mismo número de sprints", "Cerrada el 22/11/2026"],
         ["AC-03", "NC-002: pruebas e2e desfasadas del flujo con retiro", "Reescribir cu-04-01, cu-09-01 y cu-09-02 para la venta con envío", D, "27/11/2026",
-         "3 pruebas e2e pasan contra el flujo actual", "Abierta"],
+         "3 pruebas e2e pasan contra el flujo actual", "Cerrada el 23/11/2026 (4 pruebas pasan)"],
         ["AC-04", "NC-003: dependencias con vulnerabilidades críticas y altas", "Actualizar @nestjs/platform-express, @nestjs/config y next a una versión con arreglo; correr npm audit y las pruebas", N, "27/11/2026",
-         "npm audit sin vulnerabilidades críticas y 187 pruebas aprobadas", "Abierta"],
+         "npm audit sin vulnerabilidades críticas y 187 pruebas aprobadas", "Cerrada el 22/11/2026"],
         ["AC-05", "NC-004: Jira desactualizado al cierre del sprint 2", "Cerrar cada subtarea el mismo día en que termina y revisar el tablero en la Daily Scrum", D, "Cada sprint",
          "SPI medido en la fecha de cierre del sprint sin diferencias con el trabajo real", "En curso"],
     ])
@@ -232,9 +242,9 @@ def construir(plantilla: Path, ev: Path, destino: Path) -> None:
     t = pl.find_table(doc, "Criterio de aceptación final")
     pl.fill_table(t, [
         ["Requisitos de alcance comprometidos verificados", "Sprints 1 y 2: historias HU-102 a HU-116 con sus pruebas; sprint 3 (HU-101 y HU-117) por cerrar el 27/11/2026", "Parcial", "Se completa al cierre del sprint 3"],
-        ["Requisitos de calidad críticos satisfechos", "Mantenibilidad cumple; seguridad no cumple por NC-003; TEST-016 y TEST-017 pendientes", "No", "Se completa al cierre del sprint 3"],
-        ["Pruebas requeridas ejecutadas y resultados aceptables", f"{n_pasan} de {n_total} pruebas y {s2['ok']} de {s2['total']} comprobaciones de sistema del sprint 2", "Sí", "Para los sprints 1 y 2"],
-        ["Defectos abiertos evaluados y aceptados formalmente si aplica", "DEF-001 y NC-004 cerrados; NC-001, NC-002 y NC-003 abiertas con acción", "Parcial", "Aprobación del Product Owner pendiente"],
+        ["Requisitos de calidad críticos satisfechos", "Mantenibilidad cumple; seguridad cumple desde el 22/11/2026 (NC-003 cerrada); TEST-016 y TEST-017 pendientes", "Parcial", "Se completa al cierre del sprint 3"],
+        ["Pruebas requeridas ejecutadas y resultados aceptables", f"{n_pasan} de {n_total} pruebas, {s2['ok']} de {s2['total']} comprobaciones de sistema del sprint 2 y 4 de 4 pruebas e2e del flujo con envío (23/11/2026)", "Sí", "Para los sprints 1 y 2"],
+        ["Defectos abiertos evaluados y aceptados formalmente si aplica", "DEF-001 y NC-001 a NC-004 cerrados; sin no conformidades abiertas", "Parcial", "Falta la aceptación formal del Product Owner del riesgo residual moderado de @nestjs/core (NC-003)"],
         ["Documentación, operación y soporte entregados", "Planes de requisitos, cronograma, calidad y ejecución; segundo entregable", "Parcial", "Despliegue en la nube pendiente: las 8 ejecuciones del workflow de despliegue hasta el 17/11/2026 fallaron en la autenticación con Google Cloud (docs/ejecucion/soporte/kpi-medidas.json)"],
         ["Riesgos comunicados y aprobados", "Riesgos en el PGR-001; festivos del 02 y 16 de noviembre en el cronograma", "Parcial", "Aprobación de la Dirección pendiente"],
     ])

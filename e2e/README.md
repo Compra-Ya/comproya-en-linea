@@ -48,7 +48,9 @@ Un rechazo de tarjeta en Stripe Checkout no cierra la sesión (queda abierta par
 
 ## Estado frente al rediseño (venta digital con envío)
 
-Las tres pruebas de `tests/` (`cu-04-01`, `cu-09-01`, `cu-09-02`) se escribieron para la interfaz anterior: retiro en sucursal con código de retiro, y un registro que termina en `/privacidad` con el consentimiento pendiente. La interfaz actual es venta digital con envío (`../docs/modo-venta-digital.md`), así que **están desfasadas**: `cu-04-01` falla en el primer paso porque busca los placeholders del formulario anterior (comprobado), y `cu-09-01` y `cu-09-02` eligen sucursal y esperan un código de retiro. No se modificaron porque están ligadas a `Plan_Pruebas_ComproYa.docx` (sección 9.4) y a la evidencia de `../evidencia/`.
+Las pruebas de `tests/` (`cu-04-01`, `cu-09-01` y `cu-09-02`) se reescribieron el 23-nov-2026 para la interfaz actual, venta digital con envío (`../docs/modo-venta-digital.md`): el registro lleva la casilla de consentimiento, la compra pide teléfono, dirección y ciudad y no hay sucursal ni código de retiro. Son 4 pruebas (`cu-04-01` tiene el camino de éxito y el de fallo) y pasan en serie (`workers: 1`: comparten backend, base y webhook). El formulario de Stripe Checkout va ahora dentro de un iframe; sus campos se llenan por nombre accesible (`pagarEnStripe` en `fixtures/`). Como el identificador de la sesión de Stripe se guarda cifrado en el pedido, `cu-09-02` encuentra la sesión en Stripe por el número de pedido de sus metadatos antes de expirarla.
+
+Si `stripe listen` imprime un `whsec_...` distinto del de `backend/.env`, el webhook responde 400 y el pedido nunca pasa a Pagado: arranca el backend con `STRIPE_WEBHOOK_SECRET` igual al que imprime el comando (una variable de entorno tiene prioridad sobre `.env`).
 
 Verificación del rediseño (otra familia de scripts, en `capturas/`, con base local, backend y frontend corriendo):
 

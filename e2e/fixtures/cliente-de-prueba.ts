@@ -1,9 +1,14 @@
 import { APIRequestContext, Page } from "@playwright/test";
 
 // Helpers de preparación para las pruebas de sistema CU-09-01/CU-09-02 —
-// registran el cliente y sincronizan una sucursal directo contra la API
-// (evita flakiness de UI en el setup; el recorrido de compra en sí SÍ es UI).
+// registran el cliente directo contra la API (evita flakiness de UI en el setup;
+// el recorrido de compra en sí SÍ es UI).
 const API_URL = process.env.E2E_API_URL ?? "http://localhost:3001/api";
+
+// Sufijo de 8 dígitos para documento y correo de cada cliente de prueba (hora + azar: dos pruebas no repiten el documento).
+export function sufijoUnico(): string {
+  return `${Date.now().toString().slice(-6)}${Math.floor(10 + Math.random() * 90)}`;
+}
 
 export interface ClienteDePrueba {
   customerId: number;
@@ -45,18 +50,24 @@ export async function iniciarSesionEnNavegador(page: Page, cliente: ClienteDePru
   await page.reload();
 }
 
-export interface SucursalSincronizada {
-  id: number;
-  name: string;
+// Datos de envío de la prueba: la interfaz actual es venta digital con envío (sin retiro ni sucursal). Se llenan por
+// etiqueta, como lo haría una persona, y se devuelven para comprobarlos en el pedido.
+export async function llenarEnvio(page: Page) {
+  const envio = { telefono: "3001234567", direccion: "Calle 45 # 12-34", ciudad: "Bogotá" };
+  await page.getByLabel("Teléfono", { exact: true }).fill(envio.telefono);
+  await page.getByLabel("Dirección", { exact: true }).fill(envio.direccion);
+  await page.getByLabel("Ciudad", { exact: true }).fill(envio.ciudad);
+  return envio;
 }
 
-// RN-04: solo una sucursal sincronizada hace menos de 15 minutos ofrece
-// retiro — se sincroniza explícitamente antes de confirmar el pedido, igual
-// que haría el proceso por lotes real del ERP.
-export async function sucursalSincronizada(request: APIRequestContext): Promise<SucursalSincronizada> {
-  const res = await request.get(`${API_URL}/catalogo/sucursales`);
-  const sucursales = (await res.json()) as SucursalSincronizada[];
-  const elegida = sucursales[0];
-  await request.post(`${API_URL}/catalogo/sucursales/${elegida.id}/sincronizar`);
-  return elegida;
+// Formulario de Stripe Checkout (sandbox). Desde la versión 2026-08-26 de la API el formulario va dentro de un iframe y sus
+// campos se identifican por su nombre accesible (ya no por el texto de ejemplo de cada campo).
+export async function pagarEnStripe(page: Page, datos: { correo: string; numero: string; titular: string }) {
+  const formulario = page.frameLocator("iframe").first();
+  await formulario.getByRole("textbox", { name: "Email" }).fill(datos.correo);
+  await formulario.getByRole("textbox", { name: "Card number" }).fill(datos.numero);
+  await formulario.getByRole("textbox", { name: /Expiration/ }).fill("12/34");
+  await formulario.getByRole("textbox", { name: "Security code" }).fill("123");
+  await formulario.getByRole("textbox", { name: "Name on card" }).fill(datos.titular);
+  return formulario;
 }

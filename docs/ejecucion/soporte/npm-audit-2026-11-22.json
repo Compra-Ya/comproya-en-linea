@@ -1,0 +1,33 @@
+{
+  "generado": "2026-11-22/23",
+  "comando": "npm audit --omit=dev --json (dependencias de producción)",
+  "antes_del_cierre_de_NC-003": "valores del 17-nov-2026 en kpi-medidas.json: 2 críticas y 7 altas",
+  "despues": {
+    "backend": {
+      "vulnerabilidades": {
+        "info": 0,
+        "low": 0,
+        "moderate": 3,
+        "high": 0,
+        "critical": 0,
+        "total": 3
+      },
+      "paquetes_con_hallazgos": [
+        "@nestjs/core",
+        "@nestjs/platform-express",
+        "@nestjs/schedule"
+      ]
+    },
+    "frontend": {
+      "vulnerabilidades": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "paquetes_con_hallazgos": []
+    }
+  }
+}

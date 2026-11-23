@@ -1,6 +1,6 @@
 # Frontend — ComproYa en Línea
 
-Next.js 14 (App Router, TypeScript estricto). Las pantallas del Cliente digital y las de los roles internos (`/admin/publicar`, `/admin/pedidos/[id]`) viven en este mismo proyecto, separadas por ruta — no son dos aplicaciones distintas (`../docs/arquitectura.md` sección 4).
+Next.js 15 con React 19 (App Router, TypeScript estricto; subió desde Next.js 14 el 22-nov-2026 para cerrar vulnerabilidades, NC-003). Las pantallas del Cliente digital y las de los roles internos (`/admin/publicar`, `/admin/pedidos/[id]`) viven en este mismo proyecto, separadas por ruta — no son dos aplicaciones distintas (`../docs/arquitectura.md` sección 4).
 
 La interfaz del Cliente digital sigue el diseño aprobado en `design/rediseno/` y el sistema de diseño de `design/design-system/`. El flujo es la venta digital con envío (`../docs/modo-venta-digital.md`): catálogo → producto → carrito → datos y envío → pago con tarjeta → pedido confirmado → mis pedidos.
 

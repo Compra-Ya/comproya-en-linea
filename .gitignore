@@ -19,3 +19,6 @@ __pycache__/
 *.pyc
 docs/usabilidad/sesiones/**/*.webm
 docs/usabilidad/sesiones/**/*.mp4
+
+# Carpeta de entregables para subir al Drive (copias; no se versionan)
+entregables-drive/

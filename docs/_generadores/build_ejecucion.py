@@ -18,6 +18,7 @@ from docx.table import Table
 from docx.text.paragraph import Paragraph
 
 import plantilla as pl
+import usabilidad_resumen as us
 
 RAIZ = Path(__file__).resolve().parent.parent
 SALIDA = RAIZ / "ejecucion"
@@ -71,6 +72,16 @@ def definir(d: dict) -> dict:
     pasos_ga = {e["paso_que_fallo"] for e in ga["ejecuciones"]}
     assert pasos_ga == {"Run google-github-actions/auth@v2"}, pasos_ga  # el texto de la justificación depende de esto
     SP = "docs/entrega-2/evidencia/"
+    sesiones = us.sesiones_participantes()
+    sat = us.resumen(sesiones, {}, {})
+    if sat and sat["seq_medio"] is not None:
+        satisfaccion = ("Satisfacción de interesados", f"Promedio de las puntuaciones obtenidas en encuestas = **{us.coma(sat['seq_medio'], 2)} de 7** (SEQ, {sat['seq_n']} respuestas de {sat['personas']} participante(s))",
+                        "Segundo entregable, sección 7.4; docs/usabilidad/sesiones", D, "Mensual",
+                        f"Promedio de la pregunta de facilidad (SEQ, de 1 a 7) que cada participante contestó al terminar cada tarea, grabada con e2e/usabilidad/grabar-sesion.mjs ({', '.join(sat['codigos'])}; {', '.join(sat['fechas'])}). Es una medición posterior al corte del 17-nov y solo de usuarios del Cliente digital; la meta del plan de calidad es ≥ 5,0.")
+    else:
+        satisfaccion = ("Satisfacción de interesados", "Promedio de las puntuaciones obtenidas en encuestas → **No medible**",
+                        "Segundo entregable, sección 7.4 (sesión con participantes pendiente)", D, "Mensual",
+                        "Depende de la sesión de usabilidad con participantes (segundo entregable, sección 7.4), que está pendiente; no se sustituye por una encuesta interna del equipo.")
     gob = [
         ("Cumplimiento de decisiones de gobernanza", "(Decisiones implementadas / Decisiones aprobadas) × 100 = 1 / 1 = **100 %**",
          "docs/cronograma, secciones 11.1 y Anexo A (CH-01 aprobado el 17/11/2026)", N, "Quincenal",
@@ -92,9 +103,7 @@ def definir(d: dict) -> dict:
         ("Porcentaje de riesgos mitigados", "(Riesgos mitigados / Riesgos identificados) × 100 → **No medible**",
          "—", D, "Quincenal",
          "El registro de riesgos no forma parte de la documentación del segundo entregable y no se abrió uno para el sprint; sin una lista de riesgos identificados no existe el cociente."),
-        ("Satisfacción de interesados", "Promedio de las puntuaciones obtenidas en encuestas → **No medible**",
-         "Segundo entregable, sección 7.4 (sesión con participantes pendiente)", D, "Mensual",
-         "Depende de la sesión de usabilidad con participantes (segundo entregable, sección 7.4), que está pendiente; no se sustituye por una encuesta interna del equipo."),
+        satisfaccion,
         ("Tiempo promedio de aprobación de cambios", "Tiempo total de evaluación / Cambios evaluados = 0 / 0 → **No aplica**",
          "docs/cronograma, sección 11.1", N, "Por cambio",
          "En el sprint 2 hay 2 cambios registrados (CH-01 y CH-02) y ninguno ha sido evaluado por la Dirección de ComproYa, así que no hay tiempos de aprobación que promediar."),
@@ -142,7 +151,7 @@ def definir(d: dict) -> dict:
          "Se cuentan los 10 criterios de aceptación de las 4 historias en Jira (HU-113: 2, HU-114: 3, HU-115: 2 y HU-116: 3), cada uno con su prueba de aceptación aprobada (TEST-007, TEST-012 y TEST-013). La aceptación formal del Product Owner se mide en el KPI de aceptación del incremento."),
         ("Vulnerabilidades críticas abiertas", f"Número de vulnerabilidades críticas pendientes = **{crit}** ({au['backend']['critical']} en el backend y {au['frontend']['critical']} en el frontend); además {altas} altas",
          "docs/ejecucion/soporte/kpi-medidas.json (npm audit --omit=dev)", D, "Por liberación",
-         f"npm audit sobre las dependencias de producción: la crítica del backend es proxy-addr y la del frontend es next; todas tienen arreglo disponible. Es la no conformidad NC-003 y la acción AC-04 del plan de calidad."),
+         f"npm audit sobre las dependencias de producción: la crítica del backend es proxy-addr y la del frontend es next; todas tienen arreglo disponible. Es la no conformidad NC-003 y la acción AC-04 del plan de calidad. Posterior al corte: NC-003 se cerró el 22-nov (npm audit de producción: 0 críticas y 0 altas; docs/ejecucion/soporte/npm-audit-2026-11-22.json); el valor del KPI al corte sigue siendo el medido el 17-nov."),
         ("Tiempo promedio de respuesta", f"Tiempo total de respuesta / Número de solicitudes: GET /ventas **{num(vent['promedioMs'])} ms** (P95 {num(vent['p95Ms'])} ms) y GET /pedidos **{num(ped['promedioMs'])} ms** (P95 {num(ped['p95Ms'])} ms)",
          SP + "rendimiento-sprint2.json", D, "Por sprint",
          "Son 30 solicitudes por consulta contra el backend local con la base de desarrollo; no es la prueba TEST-016 (40.000 productos y 900 pedidos por hora), que se mide en el sprint 3."),
@@ -161,7 +170,7 @@ def definir(d: dict) -> dict:
         ("Tasa de defectos reabiertos", "(Defectos reabiertos / Defectos cerrados) × 100 = 0 / 1 = **0,0 %**", "DEF-001 no se reabrió."),
         ("Tasa de defectos escapados", "(Defectos detectados en producción / Total de defectos detectados) × 100 = 0 / 1 = **0,0 %**", "No hay producción todavía."),
         ("Cobertura de requisitos mediante pruebas", "(Requisitos con pruebas asociadas / Total de requisitos verificables) × 100 = 6 / 6 = **100 %**", "Segundo entregable, Anexo B."),
-        ("Deuda técnica", "Esfuerzo estimado para resolver deuda técnica → **2 no conformidades técnicas abiertas, sin esfuerzo estimado**", "NC-002 (pruebas e2e desfasadas) y NC-003 (dependencias); el esfuerzo se estima en el sprint 3."),
+        ("Deuda técnica", "Esfuerzo estimado para resolver deuda técnica → **2 no conformidades técnicas abiertas, sin esfuerzo estimado**", "NC-002 (pruebas e2e desfasadas) y NC-003 (dependencias); el esfuerzo se estima en el sprint 3. Posterior al corte, NC-003 y NC-002 se cerraron el 22 y el 23-nov."),
     ]
     agi = [
         ("Elementos refinados del backlog", "(Elementos refinados / Elementos que requieren refinamiento) × 100 = 17 / 17 = **100 %**",
@@ -184,7 +193,7 @@ def definir(d: dict) -> dict:
          "La Sprint Review del sprint 2 todavía no se ha realizado con el Product Owner, así que no hay elementos aceptados ni presentados."),
         ("Acciones de mejora implementadas", "(Acciones implementadas / Acciones acordadas) × 100 = 0 / 5 = **0,0 %**",
          "docs/calidad, sección 12 (AC-01 a AC-05)", D, "Por sprint",
-         "Las 5 acciones se registraron el 17-nov (AC-01 y AC-05 en curso, AC-02 a AC-04 abiertas); se acuerdan y cierran en la retrospectiva del sprint 3."),
+         "Las 5 acciones se registraron el 17-nov (AC-01 y AC-05 en curso, AC-02 a AC-04 abiertas); se acuerdan y cierran en la retrospectiva del sprint 3. Posterior al corte: AC-02, AC-03 y AC-04 se cerraron el 22 y el 23-nov (3 de 5); el valor al corte sigue siendo 0 de 5."),
         ("Frecuencia de despliegue", f"Número de despliegues por período = **0** exitosos ({n_ga} intentos del workflow entre el {rango_ga.replace(' al ', ' y el ')}, todos fallidos)",
          "docs/ejecucion/soporte/kpi-medidas.json (GitHub Actions)", D, "Por liberación",
          f"Se cuentan los despliegues que llegaron a Cloud Run; ninguno de los {n_ga} intentos lo logró (ver la tasa de despliegues exitosos), así que la frecuencia es cero y no hay entregas incrementales en un entorno compartido todavía."),
@@ -235,7 +244,7 @@ def construir(plantilla: Path, destino: Path) -> None:
     marco = pl.find_paragraph(doc, "-- Enfoque integrado")
     sub = pl.insert_paragraph_after(marco, PROYECTO, copy_format_from=cuerpo)
     sub2 = pl.insert_paragraph_after(sub, "Tiendas ComproYa · Ingeniería de Software II · Universidad Central", copy_format_from=cuerpo)
-    pl.insert_paragraph_after(sub2, "Documento PGE-001 · Versión 1.1 · 22/11/2026 · Integrantes: Nicolás Santiago Cancimance Pabón y Duván Camilo Serrano Rojas", copy_format_from=cuerpo)
+    pl.insert_paragraph_after(sub2, "Documento PGE-001 · Versión 1.2 · 23/11/2026 · Integrantes: Nicolás Santiago Cancimance Pabón y Duván Camilo Serrano Rojas", copy_format_from=cuerpo)
 
     # alcance de la medición, después de la definición de KPI
     kpi_def = pl.find_paragraph(doc, "Un KPI (Key Performance Indicator")
@@ -245,7 +254,7 @@ def construir(plantilla: Path, destino: Path) -> None:
         "gobernanza y gestión del proyecto, ingeniería de software y calidad técnica, y agilidad y entrega iterativa (Scrum). Las categorías ISO/IEC y CMMI se "
         "conservan como referencia teórica y no se calculan. Cada KPI indica su fórmula, su cálculo y su resultado; el soporte documental de cada uno está en el "
         "Anexo A. Un KPI sin datos se declara «No medible» (falta el registro) o «No aplica» (el proyecto no tiene ese elemento) y se justifica en un párrafo; "
-        "no se estima ningún valor. La versión 1.1 (22-nov) incorpora el historial de GitHub Actions, que no se había podido consultar en la versión 1.0, y agrega al segundo entregable el Anexo C con este mismo soporte."), copy_format_from=cuerpo)
+        "no se estima ningún valor. La versión 1.1 (22-nov) incorporó el historial de GitHub Actions, que no se había podido consultar en la versión 1.0, y el Anexo C del segundo entregable con este mismo soporte; la 1.2 (23-nov) agrega, sin cambiar el corte ni los valores medidos, notas sobre el cierre posterior de NC-001 a NC-003."), copy_format_from=cuerpo)
     pl.insert_paragraph_after(a, (
         "**Fuentes de datos.** Jira (proyecto SCRUM, estado y horas por subtarea), el repositorio de GitHub, los resultados de jest y de las verificaciones en navegador "
         "(docs/entrega-2/evidencia), el historial de GitHub Actions y el Plan de gestión de requisitos PGR-001. Las mediciones propias se regeneran con docs/_generadores/recolectar_soporte_kpi.py."), copy_format_from=cuerpo)
