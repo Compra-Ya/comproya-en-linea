@@ -5,7 +5,7 @@
 //   node usabilidad/grabar-sesion.mjs --codigo=P01 --modo=participante --consentimiento
 //   node usabilidad/grabar-sesion.mjs --codigo=EQ-GUION --modo=guionado        (corrida automatizada, NO es una persona)
 //
-// Opciones: --web=http://localhost:3000  --tareas=T2,T3,T4  (por defecto las tareas «hacer» de sesion.mjs)
+// Opciones: --navegador=chrome|chromium (por defecto chrome)  --web=http://localhost:3000  --tareas=T2,T3,T4  (por defecto las tareas «hacer» de sesion.mjs)
 //
 // Modo participante: abre el navegador con la sesión de una PERSONA REAL que usa el portal con su mouse; ella lee la tarea
 // en el panel, pulsa «Empezar tarea», la hace y pulsa «Terminé» o «No pude», y califica la dificultad de 1 a 7.
@@ -50,7 +50,9 @@ const resultados = tareas.map((t) => ({ id: t.n, nombre: t.titulo, duracionS: nu
 const inicioSesion = new Date();
 let terminada = false;
 
-const navegador = await chromium.launch({ headless: modo === "guionado" ? !args.visible : false });
+// Por defecto usa el Chrome instalado en el equipo (no exige descargar Chromium); --navegador=chromium usa el de Playwright.
+const canal = args.navegador === "chromium" ? undefined : "chrome";
+const navegador = await chromium.launch({ channel: canal, headless: modo === "guionado" ? !args.visible : false });
 const ctx = await navegador.newContext({ viewport: { width: 1366, height: 800 }, recordVideo: { dir: carpeta, size: { width: 1366, height: 800 } }, locale: "es-CO" });
 
 async function pintar() {
