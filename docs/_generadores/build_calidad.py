@@ -42,7 +42,7 @@ def construir(plantilla: Path, ev: Path, destino: Path) -> None:
     # ---- datos de control
     t = pl.find_table(doc, "Dato de control")
     pl.fill_pairs(t, [PROYECTO, "Tiendas ComproYa — área de Canal Digital", "Dirección de ComproYa (CEO, CFO y CTO)", D,
-                      f"{D} (QA)", "1.2 – 23/11/2026", "☐ Borrador  ☒ En revisión  ☐ Aprobado"])
+                      f"{D} (QA)", "1.3 – 24/11/2026", "☐ Borrador  ☒ En revisión  ☐ Aprobado"])
 
     t = pl.find_table(doc, "Rol", "Nombre")
     for i, (nombre, firma) in enumerate([("Dirección de ComproYa (CEO, CFO y CTO)", "☐ Pendiente"), (D, "☐ Pendiente"), (D, "☐ Pendiente"),
@@ -201,7 +201,7 @@ def construir(plantilla: Path, ev: Path, destino: Path) -> None:
         efectividad_ok = sat["efectividad"] is not None and sat["efectividad"] >= us.META_EFECTIVIDAD
         fila_calidad_en_uso = ["Sprint 3", "Usabilidad (calidad en uso)", f"Sesiones con {sat['personas']} participante(s) y grabador de sesión ({', '.join(sat['fechas'])})",
                                f"Efectividad {us.coma(sat['efectividad'])} %; SEQ {us.coma(sat['seq_medio'], 2)} de 7", "Metas de 6.1: ≥ 80 % por tarea y SEQ ≥ 5,0",
-                               "Cumple" if (efectividad_ok and sat["cumple_seq"]) else "No cumple (ver segundo entregable, 7.4)", "Product Owner"]
+                               (f"Cumple con {sat['personas']} de los 5 participantes previstos" if (efectividad_ok and sat["cumple_seq"]) else "No cumple (ver segundo entregable, 7.4)"), "Product Owner"]
     else:
         fila_calidad_en_uso = ["Sprint 2", "Usabilidad (calidad en uso)", "Línea base del equipo; sesión con participantes pendiente", "Sin datos de participantes", "Metas de 6.1", "Condicionado", "Product Owner"]
     t = pl.find_table(doc, "Versión / Sprint", "Característica evaluada")

@@ -22,3 +22,11 @@ docs/usabilidad/sesiones/**/*.mp4
 
 # Carpeta de entregables para subir al Drive (copias; no se versionan)
 entregables-drive/
+
+# Capturas de participantes de las tareas posteriores a crear la cuenta: muestran el nombre de la persona (el portal saluda por su nombre)
+docs/usabilidad/sesiones/P*/mapa-calor-T6.png
+docs/usabilidad/sesiones/P*/mapa-calor-T7.png
+docs/usabilidad/sesiones/P*/mapa-calor-T8.png
+docs/usabilidad/sesiones/P*/mapa-calor-T9.png
+docs/usabilidad/sesiones/P*/mapa-calor-T10.png
+docs/usabilidad/sesiones/P*/mapa-calor-T11.png

@@ -120,7 +120,7 @@ for (const [pi, n_] of [[1, "T6"], [3, "T3"], [0, "T7"]]) {
   ver(`registro ${n_} razón`, val("Registro", `O${r}`), x.E / ref.referenciaExpertoS);
   ver(`registro ${n_} eficiencia`, val("Registro", `Q${r}`), ref.clics / x.F);
 }
-ver("registro: nombre de P01", val("Registro", `B${fila(0, "T1")}`), "Ingrid Katerin Monroy Murcia");
+ver("registro: nombre de P01", val("Registro", `B${fila(0, "T1")}`), "");
 
 // Tiempos por tarea (tarea 6 y 3)
 const principales = TAREAS.filter((t) => t.seq);

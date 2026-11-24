@@ -1,0 +1,502 @@
+{
+  "codigo": "P03",
+  "modo": "participante",
+  "fecha": "2026-11-24T14:46:29.891Z",
+  "duracionTotalS": 934.4,
+  "aviso": "Sesión de una persona que dio su consentimiento.",
+  "web": "http://localhost:3000",
+  "navegador": "Chromium 1366x800",
+  "tareas": [
+    {
+      "id": "T2",
+      "nombre": "Buscar y agregar una licuadora",
+      "duracionS": 14.9,
+      "clics": 0,
+      "teclas": 0,
+      "completada": true,
+      "dificultad": 7
+    },
+    {
+      "id": "T3",
+      "nombre": "Agregar un televisor mirando las categorías",
+      "duracionS": 17.5,
+      "clics": 1,
+      "teclas": 0,
+      "completada": true,
+      "dificultad": 7
+    },
+    {
+      "id": "T4",
+      "nombre": "Agregar 2 refrigeradores",
+      "duracionS": 13.5,
+      "clics": 4,
+      "teclas": 0,
+      "completada": true,
+      "dificultad": 7
+    },
+    {
+      "id": "T6",
+      "nombre": "Primera compra: una licuadora",
+      "duracionS": 355.1,
+      "clics": 20,
+      "teclas": 251,
+      "completada": true,
+      "dificultad": 7
+    },
+    {
+      "id": "T7",
+      "nombre": "Segunda compra: 2 televisores",
+      "duracionS": 55.1,
+      "clics": 9,
+      "teclas": 0,
+      "completada": true,
+      "dificultad": 7
+    },
+    {
+      "id": "T8",
+      "nombre": "Tercera compra: lavadora y licuadora",
+      "duracionS": 31.4,
+      "clics": 5,
+      "teclas": 0,
+      "completada": true,
+      "dificultad": 7
+    },
+    {
+      "id": "T9",
+      "nombre": "Usar el código de descuento",
+      "duracionS": 35.9,
+      "clics": 5,
+      "teclas": 10,
+      "completada": true,
+      "dificultad": 7
+    },
+    {
+      "id": "T10",
+      "nombre": "Quitar el descuento y ponerlo otra vez",
+      "duracionS": 22.1,
+      "clics": 5,
+      "teclas": 32,
+      "completada": true,
+      "dificultad": 7
+    },
+    {
+      "id": "T11",
+      "nombre": "Descuento en otra compra, hasta la pantalla de pago",
+      "duracionS": 28.5,
+      "clics": 2,
+      "teclas": 12,
+      "completada": true,
+      "dificultad": 7
+    }
+  ],
+  "clics": [
+    {
+      "tarea": "T3",
+      "t": 11.9,
+      "x": 899,
+      "y": 1265,
+      "ruta": "/categoria/26",
+      "objetivo": "Ver carrito"
+    },
+    {
+      "tarea": "T4",
+      "t": 4.86,
+      "x": 657,
+      "y": 979,
+      "ruta": "/categoria/26",
+      "objetivo": "IMG"
+    },
+    {
+      "tarea": "T4",
+      "t": 6.59,
+      "x": 826,
+      "y": 506,
+      "ruta": "/producto/2403",
+      "objetivo": "svg"
+    },
+    {
+      "tarea": "T4",
+      "t": 8.06,
+      "x": 1027,
+      "y": 603,
+      "ruta": "/producto/2403",
+      "objetivo": "Agregar al carrito"
+    },
+    {
+      "tarea": "T4",
+      "t": 10.18,
+      "x": 824,
+      "y": 644,
+      "ruta": "/producto/2403",
+      "objetivo": "Ver carrito"
+    },
+    {
+      "tarea": "T6",
+      "t": 3.85,
+      "x": 817,
+      "y": 735,
+      "ruta": "/carrito",
+      "objetivo": "Quitar"
+    },
+    {
+      "tarea": "T6",
+      "t": 4.45,
+      "x": 816,
+      "y": 632,
+      "ruta": "/carrito",
+      "objetivo": "Quitar"
+    },
+    {
+      "tarea": "T6",
+      "t": 6.47,
+      "x": 1128,
+      "y": 521,
+      "ruta": "/carrito",
+      "objetivo": "Continuar con tus datos de envío"
+    },
+    {
+      "tarea": "T6",
+      "t": 14.95,
+      "x": 239,
+      "y": 420,
+      "ruta": "/pedido/confirmar",
+      "objetivo": "Iniciar sesión"
+    },
+    {
+      "tarea": "T6",
+      "t": 16.77,
+      "x": 805,
+      "y": 354,
+      "ruta": "/ingresar",
+      "objetivo": "INPUT"
+    },
+    {
+      "tarea": "T6",
+      "t": 45.42,
+      "x": 785,
+      "y": 491,
+      "ruta": "/ingresar",
+      "objetivo": "INPUT"
+    },
+    {
+      "tarea": "T6",
+      "t": 60.65,
+      "x": 946,
+      "y": 550,
+      "ruta": "/ingresar",
+      "objetivo": "Iniciar sesión"
+    },
+    {
+      "tarea": "T6",
+      "t": 63.53,
+      "x": 927,
+      "y": 782,
+      "ruta": "/ingresar",
+      "objetivo": "Crear cuenta"
+    },
+    {
+      "tarea": "T6",
+      "t": 64.62,
+      "x": 782,
+      "y": 355,
+      "ruta": "/registro",
+      "objetivo": "INPUT"
+    },
+    {
+      "tarea": "T6",
+      "t": 70.59,
+      "x": 777,
+      "y": 457,
+      "ruta": "/registro",
+      "objetivo": "INPUT"
+    },
+    {
+      "tarea": "T6",
+      "t": 79.34,
+      "x": 740,
+      "y": 574,
+      "ruta": "/registro",
+      "objetivo": "INPUT"
+    },
+    {
+      "tarea": "T6",
+      "t": 105.61,
+      "x": 820,
+      "y": 655,
+      "ruta": "/registro",
+      "objetivo": "INPUT"
+    },
+    {
+      "tarea": "T6",
+      "t": 113.01,
+      "x": 723,
+      "y": 727,
+      "ruta": "/registro",
+      "objetivo": "INPUT"
+    },
+    {
+      "tarea": "T6",
+      "t": 114.91,
+      "x": 962,
+      "y": 847,
+      "ruta": "/registro",
+      "objetivo": "Crear cuenta"
+    },
+    {
+      "tarea": "T6",
+      "t": 120.21,
+      "x": 573,
+      "y": 392,
+      "ruta": "/pedido/confirmar",
+      "objetivo": "INPUT"
+    },
+    {
+      "tarea": "T6",
+      "t": 134.19,
+      "x": 191,
+      "y": 561,
+      "ruta": "/pedido/confirmar",
+      "objetivo": "INPUT"
+    },
+    {
+      "tarea": "T6",
+      "t": 212.24,
+      "x": 169,
+      "y": 687,
+      "ruta": "/pedido/confirmar",
+      "objetivo": "INPUT"
+    },
+    {
+      "tarea": "T6",
+      "t": 224.09,
+      "x": 580,
+      "y": 686,
+      "ruta": "/pedido/confirmar",
+      "objetivo": "TEXTAREA"
+    },
+    {
+      "tarea": "T6",
+      "t": 254.86,
+      "x": 1056,
+      "y": 603,
+      "ruta": "/pedido/confirmar",
+      "objetivo": "Continuar al pago"
+    },
+    {
+      "tarea": "T6",
+      "t": 278.53,
+      "x": 1108,
+      "y": 589,
+      "ruta": "/pago/132",
+      "objetivo": "Pagar con tarjeta"
+    },
+    {
+      "tarea": "T7",
+      "t": 6.19,
+      "x": 258,
+      "y": 99,
+      "ruta": "/comprobante/132",
+      "objetivo": "Categorías"
+    },
+    {
+      "tarea": "T7",
+      "t": 7.99,
+      "x": 100,
+      "y": 180,
+      "ruta": "/comprobante/132",
+      "objetivo": "Electrodomésticos"
+    },
+    {
+      "tarea": "T7",
+      "t": 12.16,
+      "x": 934,
+      "y": 980,
+      "ruta": "/categoria/26",
+      "objetivo": "IMG"
+    },
+    {
+      "tarea": "T7",
+      "t": 14.3,
+      "x": 821,
+      "y": 470,
+      "ruta": "/producto/2405",
+      "objetivo": "svg"
+    },
+    {
+      "tarea": "T7",
+      "t": 15.15,
+      "x": 1044,
+      "y": 561,
+      "ruta": "/producto/2405",
+      "objetivo": "Agregar al carrito"
+    },
+    {
+      "tarea": "T7",
+      "t": 16.76,
+      "x": 814,
+      "y": 600,
+      "ruta": "/producto/2405",
+      "objetivo": "Ver carrito"
+    },
+    {
+      "tarea": "T7",
+      "t": 24.5,
+      "x": 1104,
+      "y": 524,
+      "ruta": "/carrito",
+      "objetivo": "Continuar con tus datos de envío"
+    },
+    {
+      "tarea": "T7",
+      "t": 29.8,
+      "x": 1099,
+      "y": 678,
+      "ruta": "/pedido/confirmar",
+      "objetivo": "Continuar al pago"
+    },
+    {
+      "tarea": "T7",
+      "t": 37.02,
+      "x": 1121,
+      "y": 633,
+      "ruta": "/pago/133",
+      "objetivo": "Pagar con tarjeta"
+    },
+    {
+      "tarea": "T8",
+      "t": 2.35,
+      "x": 386,
+      "y": 1323,
+      "ruta": "/categoria/26",
+      "objetivo": "Agregar al carrito"
+    },
+    {
+      "tarea": "T8",
+      "t": 6.28,
+      "x": 402,
+      "y": 1270,
+      "ruta": "/categoria/26",
+      "objetivo": "Ver carrito"
+    },
+    {
+      "tarea": "T8",
+      "t": 11.9,
+      "x": 1008,
+      "y": 520,
+      "ruta": "/carrito",
+      "objetivo": "Continuar con tus datos de envío"
+    },
+    {
+      "tarea": "T8",
+      "t": 15.13,
+      "x": 1048,
+      "y": 747,
+      "ruta": "/pedido/confirmar",
+      "objetivo": "Continuar al pago"
+    },
+    {
+      "tarea": "T8",
+      "t": 16.79,
+      "x": 1068,
+      "y": 644,
+      "ruta": "/pago/134",
+      "objetivo": "Pagar con tarjeta"
+    },
+    {
+      "tarea": "T9",
+      "t": 1.65,
+      "x": 395,
+      "y": 1321,
+      "ruta": "/categoria/26",
+      "objetivo": "Agregar al carrito"
+    },
+    {
+      "tarea": "T9",
+      "t": 4.26,
+      "x": 456,
+      "y": 1254,
+      "ruta": "/categoria/26",
+      "objetivo": "Ver carrito"
+    },
+    {
+      "tarea": "T9",
+      "t": 7.46,
+      "x": 1053,
+      "y": 526,
+      "ruta": "/carrito",
+      "objetivo": "Continuar con tus datos de envío"
+    },
+    {
+      "tarea": "T9",
+      "t": 10.32,
+      "x": 251,
+      "y": 873,
+      "ruta": "/pedido/confirmar",
+      "objetivo": "INPUT"
+    },
+    {
+      "tarea": "T9",
+      "t": 20.54,
+      "x": 820,
+      "y": 869,
+      "ruta": "/pedido/confirmar",
+      "objetivo": "Aplicar"
+    },
+    {
+      "tarea": "T10",
+      "t": 1.49,
+      "x": 330,
+      "y": 871,
+      "ruta": "/pedido/confirmar",
+      "objetivo": "INPUT"
+    },
+    {
+      "tarea": "T10",
+      "t": 3.97,
+      "x": 235,
+      "y": 859,
+      "ruta": "/pedido/confirmar",
+      "objetivo": "INPUT"
+    },
+    {
+      "tarea": "T10",
+      "t": 5.76,
+      "x": 806,
+      "y": 858,
+      "ruta": "/pedido/confirmar",
+      "objetivo": "Quitar"
+    },
+    {
+      "tarea": "T10",
+      "t": 10.05,
+      "x": 491,
+      "y": 853,
+      "ruta": "/pedido/confirmar",
+      "objetivo": "INPUT"
+    },
+    {
+      "tarea": "T10",
+      "t": 17.86,
+      "x": 837,
+      "y": 867,
+      "ruta": "/pedido/confirmar",
+      "objetivo": "Aplicar"
+    },
+    {
+      "tarea": "T11",
+      "t": 2.37,
+      "x": 484,
+      "y": 864,
+      "ruta": "/pedido/confirmar",
+      "objetivo": "INPUT"
+    },
+    {
+      "tarea": "T11",
+      "t": 12.19,
+      "x": 807,
+      "y": 860,
+      "ruta": "/pedido/confirmar",
+      "objetivo": "Aplicar"
+    }
+  ]
+}

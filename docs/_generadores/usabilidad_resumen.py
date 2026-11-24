@@ -24,7 +24,26 @@ def sesiones_participantes() -> list[dict]:
     for f in sorted(carpeta.glob("*.json")):
         s = json.loads(f.read_text(encoding="utf-8"))
         if s.get("modo") == "participante":
+            # Observaciones del observador (opcional): <sesion>.observaciones.json marca las tareas cuyo tiempo y clics no son
+            # válidos (por ejemplo, la persona hizo la tarea antes de pulsar «Empezar tarea»). Esas tareas siguen contando en
+            # efectividad y satisfacción, pero no en eficiencia.
+            obs = f.with_name(f.stem + ".observaciones.json")
+            s["observaciones"] = json.loads(obs.read_text(encoding="utf-8")).get("tareas", {}) if obs.exists() else {}
             salida.append(s)
+    return salida
+
+
+def eficiencia_valida(sesion: dict, tarea_id: str) -> bool:
+    return sesion.get("observaciones", {}).get(tarea_id, {}).get("eficiencia_valida", True)
+
+
+def tareas_excluidas(sesiones: list[dict]) -> list[dict]:
+    """Tareas con eficiencia no válida, con su motivo, para declararlas en los documentos."""
+    salida = []
+    for s in sesiones:
+        for tid, o in s.get("observaciones", {}).items():
+            if not o.get("eficiencia_valida", True):
+                salida.append({"codigo": s["codigo"], "id": tid, "motivo": o.get("motivo", "")})
     return salida
 
 
@@ -41,11 +60,12 @@ def resumen(sesiones: list[dict], objetivos: dict[str, float], clics_equipo: dic
         for t in s["tareas"]:
             fila = por_tarea.setdefault(t["id"], {"id": t["id"], "nombre": t.get("nombre", t["id"]), "intentos": 0, "ok": 0, "tiempos": [], "clics": [], "seq": []})
             fila["intentos"] += 1
+            valida = eficiencia_valida(s, t["id"])
             if t.get("completada"):
                 fila["ok"] += 1
-                if t.get("duracionS") is not None:
+                if t.get("duracionS") is not None and valida:
                     fila["tiempos"].append(t["duracionS"])
-            if t.get("clics") is not None:
+            if t.get("clics") is not None and valida:
                 fila["clics"].append(t["clics"])
             if t.get("dificultad"):
                 fila["seq"].append(t["dificultad"])
@@ -80,6 +100,7 @@ def resumen(sesiones: list[dict], objetivos: dict[str, float], clics_equipo: dic
         "seq_n": len(todas_seq),
         "tareas": sorted(tareas, key=lambda t: (len(t["id"]), t["id"])),
         "cumple_seq": (seq >= META_SEQ) if seq is not None else None,
+        "excluidas": tareas_excluidas(sesiones),
     }
 
 

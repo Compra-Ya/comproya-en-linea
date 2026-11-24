@@ -2,8 +2,8 @@
 // Fuente única de la guía del participante y del Excel de registro. Los tiempos y clics de referencia salen de linea-base.json
 // (medir-linea-base.mjs); `ref` es el identificador de la tarea en ese archivo.
 export const PARTICIPANTES = [
-  { codigo: "P01", nombre: "Ingrid Katerin Monroy Murcia" },
-  { codigo: "P02", nombre: "Martha Liliana Rojas Pacheco" },
+  { codigo: "P01", nombre: "" },
+  { codigo: "P02", nombre: "" },
   { codigo: "P03", nombre: "" },
   { codigo: "P04", nombre: "" },
   { codigo: "P05", nombre: "" },

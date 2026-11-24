@@ -29,7 +29,7 @@ SALIDA = RAIZ / "entrega-2"
 IMG = SALIDA / "img"
 DISENO = RAIZ.parent / "design"
 FECHA = "17 de noviembre de 2026"  # fecha de ejecución de las pruebas
-FECHA_DOC = "23 de noviembre de 2026"  # fecha de esta versión del documento (portada)
+FECHA_DOC = "24 de noviembre de 2026"  # fecha de esta versión del documento (portada)
 FECHA_ISO = "2026-11-17"
 
 
@@ -250,9 +250,9 @@ def construir(base: Path, ev: Path, destino: Path) -> None:
     c.p_("4. Las fechas del sprint 2 terminaron el 13 de noviembre. El sprint se cerró en Jira el 17 de noviembre, con las 4 historias y sus "
          "24 subtareas en estado Finalizado, porque la documentación y las pruebas de este entregable se completaron después de esa fecha "
          "(4 días calendario de desviación; 2 días hábiles del calendario del plan de cronograma).")
-    c.p_("5. Esta versión (23 de noviembre de 2026) agrega el Anexo C con el soporte documental de los KPI de la gestión de la ejecución, "
-         "el Anexo D con el cierre de las no conformidades NC-001 a NC-003 y corrige el estado del sprint 2 en Jira; las pruebas y las "
-         "mediciones de las secciones 5 a 7 son las del 17 de noviembre.")
+    c.p_("5. Esta versión (24 de noviembre de 2026) agrega el Anexo C con el soporte documental de los KPI de la gestión de la ejecución, "
+         "el Anexo D con el cierre de las no conformidades NC-001 a NC-003 y la sesión de usabilidad del participante P03 (sección 7.4), y corrige "
+         "el estado del sprint 2 en Jira; las pruebas y las mediciones de las secciones 5 y 6 son las del 17 de noviembre.")
     c.salto_pagina()
 
     # ------------------------------------------------------------- 2. Casos de uso
@@ -470,19 +470,33 @@ def construir(base: Path, ev: Path, destino: Path) -> None:
             ok = sum(1 for t in s["tareas"] if t.get("completada"))
             n = len(s["tareas"])
             dif = [t["dificultad"] for t in s["tareas"] if t.get("dificultad")]
-            clics = sum(t["clics"] for t in s["tareas"])
-            seg = sum(t["duracionS"] for t in s["tareas"])
+            validas = [t for t in s["tareas"] if us.eficiencia_valida(s, t["id"])]
+            clics = sum(t["clics"] for t in validas)
+            seg = sum(t["duracionS"] for t in validas)
             filas.append([s["codigo"], s["fecha"][:10], f"{ok} de {n} ({100 * ok / n:.0f} %)", str(clics), f"{seg:.0f}",
                           f"{sum(dif) / len(dif):.1f}".replace(".", ",") if dif else "—"])
         c.p_(f"Se aplicó la sesión a {res['personas']} participante(s) ({', '.join(res['codigos'])}; {', '.join(res['fechas'])}). Cada fila sale del archivo de "
              "sesión grabado (docs/usabilidad/sesiones); los participantes se identifican solo con su código.")
         c.tabla(["Participante", "Fecha", "Efectividad", "Clics", "Tiempo total (s)", "Satisfacción (1–7)"], filas, [1400, 1400, 2200, 1000, 1700, 1650])
+        if res["excluidas"]:
+            c.p_("Los clics y el tiempo total suman solo las tareas con medición de eficiencia válida (ver las notas bajo la tabla por tarea); "
+                 "la efectividad y la satisfacción cuentan todas las tareas.", tam=9)
         c.p_("Resultados por tarea", negrita=True)
         filas_t = []
         for t in res["tareas"]:
             filas_t.append([t["id"], f"{t['ok']} de {t['intentos']} ({us.coma(t['efectividad'], 0)} %)", us.coma(t["tiempo_medio"]), us.coma(t["tiempo_objetivo"], 0),
                             us.coma(t["clics_medios"]), us.coma(t["clics_equipo"], 0), us.coma(t["seq_medio"])])
         c.tabla(["Tarea", "Efectividad", "Tiempo medio (s)", "Tiempo objetivo (s)", "Clics medios", "Clics del equipo", "SEQ medio"], filas_t, [800, 2000, 1400, 1400, 1250, 1250, 1250], tam=8)
+        if res["excluidas"]:
+            c.p_("Notas sobre la medición (— = eficiencia no válida, no se promedia):", negrita=True, tam=9)
+            c.lista([f"{x['id']} ({x['codigo']}): {x['motivo']}." for x in res["excluidas"]])
+        # Captura de una tarea de la persona (solo las de antes de iniciar sesión: las demás muestran el nombre de la cuenta y no se publican).
+        for s_ in reales:
+            png = RAIZ / "usabilidad/sesiones" / f"{s_['codigo']}-{s_['fecha'][:10]}" / "mapa-calor-T4.png"
+            t4 = next((t for t in s_["tareas"] if t["id"] == "T4"), None)
+            if png.exists() and t4:
+                c.figura(png, f"Captura al terminar la tarea T4 de {s_['codigo']}: el panel de la sesión muestra {int(t4['duracionS'])} s y {t4['clics']} clics. "
+                              "Las capturas de las tareas posteriores a crear la cuenta muestran el nombre de la persona y no se publican.", 14.5)
     else:
         c.p_("Estado: la sesión con participantes está pendiente. Las sesiones de los participantes P01 a P05 se registran con el grabador de "
              "sesión y sus archivos se guardan en docs/usabilidad/sesiones; al regenerar este documento (python docs/_generadores/build_entrega2.py) "
@@ -495,7 +509,8 @@ def construir(base: Path, ev: Path, destino: Path) -> None:
         cumplen_ti = sum(1 for t in con_tiempo if t["cumple_tiempo"])
         c.p_(f"Con {res['personas']} de los 5 participantes previstos y {res['intentos']} tareas intentadas, la efectividad global fue {us.coma(res['efectividad'])} %; "
              f"{cumplen_ef} de {len(res['tareas'])} tareas alcanzan la meta de efectividad (≥ 80 % por tarea). "
-             f"El tiempo medio de las tareas completadas está dentro del objetivo (≤ 3 × el del equipo) en {cumplen_ti} de {len(con_tiempo)} tareas. "
+             f"El tiempo medio de las tareas completadas está dentro del objetivo (≤ 3 × el del equipo) en {cumplen_ti} de {len(con_tiempo)} tareas con medición válida"
+             f"{' (' + ', '.join(x['id'] for x in res['excluidas']) + ' se excluyen de la eficiencia por las notas del observador)' if res['excluidas'] else ''}. "
              f"La satisfacción promedio (SEQ, {res['seq_n']} respuestas) fue {us.coma(res['seq_medio'], 2)} de 7, "
              f"{'por encima' if res['cumple_seq'] else 'por debajo'} de la meta de 5,0. "
              "Los hallazgos y los comentarios de cada sesión están en docs/usabilidad/sesiones y en el registro de medición.")

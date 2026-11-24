@@ -1,0 +1,13 @@
+{
+  "fuente": "Notas del observador en la hoja «Notas P03» de docs/usabilidad/Registro_Medicion_CU2_ComproYa_P03.xlsx (revisión del video de la sesión)",
+  "tareas": {
+    "T2": {
+      "eficiencia_valida": false,
+      "motivo": "el video muestra la licuadora ya en el carrito antes de pulsar «Empezar tarea»; el portal guardó 14,9 s y 0 clics, que no reflejan el recorrido (medido sobre el video, el tiempo real fue de unos 11 s)"
+    },
+    "T9": {
+      "eficiencia_valida": false,
+      "motivo": "la persona armó el carrito dentro de la tarea (no tenía las 2 licuadoras que pide la guía), así que el tiempo y los clics no son comparables con los del equipo"
+    }
+  }
+}

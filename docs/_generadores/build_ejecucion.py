@@ -77,7 +77,7 @@ def definir(d: dict) -> dict:
     if sat and sat["seq_medio"] is not None:
         satisfaccion = ("Satisfacción de interesados", f"Promedio de las puntuaciones obtenidas en encuestas = **{us.coma(sat['seq_medio'], 2)} de 7** (SEQ, {sat['seq_n']} respuestas de {sat['personas']} participante(s))",
                         "Segundo entregable, sección 7.4; docs/usabilidad/sesiones", D, "Mensual",
-                        f"Promedio de la pregunta de facilidad (SEQ, de 1 a 7) que cada participante contestó al terminar cada tarea, grabada con e2e/usabilidad/grabar-sesion.mjs ({', '.join(sat['codigos'])}; {', '.join(sat['fechas'])}). Es una medición posterior al corte del 17-nov y solo de usuarios del Cliente digital; la meta del plan de calidad es ≥ 5,0.")
+                        f"Promedio de la pregunta de facilidad (SEQ, de 1 a 7) que cada participante contestó al terminar cada tarea, grabada con e2e/usabilidad/grabar-sesion.mjs ({', '.join(sat['codigos'])}; {', '.join(sat['fechas'])}). Es una medición posterior al corte del 17-nov y solo de usuarios del Cliente digital; la meta del plan de calidad es ≥ 5,0." + (" Con un solo participante el promedio no permite concluir sobre el grupo." if sat["personas"] == 1 else ""))
     else:
         satisfaccion = ("Satisfacción de interesados", "Promedio de las puntuaciones obtenidas en encuestas → **No medible**",
                         "Segundo entregable, sección 7.4 (sesión con participantes pendiente)", D, "Mensual",
@@ -244,7 +244,7 @@ def construir(plantilla: Path, destino: Path) -> None:
     marco = pl.find_paragraph(doc, "-- Enfoque integrado")
     sub = pl.insert_paragraph_after(marco, PROYECTO, copy_format_from=cuerpo)
     sub2 = pl.insert_paragraph_after(sub, "Tiendas ComproYa · Ingeniería de Software II · Universidad Central", copy_format_from=cuerpo)
-    pl.insert_paragraph_after(sub2, "Documento PGE-001 · Versión 1.2 · 23/11/2026 · Integrantes: Nicolás Santiago Cancimance Pabón y Duván Camilo Serrano Rojas", copy_format_from=cuerpo)
+    pl.insert_paragraph_after(sub2, "Documento PGE-001 · Versión 1.3 · 24/11/2026 · Integrantes: Nicolás Santiago Cancimance Pabón y Duván Camilo Serrano Rojas", copy_format_from=cuerpo)
 
     # alcance de la medición, después de la definición de KPI
     kpi_def = pl.find_paragraph(doc, "Un KPI (Key Performance Indicator")
@@ -254,7 +254,7 @@ def construir(plantilla: Path, destino: Path) -> None:
         "gobernanza y gestión del proyecto, ingeniería de software y calidad técnica, y agilidad y entrega iterativa (Scrum). Las categorías ISO/IEC y CMMI se "
         "conservan como referencia teórica y no se calculan. Cada KPI indica su fórmula, su cálculo y su resultado; el soporte documental de cada uno está en el "
         "Anexo A. Un KPI sin datos se declara «No medible» (falta el registro) o «No aplica» (el proyecto no tiene ese elemento) y se justifica en un párrafo; "
-        "no se estima ningún valor. La versión 1.1 (22-nov) incorporó el historial de GitHub Actions, que no se había podido consultar en la versión 1.0, y el Anexo C del segundo entregable con este mismo soporte; la 1.2 (23-nov) agrega, sin cambiar el corte ni los valores medidos, notas sobre el cierre posterior de NC-001 a NC-003."), copy_format_from=cuerpo)
+        "no se estima ningún valor. La versión 1.1 (22-nov) incorporó el historial de GitHub Actions, que no se había podido consultar en la versión 1.0, y el Anexo C del segundo entregable con este mismo soporte; la 1.2 (23-nov) agregó, sin cambiar el corte ni los valores medidos, notas sobre el cierre posterior de NC-001 a NC-003; la 1.3 (24-nov) incorpora la satisfacción medida con el participante P03."), copy_format_from=cuerpo)
     pl.insert_paragraph_after(a, (
         "**Fuentes de datos.** Jira (proyecto SCRUM, estado y horas por subtarea), el repositorio de GitHub, los resultados de jest y de las verificaciones en navegador "
         "(docs/entrega-2/evidencia), el historial de GitHub Actions y el Plan de gestión de requisitos PGR-001. Las mediciones propias se regeneran con docs/_generadores/recolectar_soporte_kpi.py."), copy_format_from=cuerpo)
