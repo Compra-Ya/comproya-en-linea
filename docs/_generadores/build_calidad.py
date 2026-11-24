@@ -263,6 +263,7 @@ def construir(plantilla: Path, ev: Path, destino: Path) -> None:
         pl.set_paragraph_text(pl.find_paragraph(doc, inicio), texto)
 
     destino.parent.mkdir(parents=True, exist_ok=True)
+    pl.limpiar_formato(doc)
     doc.save(str(destino))
 
 

@@ -95,6 +95,24 @@ def set_cell(cell: _Cell, text: str) -> None:
         anterior = nuevo
 
 
+# --------------------------------------------------------------------------- formato
+def limpiar_formato(doc) -> None:
+    """Deja el documento legible al exportarlo a PDF con Word.
+
+    Las plantillas del docente (exportadas de Google Docs) traen resaltado blanco en casi todo el texto: sobre las celdas de
+    encabezado azules, Word pinta cajas blancas y el texto del encabezado no se lee. También traen resaltado amarillo en las
+    viñetas de instrucciones y texto rojo (palabras clave) que, al reemplazar el contenido de una celda, se heredaba a toda la celda.
+    Se quitan los resaltados y el rojo de las celdas de tabla; no cambia ningún texto.
+    """
+    cuerpo = doc.element.body
+    for h in list(cuerpo.iter(qn("w:highlight"))):
+        h.getparent().remove(h)
+    for tc in list(cuerpo.iter(qn("w:tc"))):
+        for c in list(tc.iter(qn("w:color"))):
+            if c.get(qn("w:val"), "").lower() == "ff0000":
+                c.getparent().remove(c)
+
+
 # --------------------------------------------------------------------------- tablas
 def fill_table(table: Table, data: Sequence[Sequence[str]], header_rows: int = 1) -> None:
     """Llena las filas de datos; clona la última fila si faltan y quita las sobrantes."""

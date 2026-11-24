@@ -331,6 +331,7 @@ def construir(plantilla: Path, destino: Path) -> None:
         el.getparent().remove(el)
 
     destino.parent.mkdir(parents=True, exist_ok=True)
+    pl.limpiar_formato(doc)
     doc.save(str(destino))
 
 

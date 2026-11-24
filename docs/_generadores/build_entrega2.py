@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import copy
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -497,6 +498,14 @@ def construir(base: Path, ev: Path, destino: Path) -> None:
             if png.exists() and t4:
                 c.figura(png, f"Captura al terminar la tarea T4 de {s_['codigo']}: el panel de la sesión muestra {int(t4['duracionS'])} s y {t4['clics']} clics. "
                               "Las capturas de las tareas posteriores a crear la cuenta muestran el nombre de la persona y no se publican.", 14.5)
+        # Video y transcripción de la sesión: el video no se sube al repositorio (es de una persona); se entrega en la carpeta de usabilidad.
+        for s_ in reales:
+            tr = RAIZ / "usabilidad/sesiones" / f"{s_['codigo']}-{s_['fecha'][:10]}" / f"transcripcion_audio_{s_['codigo']}.md"
+            if tr.exists():
+                m = re.search(r"duración (\d+:\d+)", tr.read_text(encoding="utf-8"))
+                dur = f" (duración {m.group(1)})" if m else ""
+                c.p_(f"El video de la sesión de {s_['codigo']}{dur}, con pantalla y audio, y la transcripción automática de su audio (no literal; el audio es bajo) "
+                     "se entregan junto con este documento, en la carpeta «Usabilidad» de la entrega. El video no se sube al repositorio público porque es de una persona.", tam=9)
     else:
         c.p_("Estado: la sesión con participantes está pendiente. Las sesiones de los participantes P01 a P05 se registran con el grabador de "
              "sesión y sus archivos se guardan en docs/usabilidad/sesiones; al regenerar este documento (python docs/_generadores/build_entrega2.py) "
